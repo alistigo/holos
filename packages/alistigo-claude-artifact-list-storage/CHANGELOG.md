@@ -1,0 +1,40 @@
+## 0.2.2 (2026-06-11)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-editor to 0.2.2
+- Updated alistigo-document-format to 0.2.2
+- Updated alistigo-domain to 0.2.2
+- Updated alistigo-logger to 0.2.2
+
+## 0.2.1 (2026-06-10)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-editor to 0.2.1
+- Updated alistigo-document-format to 0.2.1
+- Updated alistigo-domain to 0.2.1
+- Updated alistigo-logger to 0.2.1
+
+## 0.2.0 (2026-06-10)
+
+### 🚀 Features
+
+- **alistigo:** add structured pino logger + two-mode artifact tester ([0bcc512](https://github.com/MLKiiwy/europa/commit/0bcc512))
+- **alistigo:** create claude-artifact-list-storage using window.storage API (Issue #73) ([#73](https://github.com/MLKiiwy/europa/issues/73))
+
+### 🩹 Fixes
+
+- **alistigo:** replace window.storage non-null assertion with explicit guard + fix README ([9eff40e](https://github.com/MLKiiwy/europa/commit/9eff40e))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-editor to 0.2.0
+- Updated alistigo-document-format to 0.2.0
+- Updated alistigo-domain to 0.2.0
+- Updated alistigo-logger to 0.2.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy

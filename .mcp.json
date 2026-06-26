@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-mcp.json",
+  "mcpServers": {
+    "notion": {
+      "type": "http",
+      "url": "https://mcp.notion.com/mcp"
+    },
+    "fallow": {
+      "type": "stdio",
+      "command": "pnpm",
+      "args": ["exec", "fallow-mcp"]
+    }
+  }
+}

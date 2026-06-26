@@ -1,0 +1,9 @@
+[submodule "vendor/caveman"]
+	path = vendor/caveman
+	url = https://github.com/JuliusBrussee/caveman.git
+[submodule "vendor/superpowers"]
+	path = vendor/superpowers
+	url = https://github.com/obra/superpowers.git
+[submodule "vendor/ccpm"]
+	path = vendor/ccpm
+	url = https://github.com/automazeio/ccpm.git

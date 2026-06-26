@@ -1,0 +1,94 @@
+/*
+ * Alistigo list components — token surface.
+ *
+ * Three layers, top to bottom:
+ *   1. Tailwind v4 — utility CSS via @import.
+ *   2. Radix Colors scales — light/dark/alpha, via @import.
+ *   3. Semantic tokens (--color-*, --radius, --font-*) — what components consume.
+ *
+ * The host (or app boot code) overrides the layer-3 vars to re-theme,
+ * either by setting them on :root or by injecting a CSS file. No JS theme
+ * runtime; no theme provider.
+ */
+
+@import "tailwindcss";
+
+@import "@radix-ui/colors/gray.css";
+@import "@radix-ui/colors/gray-dark.css";
+@import "@radix-ui/colors/gray-alpha.css";
+@import "@radix-ui/colors/violet.css";
+@import "@radix-ui/colors/violet-dark.css";
+@import "@radix-ui/colors/red.css";
+@import "@radix-ui/colors/red-dark.css";
+
+/*
+ * Tailwind v4 content scan. The components package owns its own source
+ * paths; consumers (apps) add an additional @source for their own files
+ * in their entry CSS so utility classes used in app code aren't tree-
+ * shaken away.
+ */
+@source "../../**/*.{ts,tsx}";
+
+@theme {
+  --color-bg: var(--color-bg-app);
+  --color-bg-subtle: var(--color-bg-subtle-app);
+  --color-fg: var(--color-fg-app);
+  --color-fg-muted: var(--color-fg-muted-app);
+  --color-border: var(--color-border-app);
+  --color-primary-9: var(--color-primary-9-app);
+  --color-primary-10: var(--color-primary-10-app);
+  --color-primary-fg: var(--color-primary-fg-app);
+  --color-danger-9: var(--color-danger-9-app);
+  --color-danger-10: var(--color-danger-10-app);
+
+  --radius: 0.625rem;
+
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Light mode — default.
+ * Each app-level token resolves to a Radix scale step.
+ * Override these on :root to re-theme.
+ */
+:root {
+  --color-bg-app: var(--gray-1);
+  --color-bg-subtle-app: var(--gray-3);
+  --color-fg-app: var(--gray-12);
+  --color-fg-muted-app: var(--gray-11);
+  --color-border-app: var(--gray-6);
+
+  --color-primary-9-app: var(--violet-9);
+  --color-primary-10-app: var(--violet-10);
+  --color-primary-fg-app: white;
+
+  --color-danger-9-app: var(--red-9);
+  --color-danger-10-app: var(--red-10);
+}
+
+[data-theme="dark"] {
+  --color-bg-app: var(--gray-1);
+  --color-bg-subtle-app: var(--gray-3);
+  --color-fg-app: var(--gray-12);
+  --color-fg-muted-app: var(--gray-11);
+  --color-border-app: var(--gray-6);
+  --color-primary-9-app: var(--violet-9);
+  --color-primary-10-app: var(--violet-10);
+  --color-primary-fg-app: white;
+  --color-danger-9-app: var(--red-9);
+  --color-danger-10-app: var(--red-10);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+}

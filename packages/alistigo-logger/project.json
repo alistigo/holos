@@ -1,0 +1,39 @@
+{
+  "name": "alistigo-logger",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-logger/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/alistigo-logger/dist",
+        "tsConfig": "packages/alistigo-logger/tsconfig.json",
+        "main": "packages/alistigo-logger/src/index.ts",
+        "rootDir": "packages/alistigo-logger/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-logger"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-logger"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-logger"
+      }
+    }
+  }
+}

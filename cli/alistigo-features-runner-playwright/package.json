@@ -1,0 +1,20 @@
+{
+  "name": "@alistigo/features-runner-playwright",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Cucumber.js runner for Alistigo Gherkin features. Consumes .feature files from @alistigo/features and drives the app via Playwright in step definitions.",
+  "scripts": {},
+  "dependencies": {
+    "@cucumber/cucumber": "^12.9.0",
+    "@alistigo/document-format": "workspace:*",
+    "@alistigo/features": "workspace:*",
+    "playwright": "^1.59.0"
+  },
+  "devDependencies": {
+    "@cucumber/pretty-formatter": "^1.0.1",
+    "@types/node": "^22.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.0"
+  }
+}

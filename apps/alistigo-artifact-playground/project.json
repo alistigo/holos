@@ -1,0 +1,102 @@
+{
+  "name": "alistigo-artifact-playground",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/alistigo-artifact-playground/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist/en"],
+      "options": {
+        "command": "vite build",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "build:fr": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist/fr"],
+      "options": {
+        "command": "LOCALE=fr vite build",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "build:all": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build", "build:fr"],
+      "options": {
+        "command": "echo 'All locales built'",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "dev:umd": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": ["alistigo-artifact-list"],
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "vite --config vite.config.umd.ts",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "dev:debug": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "VITE_ALISTIGO_DEBUG=true vite",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite preview --port 5173 --strictPort",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "storybook dev -p 6007",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    },
+    "build-storybook": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/storybook-static"],
+      "options": {
+        "command": "storybook build",
+        "cwd": "apps/alistigo-artifact-playground"
+      }
+    }
+  }
+}

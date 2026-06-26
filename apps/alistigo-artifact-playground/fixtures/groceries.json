@@ -1,0 +1,54 @@
+{
+  "@context": "https://schema.org",
+  "@type": "alistigo:Document",
+  "meta": {
+    "listId": "urn:uuid:01900000-0000-7000-8000-000000000002",
+    "formatVersion": "1.0.0",
+    "name": "Groceries",
+    "dateCreated": "2026-05-01T00:00:00.000Z",
+    "dateModified": "2026-05-01T00:00:00.000Z",
+    "eventLog": { "presence": "absent", "wipedAt": "2026-05-01T00:00:00.000Z" }
+  },
+  "projection": {
+    "@type": "ItemList",
+    "numberOfItems": 4,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000101",
+          "name": "Buy bread"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000102",
+          "name": "Buy milk"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000103",
+          "name": "Buy eggs"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000104",
+          "name": "Pick up dry cleaning"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "alistigo-features",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-features/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/alistigo-features/dist",
+        "tsConfig": "packages/alistigo-features/tsconfig.json",
+        "main": "packages/alistigo-features/src/index.ts",
+        "rootDir": "packages/alistigo-features/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-features"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": true,
+        "commands": ["bun ./node_modules/gherklin/bin/gherklin", "biome check ."],
+        "cwd": "packages/alistigo-features"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["prettier --write 'features/**/*.feature'", "biome check . --write"],
+        "cwd": "packages/alistigo-features"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --check 'features/**/*.feature'",
+        "cwd": "packages/alistigo-features"
+      }
+    },
+    "validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun tools/validate.ts",
+        "cwd": "packages/alistigo-features"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-features"
+      }
+    }
+  }
+}

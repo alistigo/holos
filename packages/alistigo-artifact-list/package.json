@@ -1,0 +1,44 @@
+{
+  "name": "@alistigo/artifact-list",
+  "version": "0.2.4",
+  "private": false,
+  "type": "module",
+  "description": "Self-contained UMD bundle of the Alistigo list widget — for Claude HTML artifacts and standalone pages. Includes React, Lingui, and all Alistigo packages; no external dependencies required.",
+  "main": "./dist/index.umd.js",
+  "types": "./src/index.tsx",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/claude-artifact-list-storage": "workspace:*",
+    "@alistigo/document-editor": "workspace:*",
+    "@alistigo/document-format": "workspace:*",
+    "@alistigo/domain": "workspace:*",
+    "@alistigo/list-components-react": "workspace:*",
+    "@alistigo/local-storage-repository": "workspace:*",
+    "@alistigo/logger": "workspace:*",
+    "@lingui/core": "^6.0.0",
+    "@lingui/react": "^6.0.0",
+    "@sentry/browser": "^9.0.0",
+    "@sentry/react": "^9.0.0",
+    "posthog-js": "^1.0.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@lingui/babel-plugin-lingui-macro": "^6.0.0",
+    "@lingui/vite-plugin": "^6.0.0",
+    "@sentry/vite-plugin": "^3.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.0.0",
+    "vite": "^7.0.0",
+    "vite-plugin-css-injected-by-js": "^4.0.1",
+    "@emotion/is-prop-valid": "^1.4.0"
+  }
+}

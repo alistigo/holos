@@ -1,0 +1,209 @@
+name: CI
+
+on:
+  # Run on draft PRs too — feedback while iterating is more valuable than
+  # the saved minutes. `ready_for_review` re-runs CI when a draft is
+  # promoted, so the status is fresh at merge time.
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  affected:
+    name: QA → build → test (affected)
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # nx affected needs git history to compute the base/head diff.
+          fetch-depth: 0
+
+      # Single source of truth for tool versions — same as local dev.
+      # `cache: true` reuses installed toolchains across runs.
+      - name: Install mise + repo tool versions
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+          cache: true
+
+      - name: Resolve pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Sets NX_BASE / NX_HEAD so `nx affected` only runs on what the PR
+      # (or the push to main) actually changed:
+      #   - PR:    base = merge-base with target branch, head = PR HEAD
+      #   - push:  base = last successful CI run on this workflow, head = HEAD
+      - name: Derive nx affected base/head
+        uses: nrwl/nx-set-shas@v4
+
+      # Detect whether any alistigo package is in the affected set.
+      # Playwright browser setup is only needed when the alistigo integration
+      # tests will actually run.
+      - name: Detect alistigo-affected packages
+        id: alistigo-affected
+        run: |
+          AFFECTED=$(pnpm exec nx show projects --affected 2>/dev/null | grep -i "alistigo" | head -1 || true)
+          echo "affected=$([ -n "$AFFECTED" ] && echo 'true' || echo 'false')" >> "$GITHUB_OUTPUT"
+
+      # Playwright ships browser binaries separately from the npm package.
+      # Cache on the lockfile hash — when playwright's version moves in
+      # pnpm-lock.yaml, the cache key invalidates and we redownload.
+      - name: Cache Playwright browsers
+        if: steps.alistigo-affected.outputs.affected == 'true'
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browsers
+        if: steps.alistigo-affected.outputs.affected == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm playwright:install
+
+      # OS-level deps (libnss, libatk, fonts, …) live in /usr/lib, not in
+      # the cached browser dir — install them every run.
+      - name: Install Playwright system deps
+        if: steps.alistigo-affected.outputs.affected == 'true'
+        run: pnpm --filter @alistigo/features-runner-playwright exec playwright install-deps chromium
+
+      # Order matters: cheap → expensive. A typecheck fail short-circuits
+      # the build; a build fail short-circuits tests.
+      - name: Lint (affected)
+        run: pnpm exec nx affected -t qa:lint --parallel=3
+
+      - name: Arch check
+        run: pnpm qa:arch-check
+
+      - name: Fallow dead-code audit
+        uses: fallow-rs/fallow@v2
+        with:
+          command: audit
+          comment: true
+          review-comments: true
+
+      - name: Typecheck (affected)
+        run: pnpm exec nx affected -t typecheck --parallel=3
+
+      - name: Build (affected)
+        run: pnpm exec nx affected -t build --parallel=3
+
+      - name: Test (affected)
+        run: pnpm exec nx affected -t test --parallel=3
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [affected]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.SEMANTIC_RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.SEMANTIC_RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Install mise + repo tool versions
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+          cache: true
+
+      - name: Resolve pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure git identity
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Version, changelog, GitHub Releases, and tag
+        run: pnpm exec nx release --skip-publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push version bumps and tags to main
+        run: git push --follow-tags origin main
+
+      - name: Build publishable packages
+        run: pnpm exec nx run-many -t build --parallel=3
+        env:
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+
+      - name: Configure npm registry auth
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        run: pnpm exec nx release publish --yes
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,47 @@
+pre-commit:
+  commands:
+    install-deps:
+      run: if git diff --cached --name-only | grep -q 'package\.json'; then pnpm install && git add pnpm-lock.yaml; fi
+
+pre-push:
+  commands:
+    lint:
+      run: pnpm run qa:lint || (pnpm run format && echo "Auto-fix applied — review changes, commit, and push again." && exit 1)
+    arch-check:
+      run: pnpm run qa:arch-check
+    fallow-audit:
+      run: pnpm run qa:audit
+    typecheck:
+      run: pnpm run build:typecheck
+
+post-merge:
+  commands:
+    install-deps:
+      run: if git diff ORIG_HEAD HEAD --name-only 2>/dev/null | grep -qE 'package\.json|pnpm-lock\.yaml'; then pnpm install; fi
+
+post-rewrite:
+  commands:
+    install-deps:
+      run: if git diff ORIG_HEAD HEAD --name-only 2>/dev/null | grep -qE 'package\.json|pnpm-lock\.yaml'; then pnpm install; fi
+
+commit-msg:
+  commands:
+    conventional-commit:
+      run: |
+        MSG=$(cat {1})
+        # Skip git-generated merge and revert messages
+        if echo "$MSG" | grep -qE '^(Merge |Revert ")'; then exit 0; fi
+        # Allow optional emoji prefix before the conventional type
+        if ! echo "$MSG" | grep -qE '^(\S+ )?(feat|fix|chore|docs|refactor|test|style|perf|ci|build|revert)(\(.+\))?(!)?: .+'; then
+          echo ""
+          echo "  ERROR: commit message must follow Conventional Commits format."
+          echo ""
+          echo "  Format:  <type>(<scope>): <description>"
+          echo "  Emoji:   🔧 <type>(<scope>): <description>  (optional)"
+          echo ""
+          echo "  Types:   feat  fix  chore  docs  refactor  test"
+          echo "           style  perf  ci  build  revert"
+          echo ""
+          echo "  Given:   $MSG"
+          exit 1
+        fi

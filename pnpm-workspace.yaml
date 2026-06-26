@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - packages/*
+  - cli/*
+ignoredBuiltDependencies:
+  - '@sentry/cli'
+  - core-js
+  - esbuild
+  - fallow
+  - lefthook
+  - nx

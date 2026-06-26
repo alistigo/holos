@@ -1,0 +1,52 @@
+{
+  "name": "alistigo-artifact-list",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "{projectRoot}/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "command": "LOCALE=en vite build",
+      "options": { "cwd": "{projectRoot}" },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "build:debug": {
+      "command": "LOCALE=en VITE_ALISTIGO_DEBUG=true vite build",
+      "options": { "cwd": "{projectRoot}" },
+      "outputs": ["{projectRoot}/dist"],
+      "dependsOn": [
+        { "projects": ["alistigo-logger"], "target": "build" },
+        { "projects": ["alistigo-list-components-react"], "target": "build" },
+        { "projects": ["alistigo-claude-artifact-list-storage"], "target": "build" },
+        { "projects": ["alistigo-local-storage-repository"], "target": "build" },
+        { "projects": ["alistigo-document-editor"], "target": "build" },
+        { "projects": ["alistigo-document-format"], "target": "build" },
+        { "projects": ["alistigo-domain"], "target": "build" }
+      ]
+    },
+    "typecheck": {
+      "command": "tsc --noEmit",
+      "options": { "cwd": "{projectRoot}" }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

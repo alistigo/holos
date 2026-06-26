@@ -1,0 +1,25 @@
+{
+  "name": "@alistigo/artifact-config-format",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./schemas/artifact-config.json": "./src/schemas/artifact-config.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/schemas"
+  ],
+  "dependencies": {
+    "@alistigo/artifact-config-list-format": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "alistigo-artifact-manager",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-artifact-manager/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "tsc -p tsconfig.json",
+        "cwd": "packages/alistigo-artifact-manager"
+      },
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-artifact-manager"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-artifact-manager"
+      }
+    },
+    "build:umd": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist/index.umd.js"],
+      "options": {
+        "command": "vite build --config vite.config.umd.ts",
+        "cwd": "packages/alistigo-artifact-manager"
+      },
+      "dependsOn": [{ "projects": ["alistigo-artifact-config-format"], "target": "build" }]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "packages/alistigo-artifact-manager"
+      },
+      "dependsOn": [{ "projects": ["alistigo-artifact-config-format"], "target": "build" }]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-artifact-manager"
+      }
+    }
+  }
+}

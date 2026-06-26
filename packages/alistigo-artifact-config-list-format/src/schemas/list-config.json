@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://alistigo.ai/schema/v1/artifact-config/list.json",
+  "title": "List Artifact Config",
+  "description": "Configuration document for the Alistigo list artifact.",
+  "type": "object",
+  "properties": {
+    "readonly": { "type": "boolean", "default": false }
+  },
+  "additionalProperties": false
+}

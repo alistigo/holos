@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "src/index.{ts,tsx,js,jsx,mjs}",
+    "src/main.{ts,tsx,js,jsx,mjs}",
+    "src/cli.{ts,js}",
+    "bin/*.{ts,js}"
+  ],
+  "workspaces": {
+    "packages": ["apps/*", "packages/*", "cli/*"]
+  },
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.nx/**",
+    "**/vendor/**",
+    "**/*.generated.ts",
+    "**/.lingui/**",
+    "**/.fallow/**",
+
+    "apps/alistigo-artifact-playground/index.umd.html",
+    "apps/alistigo-artifact-playground/src/components/DevFixturePicker.tsx",
+
+    "lingui.config.ts",
+    "packages/alistigo-features/gherklin.config.ts",
+    "packages/alistigo-features/tools/validate.ts",
+
+    ".github/**"
+  ],
+  "dynamicallyLoaded": [
+    "**/*.test.{ts,tsx}",
+    "**/tests/**/*.{ts,tsx}",
+    "cli/alistigo-features-runner-playwright/src/support/hooks.ts",
+    "**/*.steps.{ts,js}"
+  ],
+  "rules": {
+    "unused-files": "error",
+    "unused-exports": "error",
+    "circular-dependencies": "error"
+  },
+  "ignoreDependencies": [
+    "@alistigo/artifact-list",
+    "@alistigo/document-format",
+    "@alistigo/list-components-react",
+    "@lingui/react",
+    "gherklin",
+    "@cucumber/pretty-formatter",
+    "@lingui/format-po",
+    "@emotion/is-prop-valid"
+  ],
+  "duplicates": {
+    "minOccurrences": 3
+  },
+  "health": {
+    "maxCyclomatic": 20,
+    "maxCognitive": 15,
+    "maxCrap": 30
+  }
+}

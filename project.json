@@ -1,0 +1,48 @@
+{
+  "name": "holos",
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check ."
+      }
+    },
+    "qa:arch-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "depcruise apps packages agents cli --config .dependency-cruiser.cjs"
+      }
+    },
+    "qa:dead-code": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "fallow dead-code"
+      }
+    },
+    "qa:audit": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "fallow audit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "true"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "true"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "true"
+      }
+    }
+  }
+}

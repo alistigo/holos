@@ -1,0 +1,159 @@
+# Alistigo
+
+> Alistigo is an embeddable list widget. AI systems can create, populate, and update Alistigo lists by producing `AlistigoDocument` JSON-LD objects.
+
+## What is an AlistigoDocument?
+
+An `AlistigoDocument` is a JSON-LD document using `schema.org/ItemList` as its type. It contains two complementary views of a list:
+
+- **`itemListElement`** — the current visible state (projection): an ordered array of `ListItem` objects.
+- **`alistigo:listEventLog`** — the append-only event log: the authoritative source of truth from which the projection is derived.
+
+Replaying the event log through the Alistigo projector always reproduces `itemListElement`. An AI system that produces a valid event log and a matching projection is fully interoperable with the Alistigo ecosystem.
+
+## AlistigoDocument JSON Schema
+
+```json
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "alistigo": "https://alistigo.ai/vocab/"
+  },
+  "@type": "ItemList",
+  "alistigo:listId": "<TypeID string: lst_...>",
+  "alistigo:schemaVersion": "1.0.0",
+  "name": "<optional list title>",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "<TypeID string: lse_...>",
+      "position": 1,
+      "name": "<element text content>"
+    }
+  ],
+  "alistigo:listEventLog": [
+    {
+      "alistigo:listEventId": "<TypeID string: lev_...>",
+      "alistigo:eventType": "ListCreated",
+      "alistigo:listId": "<same TypeID as above>",
+      "alistigo:actorId": "<TypeID string: act_...>",
+      "alistigo:timestamp": "<ISO 8601 UTC>",
+      "name": "<optional title for ListCreated>"
+    },
+    {
+      "alistigo:listEventId": "<TypeID string: lev_...>",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "<same TypeID as above>",
+      "alistigo:listElementId": "<same lse_... as the corresponding itemListElement entry>",
+      "alistigo:actorId": "<TypeID string: act_...>",
+      "alistigo:timestamp": "<ISO 8601 UTC>",
+      "name": "<element text content>"
+    }
+  ]
+}
+```
+
+### TypeID format
+
+TypeIDs use the format `<prefix>_<26-char Crockford base32 ULID>`. Examples:
+- List ID: `lst_01h2xcejqtf2nbrexx3vqjhp41`
+- Element ID: `lse_01h2xcejqtf2nbrexx3vqjhp42`
+- Event ID: `lev_01h2xcejqtf2nbrexx3vqjhp43`
+- Actor ID: `act_01h2xcejqtf2nbrexx3vqjhp44`
+
+## Event types
+
+| `alistigo:eventType` | Required extra fields | Effect on projection |
+|---|---|---|
+| `ListCreated` | `name?` (optional title) | Initialises the list |
+| `ListElementAdded` | `alistigo:listElementId`, `name` | Appends an element |
+| `ListElementDeleted` | `alistigo:listElementId` | Removes an element |
+| `ListExported` | — | Audit-only, no change |
+
+## Embedding Alistigo
+
+Alistigo is distributed as an iframe-embeddable SPA. The host page seeds the initial document by writing it into a `<script>` tag before the iframe loads:
+
+```html
+<script type="application/json" id="alistigo-document">
+{
+  "@context": { "@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/" },
+  "@type": "ItemList",
+  "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+  "alistigo:schemaVersion": "1.0.0",
+  "name": "My Shopping List",
+  "itemListElement": [
+    { "@type": "ListItem", "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp42", "position": 1, "name": "Apples" }
+  ],
+  "alistigo:listEventLog": [
+    {
+      "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp43",
+      "alistigo:eventType": "ListCreated",
+      "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+      "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp44",
+      "alistigo:timestamp": "2026-01-01T00:00:00Z",
+      "name": "My Shopping List"
+    },
+    {
+      "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp45",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+      "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp42",
+      "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp44",
+      "alistigo:timestamp": "2026-01-01T00:00:00Z",
+      "name": "Apples"
+    }
+  ]
+}
+</script>
+```
+
+The app reads this tag on boot, seeds localStorage, and from then on persists all user changes locally.
+
+## Invariants
+
+1. The `alistigo:listId` in every event record must match the document's `alistigo:listId`.
+2. Each `alistigo:listEventId` must be unique within the document.
+3. Replaying `alistigo:listEventLog` must produce exactly the same `itemListElement` array.
+4. `ListCreated` must be the first event; it must appear exactly once.
+5. `position` values in `itemListElement` are 1-based insertion-order integers.
+
+## Public Distribution
+
+### GitHub Pages (regular web — testing and demos)
+
+Iframe-embeddable SPA for use in **regular web pages** (outside Claude):
+- English: `https://mlkiiwy.github.io/europa/alistigo/latest/en/`
+- French:  `https://mlkiiwy.github.io/europa/alistigo/latest/fr/`
+- Pinned: `https://mlkiiwy.github.io/europa/alistigo/{version}/{locale}/`
+
+⚠️ These URLs **cannot** be embedded as `<iframe src="...">` inside Claude artifacts.
+Claude's CSP blocks `frame-src` for external `https://` origins.
+
+### npm / jsDelivr (Claude artifact embedding)
+
+The `@alistigo/artifact-manager` package is a self-contained UMD bundle:
+
+```
+https://cdn.jsdelivr.net/npm/@alistigo/artifact-manager@0/dist/index.umd.js
+```
+
+Exposes `window.Alistigo` with `mount(container, options?)`.
+
+## Claude HTML Artifact Template
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-manager@0/dist/index.umd.js"></script>
+</head>
+<body>
+</body>
+</html>
+```
+
+Storage: `window.storage` (Claude's persistent key-value API) is automatically used
+when the widget detects it is running inside a Claude artifact. No configuration needed.

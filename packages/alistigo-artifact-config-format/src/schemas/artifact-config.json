@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["app"],
+  "properties": {
+    "app": { "type": "string" },
+    "lang": { "type": "string" }
+  },
+  "if": {
+    "properties": { "app": { "const": "@alistigo/artifact-list" } }
+  },
+  "then": {
+    "properties": {
+      "app": { "type": "string" },
+      "lang": { "type": "string" },
+      "readonly": { "type": "boolean", "default": false }
+    },
+    "additionalProperties": false
+  },
+  "else": {
+    "additionalProperties": true
+  }
+}

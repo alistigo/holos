@@ -1,0 +1,39 @@
+{
+  "name": "alistigo-local-storage-repository",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-local-storage-repository/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/alistigo-local-storage-repository/dist",
+        "tsConfig": "packages/alistigo-local-storage-repository/tsconfig.json",
+        "main": "packages/alistigo-local-storage-repository/src/index.ts",
+        "rootDir": "packages/alistigo-local-storage-repository/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-local-storage-repository"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-local-storage-repository"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-local-storage-repository"
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "holos",
+  "private": true,
+  "scripts": {
+    "build": "nx run-many -t build",
+    "build:typecheck": "nx run-many -t typecheck",
+    "qa": "nx run-many -t qa:lint qa:arch-check qa:dead-code qa:audit && pnpm qa:stories-check",
+    "qa:lint": "nx run-many -t qa:lint",
+    "qa:arch-check": "depcruise apps packages cli --config .dependency-cruiser.cjs",
+    "qa:dead-code": "fallow dead-code",
+    "qa:audit": "fallow audit",
+    "qa:stories-check": "bash scripts/check-stories.sh",
+    "format": "biome check --write .",
+    "test": "nx run-many -t test",
+    "dev": "nx run-many -t dev --parallel",
+    "nx": "nx",
+    "clean": "nx run-many -t clean",
+    "playwright:install": "pnpm --filter @alistigo/features-runner-playwright exec playwright install chromium",
+    "i18n:extract": "lingui extract",
+    "i18n:extract:clean": "lingui extract --clean",
+    "i18n:compile": "lingui compile",
+    "agent:dailylife": "bun apps/dailylife-cli/src/index.ts",
+    "kill": "lsof -ti :5173,:5174 | xargs kill -9 2>/dev/null; true",
+    "validate:file": "bun scripts/validate-file.ts",
+    "prepare": "if [ -d .git ]; then git config --unset-all core.hooksPath 2>/dev/null; lefthook install; fi"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6",
+    "@lingui/cli": "^6.0.0",
+    "@lingui/format-po": "^6.0.0",
+    "@nx/js": "22.5.4",
+    "@nx/workspace": "22.5.4",
+    "@types/bun": "^1.2.0",
+    "dependency-cruiser": "^17.4.0",
+    "fallow": "^2.80.0",
+    "lefthook": "^2.1.8",
+    "nx": "22.5.4",
+    "typescript": "^5.8.0",
+    "yaml": "^2.7.0"
+  },
+  "packageManager": "pnpm@10.7.0",
+  "engines": {
+    "bun": ">=1.1.0",
+    "node": ">=22.0.0"
+  }
+}

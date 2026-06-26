@@ -1,0 +1,43 @@
+{
+  "name": "alistigo-features-runner-playwright",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "cli/alistigo-features-runner-playwright/src",
+  "projectType": "application",
+  "targets": {
+    "run-all-features": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "bun ./node_modules/@cucumber/cucumber/bin/cucumber.js",
+        "args": "--config cucumber.config.ts --profile all",
+        "cwd": "cli/alistigo-features-runner-playwright"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash -c 'set -m; nx run alistigo-artifact-playground:preview & nx run alistigo-features-runner-playwright:run-all-features; RESULT=$?; kill %1 2>/dev/null; wait %1 2>/dev/null; exit $RESULT'"
+      },
+      "dependsOn": [
+        {
+          "projects": ["alistigo-artifact-playground"],
+          "target": "build"
+        }
+      ]
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "cli/alistigo-features-runner-playwright"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "cli/alistigo-features-runner-playwright"
+      }
+    }
+  }
+}

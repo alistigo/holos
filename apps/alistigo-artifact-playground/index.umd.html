@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alistigo (UMD preview)</title>
+  </head>
+  <body>
+    <!--
+      UMD preview mode: the built @alistigo/artifact bundle is served at
+      /index.umd.js by the Vite middleware in vite.config.umd.ts.
+      The bundle auto-mounts using the #alistigo-config below.
+      Edit the config to test different documents.
+    -->
+    <script type="application/json" id="alistigo-config">
+      {
+        "container": "#root",
+        "document": {
+          "@context": { "@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/" },
+          "@type": "ItemList",
+          "alistigo:listId": "lst_00000000000000000000000000",
+          "alistigo:schemaVersion": "1.0.0",
+          "name": "UMD Preview List",
+          "itemListElement": [],
+          "alistigo:listEventLog": []
+        }
+      }
+    </script>
+    <div id="root"></div>
+    <script src="/index.umd.js"></script>
+  </body>
+</html>

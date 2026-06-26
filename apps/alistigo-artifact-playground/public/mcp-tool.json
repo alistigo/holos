@@ -1,0 +1,130 @@
+{
+  "name": "create_alistigo_list",
+  "description": "Create an AlistigoDocument JSON-LD object representing a list. Returns a document ready to be embedded in an Alistigo host page via the <script id=\"alistigo-document\"> tag.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "listId": {
+        "type": "string",
+        "description": "TypeID for the list (prefix 'lst_' followed by 26 Crockford base32 characters). Generate a new ULIDv7-based TypeID if not provided.",
+        "pattern": "^lst_[0-9a-hjkmnp-tv-z]{26}$"
+      },
+      "name": {
+        "type": "string",
+        "description": "Optional title for the list.",
+        "maxLength": 255
+      },
+      "items": {
+        "type": "array",
+        "description": "Initial list items, in order.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "elementId": {
+              "type": "string",
+              "description": "TypeID for the element (prefix 'lse_'). Generate a new one if not provided.",
+              "pattern": "^lse_[0-9a-hjkmnp-tv-z]{26}$"
+            },
+            "text": {
+              "type": "string",
+              "description": "The text content of the list item.",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "required": ["text"]
+        },
+        "default": []
+      },
+      "actorId": {
+        "type": "string",
+        "description": "TypeID for the actor creating this list (prefix 'act_'). Defaults to a system actor.",
+        "pattern": "^act_[0-9a-hjkmnp-tv-z]{26}$"
+      },
+      "timestamp": {
+        "type": "string",
+        "description": "ISO 8601 UTC timestamp for all events. Defaults to the current time.",
+        "format": "date-time"
+      }
+    },
+    "required": []
+  },
+  "outputSchema": {
+    "type": "object",
+    "description": "An AlistigoDocument conforming to the JSON-LD schema at https://alistigo.ai/vocab/. Embed this in a <script type=\"application/json\" id=\"alistigo-document\"> tag.",
+    "properties": {
+      "@context": { "type": "object" },
+      "@type": { "type": "string", "const": "ItemList" },
+      "alistigo:listId": { "type": "string" },
+      "alistigo:schemaVersion": { "type": "string" },
+      "name": { "type": "string" },
+      "itemListElement": { "type": "array" },
+      "alistigo:listEventLog": { "type": "array" }
+    },
+    "required": [
+      "@context",
+      "@type",
+      "alistigo:listId",
+      "alistigo:schemaVersion",
+      "itemListElement",
+      "alistigo:listEventLog"
+    ]
+  },
+  "examples": [
+    {
+      "input": {
+        "name": "Shopping List",
+        "items": [{ "text": "Apples" }, { "text": "Bananas" }]
+      },
+      "output": {
+        "@context": { "@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/" },
+        "@type": "ItemList",
+        "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+        "alistigo:schemaVersion": "1.0.0",
+        "name": "Shopping List",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp42",
+            "position": 1,
+            "name": "Apples"
+          },
+          {
+            "@type": "ListItem",
+            "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp43",
+            "position": 2,
+            "name": "Bananas"
+          }
+        ],
+        "alistigo:listEventLog": [
+          {
+            "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp44",
+            "alistigo:eventType": "ListCreated",
+            "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+            "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
+            "alistigo:timestamp": "2026-01-01T00:00:00Z",
+            "name": "Shopping List"
+          },
+          {
+            "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp46",
+            "alistigo:eventType": "ListElementAdded",
+            "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+            "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp42",
+            "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
+            "alistigo:timestamp": "2026-01-01T00:00:00Z",
+            "name": "Apples"
+          },
+          {
+            "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp47",
+            "alistigo:eventType": "ListElementAdded",
+            "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
+            "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp43",
+            "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
+            "alistigo:timestamp": "2026-01-01T00:00:00Z",
+            "name": "Bananas"
+          }
+        ]
+      }
+    }
+  ]
+}

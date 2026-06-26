@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alistigo.ai/schema/v1/document.json",
+  "title": "Alistigo Document",
+  "description": "A self-contained Alistigo list document in JSON-LD ItemList format.",
+  "type": "object",
+  "required": [
+    "@context",
+    "@type",
+    "alistigo:listId",
+    "alistigo:schemaVersion",
+    "itemListElement",
+    "alistigo:listEventLog"
+  ],
+  "properties": {
+    "@context": {
+      "type": "object",
+      "required": ["@vocab", "alistigo"],
+      "properties": {
+        "@vocab": { "type": "string", "const": "https://schema.org/" },
+        "alistigo": { "type": "string", "const": "https://alistigo.ai/vocab/" }
+      }
+    },
+    "@type": { "type": "string", "const": "ItemList" },
+    "alistigo:listId": { "type": "string", "pattern": "^lst_" },
+    "alistigo:schemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "name": { "type": "string" },
+    "itemListElement": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ListItem" }
+    },
+    "alistigo:listEventLog": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/EventRecord" }
+    }
+  },
+  "$defs": {
+    "ListItem": {
+      "type": "object",
+      "required": ["@type", "alistigo:listElementId", "position", "name"],
+      "properties": {
+        "@type": { "type": "string", "const": "ListItem" },
+        "alistigo:listElementId": { "type": "string", "pattern": "^lse_" },
+        "position": { "type": "integer", "minimum": 1 },
+        "name": { "type": "string", "minLength": 1 }
+      }
+    },
+    "EventRecord": {
+      "type": "object",
+      "required": [
+        "alistigo:listEventId",
+        "alistigo:eventType",
+        "alistigo:listId",
+        "alistigo:actorId",
+        "alistigo:timestamp"
+      ],
+      "properties": {
+        "alistigo:listEventId": { "type": "string" },
+        "alistigo:eventType": {
+          "type": "string",
+          "enum": ["ListCreated", "ListElementAdded", "ListElementDeleted", "ListExported"]
+        },
+        "alistigo:listId": { "type": "string" },
+        "alistigo:actorId": { "type": "string" },
+        "alistigo:timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

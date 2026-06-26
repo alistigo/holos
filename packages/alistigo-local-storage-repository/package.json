@@ -1,0 +1,20 @@
+{
+  "name": "@alistigo/local-storage-repository",
+  "version": "0.2.2",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "dependencies": {
+    "@alistigo/logger": "workspace:*",
+    "@alistigo/domain": "workspace:*",
+    "@alistigo/document-format": "workspace:*",
+    "@alistigo/document-editor": "workspace:*"
+  }
+}

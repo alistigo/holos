@@ -1,0 +1,34 @@
+{
+  "name": "alistigo-artifact-playground",
+  "version": "0.2.4",
+  "private": true,
+  "type": "module",
+  "description": "Two-page dev playground for Alistigo artifacts. Host page provides a Dev Config Form for configuring artifacts; iframe page renders the artifact in an isolated context that mirrors the Claude embedding environment.",
+  "scripts": {
+    "build:en": "LOCALE=en vite build",
+    "build:fr": "LOCALE=fr vite build",
+    "build:all": "pnpm run build:en && pnpm run build:fr"
+  },
+  "dependencies": {
+    "@alistigo/artifact-list": "workspace:*",
+    "@alistigo/artifact-manager": "workspace:*",
+    "@alistigo/document-format": "workspace:*",
+    "@alistigo/list-components-react": "workspace:*",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@lingui/babel-plugin-lingui-macro": "^6.0.0",
+    "@lingui/core": "^6.0.0",
+    "@lingui/react": "^6.0.0",
+    "@lingui/vite-plugin": "^6.0.0",
+    "@storybook/react-vite": "^10.3.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "storybook": "^10.3.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^7.0.0"
+  }
+}

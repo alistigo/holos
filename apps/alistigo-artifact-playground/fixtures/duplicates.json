@@ -1,0 +1,45 @@
+{
+  "@context": "https://schema.org",
+  "@type": "alistigo:Document",
+  "meta": {
+    "listId": "urn:uuid:01900000-0000-7000-8000-000000000003",
+    "formatVersion": "1.0.0",
+    "name": "Duplicates allowed",
+    "dateCreated": "2026-05-01T00:00:00.000Z",
+    "dateModified": "2026-05-01T00:00:00.000Z",
+    "eventLog": { "presence": "absent", "wipedAt": "2026-05-01T00:00:00.000Z" }
+  },
+  "projection": {
+    "@type": "ItemList",
+    "numberOfItems": 3,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000201",
+          "name": "Buy bread"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000202",
+          "name": "Buy bread"
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "Thing",
+          "@id": "urn:uuid:01900000-0000-7000-8000-000000000203",
+          "name": "Buy milk"
+        }
+      }
+    ]
+  }
+}

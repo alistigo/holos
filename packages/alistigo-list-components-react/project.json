@@ -1,0 +1,52 @@
+{
+  "name": "alistigo-list-components-react",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-list-components-react/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "pnpm build",
+        "cwd": "packages/alistigo-list-components-react"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-list-components-react"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-list-components-react"
+      }
+    },
+    "storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "storybook dev -p 6006",
+        "cwd": "packages/alistigo-list-components-react"
+      }
+    },
+    "build-storybook": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/storybook-static"],
+      "options": {
+        "command": "storybook build",
+        "cwd": "packages/alistigo-list-components-react"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist storybook-static",
+        "cwd": "packages/alistigo-list-components-react"
+      }
+    }
+  }
+}

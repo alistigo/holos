@@ -1,0 +1,39 @@
+{
+  "name": "alistigo-claude-artifact-list-storage",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-claude-artifact-list-storage/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/alistigo-claude-artifact-list-storage/dist",
+        "tsConfig": "packages/alistigo-claude-artifact-list-storage/tsconfig.json",
+        "main": "packages/alistigo-claude-artifact-list-storage/src/index.ts",
+        "rootDir": "packages/alistigo-claude-artifact-list-storage/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-claude-artifact-list-storage"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-claude-artifact-list-storage"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-claude-artifact-list-storage"
+      }
+    }
+  }
+}

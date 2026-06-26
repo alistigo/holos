@@ -1,0 +1,46 @@
+{
+  "name": "alistigo-artifact-config-format",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-artifact-config-format/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/alistigo-artifact-config-format/dist",
+        "tsConfig": "packages/alistigo-artifact-config-format/tsconfig.json",
+        "main": "packages/alistigo-artifact-config-format/src/index.ts",
+        "rootDir": "packages/alistigo-artifact-config-format/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/alistigo-artifact-config-format"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "packages/alistigo-artifact-config-format"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-artifact-config-format"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-artifact-config-format"
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@alistigo/artifact-manager",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/artifact-config-format": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}

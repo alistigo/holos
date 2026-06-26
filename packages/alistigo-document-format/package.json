@@ -1,0 +1,39 @@
+{
+  "name": "@alistigo/document-format",
+  "version": "0.2.2",
+  "private": false,
+  "type": "module",
+  "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format. The source of truth for what an Alistigo document looks like.",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./schemas/document.json": "./src/schemas/document.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/schemas",
+    "docs"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/domain": "workspace:*"
+  },
+  "peerDependencies": {
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "peerDependenciesMeta": {
+    "ajv": {
+      "optional": true
+    },
+    "ajv-formats": {
+      "optional": true
+    }
+  }
+}

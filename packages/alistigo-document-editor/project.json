@@ -1,0 +1,46 @@
+{
+  "name": "alistigo-document-editor",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/alistigo-document-editor/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/alistigo-document-editor/dist",
+        "tsConfig": "packages/alistigo-document-editor/tsconfig.json",
+        "main": "packages/alistigo-document-editor/src/index.ts",
+        "rootDir": "packages/alistigo-document-editor/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.test.json",
+        "cwd": "packages/alistigo-document-editor"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "packages/alistigo-document-editor"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-document-editor"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/alistigo-document-editor"
+      }
+    }
+  }
+}

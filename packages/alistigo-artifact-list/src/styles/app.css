@@ -1,0 +1,10 @@
+/*
+ * Embedded-app entry CSS. Imports the components-package CSS (which sets
+ * up Tailwind v4 + Radix Colors + semantic tokens), then adds an
+ * @source for this app's own files so utility classes used in
+ * App.tsx / DevFixturePicker.tsx aren't tree-shaken away.
+ */
+
+@import "@alistigo/list-components-react/styles.css";
+
+@source "../**/*.{ts,tsx}";

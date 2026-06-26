@@ -1,0 +1,32 @@
+{
+  "name": "@alistigo/features",
+  "version": "0.2.2",
+  "private": false,
+  "type": "module",
+  "description": "Gherkin behavior specifications for Alistigo AI. Source of truth for what the app should do; the runner reads these files to assert conformance.",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./tags": {
+      "import": "./dist/tags.js",
+      "types": "./dist/tags.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "features"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gherklin": "^1.0.0",
+    "prettier": "^3.3.0",
+    "prettier-plugin-gherkin": "^3.1.2"
+  }
+}
