@@ -1,6 +1,7 @@
 {
   "name": "@alistigo/artifact-list",
   "version": "0.2.4",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "description": "Self-contained UMD bundle of the Alistigo list widget — for Claude HTML artifacts and standalone pages. Includes React, Lingui, and all Alistigo packages; no external dependencies required.",

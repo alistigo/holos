@@ -1,6 +1,7 @@
 {
   "name": "@alistigo/document-format",
   "version": "0.2.2",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format. The source of truth for what an Alistigo document looks like.",

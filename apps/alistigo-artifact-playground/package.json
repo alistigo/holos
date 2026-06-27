@@ -1,6 +1,7 @@
 {
   "name": "alistigo-artifact-playground",
   "version": "0.2.4",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "description": "Two-page dev playground for Alistigo artifacts. Host page provides a Dev Config Form for configuring artifacts; iframe page renders the artifact in an isolated context that mirrors the Claude embedding environment.",

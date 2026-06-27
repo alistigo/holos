@@ -1,6 +1,7 @@
 {
   "name": "@alistigo/local-storage-repository",
   "version": "0.2.2",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",

@@ -28,6 +28,7 @@ cat > "$PKG_DIR/package.json" <<EOF
 {
   "name": "@mlabrut/$NAME",
   "version": "0.1.0",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "exports": {
@@ -118,6 +119,9 @@ pnpm add @mlabrut/$NAME
 import {} from "@mlabrut/$NAME";
 \`\`\`
 EOF
+
+# LICENSE
+cp "$REPO_ROOT/LICENSE" "$PKG_DIR/LICENSE"
 
 echo "Created packages/$NAME"
 echo "Run 'pnpm install' to link the new package in the workspace."

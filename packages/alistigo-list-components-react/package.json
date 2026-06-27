@@ -1,6 +1,7 @@
 {
   "name": "@alistigo/list-components-react",
   "version": "0.2.2",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "description": "React presentational components for the Alistigo base list app — built on the repo's chosen stack (Tailwind v4 + Radix Primitives + Vaul + Motion + Lucide + Radix Colors + Lingui i18n). Pinned to the driver-playwright contract; ships its own Storybook for component review.",
