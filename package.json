@@ -1,5 +1,6 @@
 {
   "name": "holos",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "build": "nx run-many -t build",

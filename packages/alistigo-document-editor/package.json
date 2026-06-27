@@ -1,6 +1,7 @@
 {
   "name": "@alistigo/document-editor",
   "version": "0.2.2",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "description": "The Alistigo document editor — pure, no UI. Takes an AlistigoDocument in, accepts commands (AddElement, DeleteElement, RenameList, …), produces events, folds them via the format package's projector, returns the updated document. The Application layer of the alistigo-ai system.",

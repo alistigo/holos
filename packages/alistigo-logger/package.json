@@ -1,6 +1,7 @@
 {
   "name": "@alistigo/logger",
   "version": "0.2.2",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "description": "Shared pino-based logger for Alistigo apps and packages. Wraps pino with a singleton root logger and a createLogger factory for named child loggers.",
