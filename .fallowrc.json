@@ -31,7 +31,8 @@
     "**/*.test.{ts,tsx}",
     "**/tests/**/*.{ts,tsx}",
     "cli/alistigo-features-runner-playwright/src/support/hooks.ts",
-    "**/*.steps.{ts,js}"
+    "**/*.steps.{ts,js}",
+    "**/umd-entry.{ts,js}"
   ],
   "rules": {
     "unused-files": "error",

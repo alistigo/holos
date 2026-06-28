@@ -5,5 +5,5 @@
  */
 export const ARTIFACT_REGISTRY: Record<string, string> = {
   "@alistigo/artifact-list":
-    "https://cdn.jsdelivr.net/npm/@alistigo/artifact-list@latest/dist/index.umd.js",
+    "https://cdn.jsdelivr.net/npm/@alistigo/artifact-list@0/dist/index.umd.js",
 };

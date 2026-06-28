@@ -12,7 +12,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
+      entry: path.resolve(__dirname, "src/umd-entry.ts"),
       name: "AlistigoArtifactManager",
       formats: ["umd"],
       fileName: () => "index.umd.js",
