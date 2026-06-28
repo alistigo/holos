@@ -1,11 +1,13 @@
 ---
 name: alistigo
-description: Embed the Alistigo list widget in a Claude HTML artifact using npm/jsDelivr. Use when asked to add a list to an artifact.
+description: Embed an Alistigo list widget in a Claude HTML artifact or standalone page using @alistigo/artifact-manager. Use when asked to add a list to an artifact.
 metadata:
   type: embedding
 ---
 
 # Alistigo — Embedding in Claude HTML Artifacts
+
+Always use `@alistigo/artifact-manager` as the entrypoint. Never load `@alistigo/artifact-list` directly.
 
 ## Quick Template
 
@@ -17,19 +19,28 @@ metadata:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-manager@0/dist/index.umd.js"></script>
+  <script id="alistigo-manager-config" type="application/json">
+  {
+    "app": "@alistigo/artifact-list"
+  }
+  </script>
 </head>
 <body class="p-4">
-  <div id="app"></div>
-  <script>Alistigo.mount('#app');</script>
 </body>
 </html>
 ```
 
+No `<div id="app">` needed — the manager creates one automatically.
+
 ## Pre-seeding with a document
 
-```js
-Alistigo.mount('#app', {
-  document: {
+Put the document inline in the config tag:
+
+```html
+<script id="alistigo-manager-config" type="application/json">
+{
+  "app": "@alistigo/artifact-list",
+  "document": {
     "@context": {"@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/"},
     "@type": "ItemList",
     "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
@@ -58,13 +69,23 @@ Alistigo.mount('#app', {
       }
     ]
   }
-});
+}
+</script>
 ```
 
-## Constraints (M1)
+## Config fields
 
-- Text elements only (no checkboxes, priorities, dates)
-- Single list per artifact
+| Field | Required | Description |
+|-------|----------|-------------|
+| `app` | **Yes** | `"@alistigo/artifact-list"` |
+| `lang` | No | BCP-47 code — omit unless a specific locale is requested |
+| `readonly` | No | `true` to prevent edits |
+| `document` | No | Pre-populated `AlistigoDocument` |
+
+## Rules
+
+- The config tag `id` must be exactly `alistigo-manager-config`, type `application/json`
+- Only include fields that are in the schema — no extras
+- **Do NOT use `<iframe src="...">` with external URLs** — Claude CSP blocks it
 - Storage: auto-detected — `window.storage` in Claude, `localStorage` otherwise
-- **Do NOT use `<iframe src="...">` with an external URL** — Claude CSP blocks it
 - Full schema: `https://mlkiiwy.github.io/europa/alistigo/latest/en/llms.txt`
