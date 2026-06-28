@@ -44,3 +44,5 @@ export type { SchemaVersion } from "./value-objects/schema-version.js";
 export { CURRENT_SCHEMA_VERSION, createSchemaVersion } from "./value-objects/schema-version.js";
 export type { Timestamp } from "./value-objects/timestamp.js";
 export { createTimestamp, nowTimestamp } from "./value-objects/timestamp.js";
+
+// @public
