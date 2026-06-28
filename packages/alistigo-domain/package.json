@@ -1,7 +1,26 @@
 {
   "name": "@alistigo/domain",
   "version": "0.2.2",
+  "description": "Shared domain primitives and types for Alistigo — IDs, value objects, and core entities.",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-domain"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-domain#readme",
+  "keywords": [
+    "alistigo",
+    "domain",
+    "typescript"
+  ],
   "private": false,
   "type": "module",
   "exports": {

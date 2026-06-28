@@ -1,7 +1,28 @@
 {
   "name": "@alistigo/artifact-config-format",
   "version": "0.1.0",
+  "description": "Aggregate config schema and TypeScript types for Alistigo artifacts — discriminated union combining base config with per-artifact schemas.",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-artifact-config-format"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-config-format#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "config",
+    "json-schema",
+    "typescript"
+  ],
   "private": false,
   "type": "module",
   "exports": {

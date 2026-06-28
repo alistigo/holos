@@ -1,5 +1,10 @@
 # @alistigo/list-components-react
 
+[![npm version](https://img.shields.io/npm/v/@alistigo/list-components-react.svg?style=flat)](https://www.npmjs.com/package/@alistigo/list-components-react)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
+
 React presentational components for the Alistigo base list app, built on
 the repo's chosen stack (see
 [`projects/alistigo-ai/ui-library-research.md`](../../projects/alistigo-ai/ui-library-research.md)

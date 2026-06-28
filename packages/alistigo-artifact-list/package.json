@@ -2,6 +2,28 @@
   "name": "@alistigo/artifact-list",
   "version": "0.2.4",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-artifact-list"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-list#readme",
+  "keywords": [
+    "alistigo",
+    "list",
+    "widget",
+    "embed",
+    "claude",
+    "react",
+    "umd"
+  ],
   "private": false,
   "type": "module",
   "description": "Self-contained UMD bundle of the Alistigo list widget — for Claude HTML artifacts and standalone pages. Includes React, Lingui, and all Alistigo packages; no external dependencies required.",

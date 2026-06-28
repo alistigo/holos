@@ -1,5 +1,10 @@
 # @alistigo/artifact-list
 
+[![npm version](https://img.shields.io/npm/v/@alistigo/artifact-list.svg?style=flat)](https://www.npmjs.com/package/@alistigo/artifact-list)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
+
 Self-contained UMD bundle for embedding the Alistigo list widget in Claude HTML artifacts or any web page. Bundles React, Lingui (English), and all Alistigo packages — no external dependencies required.
 
 Auto-detects Claude artifact runtime and uses `window.storage` for persistence; falls back to `localStorage` elsewhere.

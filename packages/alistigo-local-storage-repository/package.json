@@ -1,16 +1,42 @@
 {
   "name": "@alistigo/local-storage-repository",
   "version": "0.2.2",
+  "description": "localStorage-backed AlistigoListStore implementation for standard browser contexts.",
   "license": "MIT",
-  "private": true,
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-local-storage-repository"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-local-storage-repository#readme",
+  "keywords": [
+    "alistigo",
+    "list",
+    "storage",
+    "localstorage"
+  ],
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@alistigo/logger": "workspace:*",

@@ -1,5 +1,10 @@
 # @alistigo/document-format
 
+[![npm version](https://img.shields.io/npm/v/@alistigo/document-format.svg?style=flat)](https://www.npmjs.com/package/@alistigo/document-format)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
+
 The **specification, JSON schemas, and TypeScript types** for the Alistigo list document format. Single source of truth — every other Alistigo package (the iframe app, the runner, the host protocol, plugins) imports types and schemas from here.
 
 A document is a self-contained JSON-LD object with three sections:

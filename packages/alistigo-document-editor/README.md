@@ -1,5 +1,10 @@
 # @alistigo/document-editor
 
+[![npm version](https://img.shields.io/npm/v/@alistigo/document-editor.svg?style=flat)](https://www.npmjs.com/package/@alistigo/document-editor)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
+
 The Application layer of the Alistigo system. **Pure, no UI.** Takes an `AlistigoDocument` in, accepts commands, produces events, folds them into a new document.
 
 This is what `architecture.md` calls the *Application Layer (CQRS)*: commands → events → projector → document. The package mirrors that contract one-to-one.
