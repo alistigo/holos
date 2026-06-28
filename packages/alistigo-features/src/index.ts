@@ -19,5 +19,3 @@ export const FEATURES_DIR = path.resolve(
   "..",
   "features",
 );
-
-// @public

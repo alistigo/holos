@@ -50,5 +50,3 @@ if (document.readyState === "loading") {
 } else {
   autoMount();
 }
-
-// @public

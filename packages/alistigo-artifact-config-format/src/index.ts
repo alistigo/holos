@@ -5,5 +5,3 @@ export { validateArtifactConfig } from "./validate.js";
 
 import artifactConfigSchemaJson from "./schemas/artifact-config.json" with { type: "json" };
 export const artifactConfigSchema = artifactConfigSchemaJson;
-
-// @public

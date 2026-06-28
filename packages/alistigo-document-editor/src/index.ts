@@ -32,5 +32,3 @@ export {
 
 // Result type
 export { err, ok, type Result } from "./result.js";
-
-// @public
