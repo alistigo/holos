@@ -114,6 +114,23 @@ info "Installing Node workspace dependencies..."
 mise exec -- pnpm install
 info "Node dependencies installed."
 
+# ── 3. .claude/ symlinks ─────────────────────────────────────────────────────
+# Wire repo ai/ subdirectories into .claude/ so Claude skills, commands,
+# PRDs, and epics are resolved from version-controlled paths.
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+info "Wiring .claude/ symlinks..."
+for pair in "skills:../ai/skills" "commands:../ai/commands" "prds:../ai/prds" "epics:../ai/epics"; do
+  link="${pair%%:*}"
+  target="${pair##*:}"
+  dest="$REPO_ROOT/.claude/$link"
+  if [ -L "$dest" ]; then
+    info "  .claude/$link already symlinked — skipping."
+  else
+    ln -s "$target" "$dest"
+    info "  .claude/$link → $target"
+  fi
+done
+
 # ── 4. Claude memory symlink ──────────────────────────────────────────────────
 # Points ~/.claude/projects/.../memory/ → ai/memory/ so Claude's memory is git-tracked.
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
