@@ -6,7 +6,7 @@
 [![pnpm](https://img.shields.io/badge/maintained_with-pnpm-cc00ff.svg?logo=pnpm)](https://pnpm.io/)
 [![Built with Nx](https://img.shields.io/badge/Built_with-Nx-143157?logo=nx)](https://nx.dev)
 
-Alistigo main monorepo. Apps, libraries, Docker containers, documentation, ... — all in one place.
+Alistigo main monorepo. Apps, libraries, documentation, ... — all in one place.
 
 ## Structure
 
@@ -28,7 +28,7 @@ The script installs mise (if needed), wires shell activation for zsh/bash/sh, in
 ## Common Commands
 
 ```sh
-pnpm build              # Build all packages
+pnpm build              # Build all projects
 pnpm build:typecheck    # Type-check all packages
 pnpm test               # Run all tests
 ```
@@ -39,34 +39,26 @@ All static analysis and linting tools follow the `qa:*` prefix — keeping QA co
 
 | Script | Tool | What it checks |
 |--------|------|----------------|
-| `pnpm qa` | All QA tools | Run all `qa:*` checks in parallel |
+| `pnpm qa` | All QA tools | Run all `qa:*` checks (lint + arch-check + dead-code + audit + stories) |
 | `pnpm qa:lint` | [Biome](https://biomejs.dev/) | Code style, formatting, and lint rules across all packages |
 | `pnpm qa:arch-check` | [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) | Architectural boundary violations — see `docs/arch-check.md` |
 | `pnpm qa:dead-code` | [Fallow](https://github.com/fallow-rs/fallow) | Unused files, exports, and dead code (full repo scan) |
 | `pnpm qa:audit` | [Fallow](https://github.com/fallow-rs/fallow) | Changed-file risk gate — fast audit for pre-push and CI |
+| `pnpm qa:stories-check` | custom script | Every component has a co-located `.stories.tsx` (ADR 0012) |
 | `pnpm build:typecheck` | TypeScript | Type correctness across all packages |
 | `pnpm test` | Bun test / Playwright | Unit, integration, and end-to-end tests |
 
 All `qa:*` checks run automatically:
-- **Pre-push** (via lefthook): `qa:lint`, `qa:arch-check`, `qa:audit` — blocks the push if any fail
-- **CI on PRs**: `qa:lint`, `qa:arch-check`, and fallow audit with inline PR annotations
-- **Weekly CI (full scan)**: all of the above plus `qa:dead-code` against the entire repo
+- **Pre-push** (via lefthook): `qa:lint`, `qa:arch-check`, `qa:audit`, `build:typecheck` — blocks the push if any fail
+- **CI on PRs and merges to `main`**: `qa:lint`, `qa:arch-check`, fallow audit (with inline PR annotations), `build:typecheck`, `build`, and `test`
 
 ## Documentation
 
 | Doc | What it covers |
 |-----|----------------|
 | [docs/sdlc.md](docs/sdlc.md) | AI-augmented SDLC philosophy — lifecycle stages, AI touchpoints per stage, human review gates, agent orchestration patterns |
-| [docs/arch-check.md](docs/arch-check.md) | Architectural boundary rules enforced by dependency-cruiser |
-| [docs/adrs/](docs/adrs/) | Architecture Decision Records — why the repo is shaped the way it is |
-
-## Publishing Packages
-
-Packages under `packages/` are scoped to `@alistigo/*` and published to NPM.
-
-```sh
-nx release --projects=packages/<name>
-```
+| [docs/arch-check.md](docs/arch-check.md) | Architectural boundary rules enforced |
+| [docs/adrs/](docs/adrs/) | Architecture Decision Records — why the repo is shaped the way it is |§§§§§§§§§§§§§§§§§
 
 ## Continuous Deployment
 
@@ -78,4 +70,4 @@ The QA pipeline is the confidence layer — lint, arch-check, dead-code audit, t
 
 **For unknown bugs that slip through:** error monitoring and observability catch them in production. The response is a rapid new commit + redeploy, not a revert.
 
-See [docs/adrs/0001-release-strategy.md](docs/adrs/0001-release-strategy.md) and [docs/adrs/0002-branch-protection.md](docs/adrs/0002-branch-protection.md) for the architectural rationale behind these choices.
+See [docs/adrs/0013-release-strategy.md](docs/adrs/0013-release-strategy.md) and [docs/adrs/0002-branch-protection.md](docs/adrs/0002-branch-protection.md) for the architectural rationale behind these choices.
