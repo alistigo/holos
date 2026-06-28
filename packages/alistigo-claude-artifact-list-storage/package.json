@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/claude-artifact-list-storage",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Window.storage-backed AlistigoListStore implementation for the Claude artifact runtime.",
   "license": "MIT",
   "author": {
