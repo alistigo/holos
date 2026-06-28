@@ -38,3 +38,5 @@ export { cn } from "./lib/cn.js";
 // shadcn-style primitives — exposed so the iframe app can compose its own UI
 export { Button, type ButtonProps, buttonVariants } from "./ui/button.js";
 export { Input, type InputProps } from "./ui/input.js";
+
+// @public

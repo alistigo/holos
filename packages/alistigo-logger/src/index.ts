@@ -19,3 +19,5 @@ export const setLogLevel = (level: LevelWithSilent): void => {
 // Optionally accepts additional static context (e.g. { listId }).
 export const createLogger = (module: string, ctx?: Record<string, unknown>): Logger =>
   root.child({ module, ...ctx });
+
+// @public
