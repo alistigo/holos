@@ -2,6 +2,26 @@
   "name": "@alistigo/features",
   "version": "0.2.2",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-features"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-features#readme",
+  "keywords": [
+    "alistigo",
+    "gherkin",
+    "bdd",
+    "behavior",
+    "specifications"
+  ],
   "private": false,
   "type": "module",
   "description": "Gherkin behavior specifications for Alistigo AI. Source of truth for what the app should do; the runner reads these files to assert conformance.",

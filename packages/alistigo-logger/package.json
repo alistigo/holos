@@ -2,6 +2,25 @@
   "name": "@alistigo/logger",
   "version": "0.2.2",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-logger"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-logger#readme",
+  "keywords": [
+    "alistigo",
+    "logger",
+    "pino",
+    "typescript"
+  ],
   "private": false,
   "type": "module",
   "description": "Shared pino-based logger for Alistigo apps and packages. Wraps pino with a singleton root logger and a createLogger factory for named child loggers.",

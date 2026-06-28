@@ -1,7 +1,29 @@
 {
   "name": "@alistigo/artifact-config-list-format",
   "version": "0.1.0",
+  "description": "JSON Schema and TypeScript types for the Alistigo list artifact config.",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-artifact-config-list-format"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-config-list-format#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "list",
+    "config",
+    "json-schema",
+    "typescript"
+  ],
   "private": false,
   "type": "module",
   "exports": {

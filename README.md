@@ -1,5 +1,11 @@
 # Holos
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![pnpm](https://img.shields.io/badge/maintained_with-pnpm-cc00ff.svg?logo=pnpm)](https://pnpm.io/)
+[![Built with Nx](https://img.shields.io/badge/Built_with-Nx-143157?logo=nx)](https://nx.dev)
+
 Alistigo main monorepo. Apps, libraries, Docker containers, documentation, ... — all in one place.
 
 ## Structure

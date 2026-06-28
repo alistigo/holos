@@ -2,6 +2,27 @@
   "name": "@alistigo/list-components-react",
   "version": "0.2.2",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-list-components-react"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-list-components-react#readme",
+  "keywords": [
+    "alistigo",
+    "list",
+    "react",
+    "components",
+    "ui",
+    "tailwind"
+  ],
   "private": false,
   "type": "module",
   "description": "React presentational components for the Alistigo base list app — built on the repo's chosen stack (Tailwind v4 + Radix Primitives + Vaul + Motion + Lucide + Radix Colors + Lingui i18n). Pinned to the driver-playwright contract; ships its own Storybook for component review.",

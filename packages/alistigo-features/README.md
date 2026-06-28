@@ -1,5 +1,10 @@
 # @alistigo/features
 
+[![npm version](https://img.shields.io/npm/v/@alistigo/features.svg?style=flat)](https://www.npmjs.com/package/@alistigo/features)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
+
 Behavior specifications for Alistigo AI, written in [Gherkin](https://cucumber.io/docs/gherkin/reference/).
 
 These `.feature` files are the **source of truth for what the app should do**. The runner ([`@alistigo/features-runner-playwright`](../../cli/alistigo-features-runner-playwright/)) reads them and asserts the app conforms. We follow TDD — features are written and reviewed *before* the code that satisfies them.

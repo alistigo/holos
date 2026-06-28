@@ -2,6 +2,27 @@
   "name": "@alistigo/document-format",
   "version": "0.2.2",
   "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-document-format"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-document-format#readme",
+  "keywords": [
+    "alistigo",
+    "list",
+    "document",
+    "json-schema",
+    "json-ld",
+    "typescript"
+  ],
   "private": false,
   "type": "module",
   "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format. The source of truth for what an Alistigo document looks like.",
