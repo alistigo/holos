@@ -4,7 +4,8 @@
     "src/index.{ts,tsx,js,jsx,mjs}",
     "src/main.{ts,tsx,js,jsx,mjs}",
     "src/cli.{ts,js}",
-    "bin/*.{ts,js}"
+    "bin/*.{ts,js}",
+    "**/scripts/*.{ts,js}"
   ],
   "workspaces": {
     "packages": ["apps/*", "packages/*", "cli/*"]
@@ -25,7 +26,8 @@
     "packages/alistigo-features/gherklin.config.ts",
     "packages/alistigo-features/tools/validate.ts",
 
-    ".github/**"
+    ".github/**",
+    "ai/**"
   ],
   "dynamicallyLoaded": [
     "**/*.test.{ts,tsx}",
