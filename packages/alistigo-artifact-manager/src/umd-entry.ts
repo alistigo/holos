@@ -1,4 +1,5 @@
 export * from "./index.js";
+
 import { autoInit } from "./auto-init.js";
 
 if (typeof document !== "undefined") {

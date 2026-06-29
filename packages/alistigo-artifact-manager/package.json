@@ -29,6 +29,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./init": {
+      "import": "./dist/init.js",
+      "types": "./dist/init.d.ts"
     }
   },
   "main": "./dist/index.js",
