@@ -1,3 +1,9 @@
+## 0.2.6 (2026-06-29)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-manager to 0.1.2
+
 ## 0.2.5 (2026-06-28)
 
 ### 🧱 Updated Dependencies
