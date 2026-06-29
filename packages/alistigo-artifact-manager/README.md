@@ -40,7 +40,7 @@ See [@alistigo/artifact-config-format](../alistigo-artifact-config-format/README
 For environments where you control initialization yourself (e.g. a framework or custom boot sequence), import the package as an ES module:
 
 ```ts
-import init from "@alistigo/artifact-manager/init";
+import { init } from "@alistigo/artifact-manager";
 
 init('#selector', {
   app: "@alistigo/artifact-list"
