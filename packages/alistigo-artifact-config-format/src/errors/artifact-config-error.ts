@@ -2,7 +2,7 @@
 // TODO: extend AbstractAlistigoError from a future @alistigo/errors package
 //       once that shared package exists.
 
-export type ErrorContext = Record<string, string | number | boolean | null | undefined>;
+type ErrorContext = Record<string, string | number | boolean | null | undefined>;
 
 // fallow-ignore-next-line code-duplication
 abstract class AbstractArtifactConfigError extends Error {
