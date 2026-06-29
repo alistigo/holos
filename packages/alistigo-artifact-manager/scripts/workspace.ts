@@ -2,23 +2,24 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { PACKAGES_DIR } from "./paths.ts";
 
+function readPackageName(dirPath: string): string | null {
+  const pkgJsonPath = path.join(dirPath, "package.json");
+  if (!existsSync(pkgJsonPath)) return null;
+  try {
+    const json = JSON.parse(readFileSync(pkgJsonPath, "utf-8")) as { name?: string };
+    return json.name ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function buildPackageDirMap(): Map<string, string> {
   const map = new Map<string, string>();
-  const entries = readdirSync(PACKAGES_DIR, { withFileTypes: true });
-  for (const entry of entries) {
+  for (const entry of readdirSync(PACKAGES_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    const pkgJsonPath = path.join(PACKAGES_DIR, entry.name, "package.json");
-    if (!existsSync(pkgJsonPath)) continue;
-    try {
-      const json = JSON.parse(readFileSync(pkgJsonPath, "utf-8")) as {
-        name?: string;
-      };
-      if (json.name) {
-        map.set(json.name, path.join(PACKAGES_DIR, entry.name));
-      }
-    } catch {
-      // malformed package.json — skip
-    }
+    const dirPath = path.join(PACKAGES_DIR, entry.name);
+    const name = readPackageName(dirPath);
+    if (name) map.set(name, dirPath);
   }
   return map;
 }

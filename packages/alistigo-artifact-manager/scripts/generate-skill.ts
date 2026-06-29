@@ -9,8 +9,8 @@
 import { writeFileSync } from "node:fs";
 import { ARTIFACT_REGISTRY } from "../src/registry.ts";
 import { OUTPUT_PATH } from "./paths.ts";
-import { loadAppSkill } from "./skill-loader.ts";
 import { renderManagerSkill } from "./renderer.ts";
+import { loadAppSkill } from "./skill-loader.ts";
 import { buildPackageDirMap } from "./workspace.ts";
 
 function main(): void {

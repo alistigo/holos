@@ -12,6 +12,16 @@ function parseFrontmatter(content: string): AppFrontmatter {
   return (parseYaml(frontmatterText) as AppFrontmatter) ?? {};
 }
 
+function skillFromFrontmatter(appName: string, pkgDir: string, content: string): AppSkillData {
+  const fm = parseFrontmatter(content);
+  return {
+    appName,
+    pkgDir,
+    description: String(fm.description ?? "").trim(),
+    triggers: Array.isArray(fm.triggers) ? (fm.triggers as string[]) : [],
+  };
+}
+
 export function loadAppSkill(
   appName: string,
   packageDirMap: Map<string, string>,
@@ -27,21 +37,8 @@ export function loadAppSkill(
     process.stderr.write(
       `warn: no SKILL.md found for "${appName}" at ${skillPath} — skipping triggers\n`,
     );
-    return {
-      appName,
-      pkgDir,
-      description: "see package README",
-      triggers: [],
-    };
+    return { appName, pkgDir, description: "see package README", triggers: [] };
   }
 
-  const content = readFileSync(skillPath, "utf-8");
-  const fm = parseFrontmatter(content);
-
-  return {
-    appName,
-    pkgDir,
-    description: String(fm.description ?? "").trim(),
-    triggers: Array.isArray(fm.triggers) ? (fm.triggers as string[]) : [],
-  };
+  return skillFromFrontmatter(appName, pkgDir, readFileSync(skillPath, "utf-8"));
 }
