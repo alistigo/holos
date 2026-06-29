@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Feature",
+      "runtimeExecutable": "bun",
+      "program": "${workspaceFolder}/cli/alistigo-features-runner-playwright/node_modules/@cucumber/cucumber/bin/cucumber.js",
+      "args": ["${file}"],
+      "cwd": "${workspaceFolder}/cli/alistigo-features-runner-playwright",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Internal Debug Feature",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["--inspect-wait=6499/cucumber"],
+      "program": "${workspaceFolder}/cli/alistigo-features-runner-playwright/node_modules/@cucumber/cucumber/bin/cucumber.js",
+      "args": ["${file}"],
+      "env": { "HEADED": "1" },
+      "cwd": "${workspaceFolder}/cli/alistigo-features-runner-playwright",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "bun",
+      "request": "attach",
+      "name": "Attach Bun Debugger to feature-runner",
+      "url": "ws://localhost:6499/cucumber",
+      "localRoot": "${workspaceFolder}",
+      "preLaunchTask": "Wait for Bun Inspector"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Feature",
+      "configurations": ["Internal Debug Feature", "Attach Bun Debugger to feature-runner"],
+      "stopAll": true
+    }
+  ]
+}

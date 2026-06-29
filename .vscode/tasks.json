@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Wait for Bun Inspector",
+      "type": "shell",
+      "command": "until nc -z localhost 6499 2>/dev/null; do sleep 0.1; done",
+      "isBackground": false,
+      "presentation": { "reveal": "never", "panel": "dedicated" },
+      "problemMatcher": []
+    }
+  ]
+}
