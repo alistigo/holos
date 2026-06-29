@@ -50,6 +50,18 @@
         "command": "rm -rf dist",
         "cwd": "packages/alistigo-artifact-manager"
       }
+    },
+    "generate-skill": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/SKILL.md"],
+      "inputs": [
+        "{projectRoot}/src/registry.ts",
+        "{workspaceRoot}/packages/alistigo-artifact-list/SKILL.md"
+      ],
+      "options": {
+        "command": "bun scripts/generate-skill.ts",
+        "cwd": "packages/alistigo-artifact-manager"
+      }
     }
   }
 }
