@@ -1,4 +1,4 @@
-import { ListError } from "../errors/list-error.js";
+import { InvalidTimestampError } from "../errors/list-error.js";
 
 /** ISO 8601 UTC timestamp string. Example: "2026-05-14T10:00:00Z" */
 export type Timestamp = string & { readonly __brand: "Timestamp" };
@@ -9,7 +9,7 @@ export type Timestamp = string & { readonly __brand: "Timestamp" };
 export function createTimestamp(iso: string): Timestamp {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) {
-    throw new ListError(`Invalid Timestamp: "${iso}" does not parse as a valid date`);
+    throw new InvalidTimestampError(iso);
   }
   return iso as Timestamp;
 }

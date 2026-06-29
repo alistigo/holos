@@ -26,6 +26,12 @@
         "command": "fallow audit"
       }
     },
+    "qa:error-pattern": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/check-throw-new-error.sh"
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {

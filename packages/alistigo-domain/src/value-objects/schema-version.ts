@@ -1,4 +1,4 @@
-import { ListError } from "../errors/list-error.js";
+import { InvalidSchemaVersionError } from "../errors/list-error.js";
 
 /** Semver string in MAJOR.MINOR.PATCH format. */
 export type SchemaVersion = `${number}.${number}.${number}`;
@@ -7,7 +7,7 @@ const SEMVER_RE = /^\d+\.\d+\.\d+$/;
 
 export function createSchemaVersion(raw: string): SchemaVersion {
   if (!SEMVER_RE.test(raw)) {
-    throw new ListError(`Invalid SchemaVersion: "${raw}" must match MAJOR.MINOR.PATCH`);
+    throw new InvalidSchemaVersionError(raw);
   }
   return raw as SchemaVersion;
 }

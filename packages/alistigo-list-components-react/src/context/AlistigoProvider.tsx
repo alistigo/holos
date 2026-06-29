@@ -22,6 +22,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { ProviderContextError } from "../errors/list-components-error.js";
 
 const UI_ACTOR_ID = generateActorId();
 const log = createLogger("alistigo:provider");
@@ -74,19 +75,19 @@ export function AlistigoProvider({
 
 function useDocumentContext(): DocumentContextValue {
   const ctx = useContext(DocumentContext);
-  if (ctx == null) throw new Error("Must be inside <AlistigoProvider>.");
+  if (ctx == null) throw new ProviderContextError("AlistigoProvider");
   return ctx;
 }
 
 function useServiceContext(): ServiceContextValue {
   const ctx = useContext(ServiceContext);
-  if (ctx == null) throw new Error("Must be inside <AlistigoProvider>.");
+  if (ctx == null) throw new ProviderContextError("AlistigoProvider");
   return ctx;
 }
 
 function usePendingContext(): PendingContextValue {
   const ctx = useContext(PendingContext);
-  if (ctx == null) throw new Error("Must be inside <AlistigoProvider>.");
+  if (ctx == null) throw new ProviderContextError("AlistigoProvider");
   return ctx;
 }
 

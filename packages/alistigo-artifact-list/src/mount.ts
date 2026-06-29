@@ -8,6 +8,7 @@ import { createRoot, type Root } from "react-dom/client";
 import pkg from "../package.json" with { type: "json" };
 import { initAnalytics, trackWidgetDisplayed } from "./analytics.js";
 import App from "./components/App.js";
+import { MountContainerNotFoundError } from "./errors/artifact-list-error.js";
 import { bootI18n } from "./i18n.js";
 import { registerMount } from "./runtime-state.js";
 import { resolveContainer } from "./utils/container.js";
@@ -82,7 +83,7 @@ export function mount(container: string | HTMLElement, options: MountOptions = {
   const el = resolveContainer(container);
   if (el == null) {
     log.error({ selector: String(container) }, "container not found");
-    throw new Error(`Alistigo.mount: container not found: ${String(container)}`);
+    throw new MountContainerNotFoundError(String(container));
   }
 
   const isFirstMount = !roots.has(el);

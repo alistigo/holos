@@ -1,6 +1,11 @@
 import { describe, expect, it } from "bun:test";
 import { List } from "../aggregates/list.js";
-import { ListElementNotFoundError, ListError } from "../errors/list-error.js";
+import { AbstractAlistigoError } from "../errors/abstract-alistigo-error.js";
+import {
+  AbstractListError,
+  InvalidListIdError,
+  ListElementNotFoundError,
+} from "../errors/list-error.js";
 import { generateActorId } from "../value-objects/actor-id.js";
 import { createListElementContent } from "../value-objects/list-element-content.js";
 import { generateListId } from "../value-objects/list-id.js";
@@ -243,16 +248,21 @@ describe("List.rehydrate", () => {
 });
 
 describe("Errors", () => {
-  it("ListError is instanceof Error", () => {
-    const err = new ListError("test");
+  it("leaf error is instanceof Error, AbstractAlistigoError, and AbstractListError", () => {
+    const err = new InvalidListIdError("bad-id");
     expect(err).toBeInstanceOf(Error);
-    expect(err).toBeInstanceOf(ListError);
-    expect(err.message).toBe("test");
+    expect(err).toBeInstanceOf(AbstractAlistigoError);
+    expect(err).toBeInstanceOf(AbstractListError);
+    expect(err).toBeInstanceOf(InvalidListIdError);
+    expect(err.message).toBe("Invalid ListId format");
+    expect(err.name).toBe("InvalidListIdError");
+    expect(err.context).toEqual({ raw: "bad-id" });
   });
 
-  it("ListElementNotFoundError is instanceof ListError", () => {
+  it("ListElementNotFoundError is instanceof AbstractListError", () => {
     const err = new ListElementNotFoundError("lse_abc");
-    expect(err).toBeInstanceOf(ListError);
+    expect(err).toBeInstanceOf(AbstractListError);
     expect(err).toBeInstanceOf(ListElementNotFoundError);
+    expect(err.context).toEqual({ listElementId: "lse_abc" });
   });
 });

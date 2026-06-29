@@ -1,4 +1,4 @@
-import { ListError } from "../errors/list-error.js";
+import { InvalidListElementContentError } from "../errors/list-error.js";
 
 const MAX_CONTENT_LENGTH = 2000;
 
@@ -12,12 +12,10 @@ export type ListElementContent = string & { readonly __brand: "ListElementConten
 export function createListElementContent(raw: string): ListElementContent {
   const trimmed = raw.trim();
   if (trimmed.length === 0) {
-    throw new ListError("ListElementContent cannot be empty");
+    throw new InvalidListElementContentError("empty");
   }
   if (trimmed.length > MAX_CONTENT_LENGTH) {
-    throw new ListError(
-      `ListElementContent exceeds maximum length of ${MAX_CONTENT_LENGTH} characters`,
-    );
+    throw new InvalidListElementContentError("too_long", trimmed.length);
   }
   return trimmed as ListElementContent;
 }
