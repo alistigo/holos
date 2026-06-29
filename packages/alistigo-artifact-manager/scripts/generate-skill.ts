@@ -60,15 +60,10 @@ function parseFrontmatter(content: string): AppFrontmatter {
   return (parseYaml(frontmatterText) as AppFrontmatter) ?? {};
 }
 
-function loadAppSkill(
-  appName: string,
-  packageDirMap: Map<string, string>,
-): AppSkillData | null {
+function loadAppSkill(appName: string, packageDirMap: Map<string, string>): AppSkillData | null {
   const pkgDir = packageDirMap.get(appName);
   if (!pkgDir) {
-    process.stderr.write(
-      `warn: no local package found for "${appName}" — skipping\n`,
-    );
+    process.stderr.write(`warn: no local package found for "${appName}" — skipping\n`);
     return null;
   }
 
@@ -92,9 +87,7 @@ function loadAppSkill(
     appName,
     pkgDir,
     description: String(fm.description ?? "").trim(),
-    triggers: Array.isArray(fm.triggers)
-      ? (fm.triggers as string[])
-      : [],
+    triggers: Array.isArray(fm.triggers) ? (fm.triggers as string[]) : [],
   };
 }
 
@@ -108,16 +101,13 @@ const MANAGER_TRIGGERS = [
 ];
 
 function renderManagerSkill(apps: AppSkillData[]): string {
-  const allTriggers = [
-    ...MANAGER_TRIGGERS,
-    ...apps.flatMap((a) => a.triggers),
-  ].filter((t, i, arr) => arr.indexOf(t) === i);
+  const allTriggers = [...MANAGER_TRIGGERS, ...apps.flatMap((a) => a.triggers)].filter(
+    (t, i, arr) => arr.indexOf(t) === i,
+  );
 
   const triggersBlock = allTriggers.map((t) => `- ${t}`).join("\n");
 
-  const routingRows = apps
-    .map((a) => `| \`${a.appName}\` | ${a.description} |`)
-    .join("\n");
+  const routingRows = apps.map((a) => `| \`${a.appName}\` | ${a.description} |`).join("\n");
 
   const appGuides = apps
     .map((a) => `- [${a.appName}](${relativeSkillPath(a.pkgDir)}) — ${a.description}`)
