@@ -1,6 +1,6 @@
 import { AbstractAlistigoError } from "@alistigo/domain";
 
-export abstract class AbstractClaudeStorageError extends AbstractAlistigoError {}
+abstract class AbstractClaudeStorageError extends AbstractAlistigoError {}
 
 export class ClaudeStorageUnavailableError extends AbstractClaudeStorageError {
   constructor() {

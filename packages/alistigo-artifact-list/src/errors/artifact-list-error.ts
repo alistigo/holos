@@ -1,6 +1,6 @@
 import { AbstractAlistigoError } from "@alistigo/domain";
 
-export abstract class AbstractArtifactListError extends AbstractAlistigoError {}
+abstract class AbstractArtifactListError extends AbstractAlistigoError {}
 
 export class MountContainerNotFoundError extends AbstractArtifactListError {
   constructor(selector: string) {

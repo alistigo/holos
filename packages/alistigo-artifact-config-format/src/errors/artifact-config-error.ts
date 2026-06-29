@@ -4,7 +4,8 @@
 
 export type ErrorContext = Record<string, string | number | boolean | null | undefined>;
 
-export abstract class AbstractArtifactConfigError extends Error {
+// fallow-ignore-next-line code-duplication
+abstract class AbstractArtifactConfigError extends Error {
   readonly context: ErrorContext;
 
   constructor(message: string, context: ErrorContext = {}) {
