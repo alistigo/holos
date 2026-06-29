@@ -1,34 +1,36 @@
-/**
- * Base error for the Core List Context.
- * Raised when a List command is rejected or an invariant is violated.
- */
-export class ListError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ListError";
-  }
-}
+import { AbstractAlistigoError } from "./abstract-alistigo-error.js";
 
-/** Raised when a command references a ListElementId that does not exist. */
-export class ListElementNotFoundError extends ListError {
+export abstract class AbstractListError extends AbstractAlistigoError {}
+
+export class ListElementNotFoundError extends AbstractListError {
   constructor(listElementId: string) {
-    super(`ListElement not found: ${listElementId}`);
-    this.name = "ListElementNotFoundError";
+    super("ListElement not found", { listElementId });
   }
 }
 
-/** Raised when a provided ListId does not match the expected format. */
-export class InvalidListIdError extends ListError {
+export class InvalidListIdError extends AbstractListError {
   constructor(raw: string) {
-    super(`Invalid ListId: "${raw}"`);
-    this.name = "InvalidListIdError";
+    super("Invalid ListId format", { raw });
   }
 }
 
-/** Raised when ListElementContent validation fails (empty or too long). */
-export class InvalidListElementContentError extends ListError {
-  constructor(reason: string) {
-    super(`Invalid ListElementContent: ${reason}`);
-    this.name = "InvalidListElementContentError";
+export class InvalidListElementContentError extends AbstractListError {
+  constructor(reason: "empty" | "too_long", valueLength?: number) {
+    super(
+      "Invalid ListElementContent",
+      valueLength !== undefined ? { reason, valueLength } : { reason },
+    );
+  }
+}
+
+export class InvalidSchemaVersionError extends AbstractListError {
+  constructor(raw: string) {
+    super("Invalid SchemaVersion — must match MAJOR.MINOR.PATCH", { raw });
+  }
+}
+
+export class InvalidTimestampError extends AbstractListError {
+  constructor(raw: string) {
+    super("Invalid Timestamp — does not parse as a valid date", { raw });
   }
 }

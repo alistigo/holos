@@ -12,11 +12,15 @@ export type { ExportListDocument } from "./commands/export-list-document.js";
 // Entities
 export type { ListElement } from "./entities/list-element.js";
 // Errors
+export type { ErrorContext } from "./errors/abstract-alistigo-error.js";
+export { AbstractAlistigoError } from "./errors/abstract-alistigo-error.js";
 export {
+  AbstractListError,
   InvalidListElementContentError,
   InvalidListIdError,
+  InvalidSchemaVersionError,
+  InvalidTimestampError,
   ListElementNotFoundError,
-  ListError,
 } from "./errors/list-error.js";
 // Events
 export type {

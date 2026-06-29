@@ -3,6 +3,7 @@ import type { AlistigoDocument } from "@alistigo/document-format";
 import { ListDocumentSerializer } from "@alistigo/document-format";
 import type { List, ListId } from "@alistigo/domain";
 import { createLogger } from "@alistigo/logger";
+import { ClaudeStorageUnavailableError } from "./errors/claude-storage-error.js";
 
 const log = createLogger("alistigo:claude-storage");
 
@@ -13,10 +14,7 @@ const storageKey = (listId: ListId): string => `alistigo-${listId.toString()}`;
 export class ClaudeArtifactListRepository implements AlistigoListStore {
   private get storage(): ClaudeStorage {
     const s = (window as Window).storage;
-    if (!s)
-      throw new Error(
-        "ClaudeArtifactListRepository requires window.storage — use isClaudeArtifactContext() before instantiating",
-      );
+    if (!s) throw new ClaudeStorageUnavailableError();
     return s;
   }
 

@@ -1,5 +1,6 @@
 import { validateListConfig } from "@alistigo/artifact-config-list-format";
 import { KNOWN_ARTIFACTS } from "./artifacts.js";
+import { UnknownArtifactTypeError } from "./errors/artifact-config-error.js";
 import type { ArtifactConfig } from "./types.js";
 
 function typeLabel(value: unknown): string {
@@ -37,7 +38,7 @@ function dispatchArtifactValidator(raw: Record<string, unknown>, app: string): A
     const listConfig = validateListConfig(raw);
     return { ...raw, ...listConfig, app } as ArtifactConfig;
   }
-  throw new Error(`Unknown artifact type: "${app}". Known types: ${KNOWN_ARTIFACTS.join(", ")}`);
+  throw new UnknownArtifactTypeError(app, KNOWN_ARTIFACTS);
 }
 
 /**

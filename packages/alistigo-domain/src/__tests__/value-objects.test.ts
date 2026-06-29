@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { ListError } from "../errors/list-error.js";
+import { AbstractListError } from "../errors/list-error.js";
 import { parseActorId } from "../value-objects/actor-id.js";
 import { createListElementContent } from "../value-objects/list-element-content.js";
 import { parseListElementId } from "../value-objects/list-element-id.js";
@@ -20,16 +20,16 @@ describe("ListElementContent", () => {
   });
 
   it("throws ListError on empty string", () => {
-    expect(() => createListElementContent("")).toThrow(ListError);
+    expect(() => createListElementContent("")).toThrow(AbstractListError);
   });
 
   it("throws ListError on whitespace-only string", () => {
-    expect(() => createListElementContent("   ")).toThrow(ListError);
+    expect(() => createListElementContent("   ")).toThrow(AbstractListError);
   });
 
   it("throws ListError when exceeding 2000 characters", () => {
     const long = "a".repeat(2001);
-    expect(() => createListElementContent(long)).toThrow(ListError);
+    expect(() => createListElementContent(long)).toThrow(AbstractListError);
   });
 
   it("accepts a string of exactly 2000 characters", () => {
@@ -45,7 +45,7 @@ describe("Timestamp", () => {
   });
 
   it("throws ListError on invalid date string", () => {
-    expect(() => createTimestamp("not-a-date")).toThrow(ListError);
+    expect(() => createTimestamp("not-a-date")).toThrow(AbstractListError);
   });
 });
 
@@ -56,8 +56,8 @@ describe("SchemaVersion", () => {
   });
 
   it("throws ListError on non-semver string", () => {
-    expect(() => createSchemaVersion("1.0")).toThrow(ListError);
-    expect(() => createSchemaVersion("v1.0.0")).toThrow(ListError);
+    expect(() => createSchemaVersion("1.0")).toThrow(AbstractListError);
+    expect(() => createSchemaVersion("v1.0.0")).toThrow(AbstractListError);
   });
 
   it("exports the correct M1 version", () => {
