@@ -1,4 +1,4 @@
-import { initArtifactManager } from "./manager.js";
+import init from "./init.js";
 
 function displayError(message: string): void {
   const el = document.createElement("div");
@@ -43,7 +43,7 @@ export function autoInit(): void {
   ensureAppDiv();
 
   try {
-    initArtifactManager(config);
+    init("#app", config);
   } catch (err) {
     displayError(errorMessage(err));
   }
