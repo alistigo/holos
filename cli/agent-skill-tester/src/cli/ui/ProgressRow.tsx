@@ -1,6 +1,6 @@
 import { Box, Text } from "ink";
 import type React from "react";
-import type { QueryResult } from "../commands/validate-triggers.js";
+import type { QueryResult } from "../lib/eval.js";
 
 const TRUNCATE_AT = 60;
 

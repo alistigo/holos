@@ -1,26 +1,10 @@
-import { execFile } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { promisify } from "node:util";
 import { Command, Option } from "clipanion";
 import { render } from "ink";
 import React from "react";
+import type { EvalQuery } from "../lib/eval.js";
 import { ValidationRunner } from "../ui/ValidationRunner.js";
-
-const execFileAsync = promisify(execFile);
-
-export interface EvalQuery {
-  query: string;
-  should_trigger: boolean;
-  split: "train" | "validation";
-}
-
-export interface QueryResult {
-  query: EvalQuery;
-  triggers: number;
-  totalRuns: number;
-  passed: boolean;
-}
 
 function findWorkspaceRoot(startDir: string): string {
   let dir = startDir;
@@ -36,51 +20,6 @@ function readSkillName(skillMdPath: string): string {
   const match = /^---\s*\n(?:[\s\S]*?\n)?name:\s*(.+?)(?:\s*\n)/m.exec(content);
   if (!match?.[1]) throw new Error(`Could not find 'name:' field in ${skillMdPath}`);
   return match[1].trim();
-}
-
-function parseTriggered(stdout: string, skillName: string): boolean {
-  try {
-    const output = JSON.parse(stdout) as {
-      messages?: Array<{
-        content?: Array<{
-          type?: string;
-          name?: string;
-          input?: Record<string, unknown>;
-        }>;
-      }>;
-    };
-    return (output.messages ?? []).some((msg) =>
-      (msg.content ?? []).some(
-        (block) =>
-          block.type === "tool_use" && block.name === "Skill" && block.input?.skill === skillName,
-      ),
-    );
-  } catch {
-    return false;
-  }
-}
-
-export async function checkTriggered(
-  query: string,
-  skillName: string,
-  agent: string,
-): Promise<boolean> {
-  try {
-    const { stdout } = await execFileAsync(agent, ["-p", query, "--output-format", "json"], {
-      maxBuffer: 10 * 1024 * 1024,
-      timeout: 120_000,
-    });
-    return parseTriggered(String(stdout), skillName);
-  } catch (err: unknown) {
-    // execFile throws on non-zero exit but may still include usable stdout
-    if (err !== null && typeof err === "object" && "stdout" in err) {
-      const raw = (err as { stdout: unknown }).stdout;
-      if (typeof raw === "string" && raw.length > 0) {
-        return parseTriggered(raw, skillName);
-      }
-    }
-    return false;
-  }
 }
 
 export class ValidateTriggersCommand extends Command {
