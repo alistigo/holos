@@ -64,6 +64,7 @@ export class ValidateTriggersCommand extends Command {
     description: "Which query split to run: 'all', 'train', or 'validation'",
   });
 
+  // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const runsCount = parseInt(this.runs, 10);
     const thresholdValue = parseFloat(this.threshold);

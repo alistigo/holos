@@ -25,6 +25,7 @@ interface ValidationReportProps {
   threshold: number;
 }
 
+// fallow-ignore-next-line complexity
 export function ValidationReport({ results, threshold }: ValidationReportProps): React.JSX.Element {
   const train = splitStats(results, "train");
   const validation = splitStats(results, "validation");

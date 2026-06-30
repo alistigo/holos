@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "CLI for evaluating skill trigger accuracy using labelled eval query sets",
+  "bin": {
+    "agent-skill-tester": "src/cli.ts"
+  },
   "scripts": {},
   "dependencies": {
     "clipanion": "4.0.0-rc.4",

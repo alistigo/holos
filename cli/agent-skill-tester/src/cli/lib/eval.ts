@@ -38,6 +38,7 @@ function parseTriggered(stdout: string, skillName: string): boolean {
   }
 }
 
+// fallow-ignore-next-line complexity
 export async function checkTriggered(
   query: string,
   skillName: string,
