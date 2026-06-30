@@ -24,18 +24,19 @@ function skillFromFrontmatter(appName: string, pkgDir: string, content: string):
 
 export function loadAppSkill(
   appName: string,
+  skillPackage: string,
   packageDirMap: Map<string, string>,
 ): AppSkillData | null {
-  const pkgDir = packageDirMap.get(appName);
+  const pkgDir = packageDirMap.get(skillPackage);
   if (!pkgDir) {
-    process.stderr.write(`warn: no local package found for "${appName}" — skipping\n`);
+    process.stderr.write(`warn: no local package found for "${skillPackage}" — skipping\n`);
     return null;
   }
 
   const skillPath = path.join(pkgDir, "SKILL.md");
   if (!existsSync(skillPath)) {
     process.stderr.write(
-      `warn: no SKILL.md found for "${appName}" at ${skillPath} — skipping triggers\n`,
+      `warn: no SKILL.md found for "${skillPackage}" at ${skillPath} — skipping triggers\n`,
     );
     return { appName, pkgDir, description: "see package README", triggers: [] };
   }

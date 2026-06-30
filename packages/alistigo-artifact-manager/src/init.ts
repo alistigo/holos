@@ -14,7 +14,7 @@ import { ARTIFACT_REGISTRY } from "./registry.js";
 export default function init(selector: string, config: unknown): void {
   const validated = validateArtifactConfig(config);
 
-  const cdnUrl = ARTIFACT_REGISTRY[validated.app];
+  const cdnUrl = ARTIFACT_REGISTRY[validated.app]?.cdnUrl;
   if (cdnUrl === undefined) {
     throw new Error(
       `Artifact manager: unknown artifact app "${validated.app}". ` +

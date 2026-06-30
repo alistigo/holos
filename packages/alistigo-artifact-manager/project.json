@@ -56,7 +56,7 @@
       "outputs": ["{projectRoot}/SKILL.md"],
       "inputs": [
         "{projectRoot}/src/registry.ts",
-        "{workspaceRoot}/packages/alistigo-artifact-list/SKILL.md"
+        "{workspaceRoot}/packages/alistigo-artifact-list-skill/SKILL.md"
       ],
       "options": {
         "command": "bun scripts/generate-skill.ts",
