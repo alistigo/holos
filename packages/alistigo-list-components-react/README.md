@@ -8,7 +8,7 @@
 React presentational components for the Alistigo base list app, built on
 the repo's chosen stack (see
 [`projects/alistigo-ai/ui-library-research.md`](../../projects/alistigo-ai/ui-library-research.md)
-and [`ai/skills/react-component/SKILL.md`](../../ai/skills/react-component/SKILL.md)):
+and [`.agents/skills/react-component/SKILL.md`](../../.agents/skills/react-component/SKILL.md)):
 
 - **Tailwind CSS v4** — utility CSS, theme tokens via CSS variables
 - **Radix Primitives** (`@radix-ui/react-slot`) + room to add Dialog, Drawer, etc. as needed
@@ -75,7 +75,7 @@ npx shadcn@latest add <name>     # e.g. dialog, drawer, dropdown-menu
 ```
 
 Files land in `src/ui/`. We own them — edit freely. The shadcn agent
-skill at [`ai/skills/shadcn/`](../../ai/skills/shadcn/) is auto-loaded
+skill at [`.agents/skills/shadcn/`](../../.agents/skills/shadcn/) is auto-loaded
 and will guide rules + composition patterns.
 
 ## Storybook

@@ -18,9 +18,9 @@ Between those transitions, and throughout the maintenance cycle, AI participates
 ```
 ideas/            Ideation & research — no structure yet
     ↓ (human: decide to build)
-ai/prds/          Specification — CCPM writes the PRD
+.agents/prds/     Specification — CCPM writes the PRD
     ↓ (human: PRD approval)
-ai/epics/         Decomposition — CCPM creates Epic + GitHub Issues
+.agents/epics/    Decomposition — CCPM creates Epic + GitHub Issues
     ↓ (human: epic approval + plan approval)
 Development       Parallel agents, TDD, quality gates
     ↓ (human: code review + PR merge)
@@ -37,8 +37,8 @@ Every Claude Code session starts with two `SessionStart` hooks that run automati
 
 | Hook | Script | What it does |
 |------|--------|--------------|
-| Tool environment | `ai/hooks/session-start.sh` | Activates `mise`, exports tool paths (bun, pnpm, node) into Claude's shell. Also reads `~/.claude/.caveman-active` for token-compression mode. |
-| Workflow discipline | `ai/hooks/superpowers-session-start.sh` | Bootstraps the Superpowers framework, which enforces: always write a plan before code, use TDD, dispatch parallel agents for independent tasks, verify before declaring done. |
+| Tool environment | `.agents/hooks/session-start.sh` | Activates `mise`, exports tool paths (bun, pnpm, node) into Claude's shell. Also reads `~/.claude/.caveman-active` for token-compression mode. |
+| Workflow discipline | `.agents/hooks/superpowers-session-start.sh` | Bootstraps the Superpowers framework, which enforces: always write a plan before code, use TDD, dispatch parallel agents for independent tasks, verify before declaring done. |
 
 These hooks mean the structured workflow is part of the environment — not a convention that can be forgotten.
 
@@ -62,14 +62,14 @@ Each idea folder contains: `createdAt`, current `status`, and a `research/` log 
 
 **Trigger:** Human initiates. "I want to build X."
 
-**Directory:** `ai/prds/<project>-<milestone>.md`
+**Directory:** `.agents/prds/<project>-<milestone>.md`
 
 **AI touchpoint:** Skill `ccpm`
 
 The `ccpm` (spec-driven delivery) skill drives PRD authoring:
 - Captures the "what" and "why" — not implementation details
 - Scopes milestones explicitly and realistically
-- Produces a structured PRD in `ai/prds/`
+- Produces a structured PRD in `.agents/prds/`
 
 **Human review gate:** The human reads the PRD and approves or redirects. Nothing moves to Stage 3 without explicit approval.
 
@@ -81,7 +81,7 @@ Once the PRD is approved, three parallel preparation threads run:
 
 | Skill | What it produces | Where it lives |
 |-------|-----------------|----------------|
-| `ccpm` | Epic with numbered tasks + GitHub Issues | `ai/epics/`, GitHub |
+| `ccpm` | Epic with numbered tasks + GitHub Issues | `.agents/epics/`, GitHub |
 | `domain-driven-design` | Bounded contexts, entities, aggregates, invariants | `domain-model.md` inside the project |
 | `writing-plans` | Bite-sized implementation plan: TDD steps, exact file paths, expected command output | `docs/superpowers/plans/YYYY-MM-DD-<feature>.md` |
 
@@ -230,10 +230,10 @@ New features re-enter the pipeline at Stage 2 (new PRD) or Stage 3 (new issue on
 
 ## Persistent Context: Memory
 
-Claude maintains a session-persistent memory system in `ai/memory/`. Memory files store:
+Claude maintains a session-persistent memory system in `.agents/memory/`. Memory files store:
 - User preferences and working style
 - Project context (active work, decisions, constraints)
 - Feedback on past approaches (what to avoid, what worked)
 - References (external systems, dashboards, data sources)
 
-Memory is indexed in `ai/memory/MEMORY.md` (loaded at session start). It is git-tracked — it survives across machines and sessions. See [CLAUDE.md](../CLAUDE.md) for the full memory system description.
+Memory is indexed in `.agents/memory/MEMORY.md` (loaded at session start). It is git-tracked — it survives across machines and sessions. See [CLAUDE.md](../CLAUDE.md) for the full memory system description.

@@ -4,12 +4,12 @@
 >
 > | Milestone | PRD |
 > |-----------|-----|
-> | M1 — Base list app | [`ai/prds/alistigo-ai-m1.md`](../../ai/prds/alistigo-ai-m1.md) |
-> | M2 — Artifact Playground & Common Architecture | [`ai/prds/alistigo-ai-m2.md`](../../ai/prds/alistigo-ai-m2.md) |
-> | M3 — Plugin Architecture & First Plugin | [`ai/prds/alistigo-ai-m3.md`](../../ai/prds/alistigo-ai-m3.md) |
-> | M4 — Second List Type via Plugins | [`ai/prds/alistigo-ai-m4.md`](../../ai/prds/alistigo-ai-m4.md) |
-> | M5 — Host ↔ Iframe Protocol | [`ai/prds/alistigo-ai-m5.md`](../../ai/prds/alistigo-ai-m5.md) |
-> | M6 — Public Beta | [`ai/prds/alistigo-ai-m6.md`](../../ai/prds/alistigo-ai-m6.md) |
+> | M1 — Base list app | [`.agents/prds/alistigo-ai-m1.md`](../../.agents/prds/alistigo-ai-m1.md) |
+> | M2 — Artifact Playground & Common Architecture | [`.agents/prds/alistigo-ai-m2.md`](../../.agents/prds/alistigo-ai-m2.md) |
+> | M3 — Plugin Architecture & First Plugin | [`.agents/prds/alistigo-ai-m3.md`](../../.agents/prds/alistigo-ai-m3.md) |
+> | M4 — Second List Type via Plugins | [`.agents/prds/alistigo-ai-m4.md`](../../.agents/prds/alistigo-ai-m4.md) |
+> | M5 — Host ↔ Iframe Protocol | [`.agents/prds/alistigo-ai-m5.md`](../../.agents/prds/alistigo-ai-m5.md) |
+> | M6 — Public Beta | [`.agents/prds/alistigo-ai-m6.md`](../../.agents/prds/alistigo-ai-m6.md) |
 
 Each milestone has: a **goal**, a **scope** (what's in / what's out), the **deliverables**, and pointers to the **Gherkin features** that define acceptance.
 

@@ -18,3 +18,4 @@ This directory contains architectural decisions for the Holos monorepo — both 
 | [0012](0012-component-documentation.md) | Component Documentation Standard | Accepted | 2026-06-12 |
 | [0013](0013-release-strategy.md) | Release Strategy | Accepted | 2026-06-10 |
 | [0014](0014-npm-token-auth.md) | npm Publishing via NPM_TOKEN | Accepted | 2026-06-11 |
+| [0015](0015-agent-skills-standard.md) | Agent Skills Standard (agentskills.io) | Accepted | 2026-06-30 |

@@ -1,6 +1,6 @@
 # Organization
 
-How `.feature` files are arranged in this package, and why. The conventions follow the [`gherkin-features` skill](../../../ai/skills/gherkin-features/SKILL.md) — that document is the universal source of truth across all features packages in the repo. This file mirrors it and adds Alistigo-specific notes.
+How `.feature` files are arranged in this package, and why. The conventions follow the [`gherkin-features` skill](../../../.agents/skills/gherkin-features/SKILL.md) — that document is the universal source of truth across all features packages in the repo. This file mirrors it and adds Alistigo-specific notes.
 
 ## The shape
 

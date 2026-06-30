@@ -1,6 +1,6 @@
 # Skills Registry
 
-Index of all skills in `ai/skills/`. Three types:
+Index of all skills in `.agents/skills/`. Three types:
 
 | Type | Meaning |
 |------|---------|

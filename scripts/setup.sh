@@ -115,11 +115,11 @@ mise exec -- pnpm install
 info "Node dependencies installed."
 
 # ── 3. .claude/ symlinks ─────────────────────────────────────────────────────
-# Wire repo ai/ subdirectories into .claude/ so Claude skills, commands,
+# Wire repo .agents/ subdirectories into .claude/ so Claude skills, commands,
 # PRDs, and epics are resolved from version-controlled paths.
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 info "Wiring .claude/ symlinks..."
-for pair in "skills:../ai/skills" "commands:../ai/commands" "prds:../ai/prds" "epics:../ai/epics"; do
+for pair in "skills:../.agents/skills" "commands:../.agents/commands" "prds:../.agents/prds" "epics:../.agents/epics"; do
   link="${pair%%:*}"
   target="${pair##*:}"
   dest="$REPO_ROOT/.claude/$link"
@@ -132,7 +132,7 @@ for pair in "skills:../ai/skills" "commands:../ai/commands" "prds:../ai/prds" "e
 done
 
 # ── 4. Claude memory symlink ──────────────────────────────────────────────────
-# Points ~/.claude/projects/.../memory/ → ai/memory/ so Claude's memory is git-tracked.
+# Points ~/.claude/projects/.../memory/ → .agents/memory/ so Claude's memory is git-tracked.
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_SLUG="$(echo "$REPO_ROOT" | sed 's|/|-|g')"
 CLAUDE_MEM_DIR="$HOME/.claude/projects/${REPO_SLUG}/memory"
@@ -142,12 +142,12 @@ if [ -L "$CLAUDE_MEM_DIR" ]; then
 elif [ -d "$CLAUDE_MEM_DIR" ]; then
   warn "Claude memory dir exists but is not a symlink — backing up and replacing..."
   mv "$CLAUDE_MEM_DIR" "${CLAUDE_MEM_DIR}.bak"
-  ln -s "$REPO_ROOT/ai/memory" "$CLAUDE_MEM_DIR"
+  ln -s "$REPO_ROOT/.agents/memory" "$CLAUDE_MEM_DIR"
   info "Claude memory symlink created (old dir backed up to memory.bak)."
 else
   mkdir -p "$(dirname "$CLAUDE_MEM_DIR")"
-  ln -s "$REPO_ROOT/ai/memory" "$CLAUDE_MEM_DIR"
-  info "Claude memory symlink created → ai/memory/"
+  ln -s "$REPO_ROOT/.agents/memory" "$CLAUDE_MEM_DIR"
+  info "Claude memory symlink created → .agents/memory/"
 fi
 
 # ── 5. Docker ─────────────────────────────────────────────────────────────────

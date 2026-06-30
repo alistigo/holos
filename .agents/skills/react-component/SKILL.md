@@ -444,7 +444,7 @@ launch on http://localhost:6006.
 
 The official shadcn agent skill (mirrored from
 [`shadcn-ui/ui` `skills/shadcn/`](https://github.com/shadcn-ui/ui/tree/main/skills/shadcn))
-lives at [`ai/skills/shadcn/`](../shadcn/). It's auto-triggered by the
+lives at [`.agents/skills/shadcn/`](../shadcn/). It's auto-triggered by the
 harness when the user mentions shadcn, presets, or works in a project
 with a `components.json`. It tells the agent what shadcn CLI flags to
 use, when to call `add` vs `view`, how the registry layout works, plus

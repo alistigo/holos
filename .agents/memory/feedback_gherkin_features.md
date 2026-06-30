@@ -29,7 +29,7 @@ Don't lump these together — the user wants the distinction visible in the doc 
 
 ## What's portable vs project-specific
 
-- **Portable (lives as a skill `ai/skills/gherkin-features/`)**: organization rules, style guide, tooling setup (Prettier+plugin / Gherklin / custom validator), tag taxonomy *structure* (categories, required-vs-optional rules), glossary *structure* (Entities/Actors/Actions sections).
+- **Portable (lives as a skill `.agents/skills/gherkin-features/`)**: organization rules, style guide, tooling setup (Prettier+plugin / Gherklin / custom validator), tag taxonomy *structure* (categories, required-vs-optional rules), glossary *structure* (Entities/Actors/Actions sections).
 - **Project-specific (lives in each `<project>-features/` package)**: actual tag names, glossary contents (which entities, which actions), the feature files themselves.
 
 Every features package MUST define its own `tags.md` + `src/tags.ts` AND its own `glossary.md`. The skill enforces the structure; the project fills in the content.

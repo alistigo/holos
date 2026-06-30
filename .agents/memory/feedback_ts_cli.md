@@ -8,4 +8,4 @@ When building CLI tools or runners in TypeScript, use the `ts-cli` skill (Clipan
 
 **Why:** Consistent CLI patterns across agents and tools. Clipanion handles arg parsing cleanly, Ink gives rich terminal UI with progress reporting.
 
-**How to apply:** Check `ai/skills/ts-cli/SKILL.md` for file structure, patterns, and gotchas. Reference implementation at `agents/_core/src/cli/`.
+**How to apply:** Check `.agents/skills/ts-cli/SKILL.md` for file structure, patterns, and gotchas. Reference implementation at `agents/_core/src/cli/`.

@@ -9,7 +9,7 @@ Behavior specifications for Alistigo AI, written in [Gherkin](https://cucumber.i
 
 These `.feature` files are the **source of truth for what the app should do**. The runner ([`@alistigo/features-runner-playwright`](../../cli/alistigo-features-runner-playwright/)) reads them and asserts the app conforms. We follow TDD — features are written and reviewed *before* the code that satisfies them.
 
-The package follows the universal conventions of the [`gherkin-features` skill](../../ai/skills/gherkin-features/SKILL.md). The skill is the source of truth for the structure (organization, tooling, tag categories, glossary sections); this package fills in the Alistigo-specific contents.
+The package follows the universal conventions of the [`gherkin-features` skill](../../.agents/skills/gherkin-features/SKILL.md). The skill is the source of truth for the structure (organization, tooling, tag categories, glossary sections); this package fills in the Alistigo-specific contents.
 
 ## What lives here
 
