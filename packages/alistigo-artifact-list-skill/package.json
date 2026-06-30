@@ -4,6 +4,8 @@
   "description": "Alistigo artifact-list agent skill (agentskills.io)",
   "license": "MIT",
   "files": [
-    "SKILL.md"
+    "SKILL.md",
+    "LICENSE",
+    "references/"
   ]
 }
