@@ -2,7 +2,7 @@
 
 The words allowed in step text and the domain concepts they refer to. If a word isn't here, it shouldn't be in a `.feature`. The glossary is the contract between **product**, **specs**, and **code** — following it is what makes a Gherkin scenario unambiguous.
 
-The glossary has three sections, in this order: **Entities**, **Actors**, **Actions**. (Per the [`gherkin-features` skill](../../../ai/skills/gherkin-features/SKILL.md), this structure is universal across features packages — the contents are project-specific.)
+The glossary has three sections, in this order: **Entities**, **Actors**, **Actions**. (Per the [`gherkin-features` skill](../../../.agents/skills/gherkin-features/SKILL.md), this structure is universal across features packages — the contents are project-specific.)
 
 ---
 

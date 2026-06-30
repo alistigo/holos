@@ -2,7 +2,7 @@
 
 How to write a `.feature` that the team and the runner are happy with.
 
-The rules in this file are universal — they come from the [`gherkin-features` skill](../../../ai/skills/gherkin-features/SKILL.md) and are identical across every features package in the repo. The Alistigo-specific vocabulary (Entities, Actors, Actions) lives in [glossary.md](glossary.md).
+The rules in this file are universal — they come from the [`gherkin-features` skill](../../../.agents/skills/gherkin-features/SKILL.md) and are identical across every features package in the repo. The Alistigo-specific vocabulary (Entities, Actors, Actions) lives in [glossary.md](glossary.md).
 
 ## The four rules that matter
 

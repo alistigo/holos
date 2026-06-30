@@ -11,15 +11,15 @@ pnpm install:ai:commands
 ## Structure
 
 ```
-ai/commands/
+.agents/commands/
 └── <command-name>/
     ├── <command-name>.md          # Command definition (installed to .claude/commands/)
-    └── <command-name>.source.md   # Origin and changelog (stays in ai/commands/ only)
+    └── <command-name>.source.md   # Origin and changelog (stays in .agents/commands/ only)
 ```
 
 ## Creating a New Command
 
-1. Create a directory: `ai/commands/<command-name>/`
+1. Create a directory: `.agents/commands/<command-name>/`
 2. Add `<command-name>.md` describing the command's usage, steps, and examples
 3. Run `pnpm install:ai:commands` to install it into `.claude/commands/`
 

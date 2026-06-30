@@ -80,8 +80,8 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "bash ai/hooks/session-start.sh" },
-          { "type": "command", "command": "bash ai/hooks/superpowers-session-start.sh" }
+          { "type": "command", "command": "bash .agents/hooks/session-start.sh" },
+          { "type": "command", "command": "bash .agents/hooks/superpowers-session-start.sh" }
         ]
       }
     ]

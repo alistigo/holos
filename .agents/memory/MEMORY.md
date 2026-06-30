@@ -15,7 +15,7 @@ Persistent patterns and preferences across Claude sessions. Keep under 200 lines
 | `apps/` | CLI tools, web servers, desktop apps |
 | `packages/` | Publishable npm/GitHub libraries (`@mlabrut/*`) |
 | `docs/` | Documentation only (no code) |
-| `ai/` | Agents skills, commands (source of truth), and this memory file |
+| `.agents/` | Agents skills, commands (source of truth), and this memory file |
 
 ## Tech Stack
 
@@ -35,11 +35,11 @@ nx affected -t build  # Build only changed projects
 bash scripts/new-package.sh <name>  # Scaffold a new package
 ```
 
-Note: `.claude/skills` and `.claude/commands` are symlinks to `ai/` — no install scripts needed.
+Note: `.claude/skills` and `.claude/commands` are symlinks to `.agents/` — no install scripts needed.
 
 ## Claude Enhancement Tools
 
-Three tools installed as git submodules in `vendor/`, skills symlinked into `ai/skills/`:
+Three tools installed as git submodules in `vendor/`, skills symlinked into `.agents/skills/`:
 
 | Tool | Skills |
 |------|--------|
@@ -49,7 +49,7 @@ Three tools installed as git submodules in `vendor/`, skills symlinked into `ai/
 
 Caveman flag: `~/.claude/.caveman-active` (user-level, not repo-tracked — recreate with `/caveman` after fresh machine setup).
 CCPM needs authenticated `gh` CLI — run `gh auth login` if CCPM commands fail.
-PRDs: `ai/prds/`. Epics: `ai/epics/`. Both symlinked from `.claude/prds` and `.claude/epics`.
+PRDs: `.agents/prds/`. Epics: `.agents/epics/`. Both symlinked from `.claude/prds` and `.claude/epics`.
 
 ## ESPHome
 

@@ -16,4 +16,4 @@ Activates `mise` and writes the resulting environment variables to `CLAUDE_ENV_F
 
 ## Directory Convention
 
-Hook scripts live here in `ai/hooks/` (source of truth). `.claude/` references them directly — no copy or symlink needed since hooks are configured by path in `settings.json`.
+Hook scripts live here in `.agents/hooks/` (source of truth). `.claude/` references them directly — no copy or symlink needed since hooks are configured by path in `settings.json`.
