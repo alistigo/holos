@@ -218,6 +218,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
 
+  packages/alistigo-artifact-list-skill: {}
+
   packages/alistigo-artifact-manager:
     dependencies:
       '@alistigo/artifact-config-format':

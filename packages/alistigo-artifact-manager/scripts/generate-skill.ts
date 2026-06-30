@@ -15,8 +15,8 @@ import { buildPackageDirMap } from "./workspace.ts";
 
 function main(): void {
   const packageDirMap = buildPackageDirMap();
-  const apps = Object.keys(ARTIFACT_REGISTRY).flatMap((appName) => {
-    const skill = loadAppSkill(appName, packageDirMap);
+  const apps = Object.entries(ARTIFACT_REGISTRY).flatMap(([appName, entry]) => {
+    const skill = loadAppSkill(appName, entry.skillPackage, packageDirMap);
     return skill ? [skill] : [];
   });
 
