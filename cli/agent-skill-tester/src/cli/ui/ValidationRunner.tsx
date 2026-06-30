@@ -31,6 +31,7 @@ interface ValidationRunnerProps {
   onComplete: (exitCode: number) => void;
 }
 
+// fallow-ignore-next-line complexity
 export function ValidationRunner({
   queries,
   skillName,
@@ -50,6 +51,7 @@ export function ValidationRunner({
   }, []);
 
   useEffect(() => {
+    // fallow-ignore-next-line complexity
     async function runAll(): Promise<void> {
       for (let i = 0; i < queries.length; i++) {
         const query = queries[i];
