@@ -1,7 +1,7 @@
 import { Box, Text, useApp } from "ink";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { checkTriggered, type EvalQuery, type QueryResult } from "../commands/validate-triggers.js";
+import { checkTriggered, type EvalQuery, type QueryResult } from "../lib/eval.js";
 import { ProgressRow } from "./ProgressRow.js";
 import { ValidationReport } from "./ValidationReport.js";
 
