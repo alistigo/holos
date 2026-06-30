@@ -1,0 +1,152 @@
+[
+  {
+    "query": "Create a checklist for my morning routine",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "I need a task list widget I can embed in my Claude artifact",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "can u make me a todo list pls",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "Help me track items I need to buy at the grocery store",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "My team needs something to tick off steps as they go through an onboarding process",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "Build an interactive checklist so I can mark things done as I pack my suitcase",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "make me an interactive list thingy where I can check things off",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "I want to keep track of which features are done and which still need work — something I can update as I go",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "Create a reading list I can tick off as I finish each book",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "query": "Build a shopping list where I can add and remove items and check them off when I buy them",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "query": "I need an artifact that lets me manage a list of tasks for my project — add, remove, and mark complete",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "query": "make a checklist widget i can share with my roommates so everyone knows what chores are done",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "query": "I'm doing a recipe — can you embed a step-by-step checklist so I can follow along and tick each step?",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "query": "I want a simple interactive list of my goals for 2026 that I can check off",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "query": "Create an embedded todo widget for tracking my daily standup action items",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "query": "Show me the list of files in my project directory",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "Write a Python function that takes a list and returns only the unique elements",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "Can you summarize this bulleted list from the article I pasted?",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "Create a numbered list of reasons why TypeScript is better than JavaScript",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "Add a dropdown select list component to my React form",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "I need a table, not a list — arrange this data in rows and columns with headers",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "can you write me a markdown list of the top 5 JavaScript frameworks?",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "List the git commits on this branch since last week",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "I want a Kanban board with columns for To Do, In Progress, and Done",
+    "should_trigger": false,
+    "split": "train"
+  },
+  {
+    "query": "Show me a calendar view of my tasks for this month",
+    "should_trigger": false,
+    "split": "validation"
+  },
+  {
+    "query": "Write a JavaScript array literal with my five favourite colours",
+    "should_trigger": false,
+    "split": "validation"
+  },
+  {
+    "query": "Give me a plain text outline (bulleted) of the main sections of my essay",
+    "should_trigger": false,
+    "split": "validation"
+  },
+  {
+    "query": "List all the environment variables my app uses and what each one does",
+    "should_trigger": false,
+    "split": "validation"
+  },
+  {
+    "query": "I need a multi-step wizard form — each step has a few fields and a Next button",
+    "should_trigger": false,
+    "split": "validation"
+  },
+  {
+    "query": "Build a Gantt chart so I can visualise my project timeline",
+    "should_trigger": false,
+    "split": "validation"
+  }
+]

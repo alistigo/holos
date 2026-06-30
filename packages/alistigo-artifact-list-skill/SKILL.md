@@ -1,9 +1,8 @@
 ---
-name: artifact-list
+name: alistigo-artifact-list-skill
 app: "@alistigo/artifact-list"
 description: >
-  Embed the Alistigo list widget — an interactive, persistent list/checklist
-  powered by AlistigoDocument. Use via @alistigo/artifact-manager.
+  Use this when user need a list of any kind: todo, checklist, tasklist. Build an artifact with a list viewer/editor.
 triggers:
   - "add a list"
   - "create a checklist"
