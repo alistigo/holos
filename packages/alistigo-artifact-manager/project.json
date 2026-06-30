@@ -11,7 +11,7 @@
         "command": "tsc -p tsconfig.json",
         "cwd": "packages/alistigo-artifact-manager"
       },
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "generate-skill"]
     },
     "typecheck": {
       "executor": "nx:run-commands",
