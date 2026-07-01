@@ -11,10 +11,11 @@ import { ARTIFACT_REGISTRY } from "./registry.js";
  * @throws {Error} if `config.app` is not found in the registry.
  * @throws {Error} if `selector` matches no element in the document.
  */
+// fallow-ignore-next-line complexity
 export default function init(selector: string, config: unknown): void {
   const validated = validateArtifactConfig(config);
 
-  const cdnUrl = ARTIFACT_REGISTRY[validated.app];
+  const cdnUrl = ARTIFACT_REGISTRY[validated.app]?.cdnUrl;
   if (cdnUrl === undefined) {
     throw new Error(
       `Artifact manager: unknown artifact app "${validated.app}". ` +

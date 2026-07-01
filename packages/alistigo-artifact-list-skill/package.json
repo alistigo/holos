@@ -1,0 +1,11 @@
+{
+  "name": "@alistigo/artifact-list-skill",
+  "version": "0.1.0",
+  "description": "Alistigo artifact-list agent skill (agentskills.io)",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "LICENSE",
+    "references/"
+  ]
+}

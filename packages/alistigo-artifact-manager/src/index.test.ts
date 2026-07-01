@@ -21,8 +21,8 @@ globalThis.document = {
 describe("ARTIFACT_REGISTRY", () => {
   it("contains @alistigo/artifact-list entry", () => {
     expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]).toBeDefined();
-    expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]).toContain("cdn.jsdelivr.net");
-    expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]).toContain("artifact-list");
+    expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]?.cdnUrl).toContain("cdn.jsdelivr.net");
+    expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]?.cdnUrl).toContain("artifact-list");
   });
 });
 
@@ -37,7 +37,7 @@ describe("init", () => {
     init("#app", { app: "@alistigo/artifact-list" });
 
     expect(appendedScripts).toHaveLength(1);
-    expect(appendedScripts[0]?.src).toBe(ARTIFACT_REGISTRY["@alistigo/artifact-list"]);
+    expect(appendedScripts[0]?.src).toBe(ARTIFACT_REGISTRY["@alistigo/artifact-list"]?.cdnUrl);
   });
 
   it("sets id='app' on the target element when its id differs", () => {

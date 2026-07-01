@@ -24,6 +24,11 @@ post-rewrite:
     install-deps:
       run: if git diff ORIG_HEAD HEAD --name-only 2>/dev/null | grep -qE 'package\.json|pnpm-lock\.yaml'; then pnpm install; fi
 
+post-checkout:
+  commands:
+    install-deps:
+      run: if [ "{3}" = "1" ] && git diff {1} {2} --name-only 2>/dev/null | grep -qE 'package\.json|pnpm-lock\.yaml'; then pnpm install; fi
+
 commit-msg:
   commands:
     conventional-commit:

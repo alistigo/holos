@@ -1,0 +1,14 @@
+{
+  "name": "alistigo-artifact-list-skill",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-artifact-list-skill"
+      }
+    }
+  }
+}
