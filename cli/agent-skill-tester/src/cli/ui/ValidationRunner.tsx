@@ -1,7 +1,12 @@
 import { Box, Text, useApp } from "ink";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { checkTriggered, type EvalQuery, type QueryResult } from "../lib/eval.js";
+import {
+  checkTriggered,
+  type EvalQuery,
+  type QueryResult,
+  type RunDebugInfo,
+} from "../lib/eval.js";
 import { ProgressRow } from "./ProgressRow.js";
 import { ValidationReport } from "./ValidationReport.js";
 
@@ -28,6 +33,7 @@ interface ValidationRunnerProps {
   agent: string;
   runs: number;
   threshold: number;
+  debug?: boolean;
   onComplete: (exitCode: number) => void;
 }
 
@@ -38,6 +44,7 @@ export function ValidationRunner({
   agent,
   runs,
   threshold,
+  debug,
   onComplete,
 }: ValidationRunnerProps): React.JSX.Element {
   const { exit } = useApp();
@@ -58,17 +65,25 @@ export function ValidationRunner({
         if (!query) continue;
 
         let triggers = 0;
+        const debugRuns: RunDebugInfo[] = [];
         for (let r = 1; r <= runs; r++) {
           if (cancelledRef.current) return;
           setRunning({ queryIdx: i, run: r });
-          const triggered = await checkTriggered(query.query, skillName, agent);
-          if (triggered) triggers++;
+          const info = await checkTriggered(query.query, skillName, agent);
+          if (info.triggered) triggers++;
+          if (debug) debugRuns.push({ ...info, runNumber: r });
         }
 
         const triggerRate = triggers / runs;
         const passed = query.should_trigger ? triggerRate >= threshold : triggerRate < threshold;
 
-        appendResult({ query, triggers, totalRuns: runs, passed });
+        appendResult({
+          query,
+          triggers,
+          totalRuns: runs,
+          passed,
+          ...(debug && debugRuns.length > 0 ? { debugRuns } : {}),
+        });
       }
 
       if (!cancelledRef.current) {
@@ -85,7 +100,7 @@ export function ValidationRunner({
     return () => {
       cancelledRef.current = true;
     };
-  }, [queries, skillName, agent, runs, threshold, appendResult]);
+  }, [queries, skillName, agent, runs, threshold, debug, appendResult]);
 
   useEffect(() => {
     if (!done) return;
