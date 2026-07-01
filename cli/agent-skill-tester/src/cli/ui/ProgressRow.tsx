@@ -55,8 +55,7 @@ export function ProgressRow({ result }: ProgressRowProps): React.JSX.Element {
   return (
     <Box flexDirection="column">
       <MainRow result={result} />
-      {result.debugRuns !== undefined &&
-        result.debugRuns.map((run) => <DebugRunRow key={run.runNumber} run={run} />)}
+      {result.debugRuns?.map((run) => <DebugRunRow key={run.runNumber} run={run} />)}
     </Box>
   );
 }
