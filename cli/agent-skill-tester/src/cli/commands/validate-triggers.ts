@@ -70,6 +70,11 @@ export class ValidateTriggersCommand extends Command {
     description: "Show per-run trigger results and agent stderr",
   });
 
+  limit = Option.String("--limit,-n", {
+    description: "Maximum number of queries to run (default: all)",
+    required: false,
+  });
+
   // fallow-ignore-next-line unused-class-member complexity
   async execute(): Promise<number> {
     const runsCount = parseInt(this.runs, 10);
@@ -122,6 +127,15 @@ export class ValidateTriggersCommand extends Command {
     if (this.split !== "all") {
       const filterSplit = this.split as "train" | "validation";
       queries = queries.filter((q) => q.split === filterSplit);
+    }
+
+    if (this.limit !== undefined) {
+      const limitCount = parseInt(this.limit, 10);
+      if (Number.isNaN(limitCount) || limitCount < 1) {
+        this.context.stderr.write("Error: --limit must be a positive integer\n");
+        return 1;
+      }
+      queries = queries.slice(0, limitCount);
     }
 
     if (queries.length === 0) {
