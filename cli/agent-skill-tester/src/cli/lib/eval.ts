@@ -21,14 +21,18 @@ export interface QueryResult {
   debugRuns?: RunDebugInfo[];
 }
 
+type ContentBlock = {
+  type?: string;
+  name?: string;
+  input?: Record<string, unknown>;
+  text?: string;
+};
+
 type StreamEvent = {
   type?: string;
+  subtype?: string;
   message?: {
-    content?: Array<{
-      type?: string;
-      name?: string;
-      input?: Record<string, unknown>;
-    }>;
+    content?: ContentBlock[];
   };
 };
 
@@ -37,6 +41,33 @@ function isSkillUse(event: StreamEvent, skillName: string): boolean {
     (block) =>
       block.type === "tool_use" && block.name === "Skill" && block.input?.skill === skillName,
   );
+}
+
+// fallow-ignore-next-line complexity
+function summarizeEvent(event: StreamEvent): string {
+  if (event.type === "system") {
+    return event.subtype ? `system:${event.subtype}` : "system";
+  }
+  if (event.type === "assistant") {
+    const parts: string[] = [];
+    for (const block of event.message?.content ?? []) {
+      if (block.type === "thinking") {
+        parts.push("thinking");
+      } else if (block.type === "tool_use") {
+        const detail = block.name === "Skill" ? `(${String(block.input?.skill ?? "?")})` : "";
+        parts.push(`→ ${block.name ?? "?"}${detail}`);
+      } else if (block.type === "text" && block.text) {
+        const preview = block.text.slice(0, 60);
+        parts.push(`"${preview}${block.text.length > 60 ? "…" : ""}"`);
+      }
+    }
+    return parts.length > 0 ? `assistant ${parts.join(", ")}` : "assistant";
+  }
+  if (event.type === "user") {
+    const hasToolResult = (event.message?.content ?? []).some((b) => b.type === "tool_result");
+    return hasToolResult ? "user:tool_result" : "user";
+  }
+  return event.type ?? "unknown";
 }
 
 // Streams stream-json output line-by-line and resolves as soon as the Skill
@@ -48,6 +79,7 @@ export async function checkTriggered(
   query: string,
   skillName: string,
   agent: string,
+  onStreamEvent?: (count: number, summary: string) => void,
 ): Promise<Omit<RunDebugInfo, "runNumber">> {
   return new Promise((resolve) => {
     const child = spawn(agent, ["-p", query, "--output-format", "stream-json", "--verbose"], {
@@ -58,6 +90,7 @@ export async function checkTriggered(
     let triggered = false;
     let stderrOutput = "";
     let lineBuffer = "";
+    let eventCount = 0;
 
     const done = (extra?: { error?: string }): void => {
       if (resolved) return;
@@ -87,6 +120,7 @@ export async function checkTriggered(
         if (!trimmed) continue;
         try {
           const event = JSON.parse(trimmed) as StreamEvent;
+          onStreamEvent?.(++eventCount, summarizeEvent(event));
           if (event.type === "assistant" && isSkillUse(event, skillName)) {
             triggered = true;
             done();

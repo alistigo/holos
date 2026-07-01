@@ -51,10 +51,15 @@ export function ValidationRunner({
   const [results, setResults] = useState<QueryResult[]>([]);
   const [running, setRunning] = useState<RunningState | null>({ queryIdx: 0, run: 1 });
   const [done, setDone] = useState(false);
+  const [streamEvents, setStreamEvents] = useState<Array<{ count: number; summary: string }>>([]);
   const cancelledRef = useRef(false);
 
   const appendResult = useCallback((result: QueryResult) => {
     setResults((prev) => [...prev, result]);
+  }, []);
+
+  const onStreamEvent = useCallback((count: number, summary: string) => {
+    setStreamEvents((prev) => [...prev, { count, summary }]);
   }, []);
 
   useEffect(() => {
@@ -69,7 +74,8 @@ export function ValidationRunner({
         for (let r = 1; r <= runs; r++) {
           if (cancelledRef.current) return;
           setRunning({ queryIdx: i, run: r });
-          const info = await checkTriggered(query.query, skillName, agent);
+          setStreamEvents([]);
+          const info = await checkTriggered(query.query, skillName, agent, debug ? onStreamEvent : undefined);
           if (info.triggered) triggers++;
           if (debug) debugRuns.push({ ...info, runNumber: r });
         }
@@ -100,7 +106,7 @@ export function ValidationRunner({
     return () => {
       cancelledRef.current = true;
     };
-  }, [queries, skillName, agent, runs, threshold, debug, appendResult]);
+  }, [queries, skillName, agent, runs, threshold, debug, appendResult, onStreamEvent]);
 
   useEffect(() => {
     if (!done) return;
@@ -130,14 +136,25 @@ export function ValidationRunner({
       ))}
 
       {running !== null && currentQuery !== undefined && (
-        <Box>
-          <Spinner />
-          <Text> </Text>
-          <Text dimColor>
-            query {running.queryIdx + 1}/{queries.length}, run {running.run}/{runs} —{" "}
-            {currentQuery.query.slice(0, 55)}
-            {currentQuery.query.length > 55 ? "…" : ""}
-          </Text>
+        <Box flexDirection="column">
+          <Box>
+            <Spinner />
+            <Text> </Text>
+            <Text dimColor>
+              query {running.queryIdx + 1}/{queries.length}, run {running.run}/{runs} —{" "}
+              {currentQuery.query.slice(0, 55)}
+              {currentQuery.query.length > 55 ? "…" : ""}
+            </Text>
+          </Box>
+          {debug && streamEvents.length > 0 && (
+            <Box flexDirection="column" marginLeft={2}>
+              {streamEvents.map((ev) => (
+                <Text key={ev.count} dimColor>
+                  <Text color="gray">[{ev.count}]</Text> {ev.summary}
+                </Text>
+              ))}
+            </Box>
+          )}
         </Box>
       )}
 
