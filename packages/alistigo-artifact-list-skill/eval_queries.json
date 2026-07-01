@@ -5,7 +5,7 @@
     "split": "train"
   },
   {
-    "query": "I need a task list widget I can embed in my Claude artifact",
+    "query": "Let's list all the tasks for that project",
     "should_trigger": true,
     "split": "train"
   },
