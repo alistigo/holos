@@ -9,11 +9,19 @@ export interface EvalQuery {
   split: "train" | "validation";
 }
 
+export interface RunDebugInfo {
+  runNumber: number;
+  triggered: boolean;
+  stderr?: string;
+  error?: string;
+}
+
 export interface QueryResult {
   query: EvalQuery;
   triggers: number;
   totalRuns: number;
   passed: boolean;
+  debugRuns?: RunDebugInfo[];
 }
 
 function parseTriggered(stdout: string, skillName: string): boolean {
@@ -43,20 +51,29 @@ export async function checkTriggered(
   query: string,
   skillName: string,
   agent: string,
-): Promise<boolean> {
+): Promise<Omit<RunDebugInfo, "runNumber">> {
   try {
-    const { stdout } = await execFileAsync(agent, ["-p", query, "--output-format", "json"], {
-      maxBuffer: 10 * 1024 * 1024,
-      timeout: 120_000,
-    });
-    return parseTriggered(String(stdout), skillName);
+    const { stdout, stderr } = await execFileAsync(
+      agent,
+      ["-p", query, "--output-format", "json"],
+      {
+        maxBuffer: 10 * 1024 * 1024,
+        timeout: 120_000,
+      },
+    );
+    const triggered = parseTriggered(String(stdout), skillName);
+    const stderrStr = typeof stderr === "string" ? stderr.trim() : "";
+    return { triggered, ...(stderrStr ? { stderr: stderrStr } : {}) };
   } catch (err: unknown) {
     if (err !== null && typeof err === "object" && "stdout" in err) {
       const raw = (err as { stdout: unknown }).stdout;
       if (typeof raw === "string" && raw.length > 0) {
-        return parseTriggered(raw, skillName);
+        const triggered = parseTriggered(raw, skillName);
+        const stderrRaw = (err as { stderr?: unknown }).stderr;
+        const stderrStr = typeof stderrRaw === "string" ? stderrRaw.trim() : "";
+        return { triggered, ...(stderrStr ? { stderr: stderrStr } : {}) };
       }
     }
-    return false;
+    return { triggered: false, error: String(err) };
   }
 }

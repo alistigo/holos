@@ -66,6 +66,10 @@ export class ValidateTriggersCommand extends Command {
     description: "Which query split to run: 'all', 'train', or 'validation'",
   });
 
+  debug = Option.Boolean("--debug,-d", false, {
+    description: "Show per-run trigger results and agent stderr",
+  });
+
   // fallow-ignore-next-line unused-class-member complexity
   async execute(): Promise<number> {
     const runsCount = parseInt(this.runs, 10);
@@ -133,6 +137,7 @@ export class ValidateTriggersCommand extends Command {
         agent: this.agent,
         runs: runsCount,
         threshold: thresholdValue,
+        debug: this.debug,
         onComplete: (code) => {
           exitCode = code;
         },
