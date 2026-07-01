@@ -23,8 +23,10 @@ function readSkillName(skillMdPath: string): string {
 }
 
 export class ValidateTriggersCommand extends Command {
+  // fallow-ignore-next-line unused-class-member
   static override paths = [["validate-triggers"]];
 
+  // fallow-ignore-next-line unused-class-member
   static override usage = Command.Usage({
     description: "Evaluate whether a skill's description triggers correctly on labelled queries",
     details: `
@@ -64,7 +66,7 @@ export class ValidateTriggersCommand extends Command {
     description: "Which query split to run: 'all', 'train', or 'validation'",
   });
 
-  // fallow-ignore-next-line complexity
+  // fallow-ignore-next-line unused-class-member complexity
   async execute(): Promise<number> {
     const runsCount = parseInt(this.runs, 10);
     const thresholdValue = parseFloat(this.threshold);
