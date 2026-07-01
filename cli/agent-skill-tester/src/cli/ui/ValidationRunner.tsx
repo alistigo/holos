@@ -75,7 +75,12 @@ export function ValidationRunner({
           if (cancelledRef.current) return;
           setRunning({ queryIdx: i, run: r });
           setStreamEvents([]);
-          const info = await checkTriggered(query.query, skillName, agent, debug ? onStreamEvent : undefined);
+          const info = await checkTriggered(
+            query.query,
+            skillName,
+            agent,
+            debug ? onStreamEvent : undefined,
+          );
           if (info.triggered) triggers++;
           if (debug) debugRuns.push({ ...info, runNumber: r });
         }
