@@ -1,10 +1,10 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import { Cli } from "clipanion";
 import { ValidateTriggersCommand } from "./cli/commands/validate-triggers.js";
 
 const cli = new Cli({
   binaryLabel: "agent-skill-tester",
-  binaryName: "bun src/cli.ts",
+  binaryName: "agent-skill-tester",
   binaryVersion: "0.1.0",
 });
 

@@ -4,6 +4,16 @@
   "sourceRoot": "cli/agent-skill-tester/src",
   "projectType": "application",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "cli/agent-skill-tester/dist",
+        "tsConfig": "cli/agent-skill-tester/tsconfig.build.json",
+        "main": "cli/agent-skill-tester/src/cli.ts",
+        "rootDir": "cli/agent-skill-tester/src"
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
