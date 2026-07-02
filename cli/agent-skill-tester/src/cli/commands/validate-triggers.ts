@@ -12,16 +12,18 @@ function isDirectory(path: string): boolean {
   return existsSync(path) && statSync(path).isDirectory();
 }
 
+function isWorkspaceRoot(dir: string): boolean {
+  return (
+    existsSync(join(dir, "pnpm-workspace.yaml")) ||
+    existsSync(join(dir, "nx.json")) ||
+    hasNpmWorkspaces(join(dir, "package.json"))
+  );
+}
+
 export function findWorkspaceRoot(startDir: string): string | undefined {
   let dir = startDir;
   while (dir !== dirname(dir)) {
-    if (
-      existsSync(join(dir, "pnpm-workspace.yaml")) ||
-      existsSync(join(dir, "nx.json")) ||
-      hasNpmWorkspaces(join(dir, "package.json"))
-    ) {
-      return dir;
-    }
+    if (isWorkspaceRoot(dir)) return dir;
     dir = dirname(dir);
   }
   return undefined;
@@ -41,42 +43,88 @@ function globsToDirs(globs: string[]): string[] {
   return globs.map((glob) => glob.replace(/\/\*+$/, "")).filter((glob) => !glob.includes("*"));
 }
 
+function matchYamlListItem(line: string): string | undefined {
+  return /^\s*-\s*['"]?([^'"#]+?)['"]?\s*$/.exec(line)?.[1];
+}
+
+function collectYamlListItems(lines: string[], startIdx: number): string[] {
+  const items: string[] = [];
+  for (const line of lines.slice(startIdx + 1)) {
+    const value = matchYamlListItem(line);
+    if (value === undefined) break;
+    items.push(value);
+  }
+  return items;
+}
+
 function parsePnpmWorkspaceGlobs(yamlContent: string): string[] {
   const lines = yamlContent.split("\n");
   const startIdx = lines.findIndex((line) => /^packages:\s*$/.test(line.trim()));
   if (startIdx === -1) return [];
+  return globsToDirs(collectYamlListItems(lines, startIdx));
+}
 
-  const globs: string[] = [];
-  for (let i = startIdx + 1; i < lines.length; i++) {
-    const line = lines[i] ?? "";
-    const match = /^\s*-\s*['"]?([^'"#]+?)['"]?\s*$/.exec(line);
-    if (!match?.[1]) break;
-    globs.push(match[1]);
+function getPnpmWorkspaceDirs(root: string): string[] | undefined {
+  const pnpmWorkspacePath = join(root, "pnpm-workspace.yaml");
+  if (!existsSync(pnpmWorkspacePath)) return undefined;
+  const dirs = parsePnpmWorkspaceGlobs(readFileSync(pnpmWorkspacePath, "utf-8"));
+  return dirs.length > 0 ? dirs : undefined;
+}
+
+// fallow-ignore-next-line complexity
+function extractWorkspaceGlobs(pkg: {
+  workspaces?: string[] | { packages?: string[] };
+}): string[] | undefined {
+  const globs = Array.isArray(pkg.workspaces) ? pkg.workspaces : pkg.workspaces?.packages;
+  return globs && globs.length > 0 ? globs : undefined;
+}
+
+function readPackageJsonWorkspaceGlobs(packageJsonPath: string): string[] | undefined {
+  try {
+    const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8")) as {
+      workspaces?: string[] | { packages?: string[] };
+    };
+    return extractWorkspaceGlobs(pkg);
+  } catch {
+    return undefined;
   }
-  return globsToDirs(globs);
+}
+
+function getNpmWorkspaceDirs(root: string): string[] | undefined {
+  const packageJsonPath = join(root, "package.json");
+  if (!existsSync(packageJsonPath)) return undefined;
+  const globs = readPackageJsonWorkspaceGlobs(packageJsonPath);
+  return globs ? globsToDirs(globs) : undefined;
 }
 
 export function getWorkspacePackageDirs(root: string): string[] {
-  const pnpmWorkspacePath = join(root, "pnpm-workspace.yaml");
-  if (existsSync(pnpmWorkspacePath)) {
-    const dirs = parsePnpmWorkspaceGlobs(readFileSync(pnpmWorkspacePath, "utf-8"));
-    if (dirs.length > 0) return dirs;
-  }
+  return getPnpmWorkspaceDirs(root) ?? getNpmWorkspaceDirs(root) ?? DEFAULT_PACKAGE_DIRS;
+}
 
-  const packageJsonPath = join(root, "package.json");
-  if (existsSync(packageJsonPath)) {
-    try {
-      const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8")) as {
-        workspaces?: string[] | { packages?: string[] };
-      };
-      const globs = Array.isArray(pkg.workspaces) ? pkg.workspaces : pkg.workspaces?.packages;
-      if (globs && globs.length > 0) return globsToDirs(globs);
-    } catch {
-      // fall through to defaults
-    }
+function findInWorkspace(input: string, workspaceRoot: string): string | undefined {
+  for (const dir of getWorkspacePackageDirs(workspaceRoot)) {
+    const candidate = join(workspaceRoot, dir, input);
+    if (isDirectory(candidate)) return candidate;
   }
+  return undefined;
+}
 
-  return DEFAULT_PACKAGE_DIRS;
+function describeResolutionFailure(
+  input: string,
+  asPath: string,
+  workspaceRoot: string | undefined,
+): string {
+  if (!workspaceRoot) {
+    return (
+      `Could not resolve '${input}': not a directory at ${asPath}, and no monorepo workspace root ` +
+      "(pnpm-workspace.yaml / nx.json / package.json workspaces) was found from the current directory"
+    );
+  }
+  const packageDirs = getWorkspacePackageDirs(workspaceRoot);
+  return (
+    `Could not resolve '${input}': not a directory at ${asPath}, and no matching package ` +
+    `found under ${packageDirs.map((dir) => `${dir}/`).join(", ")} in workspace root ${workspaceRoot}`
+  );
 }
 
 export function resolvePackageDir(input: string, cwd: string): string {
@@ -84,22 +132,10 @@ export function resolvePackageDir(input: string, cwd: string): string {
   if (isDirectory(asPath)) return asPath;
 
   const workspaceRoot = findWorkspaceRoot(cwd);
-  if (workspaceRoot) {
-    const packageDirs = getWorkspacePackageDirs(workspaceRoot);
-    for (const dir of packageDirs) {
-      const candidate = join(workspaceRoot, dir, input);
-      if (isDirectory(candidate)) return candidate;
-    }
-    throw new Error(
-      `Could not resolve '${input}': not a directory at ${asPath}, and no matching package ` +
-        `found under ${packageDirs.map((dir) => `${dir}/`).join(", ")} in workspace root ${workspaceRoot}`,
-    );
-  }
+  const resolved = workspaceRoot ? findInWorkspace(input, workspaceRoot) : undefined;
+  if (resolved) return resolved;
 
-  throw new Error(
-    `Could not resolve '${input}': not a directory at ${asPath}, and no monorepo workspace root ` +
-      "(pnpm-workspace.yaml / nx.json / package.json workspaces) was found from the current directory",
-  );
+  throw new Error(describeResolutionFailure(input, asPath, workspaceRoot));
 }
 
 function readSkillName(skillMdPath: string): string {
