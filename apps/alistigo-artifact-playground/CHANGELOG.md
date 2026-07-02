@@ -1,3 +1,12 @@
+## 0.2.7 (2026-07-02)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.4
+- Updated alistigo-artifact-manager to 0.1.3
+- Updated alistigo-document-format to 0.2.4
+- Updated alistigo-artifact-list to 0.2.6
+
 ## 0.2.6 (2026-06-29)
 
 ### 🧱 Updated Dependencies

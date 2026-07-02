@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-manager",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Artifact configuration management for Alistigo — reads, validates, and resolves artifact config at runtime.",
   "license": "MIT",
   "author": {

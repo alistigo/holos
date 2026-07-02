@@ -1,3 +1,15 @@
+## 0.2.6 (2026-07-02)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-claude-artifact-list-storage to 0.2.4
+- Updated alistigo-local-storage-repository to 0.2.4
+- Updated alistigo-list-components-react to 0.2.4
+- Updated alistigo-document-editor to 0.2.4
+- Updated alistigo-document-format to 0.2.4
+- Updated alistigo-domain to 0.2.4
+- Updated alistigo-logger to 0.2.4
+
 ## 0.2.5 (2026-06-28)
 
 ### 🩹 Fixes

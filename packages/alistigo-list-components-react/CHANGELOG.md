@@ -1,3 +1,12 @@
+## 0.2.4 (2026-07-02)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-editor to 0.2.4
+- Updated alistigo-document-format to 0.2.4
+- Updated alistigo-domain to 0.2.4
+- Updated alistigo-logger to 0.2.4
+
 ## 0.2.3 (2026-06-28)
 
 ### 🩹 Fixes
