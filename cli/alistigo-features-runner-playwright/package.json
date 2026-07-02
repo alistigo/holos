@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/features-runner-playwright",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Cucumber.js runner for Alistigo Gherkin features. Consumes .feature files from @alistigo/features and drives the app via Playwright in step definitions.",
