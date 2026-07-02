@@ -255,15 +255,15 @@ importers:
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
-      yaml:
-        specifier: ^2.7.0
-        version: 2.8.2
 
   packages/alistigo-artifact-manager-skill:
     devDependencies:
       '@alistigo/artifact-manager':
         specifier: workspace:*
         version: link:../alistigo-artifact-manager
+      yaml:
+        specifier: ^2.7.0
+        version: 2.8.2
 
   packages/alistigo-claude-artifact-list-storage:
     dependencies:

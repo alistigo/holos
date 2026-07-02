@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { SKILL_PKG_DIR, TEMPLATE_PATH } from "./paths.ts";
+import { PKG_DIR, TEMPLATE_PATH } from "./paths.ts";
 import type { AppSkillData } from "./types.ts";
 
 const MANAGER_TRIGGERS = [
@@ -9,7 +9,7 @@ const MANAGER_TRIGGERS = [
 ];
 
 function relativeSkillPath(appPkgDir: string): string {
-  return path.relative(SKILL_PKG_DIR, path.join(appPkgDir, "SKILL.md"));
+  return path.relative(PKG_DIR, path.join(appPkgDir, "SKILL.md"));
 }
 
 function buildTriggersBlock(apps: AppSkillData[]): string {

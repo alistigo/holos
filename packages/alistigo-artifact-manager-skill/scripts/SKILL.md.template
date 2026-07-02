@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — do not edit manually.
-     Source: packages/alistigo-artifact-manager/scripts/generate-skill.ts
-     Re-generate: nx run alistigo-artifact-manager:generate-skill -->
+     Source: packages/alistigo-artifact-manager-skill/scripts/generate-skill.ts
+     Re-generate: nx run alistigo-artifact-manager-skill:generate-skill -->
 ---
 name: alistigo-artifact-manager
 description: >

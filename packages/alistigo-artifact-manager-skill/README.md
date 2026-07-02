@@ -19,7 +19,7 @@ what's actually registered. It's gitignored — not committed to git.
 Regenerate it with:
 
 ```sh
-nx run alistigo-artifact-manager:generate-skill
+nx run alistigo-artifact-manager-skill:generate-skill
 # or, equivalently:
 nx run alistigo-artifact-manager-skill:build
 ```
