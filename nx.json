@@ -33,7 +33,7 @@
     "production": ["default", "!{projectRoot}/**/*.spec.ts", "!{projectRoot}/**/*.test.ts"]
   },
   "release": {
-    "projects": ["packages/*", "apps/*"],
+    "projects": ["packages/*", "apps/*", "cli/*"],
     "projectsRelationship": "independent",
     "releaseTagPattern": "{projectName}@{version}",
     "version": {
