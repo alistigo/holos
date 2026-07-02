@@ -44,6 +44,8 @@
   "ignoreDependencies": [
     "@alistigo/artifact-list",
     "@alistigo/document-format",
+    "@alistigo/artifact-config-list-format",
+    "@alistigo/artifact-manager",
     "@alistigo/list-components-react",
     "@lingui/react",
     "gherklin",
