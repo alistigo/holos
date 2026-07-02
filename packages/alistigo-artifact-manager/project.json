@@ -11,7 +11,7 @@
         "command": "tsc -p tsconfig.json",
         "cwd": "packages/alistigo-artifact-manager"
       },
-      "dependsOn": ["^build", "generate-skill"]
+      "dependsOn": ["^build"]
     },
     "typecheck": {
       "executor": "nx:run-commands",
@@ -48,19 +48,6 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "rm -rf dist",
-        "cwd": "packages/alistigo-artifact-manager"
-      }
-    },
-    "generate-skill": {
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/packages/alistigo-artifact-manager-skill/SKILL.md"],
-      "inputs": [
-        "{projectRoot}/src/registry.ts",
-        "{projectRoot}/scripts/SKILL.md.template",
-        "{workspaceRoot}/packages/alistigo-artifact-list-skill/SKILL.md"
-      ],
-      "options": {
-        "command": "bun scripts/generate-skill.ts",
         "cwd": "packages/alistigo-artifact-manager"
       }
     }

@@ -1,13 +1,13 @@
 /**
- * Generates packages/alistigo-artifact-manager/SKILL.md from the artifact registry
+ * Generates packages/alistigo-artifact-manager-skill/SKILL.md from the artifact registry
  * and each registered app's own SKILL.md.
  *
  * Run: bun scripts/generate-skill.ts
- * Nx:  nx run alistigo-artifact-manager:generate-skill
+ * Nx:  nx run alistigo-artifact-manager-skill:generate-skill
  */
 
 import { writeFileSync } from "node:fs";
-import { ARTIFACT_REGISTRY } from "../src/registry.ts";
+import { ARTIFACT_REGISTRY } from "@alistigo/artifact-manager";
 import { OUTPUT_PATH } from "./paths.ts";
 import { renderManagerSkill } from "./renderer.ts";
 import { loadAppSkill } from "./skill-loader.ts";

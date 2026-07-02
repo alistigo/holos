@@ -6,9 +6,22 @@
     "build": {
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/SKILL.md"],
-      "dependsOn": [{ "projects": ["alistigo-artifact-manager"], "target": "generate-skill" }],
+      "dependsOn": ["generate-skill"],
       "options": {
         "command": "test -f SKILL.md",
+        "cwd": "packages/alistigo-artifact-manager-skill"
+      }
+    },
+    "generate-skill": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/SKILL.md"],
+      "inputs": [
+        "{projectRoot}/scripts/**/*",
+        "{workspaceRoot}/packages/alistigo-artifact-list-skill/SKILL.md"
+      ],
+      "dependsOn": [{ "projects": ["alistigo-artifact-manager"], "target": "build" }],
+      "options": {
+        "command": "bun scripts/generate-skill.ts",
         "cwd": "packages/alistigo-artifact-manager-skill"
       }
     },

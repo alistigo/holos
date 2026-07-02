@@ -35,6 +35,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@alistigo/artifact-manager": "workspace:*"
+    "@alistigo/artifact-manager": "workspace:*",
+    "yaml": "^2.7.0"
   }
 }
