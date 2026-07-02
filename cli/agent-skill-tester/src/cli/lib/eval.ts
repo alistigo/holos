@@ -1,9 +1,36 @@
 import { spawn } from "node:child_process";
+import evalQueriesSchemaJson from "../../schemas/eval-queries.schema.json" with { type: "json" };
+
+export const evalQueriesSchema = evalQueriesSchemaJson;
 
 export interface EvalQuery {
   query: string;
   should_trigger: boolean;
   split: "train" | "validation";
+}
+
+function validateEvalQuery(item: unknown, index: number, sourcePath: string): EvalQuery {
+  if (typeof item !== "object" || item === null) {
+    throw new Error(`${sourcePath}[${index}]: expected an object`);
+  }
+  const { query, should_trigger, split } = item as Record<string, unknown>;
+  if (typeof query !== "string" || query.length === 0) {
+    throw new Error(`${sourcePath}[${index}].query: expected a non-empty string`);
+  }
+  if (typeof should_trigger !== "boolean") {
+    throw new Error(`${sourcePath}[${index}].should_trigger: expected a boolean`);
+  }
+  if (split !== "train" && split !== "validation") {
+    throw new Error(`${sourcePath}[${index}].split: expected "train" or "validation"`);
+  }
+  return { query, should_trigger, split };
+}
+
+export function parseEvalQueries(raw: unknown, sourcePath: string): EvalQuery[] {
+  if (!Array.isArray(raw)) {
+    throw new Error(`${sourcePath}: expected a JSON array of queries`);
+  }
+  return raw.map((item, index) => validateEvalQuery(item, index, sourcePath));
 }
 
 export interface RunDebugInfo {

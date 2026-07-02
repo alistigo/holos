@@ -17,7 +17,8 @@ trigger rate crosses `--threshold` in the direction implied by its `should_trigg
 
 ## Requirements
 
-- A `eval_queries.json` file into the package containing the SKILL.
+- An `eval_queries.json` file (or a file passed via `--queries`) matching the
+  [schema](#eval-queries-schema) below.
 
 ### Temporary requirement
 
@@ -39,11 +40,19 @@ npx @alistigo/agent-skill-tester validate-triggers <skill-name>
 ## Usage
 
 ```sh
-agent-skill-tester validate-triggers <skill-name> [options]
+agent-skill-tester validate-triggers <package> [options]
 ```
+
+`<package>` accepts either:
+
+- A real filesystem path to the skill package (relative or absolute).
+- A bare package name, if the current directory is inside a monorepo (Nx, pnpm
+  workspaces, or npm/yarn workspaces) — resolved by searching the workspace's
+  declared package directories (e.g. `apps/*`, `packages/*`, `cli/*`).
 
 | Flag | Default | Description |
 |------|---------|-------------|
+| `--queries, -q` | `<package>/eval_queries.json` | Path to the eval queries JSON file |
 | `--agent, -a` | `claude` | Agent CLI to invoke (only `claude` is currently supported) |
 | `--runs, -r` | `3` | Number of times to run each query |
 | `--threshold` | `0.5` | Trigger-rate threshold (0.0–1.0) a query must cross to pass |
@@ -55,11 +64,32 @@ Examples:
 
 ```sh
 agent-skill-tester validate-triggers alistigo-artifact-list-skill
+agent-skill-tester validate-triggers packages/alistigo-artifact-list-skill
 agent-skill-tester validate-triggers my-skill --split train --runs 5
 agent-skill-tester validate-triggers my-skill --threshold 0.3 --debug
+agent-skill-tester validate-triggers my-skill --queries ./eval.json
 ```
 
 Exits `0` if every query passes, `1` otherwise.
+
+## Eval queries schema
+
+`eval_queries.json` must be a JSON array of `{ query, should_trigger, split }` objects.
+A machine-readable [JSON Schema](https://json-schema.org/) ships with the package at
+`dist/schemas/eval-queries.schema.json`, for example to enable editor autocomplete/validation.
+Since the file's root is an array (which can't carry an inline `"$schema"` key), map it via
+your editor's schema settings instead — for VS Code, in `.vscode/settings.json`:
+
+```json
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["eval_queries.json"],
+      "url": "./node_modules/@alistigo/agent-skill-tester/dist/schemas/eval-queries.schema.json"
+    }
+  ]
+}
+```
 
 ## Current limitations: Only support Claude with subscription (not api)
 

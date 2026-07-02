@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Skill Tester eval queries",
+  "description": "Labelled queries used by `agent-skill-tester validate-triggers` to test whether a skill's trigger description fires correctly.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["query", "should_trigger", "split"],
+    "additionalProperties": false,
+    "properties": {
+      "query": {
+        "type": "string",
+        "minLength": 1,
+        "description": "The user query to replay through the agent."
+      },
+      "should_trigger": {
+        "type": "boolean",
+        "description": "Whether the skill is expected to trigger on this query."
+      },
+      "split": {
+        "type": "string",
+        "enum": ["train", "validation"],
+        "description": "Which split this query belongs to."
+      }
+    }
+  }
+}
