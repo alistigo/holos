@@ -1,5 +1,12 @@
 import { describe, expect, it } from "bun:test";
-import { type EvalQuery, parseEvalQueries } from "./eval.js";
+import { type EvalQuery, evalQueriesSchema, parseEvalQueries } from "./eval.js";
+
+describe("evalQueriesSchema", () => {
+  it("declares the same required fields that parseEvalQueries enforces", () => {
+    expect(evalQueriesSchema.items.required).toEqual(["query", "should_trigger", "split"]);
+    expect(evalQueriesSchema.items.properties.split.enum).toEqual(["train", "validation"]);
+  });
+});
 
 describe("parseEvalQueries", () => {
   it("accepts a valid array of queries", () => {
