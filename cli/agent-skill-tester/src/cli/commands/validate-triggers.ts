@@ -1,18 +1,105 @@
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { Command, Option } from "clipanion";
 import { render } from "ink";
 import React from "react";
-import type { EvalQuery } from "../lib/eval.js";
+import { type EvalQuery, parseEvalQueries } from "../lib/eval.js";
 import { ValidationRunner } from "../ui/ValidationRunner.js";
 
-function findWorkspaceRoot(startDir: string): string {
+const DEFAULT_PACKAGE_DIRS = ["packages", "apps", "cli", "libs"];
+
+function isDirectory(path: string): boolean {
+  return existsSync(path) && statSync(path).isDirectory();
+}
+
+export function findWorkspaceRoot(startDir: string): string | undefined {
   let dir = startDir;
   while (dir !== dirname(dir)) {
-    if (existsSync(join(dir, "nx.json"))) return dir;
+    if (
+      existsSync(join(dir, "pnpm-workspace.yaml")) ||
+      existsSync(join(dir, "nx.json")) ||
+      hasNpmWorkspaces(join(dir, "package.json"))
+    ) {
+      return dir;
+    }
     dir = dirname(dir);
   }
-  throw new Error("Could not find workspace root (nx.json not found in any parent directory)");
+  return undefined;
+}
+
+function hasNpmWorkspaces(packageJsonPath: string): boolean {
+  if (!existsSync(packageJsonPath)) return false;
+  try {
+    const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8")) as { workspaces?: unknown };
+    return pkg.workspaces !== undefined;
+  } catch {
+    return false;
+  }
+}
+
+function globsToDirs(globs: string[]): string[] {
+  return globs.map((glob) => glob.replace(/\/\*+$/, "")).filter((glob) => !glob.includes("*"));
+}
+
+function parsePnpmWorkspaceGlobs(yamlContent: string): string[] {
+  const lines = yamlContent.split("\n");
+  const startIdx = lines.findIndex((line) => /^packages:\s*$/.test(line.trim()));
+  if (startIdx === -1) return [];
+
+  const globs: string[] = [];
+  for (let i = startIdx + 1; i < lines.length; i++) {
+    const line = lines[i] ?? "";
+    const match = /^\s*-\s*['"]?([^'"#]+?)['"]?\s*$/.exec(line);
+    if (!match?.[1]) break;
+    globs.push(match[1]);
+  }
+  return globsToDirs(globs);
+}
+
+export function getWorkspacePackageDirs(root: string): string[] {
+  const pnpmWorkspacePath = join(root, "pnpm-workspace.yaml");
+  if (existsSync(pnpmWorkspacePath)) {
+    const dirs = parsePnpmWorkspaceGlobs(readFileSync(pnpmWorkspacePath, "utf-8"));
+    if (dirs.length > 0) return dirs;
+  }
+
+  const packageJsonPath = join(root, "package.json");
+  if (existsSync(packageJsonPath)) {
+    try {
+      const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8")) as {
+        workspaces?: string[] | { packages?: string[] };
+      };
+      const globs = Array.isArray(pkg.workspaces) ? pkg.workspaces : pkg.workspaces?.packages;
+      if (globs && globs.length > 0) return globsToDirs(globs);
+    } catch {
+      // fall through to defaults
+    }
+  }
+
+  return DEFAULT_PACKAGE_DIRS;
+}
+
+export function resolvePackageDir(input: string, cwd: string): string {
+  const asPath = resolve(cwd, input);
+  if (isDirectory(asPath)) return asPath;
+
+  const workspaceRoot = findWorkspaceRoot(cwd);
+  if (workspaceRoot) {
+    const packageDirs = getWorkspacePackageDirs(workspaceRoot);
+    for (const dir of packageDirs) {
+      const candidate = join(workspaceRoot, dir, input);
+      if (isDirectory(candidate)) return candidate;
+    }
+    throw new Error(
+      `Could not resolve '${input}': not a directory at ${asPath}, and no matching package ` +
+        `found under ${packageDirs.map((dir) => `${dir}/`).join(", ")} in workspace root ${workspaceRoot}`,
+    );
+  }
+
+  throw new Error(
+    `Could not resolve '${input}': not a directory at ${asPath}, and no monorepo workspace root ` +
+      "(pnpm-workspace.yaml / nx.json / package.json workspaces) was found from the current directory",
+  );
 }
 
 function readSkillName(skillMdPath: string): string {
@@ -30,8 +117,14 @@ export class ValidateTriggersCommand extends Command {
   static override usage = Command.Usage({
     description: "Evaluate whether a skill's description triggers correctly on labelled queries",
     details: `
-      Reads eval_queries.json from the given skill package, runs each query through
-      the specified agent (default: claude), and reports per-query trigger rates.
+      Reads eval_queries.json (or the file passed via --queries) from the given skill
+      package, runs each query through the specified agent (default: claude), and
+      reports per-query trigger rates.
+
+      The package argument accepts a real filesystem path to the skill package. If it
+      isn't a path, and the current directory is inside a monorepo (Nx, pnpm workspaces,
+      or npm/yarn workspaces), it's treated as a package name and resolved by searching
+      the workspace's declared package directories.
 
       A query passes if its trigger rate is above --threshold for should_trigger:true
       queries, or below it for should_trigger:false queries.
@@ -40,15 +133,28 @@ export class ValidateTriggersCommand extends Command {
     `,
     examples: [
       [
-        "Validate the alistigo-artifact-list-skill",
+        "Validate the alistigo-artifact-list-skill by name (resolved via the monorepo workspace)",
         "validate-triggers alistigo-artifact-list-skill",
+      ],
+      [
+        "Validate a skill package by path",
+        "validate-triggers packages/alistigo-artifact-list-skill",
       ],
       ["Run only train queries, 5 times each", "validate-triggers my-skill --split train --runs 5"],
       ["Lower pass threshold", "validate-triggers my-skill --threshold 0.3"],
+      [
+        "Use a queries file outside the package",
+        "validate-triggers my-skill --queries ./eval.json",
+      ],
     ],
   });
 
-  packageName = Option.String({ required: true, name: "package-name" });
+  packageArg = Option.String({ required: true, name: "package" });
+
+  queriesArg = Option.String("--queries,-q", {
+    description: "Path to the eval queries JSON file (default: <package>/eval_queries.json)",
+    required: false,
+  });
 
   agent = Option.String("--agent,-a", "claude", {
     description: "Agent CLI to use for triggering (currently only 'claude' is supported)",
@@ -93,20 +199,24 @@ export class ValidateTriggersCommand extends Command {
       return 1;
     }
 
-    let workspaceRoot: string;
+    let pkgRoot: string;
     try {
-      workspaceRoot = findWorkspaceRoot(process.cwd());
+      pkgRoot = resolvePackageDir(this.packageArg, process.cwd());
     } catch (err: unknown) {
       this.context.stderr.write(`Error: ${String(err)}\n`);
       return 1;
     }
 
-    const pkgRoot = join(workspaceRoot, "packages", this.packageName);
-    const queriesPath = join(pkgRoot, "eval_queries.json");
+    const queriesPath = this.queriesArg
+      ? resolve(process.cwd(), this.queriesArg)
+      : join(pkgRoot, "eval_queries.json");
     const skillMdPath = join(pkgRoot, "SKILL.md");
 
     if (!existsSync(queriesPath)) {
-      this.context.stderr.write(`Error: eval_queries.json not found at ${queriesPath}\n`);
+      const hint = this.queriesArg
+        ? `Error: queries file not found at ${queriesPath}\n`
+        : `Error: eval_queries.json not found at ${queriesPath} (pass --queries to use a different file)\n`;
+      this.context.stderr.write(hint);
       return 1;
     }
     if (!existsSync(skillMdPath)) {
@@ -117,7 +227,7 @@ export class ValidateTriggersCommand extends Command {
     let queries: EvalQuery[];
     let skillName: string;
     try {
-      queries = JSON.parse(readFileSync(queriesPath, "utf-8")) as EvalQuery[];
+      queries = parseEvalQueries(JSON.parse(readFileSync(queriesPath, "utf-8")), queriesPath);
       skillName = readSkillName(skillMdPath);
     } catch (err: unknown) {
       this.context.stderr.write(`Error reading skill data: ${String(err)}\n`);
