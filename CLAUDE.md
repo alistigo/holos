@@ -10,6 +10,7 @@ Holos is the main repository (monorepo) of alistigo. It contains TypeScript apps
 | `apps/` | Runnable applications — CLI tools, web servers, desktop apps |
 | `packages/` | Reusable libraries, publishable to npm / GitHub Packages |
 | `docs/` | Project documentation — plans, goals, architecture docs (no code) |
+| `communication/` | Outward-facing communication drafts — LinkedIn, dev.to (no code) |
 | `.agents/` | Agents AI skills, commands (source of truth), and persistent memory |
 
 ## Package Manager & Runtime

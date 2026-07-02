@@ -15,6 +15,7 @@ Persistent patterns and preferences across Claude sessions. Keep under 200 lines
 | `apps/` | CLI tools, web servers, desktop apps |
 | `packages/` | Publishable npm/GitHub libraries (`@mlabrut/*`) |
 | `docs/` | Documentation only (no code) |
+| `communication/` | Outward-facing content drafts (LinkedIn, dev.to) — see skill `communication` |
 | `.agents/` | Agents skills, commands (source of truth), and this memory file |
 
 ## Tech Stack
@@ -79,6 +80,7 @@ PRDs: `.agents/prds/`. Epics: `.agents/epics/`. Both symlinked from `.claude/prd
 - [Career transition 2026](user_career_2026.md) — left Quatt, exploring employment vs freelancing in NL
 - [Job research project](project_job_research.md) — tracking career transition tasks and decisions
 - [Alistigo AI](project_alistigo_ai.md) — base list app + plugins (todo, checklist, etc.); M1 = base list, NOT todo list
+- Communication workflow — LinkedIn + dev.to only (no X, no auto-publish); backlog and drafts in `communication/`, skill `communication`, command `/communicate`
 
 ## References
 

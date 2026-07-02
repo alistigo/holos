@@ -166,7 +166,24 @@ Skill `verification-before-completion` ensures Claude runs `pnpm qa` and reads t
 
 ---
 
-## Stage 7: Production
+## Stage 7: Communication
+
+**Trigger:** A PR merges, a package publishes, or a feature ships that's worth telling people about — or the human explicitly asks for a draft.
+
+**Directory:** `communication/`
+
+**AI touchpoint:** Skill `communication`, command `/communicate`
+
+The `communication` skill operates a lightweight idea → draft → review → publish workflow for outward-facing content about work done in this repo:
+- Spotting shippable work and offering to log it to `communication/ideas.md` (never auto-logs without asking)
+- On explicit request, drafting channel-appropriate content (LinkedIn short-form, dev.to long-form technical writeup) into `communication/posts/<channel>/`, grounded in real commits/PRs/source — no invented claims
+- Style rules live in `communication/voice.md`; channel norms live in `communication/channels.md`
+
+**Human review gate:** The human reviews every draft and publishes manually — there is no auto-post integration to LinkedIn or dev.to. This is distinct from changelog/release-note generation, which is fully automated by `nx release` per [ADR 0013](adrs/0013-release-strategy.md); this stage is purely social/marketing content.
+
+---
+
+## Stage 8: Production
 
 "Production" in Europa means: software that is depended on, deployed, or used in a way that matters when it breaks.
 
@@ -196,7 +213,7 @@ Agents always commit to dedicated branches and open PRs — they never push dire
 
 ---
 
-## Stage 8: Maintenance & Deprecation
+## Stage 9: Maintenance & Deprecation
 
 New features re-enter the pipeline at Stage 2 (new PRD) or Stage 3 (new issue on existing epic). Bug fixes re-enter at Stage 4 directly.
 
@@ -223,7 +240,8 @@ New features re-enter the pipeline at Stage 2 (new PRD) or Stage 3 (new issue on
 | 3 → 4 | Epic + Plan approval | Is the decomposition right? Is the approach right? |
 | 4 (internal) | Task-level review | Subagent output reviewed by orchestrator before next task (AI-to-AI review) |
 | 5 | QA gate | Automated — blocks push if failed |
-| 6 → prod | PR merge | Human reads diff, approves, merges |
+| 6 → 7 | PR merge | Human reads diff, approves, merges |
+| 7 → 8 | Communication draft | Human reviews and manually publishes — no auto-post |
 | Maintenance | Deprecation | Human decides what dies |
 
 ---
