@@ -9,21 +9,41 @@ export interface EvalQuery {
   split: "train" | "validation";
 }
 
-function validateEvalQuery(item: unknown, index: number, sourcePath: string): EvalQuery {
-  if (typeof item !== "object" || item === null) {
-    throw new Error(`${sourcePath}[${index}]: expected an object`);
-  }
-  const { query, should_trigger, split } = item as Record<string, unknown>;
+function assertQueryField(raw: Record<string, unknown>, prefix: string): string {
+  const { query } = raw;
   if (typeof query !== "string" || query.length === 0) {
-    throw new Error(`${sourcePath}[${index}].query: expected a non-empty string`);
+    throw new Error(`${prefix}.query: expected a non-empty string`);
   }
+  return query;
+}
+
+function assertShouldTriggerField(raw: Record<string, unknown>, prefix: string): boolean {
+  const { should_trigger } = raw;
   if (typeof should_trigger !== "boolean") {
-    throw new Error(`${sourcePath}[${index}].should_trigger: expected a boolean`);
+    throw new Error(`${prefix}.should_trigger: expected a boolean`);
   }
+  return should_trigger;
+}
+
+function assertSplitField(raw: Record<string, unknown>, prefix: string): "train" | "validation" {
+  const { split } = raw;
   if (split !== "train" && split !== "validation") {
-    throw new Error(`${sourcePath}[${index}].split: expected "train" or "validation"`);
+    throw new Error(`${prefix}.split: expected "train" or "validation"`);
   }
-  return { query, should_trigger, split };
+  return split;
+}
+
+function validateEvalQuery(item: unknown, index: number, sourcePath: string): EvalQuery {
+  const prefix = `${sourcePath}[${index}]`;
+  if (typeof item !== "object" || item === null) {
+    throw new Error(`${prefix}: expected an object`);
+  }
+  const raw = item as Record<string, unknown>;
+  return {
+    query: assertQueryField(raw, prefix),
+    should_trigger: assertShouldTriggerField(raw, prefix),
+    split: assertSplitField(raw, prefix),
+  };
 }
 
 export function parseEvalQueries(raw: unknown, sourcePath: string): EvalQuery[] {
