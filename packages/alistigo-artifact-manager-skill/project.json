@@ -1,0 +1,23 @@
+{
+  "name": "alistigo-artifact-manager-skill",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/SKILL.md"],
+      "dependsOn": [{ "projects": ["alistigo-artifact-manager"], "target": "generate-skill" }],
+      "options": {
+        "command": "test -f SKILL.md",
+        "cwd": "packages/alistigo-artifact-manager-skill"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/alistigo-artifact-manager-skill"
+      }
+    }
+  }
+}

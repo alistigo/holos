@@ -1,7 +1,7 @@
 {
-  "name": "@alistigo/artifact-list-skill",
+  "name": "@alistigo/artifact-manager-skill",
   "version": "0.1.0",
-  "description": "Alistigo artifact-list agent skill (agentskills.io)",
+  "description": "Alistigo artifact-manager agent skill (agentskills.io)",
   "license": "MIT",
   "author": {
     "name": "Mikael Labrut",
@@ -10,15 +10,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/alistigo-artifact-list-skill"
+    "directory": "packages/alistigo-artifact-manager-skill"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-list-skill#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-manager-skill#readme",
   "keywords": [
     "alistigo",
-    "list",
+    "artifact",
+    "manager",
     "skill",
     "agent-skill",
     "claude"
@@ -28,14 +29,12 @@
   "files": [
     "SKILL.md",
     "README.md",
-    "LICENSE",
-    "references/"
+    "LICENSE"
   ],
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@alistigo/document-format": "workspace:*",
-    "@alistigo/artifact-config-list-format": "workspace:*"
+  "devDependencies": {
+    "@alistigo/artifact-manager": "workspace:*"
   }
 }

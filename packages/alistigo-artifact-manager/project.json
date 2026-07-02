@@ -53,9 +53,10 @@
     },
     "generate-skill": {
       "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/SKILL.md"],
+      "outputs": ["{workspaceRoot}/packages/alistigo-artifact-manager-skill/SKILL.md"],
       "inputs": [
         "{projectRoot}/src/registry.ts",
+        "{projectRoot}/scripts/SKILL.md.template",
         "{workspaceRoot}/packages/alistigo-artifact-list-skill/SKILL.md"
       ],
       "options": {
