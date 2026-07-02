@@ -66,5 +66,5 @@ App-specific config fields are documented in each app's SKILL.md (see below).
 
 ## Full reference
 
-See [README.md](./README.md) for complete examples including pre-seeded documents and
-programmatic API usage.
+See [README.md](../alistigo-artifact-manager/README.md) for complete examples including
+pre-seeded documents and programmatic API usage.

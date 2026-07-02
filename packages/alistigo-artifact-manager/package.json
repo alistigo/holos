@@ -35,8 +35,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "SKILL.md"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"

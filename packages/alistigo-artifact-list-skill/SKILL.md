@@ -6,11 +6,9 @@ description: >
 triggers:
   - "add a list"
   - "create a checklist"
-  - "embed a list widget"
   - "show a to-do list"
   - "create a task list"
   - "interactive list"
-  - "@alistigo/artifact-list"
 ---
 
 # @alistigo/artifact-list — AI usage guide
@@ -36,4 +34,6 @@ The `document` field pre-seeds the list. It is a JSON-LD object with an `alistig
 array: one `ListCreated` event, then one `ListElementAdded` event per item.
 
 See [references/document-format.md](references/document-format.md) for the full format spec,
-ID prefix conventions, and a complete example.
+ID prefix conventions, and a complete example. See
+[references/artifact-config-list-format.md](references/artifact-config-list-format.md) for the
+full `readonly`/`document` config schema.
