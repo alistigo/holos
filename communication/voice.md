@@ -38,6 +38,12 @@ What to do instead:
 5. **Soft CTA** — invite conversation or point at the repo/writeup. Not "buy now"
    energy — something like "curious if others have hit this" or a plain link.
 
+For **LinkedIn**, this structure is the topic-framing input handed to the vendored
+`linkedin-post-writer` skill (see `communication/channels.md`), which owns the actual
+hook formula, length target, and emoji density — don't re-derive those here. For
+**dev.to**, this Structure section is the full spec, since no vendored skill covers
+that channel.
+
 ## Example hooks
 
 > I spent an afternoon trying to figure out why a skill's trigger description worked

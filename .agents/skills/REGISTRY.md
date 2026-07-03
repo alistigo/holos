@@ -46,6 +46,16 @@ What to say or do to activate each skill. Claude should invoke the skill before 
 | `caveman-commit` | commit message, caveman commit | "Write a commit message for this diff" *(in caveman mode)* |
 | `caveman-compress` | compress memory, compress notes | "Compress this memory file" |
 | `caveman-stats` | /caveman-stats, compression stats | `/caveman-stats` |
+| `linkedin-post-writer` | write LinkedIn post, hook, draft a post | "Draft a LinkedIn post about X" |
+| `linkedin-humanizer` | humanize, de-AI, audit before posting | "Is this post ready to publish?" |
+| `linkedin-hook-extractor` | reverse-engineer hook, viral post formula | "Why did this post go viral?" |
+| `linkedin-content-planner` | content plan, posting schedule, week of posts | "Plan a week of LinkedIn posts" |
+| `linkedin-profile-optimizer` | profile audit, rewrite headline/About | "Rewrite my LinkedIn headline" |
+| `linkedin-employee-advocacy` | employee advocacy, team LinkedIn program | "Help me launch a team advocacy program" |
+| `linkedin-comment-drafter` | comment on this post, engage, first commenter | "Draft a comment on this post URL" |
+| `linkedin-reply-handler` | reply to this comment | "Reply to this comment thread" |
+| `linkedin-engager-analytics` | who liked my post, engagers report | "Who engaged with my last post?" |
+| `linkedin-thread-monitor` | threads needing follow-up, author replied | "Which of my comments got replies?" |
 
 ---
 
@@ -88,6 +98,39 @@ Spec-driven project management: PRD → Epic → GitHub Issues → parallel agen
 | Skill | Purpose |
 |-------|---------|
 | `ccpm` | Full CCPM workflow — plan, structure, sync, execute, track |
+
+### vendor/linkedin-skills — https://github.com/sergebulaev/linkedin-skills
+
+10 tested LinkedIn skills (post writing, humanizing, hook extraction, profile/content
+tooling, comment/reply/analytics). The `communication` skill hands off actual LinkedIn
+post drafting to `linkedin-post-writer` rather than owning those rules itself — see
+`communication/channels.md`.
+
+| Skill | Purpose |
+|-------|---------|
+| `linkedin-post-writer` | Draft a new post from scratch using one of 16 hook formulas, picked by engagement goal |
+| `linkedin-humanizer` | Scrub AI tells from a draft, or `--mode audit` a finished post against 2026 algorithm heuristics |
+| `linkedin-hook-extractor` | Reverse-engineer the hook formula from a viral post URL (research, not drafting) |
+| `linkedin-content-planner` | Build a 7-day content plan (pillars, formats, cadence) |
+| `linkedin-profile-optimizer` | Rewrite headline/About/Featured/Experience sections |
+| `linkedin-employee-advocacy` | Plan a team LinkedIn advocacy program (14-day launch, governance, cadence) |
+| `linkedin-comment-drafter` | Draft a comment on someone else's post from its URL |
+| `linkedin-reply-handler` | Draft a reply to a specific existing comment |
+| `linkedin-engager-analytics` | Segment who liked/commented on a post by ICP fit |
+| `linkedin-thread-monitor` | Track which comments earned author replies, flag the warm-reply window |
+
+**Never invoke the Publora auto-post/schedule path** built into `linkedin-post-writer`,
+`linkedin-comment-drafter`, or `linkedin-reply-handler` — this repo's communication
+workflow never publishes anything automatically (see `communication/SKILL.md`). Use
+these skills to draft only, then stop before their "on approval" publish step.
+`linkedin-hook-extractor`, `linkedin-engager-analytics`, and `linkedin-thread-monitor`
+optionally call Apify (`APIFY_TOKEN`) for read-only scraping — no token is configured
+here, so they fall back to manual paste.
+
+*(Note: unlike `linkedin-skills`, the `caveman`/`superpowers`/`ccpm` symlinks above are
+currently plain copied files on disk rather than live symlinks into a checked-out
+`vendor/` submodule — a pre-existing gap found while wiring this one up, not fixed
+here.)*
 
 ---
 
