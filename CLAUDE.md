@@ -103,13 +103,14 @@ When creating a new command, add it to `.agents/commands/<command-name>/<command
 
 ## Claude Enhancement Tools
 
-Three tools live as git submodules in `vendor/` and are symlinked into `.agents/skills/`:
+Four tools live as git submodules in `vendor/` and are symlinked into `.agents/skills/`:
 
 | Tool | Purpose | Source |
 |------|---------|--------|
 | **Caveman** | Token compression — ~65% output token reduction via terse responses | `vendor/caveman` |
 | **Superpowers** | Structured dev methodology — Design→Plan→Execute→Test→Complete | `vendor/superpowers` |
 | **CCPM** | Spec-driven project management — PRD → Epic → GitHub Issues → Code | `vendor/ccpm` |
+| **LinkedIn Skills** | 10 tested LinkedIn skills — post drafting, humanizing/auditing, hook extraction, profile/content tooling | `vendor/linkedin-skills` |
 
 ### Caveman
 
@@ -132,12 +133,17 @@ CCPM manages the full delivery lifecycle. PRDs go in `.agents/prds/`, epics in `
 
 **Every project in `projects/` should have a corresponding CCPM epic and GitHub issues.**
 
+### LinkedIn Skills
+
+10 skills for drafting/auditing LinkedIn content (`linkedin-post-writer`, `linkedin-humanizer`, `linkedin-hook-extractor`, `linkedin-content-planner`, `linkedin-profile-optimizer`, `linkedin-employee-advocacy`, `linkedin-comment-drafter`, `linkedin-reply-handler`, `linkedin-engager-analytics`, `linkedin-thread-monitor`). The `communication` skill hands off actual LinkedIn post drafting to `linkedin-post-writer` instead of owning hook/length/emoji rules itself — see `communication/channels.md`. **Never invoke the Publora auto-post path** built into `linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-reply-handler` — draft only, this repo never auto-publishes. See `.agents/skills/REGISTRY.md` for the full breakdown.
+
 ### Updating Tools
 
 ```sh
 git submodule update --remote vendor/caveman
 git submodule update --remote vendor/superpowers
 git submodule update --remote vendor/ccpm
+git submodule update --remote vendor/linkedin-skills
 git add vendor/ && git commit -m "chore(vendor): update claude tool submodules"
 ```
 

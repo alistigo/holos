@@ -14,24 +14,35 @@ about work done in this repo.
 
 ### `idea` mode
 
+0. Creates (or reuses) branch `communication/<slug>`, derived from the topic — always,
+   regardless of the currently checked-out branch
 1. Appends a row to `communication/ideas.md`: today's date, the given topic, source
    (inferred from recent git log/current branch if not specified), status `idea`
 2. No draft content is generated — this is a quick capture, not a writing session
 
 ### `draft` mode
 
+0. Creates (or reuses) branch `communication/<slug>`, derived from the topic — always,
+   regardless of the currently checked-out branch
 1. Reads `communication/voice.md` and `communication/channels.md`
 2. Gathers context: recent commits/PR for the given topic via `git log`, plus relevant
    source files
-3. Drafts content following the structural template in `voice.md`
+3. Drafts content following the structural template in `voice.md` for **dev.to**; for
+   **LinkedIn**, hands off to the vendored `linkedin-post-writer` skill to draft the
+   body (hook formula, length, emoji are its rules), optionally followed by
+   `linkedin-humanizer --mode audit`
 4. Writes to `communication/posts/linkedin/YYYY-MM-DD-<slug>.md` and/or
    `communication/posts/devto/YYYY-MM-DD-<slug>.md` depending on `--channel` (both, if
    omitted and the topic has enough technical depth for dev.to; LinkedIn-only
-   otherwise)
+   otherwise), with an `attachment` frontmatter field (empty, or a sibling `.mmd`
+   Mermaid diagram if one was proposed)
 5. If a matching row exists in `communication/ideas.md`, updates its status to
    `drafted` with a link to the new file
 
-Never publishes anything — output is always a draft file for human review.
+Never publishes anything — output is always a draft file for human review. This
+includes the vendored `linkedin-skills` toolkit's Publora auto-post path (in
+`linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-reply-handler`) — never
+invoked, draft only.
 
 ## Options
 

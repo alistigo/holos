@@ -13,6 +13,32 @@ API and never publishes anything itself.
 
 ## Two modes
 
+Both modes start with the same branch-first step before any file is touched:
+
+### 0. Create/reuse the communication branch
+
+Before appending to `ideas.md` or writing any draft file, derive a kebab-case slug
+from the topic (the same slugging used for post filenames, e.g.
+`2026-07-02-agent-skill-tester-launch.md` → `agent-skill-tester-launch`) and switch to
+a dedicated branch for it:
+
+```sh
+git checkout -b communication/<slug>
+```
+
+Do this unconditionally — regardless of what branch is currently checked out — so each
+piece of communication work stays isolated from unrelated in-progress code changes and
+can be reviewed/merged on its own.
+
+If `communication/<slug>` already exists (e.g. `idea` mode ran earlier and `draft` mode
+is now continuing on the same topic), reuse it instead of creating a duplicate:
+
+```sh
+git checkout communication/<slug>
+```
+
+Only after switching onto that branch do the mode-specific steps below.
+
 ### 1. Passive idea-capture
 
 When you notice, in the course of other work, that something just shipped — a PR
@@ -32,21 +58,36 @@ about Y", or via `/communicate draft ...`).
 2. Gather real context: `git log` for the relevant commits, and read the actual source
    files / READMEs involved. Don't draft from assumption.
 3. Apply the structural template from `voice.md` (Hook → Context → What was built →
-   Insight/lesson → Soft CTA).
+   Insight/lesson → Soft CTA) — this step is channel-conditional:
+   - **dev.to**: this structure *is* the spec — write the piece directly.
+   - **LinkedIn**: use it only as topic framing, then hand off to the vendored
+     `linkedin-post-writer` skill to actually draft the body (hook formula, length,
+     emoji, hashtags are its rules, not `voice.md`'s). Optionally follow with
+     `linkedin-humanizer --mode audit` before finalizing.
 4. Ground every technical claim in something actually read. No invented metrics, no
    invented adoption numbers, no invented URLs (see the repo-wide rule against
    guessing URLs — link only to things you've verified exist).
 5. Write the draft to `communication/posts/<channel>/YYYY-MM-DD-<slug>.md` with
-   frontmatter `status: draft`, `channel`, `createdAt`, empty `publishedAt`/`url`.
+   frontmatter `status: draft`, `channel`, `createdAt`, `attachment` (empty, or the
+   path to a `.mmd` file — see step 8), empty `publishedAt`/`url`.
 6. If the topic warrants both channels, draft LinkedIn first (short, links out to the
    dev.to piece), then dev.to (long-form, real code/detail).
 7. If a matching row exists in `communication/ideas.md`, update its status to
    `drafted` with a link to the new file(s).
+8. If the topic has an architecture, flow, or before/after worth visualizing, propose
+   a Mermaid diagram source as a sibling `<slug>.mmd` file and reference it via the
+   `attachment` frontmatter field — optional, a judgment call per post, not required.
 
 ## Rules
 
+- Always create/reuse a `communication/<slug>` branch before touching any file (Step 0
+  above) — never append to `ideas.md` or write a draft directly on whatever branch
+  happens to be checked out.
 - Never publish. No API calls, no browser automation to post anything — the human
-  copies the draft and posts it manually.
+  copies the draft and posts it manually. This includes the Publora auto-post path
+  built into `linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-reply-handler`
+  (`vendor/linkedin-skills`) — use those skills to draft only, and stop before their
+  "on approval" publish step.
 - Never fabricate technical details, metrics, quotes, or URLs.
 - Write in first person, matching `communication/voice.md` — this is Mikael's voice,
   not a generic brand voice.
@@ -55,6 +96,9 @@ about Y", or via `/communicate draft ...`).
 
 ## Not this skill's job
 
+- No committing or PR creation — Step 0 only creates/switches to the
+  `communication/<slug>` branch. Changes are left uncommitted for the human to review,
+  commit, and push, consistent with "never publishes anything."
 - No auto-publish integration — doesn't exist, isn't planned.
 - No changelog/release-note generation — `nx release` handles that from commit
   messages (see `docs/adrs/0013-release-strategy.md`). Don't conflate the two.

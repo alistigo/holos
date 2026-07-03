@@ -40,17 +40,19 @@ Note: `.claude/skills` and `.claude/commands` are symlinks to `.agents/` — no 
 
 ## Claude Enhancement Tools
 
-Three tools installed as git submodules in `vendor/`, skills symlinked into `.agents/skills/`:
+Four tools installed as git submodules in `vendor/`, skills symlinked into `.agents/skills/`:
 
 | Tool | Skills |
 |------|--------|
 | **Caveman** (`vendor/caveman`) | `caveman`, `caveman-stats`, `caveman-commit`, `caveman-compress` |
 | **Superpowers** (`vendor/superpowers`) | `writing-plans`, `executing-plans`, `subagent-driven-development`, `test-driven-development`, `systematic-debugging`, `using-git-worktrees`, `dispatching-parallel-agents`, `finishing-a-development-branch`, `requesting-code-review`, `receiving-code-review`, `verification-before-completion` |
 | **CCPM** (`vendor/ccpm`) | `ccpm` |
+| **LinkedIn Skills** (`vendor/linkedin-skills`) | `linkedin-post-writer`, `linkedin-humanizer`, `linkedin-hook-extractor`, `linkedin-content-planner`, `linkedin-profile-optimizer`, `linkedin-employee-advocacy`, `linkedin-comment-drafter`, `linkedin-reply-handler`, `linkedin-engager-analytics`, `linkedin-thread-monitor` |
 
 Caveman flag: `~/.claude/.caveman-active` (user-level, not repo-tracked — recreate with `/caveman` after fresh machine setup).
 CCPM needs authenticated `gh` CLI — run `gh auth login` if CCPM commands fail.
 PRDs: `.agents/prds/`. Epics: `.agents/epics/`. Both symlinked from `.claude/prds` and `.claude/epics`.
+LinkedIn Skills: [vendoring pattern gap](feedback_vendor_symlink_gap.md) discovered 2026-07-03 — do it properly here (real submodule + real symlinks), unlike the other three. Its `linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-reply-handler` have a Publora auto-post path — never invoke it, draft only (see [[project_communication_linkedin_skills]]).
 
 ## ESPHome
 
@@ -80,7 +82,7 @@ PRDs: `.agents/prds/`. Epics: `.agents/epics/`. Both symlinked from `.claude/prd
 - [Career transition 2026](user_career_2026.md) — left Quatt, exploring employment vs freelancing in NL
 - [Job research project](project_job_research.md) — tracking career transition tasks and decisions
 - [Alistigo AI](project_alistigo_ai.md) — base list app + plugins (todo, checklist, etc.); M1 = base list, NOT todo list
-- Communication workflow — LinkedIn + dev.to only (no X, no auto-publish); backlog and drafts in `communication/`, skill `communication`, command `/communicate`
+- [Communication workflow](project_communication_linkedin_skills.md) — LinkedIn + dev.to only (no X, no auto-publish); backlog and drafts in `communication/`, skill `communication`, command `/communicate`; LinkedIn drafting hands off to vendored `linkedin-post-writer` (2026-07-03)
 
 ## References
 

@@ -7,3 +7,6 @@
 [submodule "vendor/ccpm"]
 	path = vendor/ccpm
 	url = https://github.com/automazeio/ccpm.git
+[submodule "vendor/linkedin-skills"]
+	path = vendor/linkedin-skills
+	url = https://github.com/sergebulaev/linkedin-skills.git
