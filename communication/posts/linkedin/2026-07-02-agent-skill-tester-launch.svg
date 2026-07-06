@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1200" height="1200" fill="#FAFAFA"/>
+
+  <text x="600" y="330" text-anchor="middle" font-size="34" font-weight="700" fill="#111827">Where testing fits in the skill lifecycle</text>
+  <text x="600" y="368" text-anchor="middle" font-size="18" fill="#6B7280">the middle step is the one people skip</text>
+
+  <!-- Box 1: Write Skill -->
+  <rect x="130" y="535" width="260" height="130" rx="14" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2"/>
+  <text x="260" y="592" text-anchor="middle" font-size="24" font-weight="600" fill="#374151">Write</text>
+  <text x="260" y="624" text-anchor="middle" font-size="24" font-weight="600" fill="#374151">Skill</text>
+
+  <!-- Arrow 1 -->
+  <line x1="392" y1="600" x2="440" y2="600" stroke="#9CA3AF" stroke-width="3"/>
+  <polygon points="440,590 460,600 440,610" fill="#9CA3AF"/>
+
+  <!-- Box 2: Test Skill (emphasized) -->
+  <rect x="450" y="505" width="300" height="190" rx="16" fill="#2563EB" stroke="#1E40AF" stroke-width="3"/>
+  <text x="600" y="585" text-anchor="middle" font-size="30" font-weight="700" fill="#FFFFFF">Test</text>
+  <text x="600" y="622" text-anchor="middle" font-size="30" font-weight="700" fill="#FFFFFF">Skill</text>
+  <text x="600" y="658" text-anchor="middle" font-size="15" fill="#DBEAFE">validate triggers before you ship</text>
+
+  <!-- Arrow 2 -->
+  <line x1="752" y1="600" x2="800" y2="600" stroke="#9CA3AF" stroke-width="3"/>
+  <polygon points="800,590 820,600 800,610" fill="#9CA3AF"/>
+
+  <!-- Box 3: Deploy Skill -->
+  <rect x="810" y="535" width="260" height="130" rx="14" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2"/>
+  <text x="940" y="592" text-anchor="middle" font-size="24" font-weight="600" fill="#374151">Deploy</text>
+  <text x="940" y="624" text-anchor="middle" font-size="24" font-weight="600" fill="#374151">Skill</text>
+
+  <text x="600" y="820" text-anchor="middle" font-size="16" fill="#6B7280">@alistigo/agent-skill-tester lives in the middle box</text>
+</svg>

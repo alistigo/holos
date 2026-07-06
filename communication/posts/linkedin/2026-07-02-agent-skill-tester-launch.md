@@ -1,35 +1,47 @@
 ---
 status: draft
 channel: linkedin
-createdAt: 2026-07-02
+createdAt: 2026-07-03
 publishedAt:
 url:
+attachment: 2026-07-02-agent-skill-tester-launch.png
 ---
 
-Most agent skill descriptions ship on a gut feeling. Mine kept silently failing to
-trigger, and I had no way to measure it — so I built a CLI to fix that.
+I shipped a skill last month and never tested it properly. You probably have too.
 
-Claude Code (and other agent CLIs) decide whether to use a skill based on a short
-natural-language `description` in its `SKILL.md`. That description either matches the
-queries it's supposed to catch, or it doesn't — and until now, the only way to find
-out was to use it for a while and eventually notice something didn't fire.
+Hard to validate by hand, isn't it? Time to ship a tool that helps.
 
-`@alistigo/agent-skill-tester` takes a labelled set of queries (a query, whether it
-*should* trigger the skill, train/validation split), replays each one through the
-`claude` CLI, and watches the streamed output for the actual `Skill` tool-use event.
-Every query runs multiple times, and passes only when its trigger rate crosses a
-threshold in the direction it's supposed to.
+Sound familiar? "Just ship it, we'll add tests later."
 
-Writing the eval set for my first skill was more revealing than writing the skill
-itself — two queries I was sure would trigger, didn't.
+Every time, the same ending: tech debt piles up, and nobody can prove anything still works.
 
-Honest limitation: right now it only works against an authenticated Claude
-subscription, no API key mode yet — so it's a local dev-loop tool, not a CI gate.
-That's next.
+Here's the nuance nobody adds: the architecture question and the test question are the same question, asked at the same time. If you can't say how you'll validate a thing, you haven't finished designing it. That's the case for TDD, write the test first, then build to satisfy it.
 
-Wrote up how the mechanism actually works — stream parsing, the eval schema, the
-threshold logic — here: [dev.to link — add once published]
+When I started writing agent skills for Claude Code, that question got concrete fast: does this skill's description actually trigger on the queries it's supposed to catch? Reading the SKILL.md back and feeling good about it isn't an answer.
 
-Code: github.com/alistigo/holos · Package: npmjs.com/package/@alistigo/agent-skill-tester
+So I built @alistigo/agent-skill-tester: an open source CLI tool that evaluates whether a list of sentences actually trigger your skills. Now I can be sure what I'm building triggers in the right context. Soon you'll be able to run it in CI/CD as a QA step too.
 
-Curious if anyone else testing agent skills has hit the same blind spot.
+Credit where it's due: part of the thinking came from agentskills.io's guide on evaluating skills. Good framework, no shipped tool, and a few gaps I ended up filling.
+
+And you, what's your experience writing skills?
+
+<!--
+Draft notes (linkedin-post-writer approval card + linkedin-humanizer --mode audit — not part of the post):
+- Hook fixed per audit: swapped the "Have you ever...?" rhetorical-question opener
+  (flagged in linkedin-humanizer/references/audit-ai-tells.md as "dead on LinkedIn")
+  for a direct first-person statement with the same pain point.
+- Re-audited: 1,302 chars (900-1,300 sweet spot), 224 words, 17 sentences, length
+  variance 2-27 words. Clean on em/en dash, double dash, curly quotes, and the full
+  AI-vocab blacklist. No opener-tell match. Close is a specific open question.
+- Attachment: 2026-07-02-agent-skill-tester-launch.png (upload-ready, 1200x1200) with
+  2026-07-02-agent-skill-tester-launch.svg as the editable source, both sibling files.
+  3-box flow diagram (Write Skill -> Test Skill -> Deploy Skill), Test Skill emphasized
+  in blue and enlarged, since that's the post's thesis (test before you ship). PNG
+  rendered locally from the SVG via macOS's built-in `qlmanage -t` thumbnailer (no
+  third-party upload) — re-render after any SVG edit with:
+  `qlmanage -t -s 1200 -o . 2026-07-02-agent-skill-tester-launch.svg && mv 2026-07-02-agent-skill-tester-launch.svg.png 2026-07-02-agent-skill-tester-launch.png`
+- Links to add in the first comment when posting: agentskills.io/skill-creation/evaluating-skills,
+  the dev.to writeup, github/npm for @alistigo/agent-skill-tester
+- Suggested posting window: Tue/Wed 7:30-9:00 AM (local)
+- Publora auto-post path intentionally not invoked — draft only, human posts manually
+-->
