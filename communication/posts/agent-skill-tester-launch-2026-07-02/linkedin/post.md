@@ -4,7 +4,7 @@ channel: linkedin
 createdAt: 2026-07-03
 publishedAt:
 url:
-attachment: 2026-07-02-agent-skill-tester-launch.png
+attachment: attachment.png
 ---
 
 I shipped a skill last month and never tested it properly. You probably have too.
@@ -33,13 +33,12 @@ Draft notes (linkedin-post-writer approval card + linkedin-humanizer --mode audi
 - Re-audited: 1,302 chars (900-1,300 sweet spot), 224 words, 17 sentences, length
   variance 2-27 words. Clean on em/en dash, double dash, curly quotes, and the full
   AI-vocab blacklist. No opener-tell match. Close is a specific open question.
-- Attachment: 2026-07-02-agent-skill-tester-launch.png (upload-ready, 1200x1200) with
-  2026-07-02-agent-skill-tester-launch.svg as the editable source, both sibling files.
-  3-box flow diagram (Write Skill -> Test Skill -> Deploy Skill), Test Skill emphasized
-  in blue and enlarged, since that's the post's thesis (test before you ship). PNG
-  rendered locally from the SVG via macOS's built-in `qlmanage -t` thumbnailer (no
-  third-party upload) — re-render after any SVG edit with:
-  `qlmanage -t -s 1200 -o . 2026-07-02-agent-skill-tester-launch.svg && mv 2026-07-02-agent-skill-tester-launch.svg.png 2026-07-02-agent-skill-tester-launch.png`
+- Attachment: attachment.png (sibling file in this same directory, 1080x1350,
+  upload-ready). Replaced by hand with a polished version of the same 3-box flow
+  (Write Skill -> Test Skill -> Deploy Skill): Test Skill carries a "CRITICAL STEP"
+  badge, a checkmark icon, and the `@alistigo/agent-skill-tester` name, since that box
+  is the post's thesis (test before you ship). No source file for this version is
+  tracked here — it was authored/edited externally.
 - Links to add in the first comment when posting: agentskills.io/skill-creation/evaluating-skills,
   the dev.to writeup, github/npm for @alistigo/agent-skill-tester
 - Suggested posting window: Tue/Wed 7:30-9:00 AM (local)

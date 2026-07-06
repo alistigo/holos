@@ -31,11 +31,12 @@ about work done in this repo.
    **LinkedIn**, hands off to the vendored `linkedin-post-writer` skill to draft the
    body (hook formula, length, emoji are its rules), optionally followed by
    `linkedin-humanizer --mode audit`
-4. Writes to `communication/posts/linkedin/YYYY-MM-DD-<slug>.md` and/or
-   `communication/posts/devto/YYYY-MM-DD-<slug>.md` depending on `--channel` (both, if
-   omitted and the topic has enough technical depth for dev.to; LinkedIn-only
-   otherwise), with an `attachment` frontmatter field (empty, or a sibling `.mmd`
-   Mermaid diagram if one was proposed)
+4. Writes to `communication/posts/<subject>-<date>/linkedin/post.md` and/or
+   `communication/posts/<subject>-<date>/devto/post.md` depending on `--channel` (both,
+   if omitted and the topic has enough technical depth for dev.to; LinkedIn-only
+   otherwise) — one shared directory per topic, `<date>` being when it was first
+   logged to `ideas.md` — with an `attachment` frontmatter field (empty, or a sibling
+   `attachment.mmd`/`attachment.png` if a diagram was proposed)
 5. If a matching row exists in `communication/ideas.md`, updates its status to
    `drafted` with a link to the new file
 

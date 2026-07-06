@@ -67,16 +67,21 @@ about Y", or via `/communicate draft ...`).
 4. Ground every technical claim in something actually read. No invented metrics, no
    invented adoption numbers, no invented URLs (see the repo-wide rule against
    guessing URLs — link only to things you've verified exist).
-5. Write the draft to `communication/posts/<channel>/YYYY-MM-DD-<slug>.md` with
-   frontmatter `status: draft`, `channel`, `createdAt`, `attachment` (empty, or the
-   path to a `.mmd` file — see step 8), empty `publishedAt`/`url`.
+5. Write the draft to `communication/posts/<subject>-<date>/<channel>/post.md` — one
+   directory per topic (`<subject>` a kebab-case slug, `<date>` the date the topic was
+   first logged to `ideas.md`), shared across channels, with `linkedin/` and `devto/`
+   subdirectories inside it. Frontmatter: `status: draft`, `channel`, `createdAt`,
+   `attachment` (empty, or a filename in the same directory — see step 8), empty
+   `publishedAt`/`url`.
 6. If the topic warrants both channels, draft LinkedIn first (short, links out to the
-   dev.to piece), then dev.to (long-form, real code/detail).
+   dev.to piece), then dev.to (long-form, real code/detail) — both land under the same
+   `<subject>-<date>/` directory, in their own channel subfolder.
 7. If a matching row exists in `communication/ideas.md`, update its status to
    `drafted` with a link to the new file(s).
 8. If the topic has an architecture, flow, or before/after worth visualizing, propose
-   a Mermaid diagram source as a sibling `<slug>.mmd` file and reference it via the
-   `attachment` frontmatter field — optional, a judgment call per post, not required.
+   a Mermaid diagram source as a sibling `attachment.mmd` file (in the `linkedin/`
+   subfolder) and reference it via the `attachment` frontmatter field — optional, a
+   judgment call per post, not required.
 
 ## Rules
 

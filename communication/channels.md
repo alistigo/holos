@@ -30,11 +30,12 @@ backlog is short and this is one person, not a content calendar to feed.
 
 **Optional diagram attachment:** when a post would benefit from a visual (architecture,
 flow, before/after), propose a Mermaid diagram source saved as a sibling file next to
-the post: `communication/posts/linkedin/<slug>.mmd`. Not for every post — only when a
-diagram would clarify something prose can't. The `.mmd` file is source only — a human
-renders it (mermaid.live, an IDE plugin, or the `mmdc` CLI) and attaches the resulting
-image manually when posting, since LinkedIn only accepts static image uploads. Reference
-the file from the post's frontmatter via an `attachment:` field (empty if unused).
+the post: `communication/posts/<subject>-<date>/linkedin/attachment.mmd`. Not for every
+post — only when a diagram would clarify something prose can't. The `.mmd` file is
+source only — a human renders it (mermaid.live, an IDE plugin, or the `mmdc` CLI) and
+saves the resulting image as `attachment.png` in the same directory, since LinkedIn
+only accepts static image uploads (never a live Mermaid render). Reference it from the
+post's frontmatter via an `attachment:` field (empty if unused).
 
 ## dev.to
 
