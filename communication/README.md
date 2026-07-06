@@ -9,9 +9,11 @@ for that) and not release notes (see below).
 1. **Idea** — when something ships that's worth telling people about, add a row to
    [ideas.md](ideas.md). Low friction: date, topic, source commit/PR, nothing more.
 2. **Draft** — expand an idea into an actual piece, following [voice.md](voice.md) for
-   tone/structure and [channels.md](channels.md) for per-channel rules. Drafts live in
-   [posts/linkedin/](posts/linkedin/) or [posts/devto/](posts/devto/), one file per post,
-   `status: draft` in frontmatter.
+   tone/structure and [channels.md](channels.md) for per-channel rules. Drafts live under
+   `posts/<subject>-<date>/<channel>/post.md` (e.g.
+   `posts/agent-skill-tester-launch-2026-07-02/linkedin/post.md`) — one directory per
+   topic, shared across channels, so a LinkedIn post and its dev.to companion (plus any
+   image attachment) sit side by side. `status: draft` in frontmatter.
 3. **Review** — you read the draft, edit as needed.
 4. **Publish** — you post it manually. Flip `status: published`, fill in `publishedAt`
    and `url` in the frontmatter.
@@ -35,8 +37,8 @@ but never publish anything themselves.
 | [channels.md](channels.md) | Which channels, why, and the norms for each |
 | [voice.md](voice.md) | Audience, tone, authenticity rules, post structure |
 | [ideas.md](ideas.md) | Running backlog of topics worth writing about |
-| `posts/linkedin/` | LinkedIn drafts and published posts |
-| `posts/devto/` | dev.to drafts and published posts |
+| `posts/<subject>-<date>/linkedin/` | LinkedIn draft/published post (`post.md`) + any image attachment for that topic |
+| `posts/<subject>-<date>/devto/` | dev.to draft/published post (`post.md`) for that topic |
 
 See also: [docs/sdlc.md](../docs/sdlc.md) Stage 7 for how this fits the rest of the
 delivery lifecycle.

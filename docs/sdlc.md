@@ -176,7 +176,7 @@ Skill `verification-before-completion` ensures Claude runs `pnpm qa` and reads t
 
 The `communication` skill operates a lightweight idea → draft → review → publish workflow for outward-facing content about work done in this repo:
 - Spotting shippable work and offering to log it to `communication/ideas.md` (never auto-logs without asking)
-- On explicit request, drafting channel-appropriate content (LinkedIn short-form, dev.to long-form technical writeup) into `communication/posts/<channel>/`, grounded in real commits/PRs/source — no invented claims
+- On explicit request, drafting channel-appropriate content (LinkedIn short-form, dev.to long-form technical writeup) into `communication/posts/<subject>-<date>/<channel>/`, grounded in real commits/PRs/source — no invented claims
 - Style rules live in `communication/voice.md`; channel norms live in `communication/channels.md`
 
 **Human review gate:** The human reviews every draft and publishes manually — there is no auto-post integration to LinkedIn or dev.to. This is distinct from changelog/release-note generation, which is fully automated by `nx release` per [ADR 0013](adrs/0013-release-strategy.md); this stage is purely social/marketing content.
