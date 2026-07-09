@@ -1,0 +1,45 @@
+{
+  "name": "@alistigo/artifact-sentry-plugin",
+  "version": "0.1.0",
+  "description": "Sentry error-monitoring plugin for @alistigo artifacts.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-artifact-sentry-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-sentry-plugin#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "plugin",
+    "sentry",
+    "error-monitoring"
+  ],
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/logger": "workspace:*",
+    "@sentry/browser": "^9.0.0"
+  },
+  "devDependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "@sentry/vite-plugin": "^3.0.0",
+    "vite": "^7.0.0"
+  }
+}

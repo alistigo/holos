@@ -271,6 +271,25 @@ importers:
         specifier: ^19.2.14
         version: 19.2.14
 
+  packages/alistigo-artifact-sentry-plugin:
+    dependencies:
+      '@alistigo/logger':
+        specifier: workspace:*
+        version: link:../alistigo-logger
+      '@sentry/browser':
+        specifier: ^9.0.0
+        version: 9.47.1
+    devDependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../alistigo-artifact-plugin-api
+      '@sentry/vite-plugin':
+        specifier: ^3.0.0
+        version: 3.6.1
+      vite:
+        specifier: ^7.0.0
+        version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
+
   packages/alistigo-claude-artifact-list-storage:
     dependencies:
       '@alistigo/document-editor':
