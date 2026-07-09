@@ -4,7 +4,11 @@
   "required": ["app"],
   "properties": {
     "app": { "type": "string" },
-    "lang": { "type": "string" }
+    "lang": { "type": "string" },
+    "plugins": {
+      "type": "object",
+      "additionalProperties": { "type": "object" }
+    }
   },
   "if": {
     "properties": { "app": { "const": "@alistigo/artifact-list" } }
@@ -13,7 +17,11 @@
     "properties": {
       "app": { "type": "string" },
       "lang": { "type": "string" },
-      "readonly": { "type": "boolean", "default": false }
+      "readonly": { "type": "boolean", "default": false },
+      "plugins": {
+        "type": "object",
+        "additionalProperties": { "type": "object" }
+      }
     },
     "additionalProperties": false
   },
