@@ -1,0 +1,44 @@
+{
+  "name": "@alistigo/artifact-posthog-plugin",
+  "version": "0.1.0",
+  "description": "PostHog analytics plugin for @alistigo artifacts.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-artifact-posthog-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-posthog-plugin#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "plugin",
+    "posthog",
+    "analytics"
+  ],
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/logger": "workspace:*",
+    "posthog-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "vite": "^7.0.0"
+  }
+}
