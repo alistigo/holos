@@ -16,14 +16,34 @@ when they land.
 
 These scenarios describe plugin lifecycle mechanics — hook invocation and event
 reaction — at the Host/Plugin contract level, not real network behavior. No
-scenario makes a real Sentry or PostHog network call; "the plugin captures an
+scenario should make a real Sentry or PostHog network call; "the plugin captures an
 event" means the plugin's own capture function was invoked with the expected
-payload, consistent with the rest of this suite being deterministic and
-app-level rather than end-to-end.
+payload.
 
 This is a `@platform` milestone group — orthogonal to the numbered `@m1`–`@m4`
 sequence, since the plugin system is cross-cutting infrastructure rather than a
 milestone-scoped list capability.
+
+## Status: `@todo`
+
+Both features are tagged `@todo` — the runner (`cli/alistigo-features-runner-playwright`)
+skips them rather than failing on undefined steps. Unlike the `core/` group, this
+runner is a real Playwright harness driving the built iframe against a live preview
+server, not an in-memory Application-layer runner. Implementing these scenarios for
+real requires:
+
+- Intercepting (via `page.route()`) the jsDelivr URL a plugin resolves to, so the
+  dynamic `import()` in `@alistigo/artifact-plugin-api`'s loader serves a local fake
+  plugin bundle instead of a real network request — keeping the scenario
+  network-free while still exercising the real load → `setup()` → event-subscription
+  path end-to-end.
+- An observable proxy for internal plugin/event state from the page — the exposed
+  `Alistigo.about()` debug API (`plugins: string[]`) covers "is a plugin loaded";
+  asserting an emitted event was actually captured needs either a page-side test hook
+  or a fake plugin bundle that writes an observable marker (e.g. a DOM attribute) when
+  its capture function runs.
+
+Remove `@todo` once that harness support exists and the steps are implemented.
 
 ## Definition of Done
 

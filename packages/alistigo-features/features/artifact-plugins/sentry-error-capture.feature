@@ -2,6 +2,7 @@
 @artifact-plugins
 @capability:plugins
 @actor:host
+@todo
 Feature: Sentry plugin captures render errors
   As the Host
   I want the Sentry plugin to observe and report uncaught render errors
