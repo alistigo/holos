@@ -108,6 +108,66 @@ describe("validateArtifactConfig", () => {
       ).toThrow(TypeError);
     });
   });
+
+  describe("plugins field", () => {
+    it("accepts a config with no plugins field", () => {
+      const result = validateArtifactConfig({ app: "@alistigo/artifact-list" });
+      expect(result.plugins).toBeUndefined();
+    });
+
+    it("accepts an empty plugins object", () => {
+      const result = validateArtifactConfig({ app: "@alistigo/artifact-list", plugins: {} });
+      expect(result.plugins).toEqual({});
+    });
+
+    it("accepts plugins with per-plugin config objects", () => {
+      const result = validateArtifactConfig({
+        app: "@alistigo/artifact-list",
+        plugins: {
+          "@alistigo/artifact-sentry-plugin": {},
+          "@alistigo/artifact-posthog-plugin": { sampleRate: 1 },
+        },
+      });
+      expect(result.plugins).toEqual({
+        "@alistigo/artifact-sentry-plugin": {},
+        "@alistigo/artifact-posthog-plugin": { sampleRate: 1 },
+      });
+    });
+
+    it("throws TypeError when plugins is not an object", () => {
+      expect(() =>
+        validateArtifactConfig({ app: "@alistigo/artifact-list", plugins: "nope" }),
+      ).toThrow(TypeError);
+    });
+
+    it("throws TypeError when plugins is an array", () => {
+      expect(() => validateArtifactConfig({ app: "@alistigo/artifact-list", plugins: [] })).toThrow(
+        TypeError,
+      );
+    });
+
+    it("throws TypeError when a plugin's own config value is not an object", () => {
+      expect(() =>
+        validateArtifactConfig({
+          app: "@alistigo/artifact-list",
+          plugins: { "@alistigo/artifact-sentry-plugin": "enabled" },
+        }),
+      ).toThrow(TypeError);
+    });
+
+    it("does not validate against any individual plugin's own config shape", () => {
+      // config-format only checks shape (object-of-objects) — arbitrary fields
+      // inside a plugin's config are the plugin's own responsibility.
+      const result = validateArtifactConfig({
+        app: "@alistigo/artifact-list",
+        plugins: { "@alistigo/artifact-sentry-plugin": { anything: "goes", nested: { a: 1 } } },
+      });
+      expect(result.plugins?.["@alistigo/artifact-sentry-plugin"]).toEqual({
+        anything: "goes",
+        nested: { a: 1 },
+      });
+    });
+  });
 });
 
 describe("KNOWN_ARTIFACTS", () => {
@@ -131,5 +191,20 @@ describe("artifactConfigSchema", () => {
     expect(artifactConfigSchema.if).toBeDefined();
     expect(artifactConfigSchema.then).toBeDefined();
     expect(artifactConfigSchema.else).toBeDefined();
+  });
+
+  it("declares a plugins field at the top level", () => {
+    expect(artifactConfigSchema.properties.plugins).toEqual({
+      type: "object",
+      additionalProperties: { type: "object" },
+    });
+  });
+
+  it("also declares plugins in the list artifact's then branch (additionalProperties: false)", () => {
+    expect(artifactConfigSchema.then.additionalProperties).toBe(false);
+    expect(artifactConfigSchema.then.properties.plugins).toEqual({
+      type: "object",
+      additionalProperties: { type: "object" },
+    });
   });
 });

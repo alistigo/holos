@@ -32,6 +32,29 @@ function assertLangField(raw: Record<string, unknown>): void {
   }
 }
 
+/**
+ * Validates only the shape of `plugins` — an object whose values are themselves
+ * objects. Deliberately does NOT validate any individual plugin's own config shape,
+ * so this package never needs to import a plugin package.
+ */
+function assertPluginsField(raw: Record<string, unknown>): void {
+  if (!("plugins" in raw) || raw.plugins === undefined) return;
+
+  if (typeof raw.plugins !== "object" || raw.plugins === null || Array.isArray(raw.plugins)) {
+    throw new TypeError(
+      `Artifact config: "plugins" must be an object, got ${typeLabel(raw.plugins)}`,
+    );
+  }
+
+  for (const [pluginName, pluginConfig] of Object.entries(raw.plugins as Record<string, unknown>)) {
+    if (typeof pluginConfig !== "object" || pluginConfig === null || Array.isArray(pluginConfig)) {
+      throw new TypeError(
+        `Artifact config: plugins["${pluginName}"] must be an object, got ${typeLabel(pluginConfig)}`,
+      );
+    }
+  }
+}
+
 function dispatchArtifactValidator(raw: Record<string, unknown>, app: string): ArtifactConfig {
   if (app === "@alistigo/artifact-list") {
     const listConfig = validateListConfig(raw);
@@ -50,5 +73,6 @@ export function validateArtifactConfig(value: unknown): ArtifactConfig {
   const raw = assertIsObject(value);
   const app = assertAppField(raw);
   assertLangField(raw);
+  assertPluginsField(raw);
   return dispatchArtifactValidator(raw, app);
 }
