@@ -12,6 +12,9 @@ const allProfile = {
   format: ["@cucumber/pretty-formatter"],
   paths: [`${FEATURES_DIR}/**/*.feature`],
   backtrace: true,
+  // @todo scenarios describe intended behavior with no step definitions yet —
+  // exclude them from execution entirely rather than reporting them undefined.
+  tags: "not @todo",
 };
 
 export { defaultProfile as default, allProfile as all };
