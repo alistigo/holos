@@ -15,6 +15,7 @@ const defaultConfig = {
   lang: "en",
   aiContext: "claude",
   readonly: false,
+  plugins: {},
 };
 
 export const Default: Story = {
@@ -29,6 +30,21 @@ export const Default: Story = {
 export const ReadOnly: Story = {
   args: {
     config: { ...defaultConfig, readonly: true },
+    onConfigChange: () => {},
+    onReload: () => {},
+    onClearData: () => {},
+  },
+};
+
+export const WithPluginsEnabled: Story = {
+  args: {
+    config: {
+      ...defaultConfig,
+      plugins: {
+        "@alistigo/artifact-sentry-plugin": {},
+        "@alistigo/artifact-posthog-plugin": {},
+      },
+    },
     onConfigChange: () => {},
     onReload: () => {},
     onClearData: () => {},

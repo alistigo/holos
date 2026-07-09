@@ -9,7 +9,7 @@ import DevFixturePicker from "./components/DevFixturePicker.js";
 // @alistigo/artifact-list registers DOMContentLoaded → autoMount on import,
 // so these writes are visible to autoMount even though the import comes first.
 const params = new URLSearchParams(window.location.search);
-if (params.has("readonly") || params.has("lang") || params.has("app")) {
+if (params.has("readonly") || params.has("lang") || params.has("app") || params.has("plugins")) {
   let configEl = document.getElementById("alistigo-config") as HTMLScriptElement | null;
   if (!configEl) {
     configEl = document.createElement("script");
@@ -21,6 +21,13 @@ if (params.has("readonly") || params.has("lang") || params.has("app")) {
   if (params.has("app")) cfg.app = params.get("app");
   if (params.has("readonly")) cfg.readonly = params.get("readonly") === "true";
   if (params.has("lang")) cfg.lang = params.get("lang");
+  if (params.has("plugins")) {
+    try {
+      cfg.plugins = JSON.parse(params.get("plugins") ?? "{}");
+    } catch {
+      console.error("[Playground] Failed to parse plugins query param");
+    }
+  }
   configEl.textContent = JSON.stringify(cfg);
 }
 

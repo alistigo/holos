@@ -1,5 +1,5 @@
 import type { Dispatch, JSX, SetStateAction } from "react";
-import { AI_CONTEXTS, KNOWN_APPS } from "../constants";
+import { AI_CONTEXTS, getAvailablePlugins, KNOWN_APPS } from "../constants";
 import type { Config } from "../hooks/useHostConfig";
 
 interface HostFormProps {
@@ -10,6 +10,20 @@ interface HostFormProps {
 }
 
 function HostForm({ config, onConfigChange, onReload, onClearData }: HostFormProps): JSX.Element {
+  const availablePlugins = getAvailablePlugins(config.app);
+
+  function togglePlugin(pluginName: string, enabled: boolean): void {
+    onConfigChange((c) => {
+      const plugins = { ...c.plugins };
+      if (enabled) {
+        plugins[pluginName] = plugins[pluginName] ?? {};
+      } else {
+        delete plugins[pluginName];
+      }
+      return { ...c, plugins };
+    });
+  }
+
   return (
     <div className="w-1/2 p-4 border-r border-gray-200 overflow-y-auto flex flex-col gap-3 bg-gray-50">
       <h2 className="m-0 text-base font-semibold">Dev Config</h2>
@@ -65,6 +79,22 @@ function HostForm({ config, onConfigChange, onReload, onClearData }: HostFormPro
           />
           <span className="font-medium text-gray-600">Read-only</span>
         </label>
+      )}
+
+      {availablePlugins.length > 0 && (
+        <fieldset className="flex flex-col gap-1.5 border border-gray-200 rounded p-2">
+          <legend className="font-medium text-gray-600 px-1">Plugins</legend>
+          {availablePlugins.map((pluginName) => (
+            <label key={pluginName} className="flex flex-row items-center gap-2">
+              <input
+                type="checkbox"
+                checked={pluginName in config.plugins}
+                onChange={(e) => togglePlugin(pluginName, e.target.checked)}
+              />
+              <span className="text-gray-600">{pluginName}</span>
+            </label>
+          ))}
+        </fieldset>
       )}
 
       <div className="flex gap-2 mt-1">
