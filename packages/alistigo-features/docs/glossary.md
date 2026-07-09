@@ -63,6 +63,20 @@ The visual rendering of an Element in the UI. A row corresponds 1:1 with an Elem
 
 (`Row` is the Gherkin-only handle for disambiguating duplicates; the data layer only knows about Elements.)
 
+### Plugin
+
+A composable extension to an artifact, implementing the `AlistigoPlugin` interface
+from `@alistigo/artifact-plugin-api`. Distributed as its own independently-versioned
+npm package and loaded dynamically at runtime — never bundled into the artifact.
+
+**Rules:**
+- A Plugin's `name` matches its own npm package name.
+- A Plugin is enabled by naming it under a config document's `plugins` field.
+- A Plugin may implement lifecycle hooks (`setup`, `beforeMount`, `mounted`, `destroy`)
+  and may subscribe to events emitted by the Host.
+- A Plugin that fails — missing configuration, a thrown error in any hook — never
+  breaks the Host's mount or another Plugin.
+
 ---
 
 ## 2. Actors
@@ -73,7 +87,14 @@ Who triggers scenarios. Each Actor has a paragraph describing who they are and t
 
 A human looking at the list. The User adds and deletes Elements directly via the UI. This is the only Actor present in M1; the User is implied when no `@actor:*` tag is present.
 
-(Future Actors — AI, Host, System — will arrive with M4 and the host protocol.)
+### Host
+
+The artifact itself, acting on its own during boot and mount — not a human. The Host
+loads configured Plugins, drives their lifecycle hooks, and emits events (e.g.
+`widget:displayed`, `error:uncaught`) that Plugins may subscribe to. Scenarios tagged
+`@actor:host` describe this internal, non-user-triggered behavior.
+
+(Future Actors — AI, System — will arrive with M4 and the host protocol.)
 
 ---
 
@@ -89,6 +110,8 @@ The verbs allowed in step text. Each row lists the verb, what it means, and poin
 | **reload** the list | Close and reopen the list, forcing the projection to be rebuilt from the event log |
 | **open** the page | Load an Alistigo page in the browser. The trigger for auto-mount. |
 | **provide** a document | Supply an `AlistigoDocument` to the widget. |
+| **enable** a plugin | Name a Plugin under the config document's `plugins` field |
+| **boot** | Run the Host's mount() lifecycle to completion |
 
 ### Implicit open
 

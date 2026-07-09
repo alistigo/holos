@@ -28,6 +28,7 @@ Exactly one per Feature. See [`projects/alistigo-ai/milestones.md`](../../../pro
 | `@m3` | Milestone 3 — Second list type via plugins |
 | `@m4` | Milestone 4 — Host ↔ iframe protocol |
 | `@v1` | Milestone 5 / 1.0 — Public beta |
+| `@platform` | Cross-cutting platform capability, not tied to a numbered milestone (e.g. the artifact plugin system) |
 
 ## Group tags
 
@@ -36,8 +37,9 @@ Exactly one per Feature. The group must match the immediate parent folder under 
 | Tag | Means |
 |-----|-------|
 | `@core` | Base list app — text elements, add, delete, persist (no plugins loaded) |
+| `@artifact-plugins` | Artifact-lifecycle/infra plugins — Sentry error monitoring, PostHog analytics |
 
-Plugin groups will be added as plugins land — likely `@todo`, `@checklist`, `@grocery`, `@wishlist`, etc. Each plugin lives in its own folder under `features/` and uses a matching tag.
+Domain plugin groups will be added as they land — likely `@todo`, `@checklist`, `@grocery`, `@wishlist`, etc. Each plugin lives in its own folder under `features/` and uses a matching tag.
 
 ## Capability tags
 
