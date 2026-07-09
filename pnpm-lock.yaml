@@ -160,6 +160,9 @@ importers:
 
   packages/alistigo-artifact-list:
     dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../alistigo-artifact-plugin-api
       '@alistigo/claude-artifact-list-storage':
         specifier: workspace:*
         version: link:../alistigo-claude-artifact-list-storage
@@ -187,15 +190,6 @@ importers:
       '@lingui/react':
         specifier: ^6.0.0
         version: 6.0.1(babel-plugin-macros@3.1.0)(react@19.2.5)
-      '@sentry/browser':
-        specifier: ^9.0.0
-        version: 9.47.1
-      '@sentry/react':
-        specifier: ^9.0.0
-        version: 9.47.1(react@19.2.5)
-      posthog-js:
-        specifier: ^1.0.0
-        version: 1.383.2
       react:
         specifier: ^19.2.5
         version: 19.2.5
@@ -212,9 +206,6 @@ importers:
       '@lingui/vite-plugin':
         specifier: ^6.0.0
         version: 6.0.1(@babel/core@7.29.0)(@lingui/babel-plugin-lingui-macro@6.0.1)(babel-plugin-macros@3.1.0)(rolldown@1.1.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
-      '@sentry/vite-plugin':
-        specifier: ^3.0.0
-        version: 3.6.1
       '@tailwindcss/vite':
         specifier: ^4.0.0
         version: 4.2.4(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
@@ -2077,12 +2068,6 @@ packages:
     resolution: {integrity: sha512-KX62+qIt4xgy8eHKHiikfhz2p5fOciXd0Cl+dNzhgPFq8klq4MGMNaf148GB3M/vBqP4nw/eFvRMAayFCgdRQw==}
     engines: {node: '>=18'}
 
-  '@sentry/react@9.47.1':
-    resolution: {integrity: sha512-Anqt0hG1R+nktlwEiDc2FmD+6DUGMJOLuArgr7q1cSCdPbK2Gb1eZ2rF57Ui+CDo9XLvlX9QP2is/M08rrVe3w==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      react: ^16.14.0 || 17.x || 18.x || 19.x
-
   '@sentry/vite-plugin@3.6.1':
     resolution: {integrity: sha512-x8WMdv2K2HcGS2ezEUIEZXpT/fNeWQ9rsEeF0K9DfKXK8Z9lzRmCr6TVA6I9+yW39Is+1/0cv1Rsu0LhO7lHzg==}
     engines: {node: '>= 14'}
@@ -3142,9 +3127,6 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  hoist-non-react-statics@3.3.2:
-    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
-
   hosted-git-info@9.0.3:
     resolution: {integrity: sha512-Hc+ghLoSt6QaYZUv0WBiIvmMDZuZZ7oaDvdH8MbfOO4lOsxdXLEvuC6ePoGs9H1X9oCLyq6+NVN0MKqD+ydxyg==}
     engines: {node: ^20.17.0 || >=22.9.0}
@@ -3926,9 +3908,6 @@ packages:
     resolution: {integrity: sha512-J5bAZz+DXMMwW/wV3xzKke59Af6CHY7G4uYLN1OvBcKEsWOs4pQExj86BBKamxl/Ik5bx9whOrvBlSDfWzgSag==}
     peerDependencies:
       react: ^19.2.5
-
-  react-is@16.13.1:
-    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -6228,13 +6207,6 @@ snapshots:
 
   '@sentry/core@9.47.1': {}
 
-  '@sentry/react@9.47.1(react@19.2.5)':
-    dependencies:
-      '@sentry/browser': 9.47.1
-      '@sentry/core': 9.47.1
-      hoist-non-react-statics: 3.3.2
-      react: 19.2.5
-
   '@sentry/vite-plugin@3.6.1':
     dependencies:
       '@sentry/bundler-plugin-core': 3.6.1
@@ -7326,10 +7298,6 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hoist-non-react-statics@3.3.2:
-    dependencies:
-      react-is: 16.13.1
-
   hosted-git-info@9.0.3:
     dependencies:
       lru-cache: 11.3.5
@@ -8071,8 +8039,6 @@ snapshots:
     dependencies:
       react: 19.2.5
       scheduler: 0.27.0
-
-  react-is@16.13.1: {}
 
   react-is@17.0.2: {}
 

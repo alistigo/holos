@@ -41,7 +41,7 @@ function autoMount(): void {
   const doc = readInlineDocument() ?? config.document;
   const { container: _c, document: _d, ...baseOptions } = config;
   const options: MountOptions = doc !== undefined ? { ...baseOptions, document: doc } : baseOptions;
-  mount(mountedContainer, options);
+  void mount(mountedContainer, options);
 }
 
 export default autoMount;

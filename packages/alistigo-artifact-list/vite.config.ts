@@ -15,7 +15,6 @@
 import path from "node:path";
 import linguiMacro from "@lingui/babel-plugin-lingui-macro";
 import { lingui } from "@lingui/vite-plugin";
-import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -31,15 +30,6 @@ export default defineConfig({
     tailwindcss(),
     lingui(),
     cssInjectedByJsPlugin(),
-    ...(process.env.SENTRY_AUTH_TOKEN
-      ? [
-          sentryVitePlugin({
-            org: process.env.SENTRY_ORG ?? "alistigo",
-            project: process.env.SENTRY_PROJECT ?? "alistigo-artifact-list",
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-          }),
-        ]
-      : []),
   ],
   resolve: {
     alias: {

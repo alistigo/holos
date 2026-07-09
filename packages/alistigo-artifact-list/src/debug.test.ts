@@ -26,7 +26,7 @@ describe("version()", () => {
 });
 
 describe("about()", () => {
-  it("returns a superset of version() with runtime, monitoring, analytics", async () => {
+  it("returns a superset of version() with runtime and plugins", async () => {
     const { about } = await import("./debug.js");
     const consoleSpy = spyOn(console, "log");
     const result = about();
@@ -39,17 +39,16 @@ describe("about()", () => {
     expect(Array.isArray(result.runtime.mountedContainers)).toBe(true);
     expect(typeof result.runtime.storageType).toBe("string");
     expect(typeof result.runtime.logLevel).toBe("string");
-    expect(typeof result.monitoring.sentry.enabled).toBe("boolean");
-    expect(typeof result.analytics.posthog.enabled).toBe("boolean");
+    expect(Array.isArray(result.plugins)).toBe(true);
     consoleSpy.mockRestore();
   });
 
-  it("analytics.posthog.enabled is false when VITE_POSTHOG_KEY is absent", async () => {
+  it("plugins is empty before any plugins have been loaded", async () => {
     const { about } = await import("./debug.js");
     const consoleSpy = spyOn(console, "log");
     const result = about();
 
-    expect(result.analytics.posthog.enabled).toBe(false);
+    expect(result.plugins).toEqual([]);
     consoleSpy.mockRestore();
   });
 
@@ -76,5 +75,13 @@ describe("registerMount / getMountedContainers", () => {
     const before = getMountedContainers().length;
     registerMount("#test-container");
     expect(getMountedContainers().length).toBe(before);
+  });
+});
+
+describe("registerLoadedPlugins / getLoadedPluginNames", () => {
+  it("tracks the most recently loaded plugin names", async () => {
+    const { registerLoadedPlugins, getLoadedPluginNames } = await import("./runtime-state.js");
+    registerLoadedPlugins(["@alistigo/artifact-sentry-plugin"]);
+    expect(getLoadedPluginNames()).toEqual(["@alistigo/artifact-sentry-plugin"]);
   });
 });
