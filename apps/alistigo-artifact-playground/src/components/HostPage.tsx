@@ -11,6 +11,9 @@ function buildIframeSrc(config: Config): string {
   if (config.app === "@alistigo/artifact-list") {
     params.set("readonly", String(config.readonly));
   }
+  if (Object.keys(config.plugins).length > 0) {
+    params.set("plugins", JSON.stringify(config.plugins));
+  }
   return `/iframe.html?${params.toString()}`;
 }
 
