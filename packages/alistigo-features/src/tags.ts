@@ -12,8 +12,14 @@
  * Capability, Test type, Suite, Actor.
  */
 
-/** Which milestone a feature belongs to. Required — every Feature has exactly one. */
-export const MILESTONE_TAGS = ["@m1", "@m2", "@m3", "@m4", "@v1"] as const;
+/**
+ * Which milestone a feature belongs to. Required — every Feature has exactly one.
+ *
+ * `@platform` marks cross-cutting platform capabilities (e.g. the artifact plugin
+ * system) that are orthogonal to the numbered milestone sequence, rather than
+ * belonging to a specific numbered milestone.
+ */
+export const MILESTONE_TAGS = ["@m1", "@m2", "@m3", "@m4", "@v1", "@platform"] as const;
 export type MilestoneTag = (typeof MILESTONE_TAGS)[number];
 
 /**
@@ -21,9 +27,10 @@ export type MilestoneTag = (typeof MILESTONE_TAGS)[number];
  * exactly one. Mirrors the folder layout under `features/`.
  *
  * - `@core` — base list app (text elements, add, delete, persist)
- * - Plugin groups will be added as plugins land: `@todo`, `@checklist`, etc.
+ * - `@artifact-plugins` — artifact-lifecycle/infra plugins (Sentry, PostHog)
+ * - Domain plugin groups will be added as they land: `@todo`, `@checklist`, etc.
  */
-export const GROUP_TAGS = ["@core"] as const;
+export const GROUP_TAGS = ["@core", "@artifact-plugins"] as const;
 export type GroupTag = (typeof GROUP_TAGS)[number];
 
 /** What capability the feature exercises. Required — at least one. */
