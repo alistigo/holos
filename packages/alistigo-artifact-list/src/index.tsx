@@ -15,7 +15,10 @@
  *
  * Explicit mount (advanced — do not mix with auto-mount):
  *   <script src="index.umd.js"></script>
- *   <script>Alistigo.mount('#root', { document: {...} });</script>
+ *   <script>Alistigo.mount('#root', { document: {...} }).catch(console.error);</script>
+ *
+ * mount() is async (it dynamically imports any configured plugins before
+ * rendering) — callers relying on synchronous completion must update to await it.
  */
 
 /*
@@ -28,9 +31,7 @@
 import "./styles/app.css";
 
 import { setLogLevel } from "@alistigo/logger";
-import pkg from "../package.json" with { type: "json" };
 import autoMount from "./auto-mount.js";
-import { initMonitoring } from "./monitoring.js";
 
 // Configure log level on bundle load.
 (() => {
@@ -42,8 +43,6 @@ import { initMonitoring } from "./monitoring.js";
     setLogLevel("info");
   }
 })();
-
-initMonitoring(pkg.version);
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", autoMount);

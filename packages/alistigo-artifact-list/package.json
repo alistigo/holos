@@ -36,6 +36,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/claude-artifact-list-storage": "workspace:*",
     "@alistigo/document-editor": "workspace:*",
     "@alistigo/document-format": "workspace:*",
@@ -45,16 +46,12 @@
     "@alistigo/logger": "workspace:*",
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
-    "@sentry/browser": "^9.0.0",
-    "@sentry/react": "^9.0.0",
-    "posthog-js": "^1.0.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",
     "@lingui/vite-plugin": "^6.0.0",
-    "@sentry/vite-plugin": "^3.0.0",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

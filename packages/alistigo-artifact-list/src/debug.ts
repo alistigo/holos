@@ -1,7 +1,5 @@
 import pkg from "../package.json" with { type: "json" };
-import { getAnalyticsHost, isAnalyticsEnabled } from "./analytics.js";
-import { getMonitoringRelease, isMonitoringEnabled } from "./monitoring.js";
-import { getMountedContainers } from "./runtime-state.js";
+import { getLoadedPluginNames, getMountedContainers } from "./runtime-state.js";
 
 export interface VersionInfo {
   version: string;
@@ -16,12 +14,7 @@ export interface AboutInfo extends VersionInfo {
     mountedContainers: readonly string[];
     logLevel: string;
   };
-  monitoring: {
-    sentry: { enabled: boolean; release?: string };
-  };
-  analytics: {
-    posthog: { enabled: boolean; host?: string };
-  };
+  plugins: readonly string[];
 }
 
 function detectStorageType(): string {
@@ -49,8 +42,6 @@ export function version(): VersionInfo {
 }
 
 export function about(): AboutInfo {
-  const release = getMonitoringRelease();
-  const host = getAnalyticsHost();
   const info: AboutInfo = {
     ...buildVersionInfo(),
     runtime: {
@@ -59,18 +50,7 @@ export function about(): AboutInfo {
       logLevel:
         (import.meta.env.VITE_ALISTIGO_DEBUG as string | undefined) === "true" ? "trace" : "error",
     },
-    monitoring: {
-      sentry: {
-        enabled: isMonitoringEnabled(),
-        ...(release !== undefined && { release }),
-      },
-    },
-    analytics: {
-      posthog: {
-        enabled: isAnalyticsEnabled(),
-        ...(host !== undefined && { host }),
-      },
-    },
+    plugins: getLoadedPluginNames(),
   };
   console.log(info);
   return info;
