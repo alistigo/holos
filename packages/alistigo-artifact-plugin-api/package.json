@@ -1,0 +1,44 @@
+{
+  "name": "@alistigo/artifact-plugin-api",
+  "version": "0.1.0",
+  "description": "Composable plugin interface, event bus, and CDN dynamic-import loader for @alistigo artifacts.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/alistigo-artifact-plugin-api"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-artifact-plugin-api#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "plugin",
+    "typescript"
+  ],
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14"
+  }
+}
