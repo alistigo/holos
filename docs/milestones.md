@@ -155,7 +155,10 @@ apps/alistigo-artifact-playground
 ### Scope
 
 In:
-- A `Plugin` interface (data extension + render contributions + commands + events)
+- A `Plugin` interface (data extension + render contributions + commands + events) —
+  already delivered as `@alistigo/artifact-plugin-api` (`packages/alistigo-artifact-plugin-api/`)
+  by the standalone `alistigo-artifact-plugins` epic; see `docs/adrs/0016-artifact-plugin-system.md`.
+  M3 implements `checkbox-element` against that existing interface, not a new one.
 - `checkbox-element` plugin — adds a checkbox column to Elements and a `complete` / `uncomplete` action; this is the seed of the **todo list** type
 - Plugin registry and loading mechanism
 - Document-level `alistigo:plugins` field declares which plugins a document opts into
@@ -167,7 +170,7 @@ Out:
 
 ### Deliverables
 
-- `Plugin` interface in `packages/alistigo-plugin-api/`
+- ~~`Plugin` interface in `packages/alistigo-plugin-api/`~~ superseded — use `@alistigo/artifact-plugin-api` (`packages/alistigo-artifact-plugin-api/`)
 - `checkbox-element` plugin in `packages/alistigo-plugin-checkbox/`
 - All M1 `.feature` files still pass against the new plugin-driven implementation (the base list is unchanged from the User's perspective)
 - New feature group `packages/alistigo-features/features/checkbox/` covering the plugin's lifecycle and the new actions (complete / uncomplete)

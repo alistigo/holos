@@ -27,7 +27,7 @@ plugin that proves the pattern.
 
 | Req | Description |
 |-----|-------------|
-| F1 | Plugin interface: data shape + render + commands + events |
+| F1 | Plugin interface: data shape + render + commands + events — implemented by `@alistigo/artifact-plugin-api` (see Note below), not a second `alistigo-plugin-api` package |
 | F2 | `checkbox-element` plugin: complete/uncomplete actions on elements |
 | F3 | Plugin registry and loading mechanism |
 | F4 | `alistigo:plugins` field in document format |
@@ -42,9 +42,23 @@ plugin that proves the pattern.
 
 ## Deliverables
 
-- `packages/alistigo-plugin-api/` — plugin interface
-- `packages/alistigo-plugin-checkbox/` — checkbox-element plugin
+- ~~`packages/alistigo-plugin-api/` — plugin interface~~ superseded — see Note below
+- `packages/alistigo-plugin-checkbox/` — checkbox-element plugin, implementing `AlistigoPlugin` from `@alistigo/artifact-plugin-api`
 - `packages/alistigo-features/features/checkbox/` — acceptance specs with `@checkbox` tag
+
+## Note — Plugin Interface Package (added 2026-07-09)
+
+The plugin-interface deliverable (F1) is **already built**, as part of the standalone
+`alistigo-artifact-plugins` epic (see `.agents/prds/alistigo-artifact-plugins.md` and
+`docs/adrs/0016-artifact-plugin-system.md`): `@alistigo/artifact-plugin-api`
+(`packages/alistigo-artifact-plugin-api/`). That epic introduced one unified
+`AlistigoPlugin` interface deliberately designed to serve both artifact-lifecycle/
+infra plugins (Sentry, PostHog, built in that epic) and this milestone's future
+domain-contribution plugins (checkbox etc.) — via the interface's `dataShape`/
+`render`/`commands`/`events` fields, typed but unconsumed until M3 actually builds
+`checkbox-element`. When M3 work starts, implement `checkbox-element` against the
+existing `@alistigo/artifact-plugin-api` package rather than scaffolding a second,
+competing `alistigo-plugin-api` package.
 
 ## Success Criteria
 
