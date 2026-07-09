@@ -2,6 +2,7 @@
 @artifact-plugins
 @capability:plugins
 @actor:host
+@todo
 Feature: PostHog plugin tracks widget display
   As the Host
   I want the PostHog plugin to record a widget_displayed event on first mount
