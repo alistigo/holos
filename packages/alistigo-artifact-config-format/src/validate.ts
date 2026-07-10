@@ -8,11 +8,15 @@ function typeLabel(value: unknown): string {
   return typeof value;
 }
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function assertIsObject(value: unknown): Record<string, unknown> {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+  if (!isPlainObject(value)) {
     throw new TypeError(`Artifact config must be a non-null object, got ${typeLabel(value)}`);
   }
-  return value as Record<string, unknown>;
+  return value;
 }
 
 // fallow-ignore-next-line complexity
@@ -37,21 +41,25 @@ function assertLangField(raw: Record<string, unknown>): void {
  * objects. Deliberately does NOT validate any individual plugin's own config shape,
  * so this package never needs to import a plugin package.
  */
-function assertPluginsField(raw: Record<string, unknown>): void {
-  if (!("plugins" in raw) || raw.plugins === undefined) return;
+function assertPluginConfigIsObject(pluginName: string, pluginConfig: unknown): void {
+  if (!isPlainObject(pluginConfig)) {
+    throw new TypeError(
+      `Artifact config: plugins["${pluginName}"] must be an object, got ${typeLabel(pluginConfig)}`,
+    );
+  }
+}
 
-  if (typeof raw.plugins !== "object" || raw.plugins === null || Array.isArray(raw.plugins)) {
+function assertPluginsField(raw: Record<string, unknown>): void {
+  if (raw.plugins === undefined) return;
+
+  if (!isPlainObject(raw.plugins)) {
     throw new TypeError(
       `Artifact config: "plugins" must be an object, got ${typeLabel(raw.plugins)}`,
     );
   }
 
-  for (const [pluginName, pluginConfig] of Object.entries(raw.plugins as Record<string, unknown>)) {
-    if (typeof pluginConfig !== "object" || pluginConfig === null || Array.isArray(pluginConfig)) {
-      throw new TypeError(
-        `Artifact config: plugins["${pluginName}"] must be an object, got ${typeLabel(pluginConfig)}`,
-      );
-    }
+  for (const [pluginName, pluginConfig] of Object.entries(raw.plugins)) {
+    assertPluginConfigIsObject(pluginName, pluginConfig);
   }
 }
 

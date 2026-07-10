@@ -117,6 +117,26 @@ function renderApp(el: Element, options: MountOptions, runtime: PluginRuntime): 
   getOrCreateRoot(el).render(runtime.wrapRoot(tree));
 }
 
+function deferUntilDomReady(container: string | HTMLElement, options: MountOptions): void {
+  console.info("[Alistigo] mount() called before DOM is ready — deferring to DOMContentLoaded");
+  document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+      void mount(container, options);
+    },
+    { once: true },
+  );
+}
+
+function resolveContainerOrThrow(container: string | HTMLElement): Element {
+  const el = resolveContainer(container);
+  if (el == null) {
+    log.error({ selector: String(container) }, "container not found");
+    throw new Error(`Alistigo.mount: container not found: ${String(container)}`);
+  }
+  return el;
+}
+
 /**
  * Mount the Alistigo list widget into `container`.
  * Calling mount() a second time on the same container updates the existing
@@ -127,23 +147,11 @@ export async function mount(
   options: MountOptions = {},
 ): Promise<void> {
   if (document.readyState === "loading") {
-    console.info("[Alistigo] mount() called before DOM is ready — deferring to DOMContentLoaded");
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => {
-        void mount(container, options);
-      },
-      { once: true },
-    );
+    deferUntilDomReady(container, options);
     return;
   }
 
-  const el = resolveContainer(container);
-  if (el == null) {
-    log.error({ selector: String(container) }, "container not found");
-    throw new Error(`Alistigo.mount: container not found: ${String(container)}`);
-  }
-
+  const el = resolveContainerOrThrow(container);
   const isFirstMount = !roots.has(el);
   registerMount(getContainerLabel(container, el));
   log.info({ selector: String(container) }, "mount called");
