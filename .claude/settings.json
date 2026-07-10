@@ -1,81 +1,4 @@
 {
-  "permissions": {
-    "allow": [
-      "Read(/Volumes/workspace/**)",
-      "Write(/Volumes/workspace/**)",
-      "Edit(/Volumes/workspace/**)",
-
-      "WebFetch(*)",
-      "WebSearch(*)",
-
-      "Bash(git:*)",
-      "Bash(gh:*)",
-      "Bash(pnpm:*)",
-      "Bash(bun:*)",
-      "Bash(nx:*)",
-      "Bash(npx:*)",
-      "Bash(npm:*)",
-      "Bash(node *)",
-      "Bash(mise:*)",
-      "Bash(esphome:*)",
-      "Bash(docker:*)",
-      "Bash(docker-compose:*)",
-      "Bash(bash:*)",
-      "Bash(cd:*)",
-      "Bash(grep:*)",
-      "Bash(find:*)",
-      "Bash(cat:*)",
-      "Bash(ls:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
-      "Bash(wc:*)",
-      "Bash(diff:*)",
-      "Bash(awk:*)",
-      "Bash(sed:*)",
-      "Bash(echo:*)",
-      "Bash(printf:*)",
-      "Bash(date:*)",
-      "Bash(sort:*)",
-      "Bash(uniq:*)",
-      "Bash(cut:*)",
-      "Bash(tr:*)",
-      "Bash(tee:*)",
-      "Bash(touch:*)",
-      "Bash(cp:*)",
-      "Bash(mv:*)",
-      "Bash(chmod:*)",
-      "Bash(mkdir:*)",
-      "Bash(jq:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)",
-
-      "Bash(node_modules/.bin/nx run *)",
-      "Bash(node_modules/.bin/ *)",
-      "Bash(/Volumes/workspace/*)",
-
-      "mcp__fallow",
-      "mcp__notion",
-      "mcp__nx-mcp"
-    ],
-    "deny": [
-      "Bash(git push --force:*)",
-      "Bash(git push -f:*)",
-      "Bash(git branch -D:*)",
-      "Bash(git checkout -B:*)",
-      "Bash(git reset --hard:*)",
-      "Bash(git clean:*)",
-      "Bash(git stash drop:*)",
-      "Bash(git stash clear:*)",
-      "Bash(rm -rf:*)",
-      "Bash(npm publish:*)",
-      "Bash(bun publish:*)",
-      "Bash(pnpm publish:*)"
-    ],
-    "additionalDirectories": [
-      "/Volumes/workspace",
-      "/Volumes/workspace/holos/.claude/epics"
-    ]
-  },
   "hooks": {
     "SessionStart": [
       {
@@ -94,27 +17,7 @@
   "enabledPlugins": {
     "nx@nx-claude-plugins": true
   },
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true,
-    "filesystem": {
-      "allowWrite": ["/Volumes/workspace/**"]
-    },
-    "network": {
-      "allowedDomains": [
-        "www.google-analytics.com",
-        "registry.npmjs.org",
-        "*.npmjs.org",
-        "github.com",
-        "*.github.com",
-        "objects.githubusercontent.com",
-        "codeload.github.com",
-        "*.githubusercontent.com"
-      ]
-    }
-  },
   "enabledMcpjsonServers": [
-    "notion",
     "fallow"
   ]
 }
