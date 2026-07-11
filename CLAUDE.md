@@ -44,6 +44,19 @@ pnpm qa:dead-code       # Fallow: unused files, exports, dead code (full repo sc
 pnpm qa:audit           # Fallow: fast changed-file risk gate (pre-push / CI)
 ```
 
+## Persistent Remote Sessions
+
+Working over SSH/VSCode Remote-SSH means closing the laptop or VSCode drops the connection, killing any `claude` process still attached to that terminal. To keep a Claude Code session running on the server after disconnecting, run it inside `tmux`:
+
+```sh
+mise run claude-session          # start or reattach to session "claude"
+mise run claude-session -- work2 # named session, run several in parallel
+```
+
+Detach with `Ctrl+b d` (or just close the laptop) — the session and `claude` keep running on the server. Reattach later with the same command.
+
+**Caveat:** if the server has systemd's `KillUserProcesses` enabled, all of your processes (including the tmux server) can be killed when your last SSH session ends. If sessions still die on full disconnect, run once on the server: `loginctl enable-linger $USER`.
+
 ## TypeScript Standards
 
 - All packages extend `tsconfig.base.json` at the repo root

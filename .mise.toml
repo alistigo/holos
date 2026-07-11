@@ -11,3 +11,7 @@ rust = "stable"
 [tasks.setup]
 description = "Bootstrap the repo on a fresh machine"
 run = "bash scripts/setup.sh"
+
+[tasks.claude-session]
+description = "Start or reattach to a persistent tmux session running Claude Code"
+run = "bash scripts/claude-session.sh"
