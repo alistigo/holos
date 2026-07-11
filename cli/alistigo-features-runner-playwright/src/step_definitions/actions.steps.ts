@@ -23,3 +23,11 @@ When("I delete row {int}", async function (this: AlistigoWorld, rowNumber: numbe
 When("I reload the list", async function (this: AlistigoWorld) {
   await this.applicationPage.reload();
 });
+
+When("the artifact initialize", async function (this: AlistigoWorld) {
+  await this.initializeArtifactWithPlugin();
+});
+
+When("an uncaught render error occurs", async function (this: AlistigoWorld) {
+  await this.applicationPage.triggerDebugRenderError();
+});

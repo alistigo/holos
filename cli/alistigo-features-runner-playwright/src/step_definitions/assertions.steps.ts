@@ -28,3 +28,24 @@ Then("an empty-state message should be visible", async function (this: AlistigoW
   const visible = await this.applicationPage.isEmptyStateVisible();
   assert.equal(visible, true, "expected empty-state message to be visible");
 });
+
+Then("the plugin should be initialized", async function (this: AlistigoWorld) {
+  await this.applicationPage.waitForPluginInitialized();
+});
+
+Then("the plugin should capture the error", async function (this: AlistigoWorld) {
+  await this.applicationPage.waitForPluginCapturedError();
+});
+
+Then("the plugin should report itself as not initialized", async function (this: AlistigoWorld) {
+  const initialized = await this.applicationPage.isPluginInitialized();
+  assert.equal(initialized, false, "expected plugin to report itself as not initialized");
+});
+
+Then("no error should be thrown", async function (this: AlistigoWorld) {
+  assert.deepEqual(
+    this.pageErrors,
+    [],
+    `expected no page errors, got: ${JSON.stringify(this.pageErrors)}`,
+  );
+});

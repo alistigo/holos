@@ -21,3 +21,30 @@ Given("a list:", async function (this: AlistigoWorld, table: DataTable) {
   });
   await this.setDocument(buildPopulatedDocument(elementTexts));
 });
+
+Given("the {string} plugin", async function (this: AlistigoWorld, packageName: string) {
+  await this.setPluginUnderTest(packageName);
+});
+
+Given(
+  "a non-initialized artifact {string} with plugin configured",
+  async function (this: AlistigoWorld, _artifact: string) {
+    this.setPluginConfig({ dsn: "https://fake-dsn.example/1" });
+  },
+);
+
+Given(
+  "an non-initialized artifact {string} with plugin not configured",
+  async function (this: AlistigoWorld, _artifact: string) {
+    this.setPluginConfig({});
+  },
+);
+
+Given(
+  "an initialized artifact {string} with plugin configured",
+  async function (this: AlistigoWorld, _artifact: string) {
+    this.setPluginConfig({ dsn: "https://fake-dsn.example/1" });
+    await this.initializeArtifactWithPlugin();
+    await this.applicationPage.waitForPluginInitialized();
+  },
+);

@@ -4,6 +4,8 @@ import type { Browser, BrowserContext, Page } from "playwright";
 import { ApplicationPage } from "../pages/application.page";
 import { buildEmptyDocument } from "./document";
 import { installDocumentRoute } from "./document-injection";
+import { fakePluginSource } from "./fixtures/index.js";
+import { installPluginRoute } from "./plugin-route";
 
 export class AlistigoWorld extends World {
   readonly baseUrl: string;
@@ -13,7 +15,12 @@ export class AlistigoWorld extends World {
   page!: Page;
   applicationPage!: ApplicationPage;
 
+  /** Uncaught page-level errors, collected via the page's "pageerror" event. */
+  pageErrors: string[] = [];
+
   private document: AlistigoDocument = buildEmptyDocument();
+  private pluginPackageName: string | undefined;
+  private pluginConfig: Record<string, unknown> | undefined;
 
   constructor(opts: IWorldOptions) {
     super(opts);
@@ -28,9 +35,37 @@ export class AlistigoWorld extends World {
     this.browser = browser;
     this.context = await this.browser.newContext();
     this.page = await this.context.newPage();
+    this.page.on("pageerror", (err) => this.pageErrors.push(err.message));
     this.applicationPage = new ApplicationPage(this.baseUrl, this.page);
     await installDocumentRoute(this.page, this.baseUrl, () => this.document);
     await this.applicationPage.open();
+  }
+
+  /**
+   * Installs the fake bundle route for `packageName` under test. Must run
+   * before any navigation that triggers the plugin loader's fetch (every
+   * scenario's "Given the ... plugin" step runs first, guaranteeing this).
+   */
+  // fallow-ignore-next-line unused-class-member
+  async setPluginUnderTest(packageName: string): Promise<void> {
+    this.pluginPackageName = packageName;
+    await installPluginRoute(this.page, packageName, fakePluginSource(packageName));
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  setPluginConfig(config: Record<string, unknown>): void {
+    this.pluginConfig = config;
+  }
+
+  /** Mounts the artifact with the plugin under test, using the configured (or empty) config. */
+  // fallow-ignore-next-line unused-class-member
+  async initializeArtifactWithPlugin(): Promise<void> {
+    if (!this.pluginPackageName) {
+      throw new Error("No plugin under test — call setPluginUnderTest first");
+    }
+    await this.applicationPage.openWithPlugins({
+      [this.pluginPackageName]: this.pluginConfig ?? {},
+    });
   }
 
   // fallow-ignore-next-line unused-class-member
