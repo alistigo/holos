@@ -9,6 +9,7 @@ import { Component, createElement, Fragment, StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import pkg from "../package.json" with { type: "json" };
 import App from "./components/App.js";
+import DebugRenderErrorTrigger from "./components/DebugRenderErrorTrigger.js";
 import { bootI18n } from "./i18n.js";
 import { loadPlugins } from "./plugins.js";
 import { registerLoadedPlugins, registerMount } from "./runtime-state.js";
@@ -110,7 +111,12 @@ function renderApp(el: Element, options: MountOptions, runtime: PluginRuntime): 
             });
           },
         },
-        createElement(App, { key: doc["alistigo:listId"], initialDocument: doc }),
+        createElement(
+          Fragment,
+          null,
+          createElement(App, { key: doc["alistigo:listId"], initialDocument: doc }),
+          createElement(DebugRenderErrorTrigger),
+        ),
       ),
     ),
   );

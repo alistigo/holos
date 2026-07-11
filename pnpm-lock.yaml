@@ -124,6 +124,9 @@ importers:
 
   cli/alistigo-features-runner-playwright:
     dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../../packages/alistigo-artifact-plugin-api
       '@alistigo/document-format':
         specifier: workspace:*
         version: link:../../packages/alistigo-document-format

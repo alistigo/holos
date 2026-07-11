@@ -1,6 +1,12 @@
 import type { Page } from "playwright";
 import { deleteButtonName, ROLES, TEST_IDS } from "../support/selectors";
 
+// This package's tsconfig has no DOM lib (Node-only), so the in-page callback
+// below is typed against an ambient global var rather than `window.*`.
+declare global {
+  var __alistigoDebugTriggerRenderError: (() => void) | undefined;
+}
+
 export class ApplicationPage {
   private opened = false;
   private readonly applicationUrl: string;
@@ -23,6 +29,44 @@ export class ApplicationPage {
     await this.open();
     await this.page.reload();
     await this.page.getByTestId(TEST_IDS.app).waitFor({ state: "visible" });
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  async openWithPlugins(plugins: Record<string, Record<string, unknown>>): Promise<void> {
+    const url = new URL(this.applicationUrl);
+    url.searchParams.set("plugins", JSON.stringify(plugins));
+    this.opened = false;
+    await this.page.goto(url.toString());
+    await this.page.getByTestId(TEST_IDS.app).waitFor({ state: "visible" });
+    this.opened = true;
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  async waitForPluginInitialized(): Promise<void> {
+    await this.page.waitForSelector(
+      `[data-testid="${TEST_IDS.fakePlugin}"][data-initialized="true"]`,
+      { state: "attached" },
+    );
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  async isPluginInitialized(): Promise<boolean> {
+    const marker = this.page.getByTestId(TEST_IDS.fakePlugin);
+    return (await marker.getAttribute("data-initialized")) === "true";
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  async waitForPluginCapturedError(): Promise<void> {
+    await this.page.waitForSelector(
+      `[data-testid="${TEST_IDS.fakePlugin}"][data-captured-error="true"]`,
+      { state: "attached" },
+    );
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  async triggerDebugRenderError(): Promise<void> {
+    await this.page.waitForFunction(() => typeof __alistigoDebugTriggerRenderError === "function");
+    await this.page.evaluate(() => __alistigoDebugTriggerRenderError?.());
   }
 
   // fallow-ignore-next-line unused-class-member

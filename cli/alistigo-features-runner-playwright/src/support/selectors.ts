@@ -21,6 +21,7 @@ export const TEST_IDS = {
   app: "alistigo-app",
   emptyState: "empty-state",
   actionPending: "action-pending",
+  fakePlugin: "fake-plugin-marker",
 } as const;
 
 export const HTML_IDS = {
