@@ -31,7 +31,6 @@ export class ApplicationPage {
     await this.page.getByTestId(TEST_IDS.app).waitFor({ state: "visible" });
   }
 
-  // fallow-ignore-next-line unused-class-member
   async openWithPlugins(plugins: Record<string, Record<string, unknown>>): Promise<void> {
     const url = new URL(this.applicationUrl);
     url.searchParams.set("plugins", JSON.stringify(plugins));
