@@ -44,8 +44,12 @@ import autoMount from "./auto-mount.js";
   }
 })();
 
+// Deferred by a microtask so that synchronous code still to come in the
+// importing module (e.g. writing #alistigo-config from a URL param) runs
+// before autoMount() reads it — import side effects always run before the
+// rest of the importing module's own top-level statements.
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", autoMount);
+  document.addEventListener("DOMContentLoaded", () => queueMicrotask(autoMount));
 } else {
-  autoMount();
+  queueMicrotask(autoMount);
 }
