@@ -5,7 +5,7 @@ on:
   # the saved minutes. `ready_for_review` re-runs CI when a draft is
   # promoted, so the status is fresh at merge time.
   pull_request:
-    branches: [main]
+    branches: [main, epic/**]
     types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
