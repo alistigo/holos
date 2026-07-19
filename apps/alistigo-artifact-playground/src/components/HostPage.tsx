@@ -1,6 +1,6 @@
 import type { JSX } from "react";
-import { type Config, useHostConfig } from "../hooks/useHostConfig";
 import { useDocumentFixtures } from "../hooks/useDocumentFixtures";
+import { type Config, useHostConfig } from "../hooks/useHostConfig";
 import { useIframeControls } from "../hooks/useIframeControls";
 import HostForm from "./HostForm";
 

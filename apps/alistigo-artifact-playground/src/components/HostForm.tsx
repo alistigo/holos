@@ -10,7 +10,13 @@ interface HostFormProps {
   documentNames: string[];
 }
 
-function HostForm({ config, onConfigChange, onReload, onClearData, documentNames }: HostFormProps): JSX.Element {
+function HostForm({
+  config,
+  onConfigChange,
+  onReload,
+  onClearData,
+  documentNames,
+}: HostFormProps): JSX.Element {
   const availablePlugins = getAvailablePlugins(config.app);
 
   function togglePlugin(pluginName: string, enabled: boolean): void {
