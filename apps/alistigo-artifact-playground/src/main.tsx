@@ -38,9 +38,7 @@ if (params.has("readonly") || params.has("lang") || params.has("app") || params.
 // script tag so auto-mount picks up the chosen fixture instead of the default.
 const documentName = params.get("document");
 if (documentName != null) {
-  const fixtureKey = Object.keys(FIXTURES_RAW).find((k) =>
-    k.endsWith(`/${documentName}.json`),
-  );
+  const fixtureKey = Object.keys(FIXTURES_RAW).find((k) => k.endsWith(`/${documentName}.json`));
   if (fixtureKey != null) {
     const doc = FIXTURES_RAW[fixtureKey];
     let docEl = document.getElementById("alistigo-document") as HTMLScriptElement | null;
