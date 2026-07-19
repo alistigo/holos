@@ -66,6 +66,7 @@ interface ArtifactErrorBoundaryProps {
 
 interface ArtifactErrorBoundaryState {
   hasError: boolean;
+  error?: unknown;
 }
 
 /**
@@ -79,8 +80,8 @@ class ArtifactErrorBoundary extends Component<
 > {
   override state: ArtifactErrorBoundaryState = { hasError: false };
 
-  static getDerivedStateFromError(): ArtifactErrorBoundaryState {
-    return { hasError: true };
+  static getDerivedStateFromError(error: unknown): ArtifactErrorBoundaryState {
+    return { hasError: true, error };
   }
 
   override componentDidCatch(error: unknown, errorInfo: ErrorInfo): void {
@@ -88,7 +89,29 @@ class ArtifactErrorBoundary extends Component<
   }
 
   override render(): ReactNode {
-    if (this.state.hasError) return createElement(Fragment, null);
+    if (this.state.hasError) {
+      return createElement(
+        "div",
+        {
+          style: {
+            fontFamily: "monospace",
+            fontSize: "13px",
+            padding: "16px",
+            margin: "16px",
+            color: "#b91c1c",
+            background: "#fef2f2",
+            border: "1px solid #fca5a5",
+            borderRadius: "6px",
+          },
+        },
+        createElement("strong", null, "Alistigo error"),
+        createElement(
+          "pre",
+          { style: { marginTop: "8px", whiteSpace: "pre-wrap", wordBreak: "break-word" } },
+          String(this.state.error),
+        ),
+      );
+    }
     return this.props.children;
   }
 }
