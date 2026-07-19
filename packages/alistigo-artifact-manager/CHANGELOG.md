@@ -1,3 +1,18 @@
+## 0.1.5 (2026-07-19)
+
+### 🚀 Features
+
+- **alistigo:** plugin-selection checkboxes in artifact playground ([#19](https://github.com/alistigo/holos/issues/19))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-config-format to 0.1.4
+
+### ❤️ Thank You
+
+- Claude Sonnet 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.4 (2026-07-02)
 
 ### 🧱 Updated Dependencies

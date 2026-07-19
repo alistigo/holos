@@ -1,3 +1,21 @@
+## 0.2.9 (2026-07-19)
+
+### 🚀 Features
+
+- **alistigo:** plugin-selection checkboxes in artifact playground ([#19](https://github.com/alistigo/holos/issues/19))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.6
+- Updated alistigo-artifact-manager to 0.1.5
+- Updated alistigo-document-format to 0.2.6
+- Updated alistigo-artifact-list to 0.2.8
+
+### ❤️ Thank You
+
+- Claude Sonnet 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.8 (2026-07-02)
 
 ### 🧱 Updated Dependencies

@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-posthog-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "PostHog analytics plugin for @alistigo artifacts.",
   "license": "MIT",
   "author": {

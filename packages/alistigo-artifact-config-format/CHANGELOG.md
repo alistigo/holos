@@ -1,3 +1,18 @@
+## 0.1.4 (2026-07-19)
+
+### 🚀 Features
+
+- **alistigo:** add plugins field to artifact-config-format ([#14](https://github.com/alistigo/holos/issues/14))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-config-list-format to 0.1.4
+
+### ❤️ Thank You
+
+- Claude Sonnet 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.3 (2026-07-02)
 
 ### 🧱 Updated Dependencies

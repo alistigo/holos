@@ -1,3 +1,24 @@
+## 0.2.8 (2026-07-19)
+
+### 🚀 Features
+
+- **sentry-plugin:** implement E2E tests for sentry-error-capture.feature ([90efc2d](https://github.com/alistigo/holos/commit/90efc2d))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-claude-artifact-list-storage to 0.2.6
+- Updated alistigo-local-storage-repository to 0.2.6
+- Updated alistigo-list-components-react to 0.2.6
+- Updated alistigo-artifact-plugin-api to 0.1.1
+- Updated alistigo-document-editor to 0.2.6
+- Updated alistigo-document-format to 0.2.6
+- Updated alistigo-domain to 0.2.6
+- Updated alistigo-logger to 0.2.6
+
+### ❤️ Thank You
+
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.7 (2026-07-02)
 
 ### 🧱 Updated Dependencies

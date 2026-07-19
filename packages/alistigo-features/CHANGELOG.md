@@ -1,3 +1,19 @@
+## 0.2.6 (2026-07-19)
+
+### 🚀 Features
+
+- **sentry-plugin:** implement E2E tests for sentry-error-capture.feature ([90efc2d](https://github.com/alistigo/holos/commit/90efc2d))
+- **features:** Gherkin specs for the Sentry and PostHog plugins ([#21](https://github.com/alistigo/holos/issues/21))
+
+### 🩹 Fixes
+
+- **features-runner:** make the @todo tag actually skip scenarios ([#21](https://github.com/alistigo/holos/issues/21))
+
+### ❤️ Thank You
+
+- Claude Sonnet 5
+- Mikael Labrut @MLKiiwy
+
 
 
 
