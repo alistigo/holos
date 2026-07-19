@@ -18,7 +18,8 @@
       host (or a static-site step) writes the JSON-LD document inline. In
       tests, `driver-playwright` rewrites this tag via `page.route()` to seed
       the scenario's fixture. In dev, an empty document is shipped here and
-      the dev fixture picker (DevFixturePicker) lets you swap it at runtime.
+      the playground host form's Document selector writes this tag via the
+      ?document= URL param before auto-mount.
     -->
     <script type="application/json" id="alistigo-document">
       {
@@ -39,7 +40,6 @@
       }
     </script>
 
-    <div id="dev-tools"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

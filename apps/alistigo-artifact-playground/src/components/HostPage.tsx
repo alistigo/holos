@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { type Config, useHostConfig } from "../hooks/useHostConfig";
+import { useDocumentFixtures } from "../hooks/useDocumentFixtures";
 import { useIframeControls } from "../hooks/useIframeControls";
 import HostForm from "./HostForm";
 
@@ -10,6 +11,9 @@ function buildIframeSrc(config: Config): string {
   params.set("aiContext", config.aiContext);
   if (config.app === "@alistigo/artifact-list") {
     params.set("readonly", String(config.readonly));
+    if (config.document !== "") {
+      params.set("document", config.document);
+    }
   }
   if (Object.keys(config.plugins).length > 0) {
     params.set("plugins", JSON.stringify(config.plugins));
@@ -20,6 +24,7 @@ function buildIframeSrc(config: Config): string {
 function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
+  const documentNames = useDocumentFixtures();
 
   return (
     <div className="flex h-full w-full font-sans text-sm">
@@ -28,6 +33,7 @@ function HostPage(): JSX.Element {
         onConfigChange={setConfig}
         onReload={reload}
         onClearData={clearData}
+        documentNames={documentNames}
       />
       <div className="w-1/2 relative">
         <iframe

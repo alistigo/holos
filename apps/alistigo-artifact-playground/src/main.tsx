@@ -1,9 +1,12 @@
 import "@alistigo/artifact-list";
 
-import { createElement, StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import type { AlistigoDocument } from "@alistigo/document-format";
 
-import DevFixturePicker from "./components/DevFixturePicker.js";
+// Eager fixture map — tree-shaken out of prod builds.
+const FIXTURES_RAW = import.meta.glob<AlistigoDocument>("../fixtures/*.json", {
+  eager: true,
+  import: "default",
+});
 
 // Inject URL params into #alistigo-config before DOMContentLoaded fires.
 // @alistigo/artifact-list registers DOMContentLoaded → autoMount on import,
@@ -31,7 +34,22 @@ if (params.has("readonly") || params.has("lang") || params.has("app") || params.
   configEl.textContent = JSON.stringify(cfg);
 }
 
-const toolsEl = document.getElementById("dev-tools");
-if (toolsEl) {
-  createRoot(toolsEl).render(createElement(StrictMode, null, createElement(DevFixturePicker)));
+// If the host selected a document fixture, replace the inline #alistigo-document
+// script tag so auto-mount picks up the chosen fixture instead of the default.
+const documentName = params.get("document");
+if (documentName != null) {
+  const fixtureKey = Object.keys(FIXTURES_RAW).find((k) =>
+    k.endsWith(`/${documentName}.json`),
+  );
+  if (fixtureKey != null) {
+    const doc = FIXTURES_RAW[fixtureKey];
+    let docEl = document.getElementById("alistigo-document") as HTMLScriptElement | null;
+    if (!docEl) {
+      docEl = document.createElement("script");
+      docEl.type = "application/json";
+      docEl.id = "alistigo-document";
+      document.body.prepend(docEl);
+    }
+    docEl.textContent = JSON.stringify(doc);
+  }
 }

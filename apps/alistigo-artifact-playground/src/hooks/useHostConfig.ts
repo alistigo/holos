@@ -6,6 +6,7 @@ export interface Config {
   lang: string;
   aiContext: string;
   readonly: boolean;
+  document: string;
   /** Enabled plugins, keyed by npm package name, each with its own (currently empty) config. */
   plugins: Record<string, Record<string, unknown>>;
 }
@@ -16,6 +17,7 @@ export function useHostConfig() {
     lang: "en",
     aiContext: "claude",
     readonly: false,
+    document: "",
     plugins: {},
   });
   return { config, setConfig };

@@ -15,6 +15,7 @@ const defaultConfig = {
   lang: "en",
   aiContext: "claude",
   readonly: false,
+  document: "",
   plugins: {},
 };
 
@@ -24,6 +25,7 @@ export const Default: Story = {
     onConfigChange: () => {},
     onReload: () => {},
     onClearData: () => {},
+    documentNames: ["duplicates", "empty", "groceries"],
   },
 };
 
@@ -33,6 +35,7 @@ export const ReadOnly: Story = {
     onConfigChange: () => {},
     onReload: () => {},
     onClearData: () => {},
+    documentNames: ["duplicates", "empty", "groceries"],
   },
 };
 
@@ -48,5 +51,6 @@ export const WithPluginsEnabled: Story = {
     onConfigChange: () => {},
     onReload: () => {},
     onClearData: () => {},
+    documentNames: ["duplicates", "empty", "groceries"],
   },
 };

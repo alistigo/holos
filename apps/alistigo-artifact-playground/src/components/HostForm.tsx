@@ -7,9 +7,10 @@ interface HostFormProps {
   onConfigChange: Dispatch<SetStateAction<Config>>;
   onReload: () => void;
   onClearData: () => void;
+  documentNames: string[];
 }
 
-function HostForm({ config, onConfigChange, onReload, onClearData }: HostFormProps): JSX.Element {
+function HostForm({ config, onConfigChange, onReload, onClearData, documentNames }: HostFormProps): JSX.Element {
   const availablePlugins = getAvailablePlugins(config.app);
 
   function togglePlugin(pluginName: string, enabled: boolean): void {
@@ -33,7 +34,7 @@ function HostForm({ config, onConfigChange, onReload, onClearData }: HostFormPro
         <select
           className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
           value={config.app}
-          onChange={(e) => onConfigChange((c) => ({ ...c, app: e.target.value }))}
+          onChange={(e) => onConfigChange((c) => ({ ...c, app: e.target.value, document: "" }))}
         >
           {KNOWN_APPS.map((app) => (
             <option key={app} value={app}>
@@ -78,6 +79,24 @@ function HostForm({ config, onConfigChange, onReload, onClearData }: HostFormPro
             onChange={(e) => onConfigChange((c) => ({ ...c, readonly: e.target.checked }))}
           />
           <span className="font-medium text-gray-600">Read-only</span>
+        </label>
+      )}
+
+      {config.app === "@alistigo/artifact-list" && (
+        <label className="flex flex-col gap-1">
+          <span className="font-medium text-gray-600">Document</span>
+          <select
+            className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
+            value={config.document}
+            onChange={(e) => onConfigChange((c) => ({ ...c, document: e.target.value }))}
+          >
+            <option value="">— default —</option>
+            {documentNames.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
         </label>
       )}
 
