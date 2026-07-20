@@ -1,3 +1,25 @@
+## 0.2.10 (2026-07-20)
+
+### 🚀 Features
+
+- **playground:** move document selector to host form ([ae75ba9](https://github.com/alistigo/holos/commit/ae75ba9))
+
+### 🩹 Fixes
+
+- **playground:** add ^build dependsOn to dev and build targets ([acdcd67](https://github.com/alistigo/holos/commit/acdcd67))
+- **artifact-list:** replace form submission with JS handlers; align playground sandbox ([6811e7e](https://github.com/alistigo/holos/commit/6811e7e))
+- **playground:** migrate fixtures to current AlistigoDocument format ([e22b8a8](https://github.com/alistigo/holos/commit/e22b8a8))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.7
+- Updated alistigo-artifact-list to 0.2.9
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.9 (2026-07-19)
 
 ### 🚀 Features

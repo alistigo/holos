@@ -1,3 +1,14 @@
+## 0.2.7 (2026-07-20)
+
+### 🩹 Fixes
+
+- **artifact-list:** replace form submission with JS handlers; align playground sandbox ([6811e7e](https://github.com/alistigo/holos/commit/6811e7e))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.6 (2026-07-19)
 
 ### 🧱 Updated Dependencies

@@ -1,3 +1,17 @@
+## 0.2.9 (2026-07-20)
+
+### 🩹 Fixes
+
+- **artifact-list:** show error message in ArtifactErrorBoundary instead of blank iframe ([fbdbaf9](https://github.com/alistigo/holos/commit/fbdbaf9))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.7
+
+### ❤️ Thank You
+
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.8 (2026-07-19)
 
 ### 🚀 Features
