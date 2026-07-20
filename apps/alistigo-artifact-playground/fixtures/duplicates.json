@@ -5,9 +5,24 @@
   "alistigo:schemaVersion": "1.0.0",
   "name": "Duplicates allowed",
   "itemListElement": [
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000201", "position": 1, "name": "Buy bread" },
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000202", "position": 2, "name": "Buy bread" },
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000203", "position": 3, "name": "Buy milk" }
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000201",
+      "position": 1,
+      "name": "Buy bread"
+    },
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000202",
+      "position": 2,
+      "name": "Buy bread"
+    },
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000203",
+      "position": 3,
+      "name": "Buy milk"
+    }
   ],
   "alistigo:listEventLog": []
 }
