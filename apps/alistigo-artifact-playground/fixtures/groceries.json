@@ -5,10 +5,30 @@
   "alistigo:schemaVersion": "1.0.0",
   "name": "Groceries",
   "itemListElement": [
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000101", "position": 1, "name": "Buy bread" },
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000102", "position": 2, "name": "Buy milk" },
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000103", "position": 3, "name": "Buy eggs" },
-    { "@type": "ListItem", "alistigo:listElementId": "lse_01jx0000000000000000000104", "position": 4, "name": "Pick up dry cleaning" }
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000101",
+      "position": 1,
+      "name": "Buy bread"
+    },
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000102",
+      "position": 2,
+      "name": "Buy milk"
+    },
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000103",
+      "position": 3,
+      "name": "Buy eggs"
+    },
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_01jx0000000000000000000104",
+      "position": 4,
+      "name": "Pick up dry cleaning"
+    }
   ],
   "alistigo:listEventLog": []
 }
