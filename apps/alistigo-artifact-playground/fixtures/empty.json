@@ -1,13 +1,9 @@
 {
-  "@context": "https://schema.org",
-  "@type": "alistigo:Document",
-  "meta": {
-    "listId": "urn:uuid:01900000-0000-7000-8000-000000000001",
-    "formatVersion": "1.0.0",
-    "name": "Empty list",
-    "dateCreated": "2026-05-01T00:00:00.000Z",
-    "dateModified": "2026-05-01T00:00:00.000Z",
-    "eventLog": { "presence": "absent", "wipedAt": "2026-05-01T00:00:00.000Z" }
-  },
-  "projection": { "@type": "ItemList", "itemListElement": [], "numberOfItems": 0 }
+  "@context": { "@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/" },
+  "@type": "ItemList",
+  "alistigo:listId": "lst_01jx0000000000000000000001",
+  "alistigo:schemaVersion": "1.0.0",
+  "name": "Empty list",
+  "itemListElement": [],
+  "alistigo:listEventLog": []
 }
