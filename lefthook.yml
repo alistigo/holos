@@ -11,6 +11,8 @@ pre-push:
       run: pnpm run qa:arch-check
     fallow-audit:
       run: pnpm run qa:audit
+    artifact-sandbox-check:
+      run: pnpm run qa:artifact-sandbox-check
     typecheck:
       run: pnpm run build:typecheck
 
