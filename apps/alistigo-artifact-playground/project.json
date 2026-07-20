@@ -6,6 +6,7 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist/en"],
       "options": {
         "command": "vite build",
@@ -14,6 +15,7 @@
     },
     "build:fr": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist/fr"],
       "options": {
         "command": "LOCALE=fr vite build",
@@ -30,6 +32,7 @@
     },
     "dev": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "options": {
         "command": "vite",
         "cwd": "apps/alistigo-artifact-playground"
@@ -50,6 +53,7 @@
     },
     "dev:debug": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "options": {
         "command": "VITE_ALISTIGO_DEBUG=true vite",
         "cwd": "apps/alistigo-artifact-playground"
