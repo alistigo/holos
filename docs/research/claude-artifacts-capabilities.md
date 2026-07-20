@@ -135,6 +135,20 @@ Uploading a `.html` file as a live artifact directly is **not supported**. Howev
 
 ## iframe Security (Confirmed via CSP Inspection)
 
+### Sandbox & Permissions Policy (Confirmed from claude.ai iframe inspection)
+
+```html
+<iframe
+  sandbox="allow-scripts allow-same-origin"
+  allow="clipboard-write"
+  ...
+/>
+```
+
+- `allow-forms` is **NOT** present — the `submit` event does not fire; use JS click/keydown handlers instead of `<form onSubmit>`
+- `allow-popups` is **NOT** present — `window.open()` is blocked
+- `allow-top-navigation` is **NOT** present — the iframe cannot navigate the parent
+
 ### Allowed
 - `'unsafe-eval'` — `eval()` works
 - `'unsafe-inline'` — inline `<script>` and `<style>` tags work
@@ -178,3 +192,4 @@ https://logs.browser-intake-us5-datadoghq.com/api/v2/logs?dd-api-key=pub718...
 | WebRTC | ❌ Explicitly blocked |
 | Nested iframes in artifacts | ❌ Only self + blob: |
 | eval() / inline scripts | ✅ Both allowed |
+| Native HTML form submission (`allow-forms`) | ❌ Not in sandbox |
