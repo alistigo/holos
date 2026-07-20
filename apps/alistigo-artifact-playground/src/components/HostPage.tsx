@@ -25,6 +25,7 @@ function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
   const documentNames = useDocumentFixtures();
+  const iframeAllow = config.aiContext === "claude" ? "clipboard-write" : "fullscreen, clipboard-write";
 
   return (
     <div className="flex h-full w-full font-sans text-sm">
@@ -45,7 +46,7 @@ function HostPage(): JSX.Element {
           sandbox="allow-scripts allow-same-origin"
           referrerPolicy="no-referrer"
           data-no-service-worker="true"
-          allow="fullscreen, clipboard-write"
+          allow={iframeAllow}
         />
       </div>
     </div>

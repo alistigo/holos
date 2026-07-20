@@ -1,7 +1,8 @@
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import { type FormEvent, type JSX, useState } from "react";
+import type { JSX, KeyboardEvent } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button.js";
 import { Input } from "../ui/input.js";
 
@@ -16,25 +17,29 @@ export function AddElementInput({ onAdd, disabled = false }: AddElementInputProp
   const trimmed = text.trim();
   const canSubmit = !disabled && trimmed.length > 0;
 
-  function submit(event: FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
+  function submit(): void {
     if (!canSubmit) return;
     onAdd(trimmed);
     setText("");
   }
 
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>): void {
+    if (e.key === "Enter") submit();
+  }
+
   return (
-    <form onSubmit={submit} className="flex items-center gap-2">
+    <div className="flex items-center gap-2">
       <Input
         aria-label={_(msg`Add element`)}
         value={text}
         onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
         disabled={disabled}
         placeholder={_(msg`Add an element…`)}
       />
-      <Button type="submit" disabled={!canSubmit}>
+      <Button type="button" disabled={!canSubmit} onClick={submit}>
         <Trans>Add</Trans>
       </Button>
-    </form>
+    </div>
   );
 }
