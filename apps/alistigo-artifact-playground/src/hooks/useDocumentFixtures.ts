@@ -13,3 +13,14 @@ export function useDocumentFixtures(): string[] {
       .sort();
   }, []);
 }
+
+export function useDocumentFixturesMap(): Map<string, AlistigoDocument> {
+  return useMemo(() => {
+    const map = new Map<string, AlistigoDocument>();
+    for (const [path, doc] of Object.entries(FIXTURES_RAW)) {
+      const name = path.replace(/^.*\/(.*)\.json$/, "$1");
+      map.set(name, doc);
+    }
+    return map;
+  }, []);
+}
