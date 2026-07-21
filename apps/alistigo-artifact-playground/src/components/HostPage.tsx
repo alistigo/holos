@@ -52,6 +52,7 @@ function HostPage(): JSX.Element {
         docJson,
         scriptUrl: ARTIFACT_ENTRY_URL,
         csp: SRCDOC_CSP,
+        isDev: import.meta.env.DEV,
       }),
     [config, docJson],
   );

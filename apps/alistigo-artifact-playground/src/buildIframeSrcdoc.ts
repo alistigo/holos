@@ -245,6 +245,8 @@ export interface BuildIframeSrcdocOptions {
   scriptUrl: string;
   /** CSP directive string for the <meta http-equiv> tag. */
   csp: string;
+  /** True in dev — injects the @vitejs/plugin-react preamble the HTML transform hook normally adds. */
+  isDev?: boolean;
 }
 
 export function buildIframeSrcdoc({
@@ -252,6 +254,7 @@ export function buildIframeSrcdoc({
   docJson,
   scriptUrl,
   csp,
+  isDev,
 }: BuildIframeSrcdocOptions): string {
   const cfg: Record<string, unknown> = {
     app: config.app,
@@ -274,6 +277,16 @@ export function buildIframeSrcdoc({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${config.app}</title>
     <script type="application/json" id="alistigo-config">${cfgJson}</script>
+    ${
+      isDev
+        ? `<script type="module">
+      import { injectIntoGlobalHook } from "/@react-refresh";
+      injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => {};
+      window.$RefreshSig$ = () => (type) => type;
+    </script>`
+        : ""
+    }
   </head>
   <body id="artifacts-component-root-html">
     <script type="application/json" id="alistigo-document">${docJson}</script>
