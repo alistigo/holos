@@ -6,6 +6,17 @@ import { createLogger } from "@alistigo/logger";
 
 const log = createLogger("alistigo:claude-storage");
 
+const STORAGE_TIMEOUT_MS = 1000;
+
+function withStorageTimeout<T>(p: Promise<T>): Promise<T> {
+  return Promise.race([
+    p,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error("Storage operation timed out")), STORAGE_TIMEOUT_MS),
+    ),
+  ]);
+}
+
 // Key format: no whitespace, no / \ ' " — TypeID format (alistigo-{listId}) is safe
 // since TypeIDs use only alphanumeric chars and underscores.
 const storageKey = (listId: ListId): string => `alistigo-${listId.toString()}`;
@@ -23,7 +34,7 @@ export class ClaudeArtifactListRepository implements AlistigoListStore {
   async load(id: ListId): Promise<List | undefined> {
     try {
       log.debug({ key: storageKey(id) }, "loading from claude storage");
-      const result = await this.storage.get(storageKey(id));
+      const result = await withStorageTimeout(this.storage.get(storageKey(id)));
       const doc = JSON.parse(result.value) as AlistigoDocument;
       return ListDocumentSerializer.deserialize(doc);
     } catch (err) {
@@ -36,13 +47,13 @@ export class ClaudeArtifactListRepository implements AlistigoListStore {
   async save(list: List): Promise<void> {
     const prev = await this.loadDocument(list.id);
     const doc = ListDocumentSerializer.serialize(list, prev);
-    await this.storage.set(storageKey(list.id), JSON.stringify(doc));
+    await withStorageTimeout(this.storage.set(storageKey(list.id), JSON.stringify(doc)));
     log.debug({ key: storageKey(list.id) }, "saved to claude storage");
   }
 
   async loadDocument(id: ListId): Promise<AlistigoDocument | undefined> {
     try {
-      const result = await this.storage.get(storageKey(id));
+      const result = await withStorageTimeout(this.storage.get(storageKey(id)));
       return JSON.parse(result.value) as AlistigoDocument;
     } catch (err) {
       log.debug({ err }, "loadDocument from claude storage returned nothing (key may not exist)");
@@ -51,11 +62,7 @@ export class ClaudeArtifactListRepository implements AlistigoListStore {
   }
 }
 
-/** Returns true when running inside a Claude artifact that exposes window.storage */
+/** Returns true when running inside a Claude artifact that exposes window.claude */
 export function isClaudeArtifactContext(): boolean {
-  return (
-    typeof window !== "undefined" &&
-    "storage" in window &&
-    typeof (window as Window).storage?.get === "function"
-  );
+  return typeof window !== "undefined" && typeof window.claude?.complete === "function";
 }
