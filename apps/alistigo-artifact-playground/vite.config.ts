@@ -36,6 +36,18 @@ const activeCatalogPath = path.join(componentsPackageRoot, `src/locales/${LOCALE
 export default defineConfig({
   base: "./", // relative paths — required for GitHub Pages subpath deployment
   plugins: [
+    {
+      name: "patch-vite-client-console-debug",
+      transform(code, id) {
+        if (id.includes("/vite/dist/client/client.mjs")) {
+          return {
+            code: code.replaceAll("console.debug(", "(console.debug || console.log)("),
+            map: null,
+          };
+        }
+        return null;
+      },
+    },
     react({
       babel: {
         plugins: [linguiMacro],
