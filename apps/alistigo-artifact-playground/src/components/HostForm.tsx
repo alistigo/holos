@@ -67,7 +67,6 @@ function HostForm({
           className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
           value={config.aiContext}
           onChange={(e) => onConfigChange((c) => ({ ...c, aiContext: e.target.value }))}
-          disabled
         >
           {AI_CONTEXTS.map((ctx) => (
             <option key={ctx} value={ctx}>

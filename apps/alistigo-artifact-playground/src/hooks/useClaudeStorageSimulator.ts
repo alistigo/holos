@@ -41,16 +41,22 @@ function applyStorageOp(
   return handler(map, { key, value, prefix });
 }
 
-export function useClaudeStorageSimulator(iframeRef: RefObject<HTMLIFrameElement | null>) {
+export function useClaudeStorageSimulator(
+  iframeRef: RefObject<HTMLIFrameElement | null>,
+  enabled: boolean,
+) {
   const storeRef = useRef(new Map<string, string>());
   const sharedRef = useRef(new Map<string, string>());
 
   const clearStorage = useCallback(() => {
+    if (!enabled) return;
     storeRef.current.clear();
     sharedRef.current.clear();
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
+    if (!enabled) return;
+
     function processStorageMessage(event: MessageEvent, win: Window) {
       const { type, id, key, value, prefix, shared } = event.data as {
         type: string;
@@ -73,7 +79,7 @@ export function useClaudeStorageSimulator(iframeRef: RefObject<HTMLIFrameElement
 
     window.addEventListener("message", handle);
     return () => window.removeEventListener("message", handle);
-  }, [iframeRef]);
+  }, [iframeRef, enabled]);
 
   return { clearStorage };
 }

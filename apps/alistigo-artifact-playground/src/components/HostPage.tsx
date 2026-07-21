@@ -40,7 +40,7 @@ function useDocJson(config: Config): string {
 function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
-  const { clearStorage } = useClaudeStorageSimulator(iframeRef);
+  const { clearStorage } = useClaudeStorageSimulator(iframeRef, config.aiContext === "claude");
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
 
