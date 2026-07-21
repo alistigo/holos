@@ -20,6 +20,11 @@ interface ClaudeStorage {
   list(prefix?: string, shared?: boolean): Promise<ClaudeStorageListResult | null>;
 }
 
+interface ClaudeApi {
+  complete(prompt: string): Promise<string>;
+}
+
 interface Window {
   storage?: ClaudeStorage;
+  claude?: ClaudeApi;
 }

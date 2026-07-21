@@ -1,6 +1,7 @@
 import type { JSX } from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
+import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useDocumentFixturesMap } from "../hooks/useDocumentFixtures";
 import { type Config, useHostConfig } from "../hooks/useHostConfig";
 import { useIframeControls } from "../hooks/useIframeControls";
@@ -39,8 +40,14 @@ function useDocJson(config: Config): string {
 function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
+  const { clearStorage } = useClaudeStorageSimulator(iframeRef);
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
+
+  const handleClearData = useCallback(async () => {
+    clearStorage();
+    await clearData();
+  }, [clearStorage, clearData]);
 
   const iframeAllow =
     config.aiContext === "claude" ? "clipboard-write" : "fullscreen, clipboard-write";
@@ -63,7 +70,7 @@ function HostPage(): JSX.Element {
         config={config}
         onConfigChange={setConfig}
         onReload={reload}
-        onClearData={clearData}
+        onClearData={handleClearData}
         documentNames={documentNames}
       />
       <div className="w-1/2">
