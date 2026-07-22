@@ -3,7 +3,7 @@ import type { Config } from "./hooks/useHostConfig";
 
 export const SRCDOC_CSP = [
   "default-src 'none'",
-  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com http://localhost:* http://127.0.0.1:*",
+  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net http://localhost:* http://127.0.0.1:*",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",

@@ -17,6 +17,8 @@ export class AlistigoWorld extends World {
   pageErrors: string[] = [];
 
   private pluginPackageName: string | undefined;
+  private pluginConfig: Record<string, unknown> | undefined;
+  private lastDocument: AlistigoDocument | undefined;
 
   constructor(opts: IWorldOptions) {
     super(opts);
@@ -48,15 +50,34 @@ export class AlistigoWorld extends World {
   }
 
   // fallow-ignore-next-line unused-class-member
-  setPluginConfig(_config: Record<string, unknown>): void {}
+  setPluginConfig(config: Record<string, unknown>): void {
+    this.pluginConfig = config;
+  }
 
-  /** Enables the plugin under test via the playground's checkbox. */
+  /** Enables the plugin under test via the playground's checkbox, optionally filling config. */
   // fallow-ignore-next-line unused-class-member
   async initializeArtifactWithPlugin(): Promise<void> {
     if (!this.pluginPackageName) {
       throw new Error("No plugin under test — call setPluginUnderTest first");
     }
+    const checkboxNav = this.page.waitForEvent("framenavigated", {
+      predicate: (frame) => frame.name() === "artifact-preview",
+      timeout: 5000,
+    });
     await this.page.getByRole("checkbox", { name: this.pluginPackageName }).check();
+    await checkboxNav;
+
+    if (this.pluginConfig && Object.keys(this.pluginConfig).length > 0) {
+      const configNav = this.page.waitForEvent("framenavigated", {
+        predicate: (frame) => frame.name() === "artifact-preview",
+        timeout: 5000,
+      });
+      await this.page
+        .getByRole("textbox", { name: `Config for ${this.pluginPackageName}` })
+        .fill(JSON.stringify(this.pluginConfig));
+      await configNav;
+    }
+
     await this.applicationPage.waitForArtifactReady();
   }
 
@@ -68,14 +89,37 @@ export class AlistigoWorld extends World {
 
   // fallow-ignore-next-line unused-class-member
   async setDocument(document: AlistigoDocument): Promise<void> {
-    if (this.applicationPage) {
-      await this.page.evaluate(() => localStorage.clear());
-      await this.page.getByLabel("Document").selectOption("__raw__");
-      await this.page
-        .getByRole("textbox", { name: /document json/i })
-        .fill(JSON.stringify(document));
-      await this.applicationPage.waitForArtifactReady();
-    }
+    if (!this.applicationPage) return;
+    this.lastDocument = document;
+    await this.page.evaluate(() => localStorage.clear());
+    await this.page.getByLabel("Document").selectOption("__raw__");
+    const frameNavigated = this.page.waitForEvent("framenavigated", {
+      predicate: (frame) => frame.name() === "artifact-preview",
+      timeout: 5000,
+    });
+    await this.page
+      .getByRole("textbox", { name: /document json/i })
+      .fill(JSON.stringify(document));
+    await frameNavigated;
+    await this.applicationPage.waitForArtifactReady();
+  }
+
+  // fallow-ignore-next-line unused-class-member
+  async reloadList(): Promise<void> {
+    if (!this.lastDocument) throw new Error("No document set — call setDocument first");
+    await this.page.reload();
+    // Wait for the initial iframe to load after page reload before setting up nav listener
+    await this.applicationPage.waitForArtifactReady();
+    await this.page.getByLabel("Document").selectOption("__raw__");
+    const frameNavigated = this.page.waitForEvent("framenavigated", {
+      predicate: (frame) => frame.name() === "artifact-preview",
+      timeout: 5000,
+    });
+    await this.page
+      .getByRole("textbox", { name: /document json/i })
+      .fill(JSON.stringify(this.lastDocument));
+    await frameNavigated;
+    await this.applicationPage.waitForArtifactReady();
   }
 }
 
