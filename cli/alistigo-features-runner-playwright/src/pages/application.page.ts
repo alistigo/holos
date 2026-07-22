@@ -71,7 +71,9 @@ export class ApplicationPage {
 
   // fallow-ignore-next-line unused-class-member
   async deleteElement(text: string): Promise<void> {
-    const button = this.artifactFrame.getByRole(ROLES.rowDelete.role, { name: deleteButtonName(text) });
+    const button = this.artifactFrame.getByRole(ROLES.rowDelete.role, {
+      name: deleteButtonName(text),
+    });
     const count = await button.count();
     if (count === 0) {
       throw new Error(`No element with text "${text}" found to delete.`);
