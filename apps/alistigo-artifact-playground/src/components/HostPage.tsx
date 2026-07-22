@@ -28,13 +28,18 @@ const DEFAULT_DOC_JSON = JSON.stringify({
   ],
 });
 
+function rawOrDefault(raw: string): string {
+  return raw || DEFAULT_DOC_JSON;
+}
+
 function useDocJson(config: Config): string {
   const fixturesMap = useDocumentFixturesMap();
   return useMemo(() => {
     if (config.document === "") return DEFAULT_DOC_JSON;
+    if (config.document === "__raw__") return rawOrDefault(config.rawDocument);
     const doc = fixturesMap.get(config.document);
     return doc !== undefined ? JSON.stringify(doc) : DEFAULT_DOC_JSON;
-  }, [config.document, fixturesMap]);
+  }, [config.document, config.rawDocument, fixturesMap]);
 }
 
 function HostPage(): JSX.Element {

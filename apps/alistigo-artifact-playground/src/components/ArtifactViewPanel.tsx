@@ -55,6 +55,7 @@ export function ArtifactViewPanel({
             ref={iframeRef}
             srcDoc={srcdoc}
             title="Artifact preview"
+            name="artifact-preview"
             className="h-full w-full border-none"
             sandbox="allow-scripts allow-same-origin"
             referrerPolicy="no-referrer"

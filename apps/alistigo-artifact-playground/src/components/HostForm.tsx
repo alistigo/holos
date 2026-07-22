@@ -77,32 +77,43 @@ function HostForm({
       </label>
 
       {config.app === "@alistigo/artifact-list" && (
-        <label className="flex flex-row items-center gap-2">
-          <input
-            type="checkbox"
-            checked={config.readonly}
-            onChange={(e) => onConfigChange((c) => ({ ...c, readonly: e.target.checked }))}
-          />
-          <span className="font-medium text-gray-600">Read-only</span>
-        </label>
-      )}
+        <>
+          <label className="flex flex-row items-center gap-2">
+            <input
+              type="checkbox"
+              checked={config.readonly}
+              onChange={(e) => onConfigChange((c) => ({ ...c, readonly: e.target.checked }))}
+            />
+            <span className="font-medium text-gray-600">Read-only</span>
+          </label>
 
-      {config.app === "@alistigo/artifact-list" && (
-        <label className="flex flex-col gap-1">
-          <span className="font-medium text-gray-600">Document</span>
-          <select
-            className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
-            value={config.document}
-            onChange={(e) => onConfigChange((c) => ({ ...c, document: e.target.value }))}
-          >
-            <option value="">— default —</option>
-            {documentNames.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label className="flex flex-col gap-1">
+            <span className="font-medium text-gray-600">Document</span>
+            <select
+              className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
+              value={config.document}
+              onChange={(e) => onConfigChange((c) => ({ ...c, document: e.target.value }))}
+            >
+              <option value="">— default —</option>
+              <option value="__raw__">— enter JSON —</option>
+              {documentNames.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+            {config.document === "__raw__" && (
+              <textarea
+                aria-label="Document JSON"
+                className="px-2 py-1.5 border border-gray-300 rounded text-xs bg-white font-mono resize-y"
+                rows={6}
+                value={config.rawDocument}
+                onChange={(e) => onConfigChange((c) => ({ ...c, rawDocument: e.target.value }))}
+                placeholder='{"@context": {"@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/"}, ...}'
+              />
+            )}
+          </label>
+        </>
       )}
 
       {availablePlugins.length > 0 && (

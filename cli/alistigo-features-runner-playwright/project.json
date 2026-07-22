@@ -16,14 +16,8 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash -c 'set -m; nx run alistigo-artifact-playground:preview & nx run alistigo-features-runner-playwright:run-all-features; RESULT=$?; kill %1 2>/dev/null; wait %1 2>/dev/null; exit $RESULT'"
-      },
-      "dependsOn": [
-        {
-          "projects": ["alistigo-artifact-playground"],
-          "target": "build"
-        }
-      ]
+        "command": "bash -c 'set -m; nx run alistigo-artifact-playground:dev & sleep 3 && nx run alistigo-features-runner-playwright:run-all-features; RESULT=$?; kill %1 2>/dev/null; wait %1 2>/dev/null; exit $RESULT'"
+      }
     },
     "typecheck": {
       "executor": "nx:run-commands",
