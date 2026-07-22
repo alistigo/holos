@@ -2,7 +2,6 @@ import type { AlistigoDocument } from "@alistigo/document-format";
 import { type IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import type { Browser, BrowserContext, Page } from "playwright";
 import { ApplicationPage } from "../pages/application.page";
-import { buildEmptyDocument } from "./document";
 import { fakePluginSource } from "./fixtures/index.js";
 import { installPluginRoute } from "./plugin-route";
 
@@ -17,9 +16,7 @@ export class AlistigoWorld extends World {
   /** Uncaught page-level errors, collected via the page's "pageerror" event. */
   pageErrors: string[] = [];
 
-  private document: AlistigoDocument = buildEmptyDocument();
   private pluginPackageName: string | undefined;
-  private pluginConfig: Record<string, unknown> | undefined;
 
   constructor(opts: IWorldOptions) {
     super(opts);
@@ -51,9 +48,7 @@ export class AlistigoWorld extends World {
   }
 
   // fallow-ignore-next-line unused-class-member
-  setPluginConfig(config: Record<string, unknown>): void {
-    this.pluginConfig = config;
-  }
+  setPluginConfig(_config: Record<string, unknown>): void {}
 
   /** Enables the plugin under test via the playground's checkbox. */
   // fallow-ignore-next-line unused-class-member
@@ -73,8 +68,6 @@ export class AlistigoWorld extends World {
 
   // fallow-ignore-next-line unused-class-member
   async setDocument(document: AlistigoDocument): Promise<void> {
-    this.document = document;
-
     if (this.applicationPage) {
       await this.page.evaluate(() => localStorage.clear());
       await this.page.getByLabel("Document").selectOption("__raw__");
