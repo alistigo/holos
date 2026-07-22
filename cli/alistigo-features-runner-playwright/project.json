@@ -15,10 +15,7 @@
     },
     "test": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        "^build",
-        { "projects": ["alistigo-artifact-playground"], "target": "build" }
-      ],
+      "dependsOn": ["^build", { "projects": ["alistigo-artifact-playground"], "target": "build" }],
       "options": {
         "command": "bash -c 'set -m; nx run alistigo-artifact-playground:dev & sleep 5 && nx run alistigo-features-runner-playwright:run-all-features; RESULT=$?; kill %1 2>/dev/null; wait %1 2>/dev/null; exit $RESULT'"
       }
