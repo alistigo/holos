@@ -7,6 +7,8 @@ export interface Config {
   aiContext: string;
   readonly: boolean;
   document: string;
+  /** Raw JSON-LD document string, used when document === "__raw__". */
+  rawDocument: string;
   /** Enabled plugins, keyed by npm package name, each with its own (currently empty) config. */
   plugins: Record<string, Record<string, unknown>>;
 }
@@ -18,6 +20,7 @@ export function useHostConfig() {
     aiContext: "claude",
     readonly: false,
     document: "",
+    rawDocument: "",
     plugins: {},
   });
   return { config, setConfig };

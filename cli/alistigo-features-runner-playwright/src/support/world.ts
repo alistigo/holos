@@ -3,7 +3,6 @@ import { type IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumb
 import type { Browser, BrowserContext, Page } from "playwright";
 import { ApplicationPage } from "../pages/application.page";
 import { buildEmptyDocument } from "./document";
-import { installDocumentRoute } from "./document-injection";
 import { fakePluginSource } from "./fixtures/index.js";
 import { installPluginRoute } from "./plugin-route";
 
@@ -24,7 +23,7 @@ export class AlistigoWorld extends World {
 
   constructor(opts: IWorldOptions) {
     super(opts);
-    this.baseUrl = process.env.ALISTIGO_APP_URL ?? "http://localhost:5173/iframe.html";
+    this.baseUrl = process.env.ALISTIGO_APP_URL ?? "http://localhost:5173";
   }
 
   // fallow-ignore-next-line unused-class-member
@@ -37,7 +36,6 @@ export class AlistigoWorld extends World {
     this.page = await this.context.newPage();
     this.page.on("pageerror", (err) => this.pageErrors.push(err.message));
     this.applicationPage = new ApplicationPage(this.baseUrl, this.page);
-    await installDocumentRoute(this.page, this.baseUrl, () => this.document);
     await this.applicationPage.open();
   }
 
@@ -57,15 +55,14 @@ export class AlistigoWorld extends World {
     this.pluginConfig = config;
   }
 
-  /** Mounts the artifact with the plugin under test, using the configured (or empty) config. */
+  /** Enables the plugin under test via the playground's checkbox. */
   // fallow-ignore-next-line unused-class-member
   async initializeArtifactWithPlugin(): Promise<void> {
     if (!this.pluginPackageName) {
       throw new Error("No plugin under test — call setPluginUnderTest first");
     }
-    await this.applicationPage.openWithPlugins({
-      [this.pluginPackageName]: this.pluginConfig ?? {},
-    });
+    await this.page.getByRole("checkbox", { name: this.pluginPackageName }).check();
+    await this.applicationPage.waitForArtifactReady();
   }
 
   // fallow-ignore-next-line unused-class-member
@@ -79,10 +76,12 @@ export class AlistigoWorld extends World {
     this.document = document;
 
     if (this.applicationPage) {
-      // Clear localStorage so the new fixture always seeds fresh (not blocked by
-      // any state left from the initial beforeScenario open or a previous step).
       await this.page.evaluate(() => localStorage.clear());
-      await this.applicationPage.reload();
+      await this.page.getByLabel("Document").selectOption("__raw__");
+      await this.page
+        .getByRole("textbox", { name: /document json/i })
+        .fill(JSON.stringify(document));
+      await this.applicationPage.waitForArtifactReady();
     }
   }
 }
