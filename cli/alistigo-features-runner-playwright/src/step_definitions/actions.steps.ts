@@ -2,7 +2,7 @@ import { When } from "@cucumber/cucumber";
 import type { AlistigoWorld } from "../support/world";
 
 When("I open the list", async function (this: AlistigoWorld) {
-  await this.applicationPage.open();
+  await this.applicationPage.waitForArtifactReady();
 });
 
 When("I add {string}", async function (this: AlistigoWorld, text: string) {
@@ -21,7 +21,7 @@ When("I delete row {int}", async function (this: AlistigoWorld, rowNumber: numbe
 });
 
 When("I reload the list", async function (this: AlistigoWorld) {
-  await this.applicationPage.reload();
+  await this.reloadList();
 });
 
 When("the artifact initialize", async function (this: AlistigoWorld) {

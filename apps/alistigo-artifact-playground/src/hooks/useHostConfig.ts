@@ -17,7 +17,7 @@ export function useHostConfig() {
   const [config, setConfig] = useState<Config>({
     app: KNOWN_APPS[0] ?? "@alistigo/artifact-list",
     lang: "en",
-    aiContext: "claude",
+    aiContext: "none",
     readonly: false,
     document: "",
     rawDocument: "",
