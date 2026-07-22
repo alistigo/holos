@@ -97,9 +97,7 @@ export class AlistigoWorld extends World {
       predicate: (frame) => frame.name() === "artifact-preview",
       timeout: 5000,
     });
-    await this.page
-      .getByRole("textbox", { name: /document json/i })
-      .fill(JSON.stringify(document));
+    await this.page.getByRole("textbox", { name: /document json/i }).fill(JSON.stringify(document));
     await frameNavigated;
     await this.applicationPage.waitForArtifactReady();
   }
