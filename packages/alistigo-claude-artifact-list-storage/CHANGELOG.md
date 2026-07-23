@@ -1,3 +1,21 @@
+## 0.2.7 (2026-07-23)
+
+### 🩹 Fixes
+
+- **playground:** implement Claude storage simulator to unblock artifact rendering ([601cf4e](https://github.com/alistigo/holos/commit/601cf4e))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-editor to 0.2.7
+- Updated alistigo-document-format to 0.2.7
+- Updated alistigo-domain to 0.2.7
+- Updated alistigo-logger to 0.2.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.6 (2026-07-19)
 
 ### 🧱 Updated Dependencies

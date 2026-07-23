@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/local-storage-repository",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "localStorage-backed AlistigoListStore implementation for standard browser contexts.",
   "license": "MIT",
   "author": {

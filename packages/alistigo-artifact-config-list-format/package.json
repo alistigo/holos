@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-config-list-format",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "JSON Schema and TypeScript types for the Alistigo list artifact config.",
   "license": "MIT",
   "author": {

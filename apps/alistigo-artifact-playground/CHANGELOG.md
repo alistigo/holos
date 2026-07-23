@@ -1,3 +1,31 @@
+## 0.2.11 (2026-07-23)
+
+### 🚀 Features
+
+- **playground,runner:** add "enter JSON" doc field; port runner to use playground UI ([a96b8bf](https://github.com/alistigo/holos/commit/a96b8bf))
+- **playground:** add "none" AI context; extract Claude bridge to ai/claude/inject-script.html ([2051af9](https://github.com/alistigo/holos/commit/2051af9))
+- **playground:** replace iframe.html+URL-params with srcdoc mechanism ([10cb142](https://github.com/alistigo/holos/commit/10cb142))
+
+### 🩹 Fixes
+
+- **runner,playground:** make all 14 Cucumber scenarios pass with srcdoc mechanism ([46a456a](https://github.com/alistigo/holos/commit/46a456a))
+- **playground:** implement Claude storage simulator to unblock artifact rendering ([601cf4e](https://github.com/alistigo/holos/commit/601cf4e))
+- **playground:** add explicit URI schemes to SRCDOC_CSP ([9055bc4](https://github.com/alistigo/holos/commit/9055bc4))
+- **playground:** inject React Refresh preamble into srcdoc in dev mode ([ac32834](https://github.com/alistigo/holos/commit/ac32834))
+- **playground:** patch Vite client to survive bridge console replacement ([a69ed08](https://github.com/alistigo/holos/commit/a69ed08))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.8
+- Updated alistigo-artifact-manager to 0.1.6
+- Updated alistigo-document-format to 0.2.7
+- Updated alistigo-artifact-list to 0.2.10
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.10 (2026-07-20)
 
 ### 🚀 Features

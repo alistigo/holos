@@ -1,3 +1,11 @@
+## 0.2.7 (2026-07-23)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-format to 0.2.7
+- Updated alistigo-domain to 0.2.7
+- Updated alistigo-logger to 0.2.7
+
 ## 0.2.6 (2026-07-19)
 
 ### 🧱 Updated Dependencies

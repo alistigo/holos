@@ -1,3 +1,9 @@
+## 0.2.7 (2026-07-23)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-domain to 0.2.7
+
 ## 0.2.6 (2026-07-19)
 
 ### 🧱 Updated Dependencies

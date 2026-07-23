@@ -1,3 +1,25 @@
+## 0.1.3 (2026-07-23)
+
+### 🚀 Features
+
+- **playground,runner:** add "enter JSON" doc field; port runner to use playground UI ([a96b8bf](https://github.com/alistigo/holos/commit/a96b8bf))
+
+### 🩹 Fixes
+
+- **runner,playground:** make all 14 Cucumber scenarios pass with srcdoc mechanism ([46a456a](https://github.com/alistigo/holos/commit/46a456a))
+- **runner:** remove unused private fields to satisfy Biome lint ([21109f4](https://github.com/alistigo/holos/commit/21109f4))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-plugin-api to 0.1.2
+- Updated alistigo-document-format to 0.2.7
+- Updated alistigo-features to 0.2.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.2 (2026-07-19)
 
 ### 🚀 Features
