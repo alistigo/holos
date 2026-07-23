@@ -24,5 +24,41 @@
       "name": "Buy milk"
     }
   ],
-  "alistigo:listEventLog": []
+  "alistigo:listEventLog": [
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000011",
+      "alistigo:eventType": "ListCreated",
+      "alistigo:listId": "lst_01jx0000000000000000000003",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "name": "Duplicates allowed"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000012",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000003",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000201",
+      "name": "Buy bread"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000013",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000003",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000202",
+      "name": "Buy bread"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000014",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000003",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000203",
+      "name": "Buy milk"
+    }
+  ]
 }

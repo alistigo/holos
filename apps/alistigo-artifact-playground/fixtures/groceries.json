@@ -30,5 +30,50 @@
       "name": "Pick up dry cleaning"
     }
   ],
-  "alistigo:listEventLog": []
+  "alistigo:listEventLog": [
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000001",
+      "alistigo:eventType": "ListCreated",
+      "alistigo:listId": "lst_01jx0000000000000000000002",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "name": "Groceries"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000002",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000002",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000101",
+      "name": "Buy bread"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000003",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000002",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000102",
+      "name": "Buy milk"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000004",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000002",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000103",
+      "name": "Buy eggs"
+    },
+    {
+      "alistigo:listEventId": "lev_01jx0000000000000000000005",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_01jx0000000000000000000002",
+      "alistigo:actorId": "act_01jx0000000000000000000001",
+      "alistigo:timestamp": "2025-01-01T00:00:00.000Z",
+      "alistigo:listElementId": "lse_01jx0000000000000000000104",
+      "name": "Pick up dry cleaning"
+    }
+  ]
 }
