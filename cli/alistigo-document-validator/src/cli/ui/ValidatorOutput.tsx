@@ -15,6 +15,40 @@ export interface ValidatorOutputProps {
   onComplete: (exitCode: number) => void;
 }
 
+function FileResultRow({ result }: { result: FileResult }): React.JSX.Element {
+  return (
+    <Box flexDirection="column">
+      <Box>
+        <Text {...(result.valid ? { color: "green" as const } : { color: "red" as const })}>
+          {result.valid ? "✓" : "✗"}
+          {"  "}
+        </Text>
+        <Text>{result.file}</Text>
+      </Box>
+      {!result.valid &&
+        result.errors.map((error) => (
+          <Box key={error} marginLeft={4}>
+            <Text color="red">{error}</Text>
+          </Box>
+        ))}
+    </Box>
+  );
+}
+
+function SummaryLine({ passed, failed }: { passed: number; failed: number }): React.JSX.Element {
+  const text =
+    failed === 0
+      ? `All ${passed} file${passed === 1 ? "" : "s"} valid`
+      : `${passed} passed, ${failed} failed`;
+  return (
+    <Box marginTop={1}>
+      <Text {...(failed === 0 ? { color: "green" as const } : { color: "red" as const })}>
+        {text}
+      </Text>
+    </Box>
+  );
+}
+
 export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): React.JSX.Element {
   const { exit } = useApp();
   const [results, setResults] = useState<FileResult[]>([]);
@@ -24,10 +58,8 @@ export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): Re
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    const filesToValidate = filesRef.current;
-
     const run = async () => {
-      for (const file of filesToValidate) {
+      for (const file of filesRef.current) {
         let parsed: unknown;
         try {
           parsed = JSON.parse(readFileSync(file, "utf-8"));
@@ -43,7 +75,6 @@ export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): Re
       }
       setDone(true);
     };
-
     void run();
   }, []);
 
@@ -61,31 +92,9 @@ export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): Re
   return (
     <Box flexDirection="column">
       {results.map((r) => (
-        <Box key={r.file} flexDirection="column">
-          <Box>
-            <Text {...(r.valid ? { color: "green" as const } : { color: "red" as const })}>
-              {r.valid ? "✓" : "✗"}
-              {"  "}
-            </Text>
-            <Text>{r.file}</Text>
-          </Box>
-          {!r.valid &&
-            r.errors.map((error) => (
-              <Box key={error} marginLeft={4}>
-                <Text color="red">{error}</Text>
-              </Box>
-            ))}
-        </Box>
+        <FileResultRow key={r.file} result={r} />
       ))}
-      {done && (
-        <Box marginTop={1}>
-          <Text {...(failed === 0 ? { color: "green" as const } : { color: "red" as const })}>
-            {failed === 0
-              ? `All ${passed} file${passed === 1 ? "" : "s"} valid`
-              : `${passed} passed, ${failed} failed`}
-          </Text>
-        </Box>
-      )}
+      {done && <SummaryLine passed={passed} failed={failed} />}
     </Box>
   );
 }
