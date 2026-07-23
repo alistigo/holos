@@ -4,6 +4,7 @@ pre-commit:
       run: if git diff --cached --name-only | grep -q 'package\.json'; then pnpm install && git add pnpm-lock.yaml; fi
 
 pre-push:
+  files: echo "lefthook.yml"
   commands:
     lint:
       run: pnpm run qa:lint || (pnpm run format && echo "Auto-fix applied — review changes, commit, and push again." && exit 1)
