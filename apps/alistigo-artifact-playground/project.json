@@ -80,6 +80,13 @@
         "cwd": "apps/alistigo-artifact-playground"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun src/cli.ts ../../apps/alistigo-artifact-playground/fixtures/empty.json ../../apps/alistigo-artifact-playground/fixtures/groceries.json ../../apps/alistigo-artifact-playground/fixtures/duplicates.json",
+        "cwd": "cli/alistigo-document-validator"
+      }
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

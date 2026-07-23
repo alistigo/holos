@@ -1,0 +1,39 @@
+{
+  "name": "alistigo-document-validator",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "cli/alistigo-document-validator/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "cli/alistigo-document-validator/dist",
+        "tsConfig": "cli/alistigo-document-validator/tsconfig.build.json",
+        "main": "cli/alistigo-document-validator/src/cli.ts",
+        "rootDir": "cli/alistigo-document-validator/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "cli/alistigo-document-validator"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "cli/alistigo-document-validator"
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun src/cli.ts",
+        "cwd": "cli/alistigo-document-validator"
+      }
+    }
+  }
+}

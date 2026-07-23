@@ -125,6 +125,34 @@ importers:
         specifier: ^18.0.0
         version: 18.3.31
 
+  cli/alistigo-document-validator:
+    dependencies:
+      '@alistigo/document-format':
+        specifier: workspace:*
+        version: link:../../packages/alistigo-document-format
+      ajv:
+        specifier: ^8.17.0
+        version: 8.20.0
+      ajv-formats:
+        specifier: ^3.0.1
+        version: 3.0.1(ajv@8.20.0)
+      clipanion:
+        specifier: 4.0.0-rc.4
+        version: 4.0.0-rc.4(typanion@3.14.0)
+      ink:
+        specifier: ^5.0.0
+        version: 5.2.1(@types/react@18.3.31)(react@18.3.1)
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.17
+      '@types/react':
+        specifier: ^18.0.0
+        version: 18.3.31
+
   cli/alistigo-features-runner-playwright:
     dependencies:
       '@alistigo/artifact-plugin-api':

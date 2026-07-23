@@ -1,0 +1,41 @@
+{
+  "name": "@alistigo/document-validator",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "cli/alistigo-document-validator"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/cli/alistigo-document-validator#readme",
+  "keywords": ["alistigo", "document", "validator", "cli", "json-schema"],
+  "private": true,
+  "type": "module",
+  "description": "CLI to validate Alistigo document JSON files against the schema",
+  "bin": {
+    "alistigo-document-validator": "./dist/cli.js"
+  },
+  "files": ["dist"],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@alistigo/document-format": "workspace:*",
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1",
+    "clipanion": "4.0.0-rc.4",
+    "ink": "^5.0.0",
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/node": "^22.0.0"
+  }
+}
