@@ -25,7 +25,6 @@ export class ValidateCommand extends Command {
     ],
   });
 
-  // fallow-ignore-next-line unused-class-member
   files = Option.Rest({ required: 1, name: "files" });
 
   // fallow-ignore-next-line unused-class-member complexity
