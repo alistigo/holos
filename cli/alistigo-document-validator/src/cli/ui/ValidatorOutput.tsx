@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import { validateDocument } from "@alistigo/document-format";
 import { Box, Text, useApp } from "ink";
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface FileResult {
   file: string;
@@ -59,17 +60,18 @@ export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): Re
 
   return (
     <Box flexDirection="column">
-      {results.map((r, i) => (
-        <Box key={i} flexDirection="column">
+      {results.map((r) => (
+        <Box key={r.file} flexDirection="column">
           <Box>
             <Text {...(r.valid ? { color: "green" as const } : { color: "red" as const })}>
-              {r.valid ? "✓" : "✗"}{"  "}
+              {r.valid ? "✓" : "✗"}
+              {"  "}
             </Text>
             <Text>{r.file}</Text>
           </Box>
           {!r.valid &&
-            r.errors.map((error, j) => (
-              <Box key={j} marginLeft={4}>
+            r.errors.map((error) => (
+              <Box key={error} marginLeft={4}>
                 <Text color="red">{error}</Text>
               </Box>
             ))}

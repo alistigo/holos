@@ -15,14 +15,22 @@
     "url": "https://github.com/alistigo/holos/issues"
   },
   "homepage": "https://github.com/alistigo/holos/tree/main/cli/alistigo-document-validator#readme",
-  "keywords": ["alistigo", "document", "validator", "cli", "json-schema"],
+  "keywords": [
+    "alistigo",
+    "document",
+    "validator",
+    "cli",
+    "json-schema"
+  ],
   "private": true,
   "type": "module",
   "description": "CLI to validate Alistigo document JSON files against the schema",
   "bin": {
     "alistigo-document-validator": "./dist/cli.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=18"
   },
