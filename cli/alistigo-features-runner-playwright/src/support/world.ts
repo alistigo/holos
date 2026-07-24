@@ -4,6 +4,7 @@ import type { Browser, BrowserContext, Page } from "playwright";
 import { ApplicationPage } from "../pages/application.page";
 import { fakePluginSource } from "./fixtures/index.js";
 import { installPluginRoute } from "./plugin-route";
+import { installDefaultStorageRoutes } from "./storage-routes.js";
 
 export class AlistigoWorld extends World {
   readonly baseUrl: string;
@@ -34,6 +35,7 @@ export class AlistigoWorld extends World {
     this.context = await this.browser.newContext();
     this.page = await this.context.newPage();
     this.page.on("pageerror", (err) => this.pageErrors.push(err.message));
+    await installDefaultStorageRoutes(this.page);
     this.applicationPage = new ApplicationPage(this.baseUrl, this.page);
     await this.applicationPage.open();
   }
