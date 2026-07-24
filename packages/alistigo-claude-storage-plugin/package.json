@@ -27,24 +27,28 @@
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./src/index.ts"
     }
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/logger": "workspace:*",
     "@alistigo/domain": "workspace:*",
     "@alistigo/document-format": "workspace:*",
     "@alistigo/document-editor": "workspace:*"
+  },
+  "devDependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "vite": "^7.0.0"
   }
 }
