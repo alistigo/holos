@@ -196,7 +196,7 @@ importers:
         version: link:../alistigo-artifact-plugin-api
       '@alistigo/claude-artifact-list-storage':
         specifier: workspace:*
-        version: link:../alistigo-claude-artifact-list-storage
+        version: link:../alistigo-claude-storage-plugin
       '@alistigo/document-editor':
         specifier: workspace:*
         version: link:../alistigo-document-editor
@@ -211,7 +211,7 @@ importers:
         version: link:../alistigo-list-components-react
       '@alistigo/local-storage-repository':
         specifier: workspace:*
-        version: link:../alistigo-local-storage-repository
+        version: link:../alistigo-local-storage-plugin
       '@alistigo/logger':
         specifier: workspace:*
         version: link:../alistigo-logger
@@ -335,7 +335,7 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-claude-artifact-list-storage:
+  packages/alistigo-claude-storage-plugin:
     dependencies:
       '@alistigo/document-editor':
         specifier: workspace:*
@@ -477,7 +477,7 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-local-storage-repository:
+  packages/alistigo-local-storage-plugin:
     dependencies:
       '@alistigo/document-editor':
         specifier: workspace:*
