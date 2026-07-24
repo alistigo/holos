@@ -5,6 +5,7 @@ import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useDocumentFixturesMap } from "../hooks/useDocumentFixtures";
 import { type Config, useHostConfig } from "../hooks/useHostConfig";
 import { useIframeControls } from "../hooks/useIframeControls";
+import { useLocalStorageEntries } from "../hooks/useLocalStorageEntries";
 import { ArtifactViewPanel } from "./ArtifactViewPanel";
 import HostForm from "./HostForm";
 
@@ -49,13 +50,15 @@ function HostPage(): JSX.Element {
     iframeRef,
     config.aiContext === "claude",
   );
+  const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
 
   const handleClearData = useCallback(async () => {
     clearStorage();
     await clearData();
-  }, [clearStorage, clearData]);
+    refreshLocalStorage();
+  }, [clearStorage, clearData, refreshLocalStorage]);
 
   const iframeAllow =
     config.aiContext === "claude" ? "clipboard-write" : "fullscreen, clipboard-write";
@@ -82,6 +85,7 @@ function HostPage(): JSX.Element {
         onReload={reload}
         onClearData={handleClearData}
         documentNames={documentNames}
+        localStorageEntries={localStorageEntries}
         storageEntries={storeEntries}
       />
       <div className="w-1/2">
