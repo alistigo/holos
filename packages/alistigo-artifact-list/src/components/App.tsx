@@ -1,12 +1,12 @@
 import {
   ClaudeArtifactListRepository,
   isClaudeArtifactContext,
-} from "@alistigo/claude-artifact-list-storage";
+} from "@alistigo/claude-storage-plugin";
 import { ListApplicationService } from "@alistigo/document-editor";
 import type { AlistigoDocument } from "@alistigo/document-format";
 import { parseListId } from "@alistigo/domain";
 import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
-import { LocalStorageListRepository } from "@alistigo/local-storage-repository";
+import { LocalStorageListRepository } from "@alistigo/local-storage-plugin";
 import { createLogger } from "@alistigo/logger";
 import { type JSX, useEffect, useMemo, useState } from "react";
 import ListBody from "./ListBody.js";

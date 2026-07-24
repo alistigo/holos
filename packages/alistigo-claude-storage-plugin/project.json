@@ -1,38 +1,36 @@
 {
-  "name": "alistigo-claude-artifact-list-storage",
+  "name": "alistigo-claude-storage-plugin",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/alistigo-claude-artifact-list-storage/src",
+  "sourceRoot": "packages/alistigo-claude-storage-plugin/src",
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "packages/alistigo-claude-artifact-list-storage/dist",
-        "tsConfig": "packages/alistigo-claude-artifact-list-storage/tsconfig.json",
-        "main": "packages/alistigo-claude-artifact-list-storage/src/index.ts",
-        "rootDir": "packages/alistigo-claude-artifact-list-storage/src"
+        "command": "vite build",
+        "cwd": "packages/alistigo-claude-storage-plugin"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc -p tsconfig.json --noEmit",
-        "cwd": "packages/alistigo-claude-artifact-list-storage"
+        "cwd": "packages/alistigo-claude-storage-plugin"
       }
     },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "biome check .",
-        "cwd": "packages/alistigo-claude-artifact-list-storage"
+        "cwd": "packages/alistigo-claude-storage-plugin"
       }
     },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
         "command": "rm -rf dist",
-        "cwd": "packages/alistigo-claude-artifact-list-storage"
+        "cwd": "packages/alistigo-claude-storage-plugin"
       }
     }
   }

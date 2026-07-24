@@ -1,7 +1,7 @@
 {
-  "name": "@alistigo/claude-artifact-list-storage",
+  "name": "@alistigo/claude-storage-plugin",
   "version": "0.2.9",
-  "description": "Window.storage-backed AlistigoListStore implementation for the Claude artifact runtime.",
+  "description": "Window.storage-backed AlistigoPlugin (type: storage) implementation for the Claude artifact runtime.",
   "license": "MIT",
   "author": {
     "name": "Mikael Labrut",
@@ -10,18 +10,19 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/alistigo-claude-artifact-list-storage"
+    "directory": "packages/alistigo-claude-storage-plugin"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-claude-artifact-list-storage#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/alistigo-claude-storage-plugin#readme",
   "keywords": [
     "alistigo",
     "list",
     "storage",
     "claude",
-    "artifact"
+    "artifact",
+    "plugin"
   ],
   "private": false,
   "type": "module",
@@ -40,6 +41,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/logger": "workspace:*",
     "@alistigo/domain": "workspace:*",
     "@alistigo/document-format": "workspace:*",

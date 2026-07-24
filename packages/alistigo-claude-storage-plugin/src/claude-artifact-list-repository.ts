@@ -8,7 +8,7 @@ const log = createLogger("alistigo:claude-storage");
 
 const STORAGE_TIMEOUT_MS = 1000;
 
-function withStorageTimeout<T>(p: Promise<T>): Promise<T> {
+export function withStorageTimeout<T>(p: Promise<T>): Promise<T> {
   return Promise.race([
     p,
     new Promise<T>((_, reject) =>
