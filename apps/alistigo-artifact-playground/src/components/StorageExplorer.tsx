@@ -86,7 +86,10 @@ function StorageSection({
   );
 }
 
-export function StorageExplorer({ localEntries, claudeEntries }: StorageExplorerProps): JSX.Element {
+export function StorageExplorer({
+  localEntries,
+  claudeEntries,
+}: StorageExplorerProps): JSX.Element {
   return (
     <div className="flex flex-col h-full overflow-hidden divide-y divide-gray-200">
       <StorageSection

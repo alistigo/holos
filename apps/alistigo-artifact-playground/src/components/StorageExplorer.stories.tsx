@@ -34,7 +34,10 @@ export const LocalOnly: Story = {
           { id: "2", text: "Walk dog" },
         ]),
       ],
-      ["alistigo:list:lst_abc123/meta", JSON.stringify({ version: 3, lastModified: "2026-07-24T12:00:00Z" })],
+      [
+        "alistigo:list:lst_abc123/meta",
+        JSON.stringify({ version: 3, lastModified: "2026-07-24T12:00:00Z" }),
+      ],
     ],
     claudeEntries: [],
   },
@@ -42,9 +45,7 @@ export const LocalOnly: Story = {
 
 export const BothStorages: Story = {
   args: {
-    localEntries: [
-      ["alistigo:list:lst_abc123", JSON.stringify({ title: "My List", items: [] })],
-    ],
+    localEntries: [["alistigo:list:lst_abc123", JSON.stringify({ title: "My List", items: [] })]],
     claudeEntries: [
       ["lst_abc123", JSON.stringify({ title: "My List (Claude)", items: [] })],
       ["session/token", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEifQ.abc"],
