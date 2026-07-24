@@ -1,5 +1,6 @@
-import type { PluginHostInfo, PluginLogger, PluginRuntime } from "@alistigo/artifact-plugin-api";
+import type { AlistigoPlugin, PluginHostInfo, PluginLogger, PluginRuntime } from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
+import type { AlistigoListStore } from "@alistigo/document-editor";
 import type { AlistigoDocument } from "@alistigo/document-format";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
@@ -11,10 +12,11 @@ import pkg from "../package.json" with { type: "json" };
 import App from "./components/App.js";
 import DebugRenderErrorTrigger from "./components/DebugRenderErrorTrigger.js";
 import { bootI18n } from "./i18n.js";
-import { loadPlugins } from "./plugins.js";
+import { buildPluginSpec, loadPlugins } from "./plugins.js";
 import { registerLoadedPlugins, registerMount } from "./runtime-state.js";
 import { resolveContainer } from "./utils/container.js";
 import makeDefaultDocument from "./utils/document.js";
+import { InMemoryListStore } from "./utils/in-memory-store.js";
 
 const log = createLogger("alistigo:artifact-list");
 
@@ -41,10 +43,18 @@ export interface MountOptions {
   plugins?: Record<string, Record<string, unknown>>;
 }
 
-function detectStorageType(): string {
-  if (typeof window !== "undefined" && "storage" in window) return "window.storage";
-  if (typeof localStorage !== "undefined") return "localStorage";
-  return "none";
+interface ActiveStorage {
+  store: AlistigoListStore;
+  pluginName: string;
+}
+
+function resolveActiveStorage(plugins: AlistigoPlugin[]): ActiveStorage {
+  for (const p of plugins) {
+    if (p.type === "storage" && p.storage?.isAvailable() === true) {
+      return { store: p.storage.createStore(), pluginName: p.name };
+    }
+  }
+  return { store: new InMemoryListStore(), pluginName: "in-memory" };
 }
 
 function getContainerLabel(container: string | HTMLElement, el: Element): string {
@@ -116,7 +126,12 @@ class ArtifactErrorBoundary extends Component<
   }
 }
 
-function renderApp(el: Element, options: MountOptions, runtime: PluginRuntime): void {
+function renderApp(
+  el: Element,
+  options: MountOptions,
+  runtime: PluginRuntime,
+  repository: AlistigoListStore,
+): void {
   const doc = options.document ?? makeDefaultDocument();
   const tree = createElement(
     StrictMode,
@@ -137,7 +152,7 @@ function renderApp(el: Element, options: MountOptions, runtime: PluginRuntime): 
         createElement(
           Fragment,
           null,
-          createElement(App, { key: doc["alistigo:listId"], initialDocument: doc }),
+          createElement(App, { key: doc["alistigo:listId"], initialDocument: doc, repository }),
           createElement(DebugRenderErrorTrigger),
         ),
       ),
@@ -185,26 +200,28 @@ export async function mount(
   registerMount(getContainerLabel(container, el));
   log.info({ selector: String(container) }, "mount called");
 
-  const plugins = await loadPlugins(options.plugins);
+  const spec = buildPluginSpec(options.plugins);
+  const plugins = await loadPlugins(spec);
+  const { store, pluginName } = resolveActiveStorage(plugins);
   const host: PluginHostInfo = {
     packageName: "@alistigo/artifact-list",
     version: pkg.version,
     locale: LOCALE,
     environment: import.meta.env.MODE,
   };
-  const runtime = createPluginRuntime(plugins, host, pluginLogger, options.plugins ?? {});
+  const runtime = createPluginRuntime(plugins, host, pluginLogger, spec);
   registerLoadedPlugins(runtime.loadedPluginNames);
 
   await runtime.setup();
   bootI18n();
   await runtime.beforeMount();
-  renderApp(el, options, runtime);
+  renderApp(el, options, runtime, store);
   await runtime.mounted();
 
   if (isFirstMount) {
     runtime.bus.emit("widget:displayed", {
       locale: LOCALE,
-      storageType: detectStorageType(),
+      storageType: pluginName,
       version: pkg.version,
     });
   }

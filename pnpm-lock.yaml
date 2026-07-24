@@ -194,9 +194,6 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../alistigo-artifact-plugin-api
-      '@alistigo/claude-storage-plugin':
-        specifier: workspace:*
-        version: link:../alistigo-claude-storage-plugin
       '@alistigo/document-editor':
         specifier: workspace:*
         version: link:../alistigo-document-editor
@@ -209,9 +206,6 @@ importers:
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../alistigo-list-components-react
-      '@alistigo/local-storage-plugin':
-        specifier: workspace:*
-        version: link:../alistigo-local-storage-plugin
       '@alistigo/logger':
         specifier: workspace:*
         version: link:../alistigo-logger
