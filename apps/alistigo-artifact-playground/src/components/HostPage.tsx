@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { useCallback, useMemo } from "react";
-import { buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
+import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useDocumentFixturesMap } from "../hooks/useDocumentFixtures";
 import { type Config, useHostConfig } from "../hooks/useHostConfig";
@@ -45,7 +45,10 @@ function useDocJson(config: Config): string {
 function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
-  const { clearStorage } = useClaudeStorageSimulator(iframeRef, config.aiContext === "claude");
+  const { clearStorage, storeEntries } = useClaudeStorageSimulator(
+    iframeRef,
+    config.aiContext === "claude",
+  );
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
 
@@ -56,6 +59,8 @@ function HostPage(): JSX.Element {
 
   const iframeAllow =
     config.aiContext === "claude" ? "clipboard-write" : "fullscreen, clipboard-write";
+
+  const configJson = useMemo(() => JSON.stringify(buildArtifactConfig(config), null, 2), [config]);
 
   const srcdoc = useMemo(
     () =>
@@ -77,6 +82,7 @@ function HostPage(): JSX.Element {
         onReload={reload}
         onClearData={handleClearData}
         documentNames={documentNames}
+        storageEntries={storeEntries}
       />
       <div className="w-1/2">
         <ArtifactViewPanel
@@ -84,6 +90,8 @@ function HostPage(): JSX.Element {
           iframeRef={iframeRef}
           reloadKey={reloadKey}
           iframeAllow={iframeAllow}
+          configJson={configJson}
+          docJson={docJson}
         />
       </div>
     </div>

@@ -20,6 +20,19 @@ function buildClaudeHeadScripts(): string {
   ].join("\n    ");
 }
 
+/** Builds the config object injected into the artifact iframe. */
+export function buildArtifactConfig(config: Config): Record<string, unknown> {
+  const cfg: Record<string, unknown> = {
+    app: config.app,
+    lang: config.lang,
+    readonly: config.readonly,
+  };
+  if (Object.keys(config.plugins).length > 0) {
+    cfg.plugins = config.plugins;
+  }
+  return cfg;
+}
+
 export interface BuildIframeSrcdocOptions {
   config: Config;
   /** JSON string for the #alistigo-document script tag. */
@@ -39,16 +52,8 @@ export function buildIframeSrcdoc({
   csp,
   isDev,
 }: BuildIframeSrcdocOptions): string {
-  const cfg: Record<string, unknown> = {
-    app: config.app,
-    lang: config.lang,
-    readonly: config.readonly,
-  };
-  if (Object.keys(config.plugins).length > 0) {
-    cfg.plugins = config.plugins;
-  }
   // aiContext and document are playground-only — not consumed by @alistigo/artifact-list
-  const cfgJson = JSON.stringify(cfg);
+  const cfgJson = JSON.stringify(buildArtifactConfig(config));
 
   const isClaude = config.aiContext === "claude";
 
