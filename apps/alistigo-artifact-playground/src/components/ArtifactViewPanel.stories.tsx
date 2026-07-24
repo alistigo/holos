@@ -17,6 +17,23 @@ const SAMPLE_SRCDOC = [
   "</html>",
 ].join("\n");
 
+const SAMPLE_CONFIG_JSON = JSON.stringify(
+  { app: "@alistigo/artifact-list", lang: "en", readonly: false },
+  null,
+  2,
+);
+
+const SAMPLE_DOC_JSON = JSON.stringify(
+  {
+    "@context": { "@vocab": "https://schema.org/", alistigo: "https://alistigo.ai/vocab/" },
+    "@type": "ItemList",
+    "alistigo:listId": "lst_00000000000000000000000000",
+    itemListElement: [],
+  },
+  null,
+  2,
+);
+
 const meta: Meta<typeof ArtifactViewPanel> = {
   title: "Playground/ArtifactViewPanel",
   component: ArtifactViewPanel,
@@ -42,6 +59,8 @@ export const SourceTabSelected: Story = {
         iframeRef={iframeRef}
         reloadKey={0}
         iframeAllow="clipboard-write"
+        configJson={SAMPLE_CONFIG_JSON}
+        docJson={SAMPLE_DOC_JSON}
       />
     );
   },
@@ -57,6 +76,42 @@ export const AppTabSelected: Story = {
         iframeRef={iframeRef}
         reloadKey={0}
         iframeAllow="clipboard-write"
+        configJson={SAMPLE_CONFIG_JSON}
+        docJson={SAMPLE_DOC_JSON}
+      />
+    );
+  },
+};
+
+export const ConfigTabSelected: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    return (
+      <ArtifactViewPanel
+        srcdoc={SAMPLE_SRCDOC}
+        iframeRef={iframeRef}
+        reloadKey={0}
+        iframeAllow="clipboard-write"
+        configJson={SAMPLE_CONFIG_JSON}
+        docJson={SAMPLE_DOC_JSON}
+      />
+    );
+  },
+};
+
+export const DocumentTabSelected: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    return (
+      <ArtifactViewPanel
+        srcdoc={SAMPLE_SRCDOC}
+        iframeRef={iframeRef}
+        reloadKey={0}
+        iframeAllow="clipboard-write"
+        configJson={SAMPLE_CONFIG_JSON}
+        docJson={SAMPLE_DOC_JSON}
       />
     );
   },
