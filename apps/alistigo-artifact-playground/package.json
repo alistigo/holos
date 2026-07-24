@@ -18,7 +18,7 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-json-view-lite": "^2.5.0"
+    "@uiw/react-json-view": "^2.0.0-alpha.43"
   },
   "devDependencies": {
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",

@@ -1,6 +1,8 @@
+import JsonView from "@uiw/react-json-view";
+import { lightTheme } from "@uiw/react-json-view/light";
+import type React from "react";
 import type { JSX, RefObject } from "react";
 import { useMemo, useState } from "react";
-import { allExpanded, defaultStyles, JsonView } from "react-json-view-lite";
 import { SourceView } from "./SourceView";
 
 type Tab = "app" | "source" | "config" | "document";
@@ -33,7 +35,7 @@ function JsonPanel({ json }: { json: string }): JSX.Element {
 
   return (
     <div className="p-3 overflow-auto h-full text-xs">
-      <JsonView data={parsed} style={defaultStyles} shouldExpandNode={allExpanded} />
+      <JsonView value={parsed} style={lightTheme as React.CSSProperties} />
     </div>
   );
 }

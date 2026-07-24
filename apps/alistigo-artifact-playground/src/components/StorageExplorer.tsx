@@ -1,6 +1,8 @@
+import JsonView from "@uiw/react-json-view";
+import { lightTheme } from "@uiw/react-json-view/light";
+import type React from "react";
 import type { JSX } from "react";
 import { useState } from "react";
-import { allExpanded, defaultStyles, JsonView } from "react-json-view-lite";
 
 export interface StorageExplorerProps {
   entries: [string, string][];
@@ -57,11 +59,7 @@ export function StorageExplorer({ entries }: StorageExplorerProps): JSX.Element 
       <div className="flex-1 overflow-auto p-2">
         {parsedValue !== undefined ? (
           typeof parsedValue === "object" && parsedValue !== null ? (
-            <JsonView
-              data={parsedValue as object}
-              style={defaultStyles}
-              shouldExpandNode={allExpanded}
-            />
+            <JsonView value={parsedValue as object} style={lightTheme as React.CSSProperties} />
           ) : (
             <pre className="text-xs font-mono text-gray-700 whitespace-pre-wrap break-all">
               {String(parsedValue)}
