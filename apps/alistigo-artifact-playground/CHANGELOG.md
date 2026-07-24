@@ -1,3 +1,26 @@
+## 0.2.13 (2026-07-24)
+
+### 🚀 Features
+
+- **playground:** replace react-json-view-lite with @uiw/react-json-view ([82ebce4](https://github.com/alistigo/holos/commit/82ebce4))
+- **playground:** refactor to tabbed left panel and extend right panel ([1ae8b4a](https://github.com/alistigo/holos/commit/1ae8b4a))
+
+### 🩹 Fixes
+
+- **playground:** suppress fallow complexity on UI components with no test coverage ([83f7eb8](https://github.com/alistigo/holos/commit/83f7eb8))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.10
+- Updated alistigo-artifact-manager to 0.1.8
+- Updated alistigo-document-format to 0.2.9
+- Updated alistigo-artifact-list to 0.2.12
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.12 (2026-07-24)
 
 ### 🩹 Fixes

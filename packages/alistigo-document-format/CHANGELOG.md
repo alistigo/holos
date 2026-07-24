@@ -1,3 +1,9 @@
+## 0.2.9 (2026-07-24)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-domain to 0.2.9
+
 ## 0.2.8 (2026-07-24)
 
 ### 🩹 Fixes
