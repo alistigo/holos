@@ -16,7 +16,7 @@
       "dependsOn": [
         { "projects": ["alistigo-logger"], "target": "build" },
         { "projects": ["alistigo-list-components-react"], "target": "build" },
-        { "projects": ["alistigo-claude-artifact-list-storage"], "target": "build" },
+        { "projects": ["alistigo-claude-storage-plugin"], "target": "build" },
         { "projects": ["alistigo-local-storage-repository"], "target": "build" },
         { "projects": ["alistigo-document-editor"], "target": "build" },
         { "projects": ["alistigo-document-format"], "target": "build" },
