@@ -1,12 +1,8 @@
-import {
-  ClaudeArtifactListRepository,
-  isClaudeArtifactContext,
-} from "@alistigo/claude-storage-plugin";
+import type { AlistigoListStore } from "@alistigo/document-editor";
 import { ListApplicationService } from "@alistigo/document-editor";
 import type { AlistigoDocument } from "@alistigo/document-format";
 import { parseListId } from "@alistigo/domain";
 import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
-import { LocalStorageListRepository } from "@alistigo/local-storage-plugin";
 import { createLogger } from "@alistigo/logger";
 import { type JSX, useEffect, useMemo, useState } from "react";
 import ListBody from "./ListBody.js";
@@ -15,26 +11,19 @@ const log = createLogger("alistigo:artifact-list");
 
 interface AppProps {
   initialDocument: AlistigoDocument;
+  repository: AlistigoListStore;
 }
 
-function App({ initialDocument }: AppProps): JSX.Element | null {
-  const repository = useMemo(() => {
-    const ctx = isClaudeArtifactContext() ? "claude-artifact" : "localStorage";
-    log.info({ ctx }, "storage context detected");
-    return ctx === "claude-artifact"
-      ? new ClaudeArtifactListRepository()
-      : new LocalStorageListRepository();
-  }, []);
+function App({ initialDocument, repository }: AppProps): JSX.Element | null {
   const service = useMemo(() => new ListApplicationService(repository), [repository]);
   const listId = useMemo(() => parseListId(initialDocument["alistigo:listId"]), [initialDocument]);
 
   const [bootDoc, setBootDoc] = useState<AlistigoDocument | undefined>(undefined);
 
   useEffect(() => {
-    const seed =
-      repository instanceof LocalStorageListRepository
-        ? repository.seedIfEmpty(initialDocument)
-        : Promise.resolve();
+    // Duck-typed: only storage plugins that implement seedIfEmpty (local-storage) will run it.
+    const seedable = repository as { seedIfEmpty?(doc: AlistigoDocument): Promise<void> };
+    const seed = seedable.seedIfEmpty?.(initialDocument) ?? Promise.resolve();
     seed
       .then(() => service.loadDocument(listId))
       .then((doc) => {
