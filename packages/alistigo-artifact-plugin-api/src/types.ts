@@ -1,3 +1,5 @@
+import type { AlistigoListStore } from "@alistigo/document-editor";
+import type { AlistigoDocument } from "@alistigo/document-format";
 import type { ReactNode } from "react";
 
 /**
@@ -46,6 +48,15 @@ export interface PluginContext {
   emit: PluginEventBus["emit"];
 }
 
+export type PluginType = "monitoring" | "storage" | (string & {});
+
+export interface AlistigoStorageExtension {
+  isAvailable(): boolean;
+  createStore(): AlistigoListStore;
+  listKeys(prefix?: string): Promise<Array<{ key: string; value: string }>>;
+  seedIfEmpty?(doc: AlistigoDocument): Promise<void>;
+}
+
 /**
  * Unified plugin interface. Lifecycle hooks (setup/beforeMount/mounted/destroy) and
  * the event bus (on/emit via PluginContext) serve artifact-lifecycle/infra plugins
@@ -56,6 +67,10 @@ export interface PluginContext {
 export interface AlistigoPlugin {
   /** Must match this plugin's own npm package name. */
   name: string;
+  /** Plugin category — informational, enables type-based queries by the host. */
+  type?: PluginType;
+  /** Present when type === "storage". Provides the storage backend contract. */
+  storage?: AlistigoStorageExtension;
 
   setup?(ctx: PluginContext): void | Promise<void>;
   beforeMount?(ctx: PluginContext): void | Promise<void>;

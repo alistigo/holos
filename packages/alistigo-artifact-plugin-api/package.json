@@ -38,6 +38,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "peerDependencies": {
+    "@alistigo/document-editor": "workspace:*",
+    "@alistigo/document-format": "workspace:*"
+  },
   "devDependencies": {
     "@types/react": "^19.2.14"
   }
