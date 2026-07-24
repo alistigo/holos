@@ -19,31 +19,35 @@ type Story = StoryObj<typeof StorageExplorer>;
 
 export const Empty: Story = {
   args: {
-    entries: [],
+    localEntries: [],
+    claudeEntries: [],
   },
 };
 
-export const WithEntries: Story = {
+export const LocalOnly: Story = {
   args: {
-    entries: [
+    localEntries: [
       [
-        "lst_abc123/items",
+        "alistigo:list:lst_abc123",
         JSON.stringify([
           { id: "1", text: "Buy milk" },
           { id: "2", text: "Walk dog" },
         ]),
       ],
-      ["lst_abc123/meta", JSON.stringify({ version: 3, lastModified: "2026-07-24T12:00:00Z" })],
-      ["lst_abc123/settings", JSON.stringify({ sortOrder: "manual", showCompleted: true })],
+      ["alistigo:list:lst_abc123/meta", JSON.stringify({ version: 3, lastModified: "2026-07-24T12:00:00Z" })],
     ],
+    claudeEntries: [],
   },
 };
 
-export const WithPrimitiveValue: Story = {
+export const BothStorages: Story = {
   args: {
-    entries: [
+    localEntries: [
+      ["alistigo:list:lst_abc123", JSON.stringify({ title: "My List", items: [] })],
+    ],
+    claudeEntries: [
+      ["lst_abc123", JSON.stringify({ title: "My List (Claude)", items: [] })],
       ["session/token", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEifQ.abc"],
-      ["session/count", "42"],
     ],
   },
 };

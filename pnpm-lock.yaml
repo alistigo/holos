@@ -59,6 +59,9 @@ importers:
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../../packages/alistigo-list-components-react
+      '@alistigo/local-storage-plugin':
+        specifier: workspace:*
+        version: link:../../packages/alistigo-local-storage-plugin
       '@uiw/react-json-view':
         specifier: ^2.0.0-alpha.43
         version: 2.0.0-alpha.43(@babel/runtime@7.28.6)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)

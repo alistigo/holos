@@ -14,6 +14,7 @@ interface HostFormProps {
   onReload: () => void;
   onClearData: () => void;
   documentNames: string[];
+  localStorageEntries: [string, string][];
   storageEntries: [string, string][];
 }
 
@@ -34,7 +35,7 @@ function ConfigTab({
   onReload,
   onClearData,
   documentNames,
-}: Omit<HostFormProps, "storageEntries">): JSX.Element {
+}: Omit<HostFormProps, "storageEntries" | "localStorageEntries">): JSX.Element {
   const showArtifactConfig =
     config.app === "@alistigo/artifact-list" || Object.keys(config.plugins).length > 0;
 
@@ -133,6 +134,7 @@ function HostForm({
   onReload,
   onClearData,
   documentNames,
+  localStorageEntries,
   storageEntries,
 }: HostFormProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<LeftTab>("config");
@@ -176,7 +178,7 @@ function HostForm({
 
       {activeTab === "storage" && (
         <div className="flex-1 overflow-hidden">
-          <StorageExplorer entries={storageEntries} />
+          <StorageExplorer localEntries={localStorageEntries} claudeEntries={storageEntries} />
         </div>
       )}
 
