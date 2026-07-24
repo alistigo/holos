@@ -1,3 +1,10 @@
+## 0.1.5 (2026-07-24)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-config-list-format to 0.1.6
+- Updated alistigo-document-format to 0.2.8
+
 ## 0.1.4 (2026-07-23)
 
 ### 🧱 Updated Dependencies

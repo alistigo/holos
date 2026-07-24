@@ -1,3 +1,21 @@
+## 0.2.12 (2026-07-24)
+
+### 🩹 Fixes
+
+- **playground:** populate event logs in fixtures and add document validator CLI ([176e884](https://github.com/alistigo/holos/commit/176e884))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.9
+- Updated alistigo-artifact-manager to 0.1.7
+- Updated alistigo-document-format to 0.2.8
+- Updated alistigo-artifact-list to 0.2.11
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.11 (2026-07-23)
 
 ### 🚀 Features

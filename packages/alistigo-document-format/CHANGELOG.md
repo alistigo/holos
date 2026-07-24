@@ -1,3 +1,18 @@
+## 0.2.8 (2026-07-24)
+
+### 🩹 Fixes
+
+- **document-validator:** resolve fallow audit failures on pre-push ([9c60cbd](https://github.com/alistigo/holos/commit/9c60cbd))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-domain to 0.2.8
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.7 (2026-07-23)
 
 ### 🧱 Updated Dependencies
