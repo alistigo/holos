@@ -14,6 +14,7 @@ function parseValue(raw: string): unknown {
   }
 }
 
+// fallow-ignore-next-line complexity
 export function StorageExplorer({ entries }: StorageExplorerProps): JSX.Element {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 

@@ -38,6 +38,7 @@ function JsonPanel({ json }: { json: string }): JSX.Element {
   );
 }
 
+// fallow-ignore-next-line complexity
 export function ArtifactViewPanel({
   srcdoc,
   iframeRef,

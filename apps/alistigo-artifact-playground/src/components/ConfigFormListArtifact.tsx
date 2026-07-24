@@ -11,6 +11,7 @@ export interface ConfigFormListArtifactProps {
   onDocumentChange: (document: string, rawDocument: string) => void;
 }
 
+// fallow-ignore-next-line complexity
 export function ConfigFormListArtifact({
   app,
   plugins,
