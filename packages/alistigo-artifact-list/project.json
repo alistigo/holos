@@ -17,7 +17,7 @@
         { "projects": ["alistigo-logger"], "target": "build" },
         { "projects": ["alistigo-list-components-react"], "target": "build" },
         { "projects": ["alistigo-claude-storage-plugin"], "target": "build" },
-        { "projects": ["alistigo-local-storage-repository"], "target": "build" },
+        { "projects": ["alistigo-local-storage-plugin"], "target": "build" },
         { "projects": ["alistigo-document-editor"], "target": "build" },
         { "projects": ["alistigo-document-format"], "target": "build" },
         { "projects": ["alistigo-domain"], "target": "build" }

@@ -4,8 +4,8 @@
 |------|-------------|-------|
 | epic | #70 | Epic: alistigo-m1-deployment |
 | 001  | #71 | Write ADRs — deployment decisions |
-| 002  | #72 | Create alistigo-local-storage-repository package |
-| 003  | #73 | Create alistigo-claude-artifact-list-storage package |
+| 002  | #72 | Create alistigo-local-storage-plugin package |
+| 003  | #73 | Create alistigo-claude-storage-plugin package |
 | 004  | #74 | Update embedded app boot with storage auto-detection |
 | 005  | #75 | Create alistigo-artifact-list UMD bundle |
 | 006  | #76 | GitHub Pages deployment — Vite base fix + workflow |

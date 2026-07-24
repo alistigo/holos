@@ -22,7 +22,7 @@ Key format `alistigo-{listId}` satisfies all `window.storage` key constraints (n
 
 ## Consequences
 
-- Two new packages: `alistigo-local-storage-repository` (extract from embedded app) and `alistigo-claude-artifact-list-storage` (new)
+- Two new packages: `alistigo-local-storage-plugin` (extract from embedded app) and `alistigo-claude-storage-plugin` (new)
 - Boot-time context detection via `isClaudeArtifactContext()` — checks for `window.storage?.get`
 - `window.storage` throws on missing keys (does not return null); all load calls need try/catch
 - `shared: false` (default) → per-user storage; `shared: true` → all viewers of the artifact share the list
