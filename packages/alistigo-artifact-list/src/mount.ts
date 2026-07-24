@@ -1,4 +1,9 @@
-import type { AlistigoPlugin, PluginHostInfo, PluginLogger, PluginRuntime } from "@alistigo/artifact-plugin-api";
+import type {
+  AlistigoPlugin,
+  PluginHostInfo,
+  PluginLogger,
+  PluginRuntime,
+} from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import type { AlistigoListStore } from "@alistigo/document-editor";
 import type { AlistigoDocument } from "@alistigo/document-format";
