@@ -288,6 +288,13 @@ importers:
         version: 2.8.2
 
   packages/alistigo-artifact-plugin-api:
+    dependencies:
+      '@alistigo/document-editor':
+        specifier: workspace:*
+        version: link:../alistigo-document-editor
+      '@alistigo/document-format':
+        specifier: workspace:*
+        version: link:../alistigo-document-format
     devDependencies:
       '@types/react':
         specifier: ^19.2.14
