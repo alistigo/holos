@@ -23,8 +23,8 @@ M1 shipped the Alistigo list widget but without a public deployment. This epic a
 
 ## Tasks
 - [ ] #71 — Write ADRs (research → decisions documented)
-- [ ] #72 — Create alistigo-local-storage-repository package
-- [ ] #73 — Create alistigo-claude-artifact-list-storage package
+- [ ] #72 — Create alistigo-local-storage-plugin package
+- [ ] #73 — Create alistigo-claude-storage-plugin package
 - [ ] #74 — Update embedded app boot with storage auto-detection
 - [ ] #75 — Create alistigo-artifact-list UMD bundle
 - [ ] #76 — GitHub Pages deployment (Vite fix + workflow)
