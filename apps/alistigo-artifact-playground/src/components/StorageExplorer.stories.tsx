@@ -17,15 +17,17 @@ const meta: Meta<typeof StorageExplorer> = {
 export default meta;
 type Story = StoryObj<typeof StorageExplorer>;
 
-export const Empty: Story = {
+export const LocalEmpty: Story = {
   args: {
+    aiContext: "none",
     localEntries: [],
     claudeEntries: [],
   },
 };
 
-export const LocalOnly: Story = {
+export const LocalWithEntries: Story = {
   args: {
+    aiContext: "none",
     localEntries: [
       [
         "alistigo:list:lst_abc123",
@@ -43,9 +45,18 @@ export const LocalOnly: Story = {
   },
 };
 
-export const BothStorages: Story = {
+export const ClaudeEmpty: Story = {
   args: {
-    localEntries: [["alistigo:list:lst_abc123", JSON.stringify({ title: "My List", items: [] })]],
+    aiContext: "claude",
+    localEntries: [],
+    claudeEntries: [],
+  },
+};
+
+export const ClaudeWithEntries: Story = {
+  args: {
+    aiContext: "claude",
+    localEntries: [],
     claudeEntries: [
       ["lst_abc123", JSON.stringify({ title: "My List (Claude)", items: [] })],
       ["session/token", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEifQ.abc"],

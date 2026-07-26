@@ -178,7 +178,11 @@ function HostForm({
 
       {activeTab === "storage" && (
         <div className="flex-1 overflow-hidden">
-          <StorageExplorer localEntries={localStorageEntries} claudeEntries={storageEntries} />
+          <StorageExplorer
+            aiContext={config.aiContext}
+            localEntries={localStorageEntries}
+            claudeEntries={storageEntries}
+          />
         </div>
       )}
 
