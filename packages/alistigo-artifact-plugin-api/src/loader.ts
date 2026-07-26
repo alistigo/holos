@@ -14,9 +14,8 @@ import type { AlistigoPlugin } from "./types.js";
 const JSDELIVR_MAJOR_VERSION = 0;
 
 export function resolvePluginUrl(packageName: string): string {
-  const overrides = (
-    globalThis as { __ALISTIGO_PLUGIN_URL_OVERRIDES__?: Record<string, string> }
-  ).__ALISTIGO_PLUGIN_URL_OVERRIDES__;
+  const overrides = (globalThis as { __ALISTIGO_PLUGIN_URL_OVERRIDES__?: Record<string, string> })
+    .__ALISTIGO_PLUGIN_URL_OVERRIDES__;
   if (overrides?.[packageName] !== undefined) return overrides[packageName];
   return `https://cdn.jsdelivr.net/npm/${packageName}@${JSDELIVR_MAJOR_VERSION}/dist/index.js`;
 }
