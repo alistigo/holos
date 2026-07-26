@@ -43,6 +43,12 @@ export interface BuildIframeSrcdocOptions {
   csp: string;
   /** True in dev — injects the @vitejs/plugin-react preamble the HTML transform hook normally adds. */
   isDev?: boolean;
+  /**
+   * Dev only: package name -> local dev-server URL, so plugins load from source
+   * instead of jsDelivr. Injected as `window.__ALISTIGO_PLUGIN_URL_OVERRIDES__`,
+   * read by @alistigo/artifact-plugin-api's loader.ts before it hits the CDN.
+   */
+  devPluginUrlOverrides?: Record<string, string> | undefined;
 }
 
 export function buildIframeSrcdoc({
@@ -51,6 +57,7 @@ export function buildIframeSrcdoc({
   scriptUrl,
   csp,
   isDev,
+  devPluginUrlOverrides,
 }: BuildIframeSrcdocOptions): string {
   // aiContext and document are playground-only — not consumed by @alistigo/artifact-list
   const cfgJson = JSON.stringify(buildArtifactConfig(config));
@@ -66,6 +73,11 @@ export function buildIframeSrcdoc({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${config.app}</title>
     <script type="application/json" id="alistigo-config">${cfgJson}</script>
+    ${
+      devPluginUrlOverrides !== undefined
+        ? `<script>window.__ALISTIGO_PLUGIN_URL_OVERRIDES__ = ${JSON.stringify(devPluginUrlOverrides)};</script>`
+        : ""
+    }
     ${
       isDev
         ? `<script type="module">

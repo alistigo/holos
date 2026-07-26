@@ -12,6 +12,18 @@ import HostForm from "./HostForm";
 // Vite resolves this to the dev server URL in dev, or the compiled chunk URL in production.
 const ARTIFACT_ENTRY_URL = new URL("../artifact-entry.tsx", import.meta.url).href;
 
+// Dev only: point plugin loading at local source (served by Vite's /@fs/ file
+// middleware) instead of jsDelivr, so the playground works without publishing or
+// building any plugin package first. Unset in production builds.
+const DEV_PLUGIN_URL_OVERRIDES: Record<string, string> | undefined = import.meta.env.DEV
+  ? Object.fromEntries(
+      Object.entries(__ALISTIGO_DEV_PLUGIN_SRC_PATHS__).map(([packageName, absPath]) => [
+        packageName,
+        `${window.location.origin}/@fs${absPath}`,
+      ]),
+    )
+  : undefined;
+
 const DEFAULT_DOC_JSON = JSON.stringify({
   "@context": { "@vocab": "https://schema.org/", alistigo: "https://alistigo.ai/vocab/" },
   "@type": "ItemList",
@@ -73,6 +85,7 @@ function HostPage(): JSX.Element {
         scriptUrl: ARTIFACT_ENTRY_URL,
         csp: SRCDOC_CSP,
         isDev: import.meta.env.DEV,
+        devPluginUrlOverrides: DEV_PLUGIN_URL_OVERRIDES,
       }),
     [config, docJson],
   );

@@ -145,8 +145,11 @@ interface and event that a plugin can subscribe and react to."
   ADR 0008's R1 error-capture window.
 - Plugin packages require a new build pattern (bundled, dependency-free ESM) not
   previously used anywhere in this repo.
-- No per-plugin jsDelivr version-pin override yet — always `@0`, deferred until a
-  concrete need arises.
+- No per-plugin jsDelivr version-pin override for real embeds — always `@0`. A
+  dev-only override point (`globalThis.__ALISTIGO_PLUGIN_URL_OVERRIDES__`, checked
+  in `loader.ts`'s `resolvePluginUrl`) was added so the playground can load
+  plugins from local source instead of jsDelivr; production/CDN resolution is
+  unaffected since the global is never set outside the playground.
 - `config.plugins` validation stays shallow by design (R6); a malformed per-plugin
   config surfaces only when that plugin's own `setup()` runs, not at config-validation
   time.
