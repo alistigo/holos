@@ -9,11 +9,11 @@ FOUND=()
 
 while IFS= read -r match; do
   FOUND+=("$match")
-done < <(grep -rn '<form' packages --include="*.tsx" --exclude="*.stories.tsx" --exclude="*.test.tsx" 2>/dev/null || true)
+done < <(grep -rn '<form' packages --include="*.tsx" --exclude="*.stories.tsx" --exclude="*.test.tsx" --exclude-dir="node_modules" 2>/dev/null || true)
 
 while IFS= read -r match; do
   FOUND+=("$match")
-done < <(grep -rn "type=['\"]submit['\"]" packages --include="*.tsx" --exclude="*.stories.tsx" --exclude="*.test.tsx" 2>/dev/null || true)
+done < <(grep -rn "type=['\"]submit['\"]" packages --include="*.tsx" --exclude="*.stories.tsx" --exclude="*.test.tsx" --exclude-dir="node_modules" 2>/dev/null || true)
 
 if (( ${#FOUND[@]} > 0 )); then
   echo "ERROR: Artifact packages must not use native form submission (blocked by Claude sandbox)."
