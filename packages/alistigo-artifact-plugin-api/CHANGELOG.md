@@ -1,3 +1,19 @@
+## 0.1.5 (2026-07-26)
+
+### 🚀 Features
+
+- **plugin-api:** add PluginType and AlistigoStorageExtension to AlistigoPlugin ([#32](https://github.com/alistigo/holos/issues/32))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-editor to 0.2.10
+- Updated alistigo-document-format to 0.2.10
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

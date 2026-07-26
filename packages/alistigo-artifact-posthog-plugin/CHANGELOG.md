@@ -1,3 +1,10 @@
+## 0.1.5 (2026-07-26)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-plugin-api to 0.1.5
+- Updated alistigo-logger to 0.2.10
+
 ## 0.1.4 (2026-07-24)
 
 ### 🧱 Updated Dependencies

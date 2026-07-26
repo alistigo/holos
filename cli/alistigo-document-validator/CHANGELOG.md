@@ -1,3 +1,9 @@
+## 0.1.3 (2026-07-26)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-document-format to 0.2.10
+
 ## 0.1.2 (2026-07-24)
 
 ### 🧱 Updated Dependencies

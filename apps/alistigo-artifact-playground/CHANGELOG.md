@@ -1,3 +1,23 @@
+## 0.2.14 (2026-07-26)
+
+### 🚀 Features
+
+- **playground:** show one storage section based on AI context ([25de63c](https://github.com/alistigo/holos/commit/25de63c))
+- **playground:** two-section storage tab with Local and Claude entries (Issue #36) ([#36](https://github.com/alistigo/holos/issues/36))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.11
+- Updated alistigo-local-storage-plugin to 0.2.10
+- Updated alistigo-artifact-manager to 0.1.9
+- Updated alistigo-document-format to 0.2.10
+- Updated alistigo-artifact-list to 0.2.13
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.13 (2026-07-24)
 
 ### 🚀 Features

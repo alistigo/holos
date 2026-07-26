@@ -1,3 +1,26 @@
+## 0.2.10 (2026-07-26)
+
+### 🚀 Features
+
+- **storage:** create alistigo-claude-storage-plugin (Issue #34) ([#34](https://github.com/alistigo/holos/issues/34))
+
+### 🩹 Fixes
+
+- **claude-storage-plugin:** add vite to devDeps and fix types to point to src ([376df28](https://github.com/alistigo/holos/commit/376df28))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-plugin-api to 0.1.5
+- Updated alistigo-document-editor to 0.2.10
+- Updated alistigo-document-format to 0.2.10
+- Updated alistigo-domain to 0.2.10
+- Updated alistigo-logger to 0.2.10
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.9 (2026-07-24)
 
 ### 🧱 Updated Dependencies

@@ -1,3 +1,9 @@
+## 0.1.8 (2026-07-26)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-config-list-format to 0.1.8
+
 ## 0.1.7 (2026-07-24)
 
 ### 🧱 Updated Dependencies

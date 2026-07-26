@@ -1,3 +1,21 @@
+## 0.1.6 (2026-07-26)
+
+### 🩹 Fixes
+
+- **features-runner:** intercept storage plugin CDN routes in test env ([9994df6](https://github.com/alistigo/holos/commit/9994df6))
+- **features-runner:** replace sleep 5 with curl readiness loop in test target ([00a5bca](https://github.com/alistigo/holos/commit/00a5bca))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-plugin-api to 0.1.5
+- Updated alistigo-document-format to 0.2.10
+- Updated alistigo-features to 0.2.10
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.5 (2026-07-24)
 
 ### 🧱 Updated Dependencies

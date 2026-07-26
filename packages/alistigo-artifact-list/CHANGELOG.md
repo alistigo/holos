@@ -1,3 +1,24 @@
+## 0.2.13 (2026-07-26)
+
+### 🚀 Features
+
+- **artifact-list:** use storage plugins via CDN with in-memory fallback (Issue #35) ([#35](https://github.com/alistigo/holos/issues/35))
+- **storage:** create alistigo-claude-storage-plugin (Issue #34) ([#34](https://github.com/alistigo/holos/issues/34))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-list-components-react to 0.2.11
+- Updated alistigo-artifact-plugin-api to 0.1.5
+- Updated alistigo-document-editor to 0.2.10
+- Updated alistigo-document-format to 0.2.10
+- Updated alistigo-domain to 0.2.10
+- Updated alistigo-logger to 0.2.10
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.12 (2026-07-24)
 
 ### 🧱 Updated Dependencies
