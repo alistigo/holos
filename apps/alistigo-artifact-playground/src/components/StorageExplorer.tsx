@@ -5,6 +5,7 @@ import type { JSX } from "react";
 import { useState } from "react";
 
 export interface StorageExplorerProps {
+  aiContext: string;
   localEntries: [string, string][];
   claudeEntries: [string, string][];
 }
@@ -87,21 +88,25 @@ function StorageSection({
 }
 
 export function StorageExplorer({
+  aiContext,
   localEntries,
   claudeEntries,
 }: StorageExplorerProps): JSX.Element {
   return (
-    <div className="flex flex-col h-full overflow-hidden divide-y divide-gray-200">
-      <StorageSection
-        label="Local Storage"
-        entries={localEntries}
-        emptyText="No localStorage entries — interact with the artifact."
-      />
-      <StorageSection
-        label="Claude Storage (simulated)"
-        entries={claudeEntries}
-        emptyText="No Claude storage entries — set AI context to 'claude'."
-      />
+    <div className="flex flex-col h-full overflow-hidden">
+      {aiContext === "claude" ? (
+        <StorageSection
+          label="Claude Storage (simulated)"
+          entries={claudeEntries}
+          emptyText="No Claude storage entries yet — interact with the artifact."
+        />
+      ) : (
+        <StorageSection
+          label="Local Storage"
+          entries={localEntries}
+          emptyText="No localStorage entries yet — interact with the artifact."
+        />
+      )}
     </div>
   );
 }
