@@ -26,6 +26,29 @@ const LOCALE = process.env.LOCALE ?? "en";
 
 const artifactSrc = path.resolve(__dirname, "../../packages/alistigo-artifact-list/src/index.tsx");
 
+// Absolute paths to each plugin package's source entry, so the playground can load
+// plugins straight from local source in dev instead of jsDelivr (see
+// @alistigo/artifact-plugin-api's loader.ts `__ALISTIGO_PLUGIN_URL_OVERRIDES__` hook).
+// None of these packages need to be built/published for the playground to work.
+const devPluginSrcPaths: Record<string, string> = {
+  "@alistigo/claude-storage-plugin": path.resolve(
+    __dirname,
+    "../../packages/alistigo-claude-storage-plugin/src/index.ts",
+  ),
+  "@alistigo/local-storage-plugin": path.resolve(
+    __dirname,
+    "../../packages/alistigo-local-storage-plugin/src/index.ts",
+  ),
+  "@alistigo/artifact-sentry-plugin": path.resolve(
+    __dirname,
+    "../../packages/alistigo-artifact-sentry-plugin/src/index.ts",
+  ),
+  "@alistigo/artifact-posthog-plugin": path.resolve(
+    __dirname,
+    "../../packages/alistigo-artifact-posthog-plugin/src/index.ts",
+  ),
+};
+
 const componentsPackageRoot = path.resolve(
   __dirname,
   "../../packages/alistigo-list-components-react",
@@ -64,6 +87,7 @@ export default defineConfig({
   },
   define: {
     __ALISTIGO_LOCALE__: JSON.stringify(LOCALE),
+    __ALISTIGO_DEV_PLUGIN_SRC_PATHS__: JSON.stringify(devPluginSrcPaths),
   },
   server: {
     port: 5173,
