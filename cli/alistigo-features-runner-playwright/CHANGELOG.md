@@ -1,3 +1,18 @@
+## 0.1.7 (2026-07-27)
+
+### 🩹 Fixes
+
+- **features-runner:** intercept /@fs/ plugin URLs in dev mode ([e9482b7](https://github.com/alistigo/holos/commit/e9482b7))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-plugin-api to 0.1.6
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.6 (2026-07-26)
 
 ### 🩹 Fixes

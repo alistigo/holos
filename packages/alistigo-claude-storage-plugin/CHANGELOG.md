@@ -1,3 +1,9 @@
+## 0.2.11 (2026-07-27)
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-artifact-plugin-api to 0.1.6
+
 ## 0.2.10 (2026-07-26)
 
 ### 🚀 Features

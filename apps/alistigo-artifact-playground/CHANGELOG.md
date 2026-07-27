@@ -1,3 +1,19 @@
+## 0.2.15 (2026-07-27)
+
+### 🩹 Fixes
+
+- **playground:** load plugins from local source instead of jsDelivr in dev ([020a1bc](https://github.com/alistigo/holos/commit/020a1bc))
+
+### 🧱 Updated Dependencies
+
+- Updated alistigo-local-storage-plugin to 0.2.11
+- Updated alistigo-artifact-list to 0.2.14
+
+### ❤️ Thank You
+
+- Claude Sonnet 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.14 (2026-07-26)
 
 ### 🚀 Features
