@@ -18,7 +18,7 @@ export default defineConfig({
       configureServer(server) {
         const umd = path.resolve(
           __dirname,
-          "../../packages/alistigo-artifact-list/dist/index.umd.js",
+          "../../packages/artifact-list/dist/index.umd.js",
         );
         server.middlewares.use("/index.umd.js", (_req, res) => {
           res.setHeader("Content-Type", "application/javascript");

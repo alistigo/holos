@@ -1,4 +1,4 @@
-import type { AlistigoDocument } from "@alistigo/document-format";
+import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { useMemo } from "react";
 
 const FIXTURES_RAW = import.meta.glob<AlistigoDocument>("../../fixtures/*.json", {

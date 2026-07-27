@@ -10,7 +10,7 @@ import { formatter } from "@lingui/format-po";
  *
  * The components package is the **single source of truth for catalogs**
  * across the Alistigo apps. Catalogs live next to the components, in
- * `packages/alistigo-list-components-react/src/locales/{locale}/messages.po`,
+ * `packages/list-components-react/src/locales/{locale}/messages.po`,
  * and consuming apps reference them through a Vite alias resolved at
  * build time (see each app's `vite.config.ts`).
  *
@@ -23,9 +23,9 @@ export default defineConfig({
   locales: ["en", "fr"],
   catalogs: [
     {
-      path: "<rootDir>/packages/alistigo-list-components-react/src/locales/{locale}/messages",
+      path: "<rootDir>/packages/list-components-react/src/locales/{locale}/messages",
       include: [
-        "packages/alistigo-list-components-react/src",
+        "packages/list-components-react/src",
         "apps/alistigo-artifact-playground/src",
       ],
     },

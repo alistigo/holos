@@ -13,7 +13,7 @@
   "dependencies": {
     "@alistigo/artifact-list": "workspace:*",
     "@alistigo/artifact-manager": "workspace:*",
-    "@alistigo/document-format": "workspace:*",
+    "@alistigo/list-document-format": "workspace:*",
     "@alistigo/list-components-react": "workspace:*",
     "@alistigo/local-storage-plugin": "workspace:*",
     "prism-react-renderer": "^2.4.1",

@@ -49,19 +49,19 @@ importers:
     dependencies:
       '@alistigo/artifact-list':
         specifier: workspace:*
-        version: link:../../packages/alistigo-artifact-list
+        version: link:../../packages/artifact-list
       '@alistigo/artifact-manager':
         specifier: workspace:*
-        version: link:../../packages/alistigo-artifact-manager
-      '@alistigo/document-format':
-        specifier: workspace:*
-        version: link:../../packages/alistigo-document-format
+        version: link:../../packages/artifact-manager
       '@alistigo/list-components-react':
         specifier: workspace:*
-        version: link:../../packages/alistigo-list-components-react
+        version: link:../../packages/list-components-react
+      '@alistigo/list-document-format':
+        specifier: workspace:*
+        version: link:../../packages/list-document-format
       '@alistigo/local-storage-plugin':
         specifier: workspace:*
-        version: link:../../packages/alistigo-local-storage-plugin
+        version: link:../../packages/local-storage-plugin
       '@uiw/react-json-view':
         specifier: ^2.0.0-alpha.43
         version: 2.0.0-alpha.43(@babel/runtime@7.28.6)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -131,11 +131,11 @@ importers:
         specifier: ^18.0.0
         version: 18.3.31
 
-  cli/alistigo-document-validator:
+  cli/document-validator:
     dependencies:
-      '@alistigo/document-format':
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../../packages/alistigo-document-format
+        version: link:../../packages/list-document-format
       clipanion:
         specifier: 4.0.0-rc.4
         version: 4.0.0-rc.4(typanion@3.14.0)
@@ -153,17 +153,17 @@ importers:
         specifier: ^18.0.0
         version: 18.3.31
 
-  cli/alistigo-features-runner-playwright:
+  cli/list-features-runner-playwright:
     dependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
-        version: link:../../packages/alistigo-artifact-plugin-api
-      '@alistigo/document-format':
+        version: link:../../packages/artifact-plugin-api
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../../packages/alistigo-document-format
-      '@alistigo/features':
+        version: link:../../packages/list-document-format
+      '@alistigo/list-features':
         specifier: workspace:*
-        version: link:../../packages/alistigo-features
+        version: link:../../packages/list-features
       '@cucumber/cucumber':
         specifier: ^12.9.0
         version: 12.9.0
@@ -184,34 +184,34 @@ importers:
         specifier: ^4.19.0
         version: 4.21.0
 
-  packages/alistigo-artifact-config-format:
+  packages/artifact-config-format:
     dependencies:
       '@alistigo/artifact-config-list-format':
         specifier: workspace:*
-        version: link:../alistigo-artifact-config-list-format
+        version: link:../artifact-config-list-format
 
-  packages/alistigo-artifact-config-list-format: {}
+  packages/artifact-config-list-format: {}
 
-  packages/alistigo-artifact-list:
+  packages/artifact-list:
     dependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
-        version: link:../alistigo-artifact-plugin-api
-      '@alistigo/document-editor':
-        specifier: workspace:*
-        version: link:../alistigo-document-editor
-      '@alistigo/document-format':
-        specifier: workspace:*
-        version: link:../alistigo-document-format
-      '@alistigo/domain':
-        specifier: workspace:*
-        version: link:../alistigo-domain
+        version: link:../artifact-plugin-api
       '@alistigo/list-components-react':
         specifier: workspace:*
-        version: link:../alistigo-list-components-react
+        version: link:../list-components-react
+      '@alistigo/list-document-editor':
+        specifier: workspace:*
+        version: link:../list-document-editor
+      '@alistigo/list-document-format':
+        specifier: workspace:*
+        version: link:../list-document-format
+      '@alistigo/list-domain':
+        specifier: workspace:*
+        version: link:../list-domain
       '@alistigo/logger':
         specifier: workspace:*
-        version: link:../alistigo-logger
+        version: link:../logger
       '@lingui/core':
         specifier: ^6.0.0
         version: 6.0.1(babel-plugin-macros@3.1.0)
@@ -256,75 +256,75 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
 
-  packages/alistigo-artifact-list-skill:
+  packages/artifact-list-skill:
     dependencies:
       '@alistigo/artifact-config-list-format':
         specifier: workspace:*
-        version: link:../alistigo-artifact-config-list-format
-      '@alistigo/document-format':
+        version: link:../artifact-config-list-format
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../alistigo-document-format
+        version: link:../list-document-format
 
-  packages/alistigo-artifact-manager:
+  packages/artifact-manager:
     dependencies:
       '@alistigo/artifact-config-format':
         specifier: workspace:*
-        version: link:../alistigo-artifact-config-format
+        version: link:../artifact-config-format
     devDependencies:
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-artifact-manager-skill:
+  packages/artifact-manager-skill:
     devDependencies:
       '@alistigo/artifact-manager':
         specifier: workspace:*
-        version: link:../alistigo-artifact-manager
+        version: link:../artifact-manager
       yaml:
         specifier: ^2.7.0
         version: 2.8.2
 
-  packages/alistigo-artifact-plugin-api:
+  packages/artifact-plugin-api:
     dependencies:
-      '@alistigo/document-editor':
+      '@alistigo/list-document-editor':
         specifier: workspace:*
-        version: link:../alistigo-document-editor
-      '@alistigo/document-format':
+        version: link:../list-document-editor
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../alistigo-document-format
+        version: link:../list-document-format
     devDependencies:
       '@types/react':
         specifier: ^19.2.14
         version: 19.2.14
 
-  packages/alistigo-artifact-posthog-plugin:
+  packages/artifact-posthog-plugin:
     dependencies:
       '@alistigo/logger':
         specifier: workspace:*
-        version: link:../alistigo-logger
+        version: link:../logger
       posthog-js:
         specifier: ^1.0.0
         version: 1.383.2
     devDependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
-        version: link:../alistigo-artifact-plugin-api
+        version: link:../artifact-plugin-api
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-artifact-sentry-plugin:
+  packages/artifact-sentry-plugin:
     dependencies:
       '@alistigo/logger':
         specifier: workspace:*
-        version: link:../alistigo-logger
+        version: link:../logger
       '@sentry/browser':
         specifier: ^9.0.0
         version: 9.47.1
     devDependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
-        version: link:../alistigo-artifact-plugin-api
+        version: link:../artifact-plugin-api
       '@sentry/vite-plugin':
         specifier: ^3.0.0
         version: 3.6.1
@@ -332,84 +332,42 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-claude-storage-plugin:
+  packages/claude-storage-plugin:
     dependencies:
-      '@alistigo/document-editor':
+      '@alistigo/list-document-editor':
         specifier: workspace:*
-        version: link:../alistigo-document-editor
-      '@alistigo/document-format':
+        version: link:../list-document-editor
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../alistigo-document-format
-      '@alistigo/domain':
+        version: link:../list-document-format
+      '@alistigo/list-domain':
         specifier: workspace:*
-        version: link:../alistigo-domain
+        version: link:../list-domain
       '@alistigo/logger':
         specifier: workspace:*
-        version: link:../alistigo-logger
+        version: link:../logger
     devDependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
-        version: link:../alistigo-artifact-plugin-api
+        version: link:../artifact-plugin-api
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-document-editor:
+  packages/list-components-react:
     dependencies:
-      '@alistigo/document-format':
+      '@alistigo/list-document-editor':
         specifier: workspace:*
-        version: link:../alistigo-document-format
-      '@alistigo/domain':
+        version: link:../list-document-editor
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../alistigo-domain
+        version: link:../list-document-format
+      '@alistigo/list-domain':
+        specifier: workspace:*
+        version: link:../list-domain
       '@alistigo/logger':
         specifier: workspace:*
-        version: link:../alistigo-logger
-
-  packages/alistigo-document-format:
-    dependencies:
-      '@alistigo/domain':
-        specifier: workspace:*
-        version: link:../alistigo-domain
-      ajv:
-        specifier: ^8.17.0
-        version: 8.20.0
-      ajv-formats:
-        specifier: ^3.0.1
-        version: 3.0.1(ajv@8.20.0)
-
-  packages/alistigo-domain:
-    dependencies:
-      typeid-js:
-        specifier: ^1.2.0
-        version: 1.2.0
-
-  packages/alistigo-features:
-    devDependencies:
-      gherklin:
-        specifier: ^1.0.0
-        version: 1.0.12
-      prettier:
-        specifier: ^3.3.0
-        version: 3.8.3
-      prettier-plugin-gherkin:
-        specifier: ^3.1.2
-        version: 3.1.3
-
-  packages/alistigo-list-components-react:
-    dependencies:
-      '@alistigo/document-editor':
-        specifier: workspace:*
-        version: link:../alistigo-document-editor
-      '@alistigo/document-format':
-        specifier: workspace:*
-        version: link:../alistigo-document-format
-      '@alistigo/domain':
-        specifier: workspace:*
-        version: link:../alistigo-domain
-      '@alistigo/logger':
-        specifier: workspace:*
-        version: link:../alistigo-logger
+        version: link:../logger
       '@lingui/core':
         specifier: ^6.0.0
         version: 6.0.1(babel-plugin-macros@3.1.0)
@@ -481,29 +439,71 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-local-storage-plugin:
+  packages/list-document-editor:
     dependencies:
-      '@alistigo/document-editor':
+      '@alistigo/list-document-format':
         specifier: workspace:*
-        version: link:../alistigo-document-editor
-      '@alistigo/document-format':
+        version: link:../list-document-format
+      '@alistigo/list-domain':
         specifier: workspace:*
-        version: link:../alistigo-document-format
-      '@alistigo/domain':
-        specifier: workspace:*
-        version: link:../alistigo-domain
+        version: link:../list-domain
       '@alistigo/logger':
         specifier: workspace:*
-        version: link:../alistigo-logger
+        version: link:../logger
+
+  packages/list-document-format:
+    dependencies:
+      '@alistigo/list-domain':
+        specifier: workspace:*
+        version: link:../list-domain
+      ajv:
+        specifier: ^8.17.0
+        version: 8.20.0
+      ajv-formats:
+        specifier: ^3.0.1
+        version: 3.0.1(ajv@8.20.0)
+
+  packages/list-domain:
+    dependencies:
+      typeid-js:
+        specifier: ^1.2.0
+        version: 1.2.0
+
+  packages/list-features:
+    devDependencies:
+      gherklin:
+        specifier: ^1.0.0
+        version: 1.0.12
+      prettier:
+        specifier: ^3.3.0
+        version: 3.8.3
+      prettier-plugin-gherkin:
+        specifier: ^3.1.2
+        version: 3.1.3
+
+  packages/local-storage-plugin:
+    dependencies:
+      '@alistigo/list-document-editor':
+        specifier: workspace:*
+        version: link:../list-document-editor
+      '@alistigo/list-document-format':
+        specifier: workspace:*
+        version: link:../list-document-format
+      '@alistigo/list-domain':
+        specifier: workspace:*
+        version: link:../list-domain
+      '@alistigo/logger':
+        specifier: workspace:*
+        version: link:../logger
     devDependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
-        version: link:../alistigo-artifact-plugin-api
+        version: link:../artifact-plugin-api
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/alistigo-logger:
+  packages/logger:
     dependencies:
       pino:
         specifier: ^9.0.0

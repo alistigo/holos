@@ -1,0 +1,53 @@
+{
+  "name": "@alistigo/local-storage-plugin",
+  "version": "0.2.11",
+  "description": "localStorage-backed AlistigoPlugin implementation (storage type) for standard browser contexts.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/local-storage-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/local-storage-plugin#readme",
+  "keywords": [
+    "alistigo",
+    "list",
+    "storage",
+    "localstorage",
+    "plugin"
+  ],
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./src/index.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/logger": "workspace:*",
+    "@alistigo/list-domain": "workspace:*",
+    "@alistigo/list-document-format": "workspace:*",
+    "@alistigo/list-document-editor": "workspace:*"
+  },
+  "devDependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "vite": "^7.0.0"
+  }
+}
