@@ -8,6 +8,8 @@ created: 2026-06-11T14:20:20Z
 # PRD: Alistigo AI — M6 Public Beta (v1.0.0)
 
 **Status:** Draft — re-plan after M5 ships
+
+> **Prerequisite:** [P0 — Platform Foundation](alistigo-platform-foundation.md) and M1–M5 must be complete. M6 ships the full platform; all packages renamed and structured per P0 are what gets published to npm.
 **Milestone:** M6
 **Depends on:** M5 (v0.6.0)
 

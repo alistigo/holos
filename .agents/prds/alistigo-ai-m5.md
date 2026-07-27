@@ -8,6 +8,8 @@ created: 2026-06-11T14:20:20Z
 # PRD: Alistigo AI — M5 Host ↔ Iframe Protocol (v0.6.0)
 
 **Status:** Backlog
+
+> **Prerequisite:** [P0 — Platform Foundation](alistigo-platform-foundation.md) must be complete before starting M5. The `postMessage` protocol in M5 builds on `@alistigo/ai-chat-async-api` and the artifact-core lifecycle introduced in P0.
 **Milestone:** M5
 **Depends on:** M4 (v0.5.0)
 

@@ -1,9 +1,10 @@
-# Alistigo AI — Milestones
+# Alistigo — Milestones
 
 > **Source of truth:** Each milestone's PRD is the authoritative reference for scope, requirements, and acceptance criteria. This file is a roadmap overview; use the PRDs for implementation planning.
 >
 > | Milestone | PRD |
 > |-----------|-----|
+> | **P0 — Platform Foundation** | [`.agents/prds/alistigo-platform-foundation.md`](../../.agents/prds/alistigo-platform-foundation.md) |
 > | M1 — Base list app | [`.agents/prds/alistigo-ai-m1.md`](../../.agents/prds/alistigo-ai-m1.md) |
 > | M2 — Artifact Playground & Common Architecture | [`.agents/prds/alistigo-ai-m2.md`](../../.agents/prds/alistigo-ai-m2.md) |
 > | M3 — Plugin Architecture & First Plugin | [`.agents/prds/alistigo-ai-m3.md`](../../.agents/prds/alistigo-ai-m3.md) |
@@ -14,6 +15,35 @@
 Each milestone has: a **goal**, a **scope** (what's in / what's out), the **deliverables**, and pointers to the **Gherkin features** that define acceptance.
 
 Milestones are versioned and incremental. Each one ships something that works end-to-end — not a shelf of half-built layers.
+
+---
+
+## P0 — Platform Foundation
+
+**Goal:** establish the Alistigo platform foundation so any artifact can be built on top of shared, well-tested libraries. The list artifact becomes the reference implementation that proves the platform works.
+
+### What P0 delivers
+
+| Area | Deliverable |
+|------|-------------|
+| ADR | [ADR 0018](adrs/0018-alistigo-platform.md) — Alistigo as a Platform for AI Artifacts |
+| Package renames | Drop `alistigo-` directory prefix from all packages; rename 4 list-specific packages to include "list" in their npm name |
+| `@alistigo/artifact-core` | Lifecycle phases (loading/ready/error), `startArtifact()`, `ArtifactErrorBoundary` |
+| `@alistigo/artifact-core-components-react` | `LoadingScreen`, `ErrorScreen`, `AlistigoBadge`, `ArtifactInfoModal` + Storybook stories |
+| `@alistigo/ai-chat-async-api` | `<api-calls>` tag executor, `ApiCallsExecutor`, `ArtifactApiDefinition` (AsyncAPI 3.0 subset) |
+| List artifact integration | List artifact uses artifact-core + shows badge, loading/error screens |
+| Playground AI API tab | Send API calls to artifact from the playground, see results in a call log |
+| Platform docs | `docs/platform/` — artifact contract, skill pattern, plugin types, layer diagram |
+| Generic CLI | `document-validator` accepts `--schema` flag for any artifact format |
+
+### Done when
+
+1. `pnpm build:typecheck` passes clean
+2. All existing Gherkin scenarios stay green (no regressions)
+3. `LoadingScreen` and `AlistigoBadge` (top-right) visible in list artifact in the playground
+4. Sending an `addElement` action via the playground AI API tab causes the list to update
+
+See [Epic #44](https://github.com/alistigo/holos/issues/44) for issue-level tracking.
 
 ---
 
@@ -29,6 +59,14 @@ Every `@alistigo` artifact follows a two-document contract:
 **State document** — JSON the artifact reads/writes; can be pre-loaded from the page or injected via API. Represents the artifact's persisted domain state.
 
 Both documents are self-contained, version-stamped, and round-trippable. This makes every artifact embeddable in any host without bespoke integration code. Validation for both documents is defined in their respective `*-format` packages.
+
+---
+
+---
+
+## List Artifact Milestones
+
+> These milestones track the **list artifact** specifically, built on top of the P0 Platform Foundation. M3 and later require P0 to be complete.
 
 ---
 

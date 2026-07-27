@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # ListDocumentSerializer — Anticorruption Layer
 
 Stateless domain service in the Document Context. Translates between the Core List Context's internal `List` aggregate and the public `AlistigoDocument` JSON-LD format.

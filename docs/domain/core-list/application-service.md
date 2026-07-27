@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # ListApplicationService — Application Layer
 
 Orchestration layer between the outside world and the Core List Context. Constructs and dispatches `ActorCommand`s, persists the result, and returns the outcome.

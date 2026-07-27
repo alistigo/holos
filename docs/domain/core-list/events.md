@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # ListEvents — Core List Context
 
 All ListEvents are **immutable facts**. Once emitted they are never modified or deleted. They form the `ListEventLog` — the source of truth for all List state.

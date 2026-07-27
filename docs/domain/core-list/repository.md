@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # ListRepository — Interface
 
 Only one Repository exists in the Core List Context — for the `List` aggregate root. The domain layer defines the interface; infrastructure provides the implementation.
