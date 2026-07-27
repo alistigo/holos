@@ -34,6 +34,7 @@ export function useStartArtifact(config: StartArtifactConfig, lifecycle: Artifac
   const setPhase = lifecycle.setPhase;
 
   useEffect(() => {
+    // fallow-ignore-next-line complexity
     const run = async () => {
       try {
         await configRef.current.onReady?.();
