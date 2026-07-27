@@ -1,4 +1,6 @@
-# Ubiquitous Language Glossary — Alistigo AI
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../platform/README.md)._
+
+# Ubiquitous Language Glossary — List Artifact
 
 The authoritative vocabulary for this project. All code, tests, and documentation must use these terms exactly.
 

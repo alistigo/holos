@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # Value Objects — Core List Context
 
 All Value Objects are **immutable**. Equality is attribute-based, not reference-based.

@@ -8,6 +8,8 @@ created: 2026-06-11T14:20:20Z
 # PRD: Alistigo AI — M4 Second List Type via Plugins (v0.5.0)
 
 **Status:** Backlog
+
+> **Prerequisite:** [P0 — Platform Foundation](alistigo-platform-foundation.md) and M3 must be complete before starting M4. M4 extends the plugin system established in P0 and validated by M3.
 **Milestone:** M4
 **Depends on:** M3 (v0.4.0)
 

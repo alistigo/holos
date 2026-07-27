@@ -1,4 +1,6 @@
-# Domain Model — Alistigo AI (M1)
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../platform/README.md)._
+
+# Domain Model — List Artifact (M1)
 
 Entry point for the Alistigo domain model. Start with the [Ubiquitous Language Glossary](glossary.md), then navigate into the bounded context that interests you.
 

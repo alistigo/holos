@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # ActorListCommands — Core List Context
 
 `ActorListCommand`s express intent to change a List, issued by an identifiable Actor. They are validated before application — a rejected command returns an error and emits no ListEvents.

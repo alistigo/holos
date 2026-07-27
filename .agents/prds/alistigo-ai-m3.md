@@ -8,6 +8,8 @@ created: 2026-06-11T14:20:20Z
 # PRD: Alistigo AI — M3 Plugin Architecture & First Plugin (v0.4.0)
 
 **Status:** Backlog
+
+> **Prerequisite:** [P0 — Platform Foundation](alistigo-platform-foundation.md) must be complete before starting M3. M3 builds on `@alistigo/artifact-core`, `@alistigo/artifact-plugin-api`, and the renamed package structure introduced in P0.
 **Milestone:** M3
 **Depends on:** M2 (v0.3.0)
 

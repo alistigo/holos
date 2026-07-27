@@ -1,3 +1,5 @@
+> _**Scope:** List Artifact domain only. Platform-level documentation lives in [`docs/platform/`](../../platform/README.md)._
+
 # Document Context — Overview
 
 **Type:** Supporting Domain

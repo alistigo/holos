@@ -1,27 +1,78 @@
-# Alistigo AI — Architecture
+# Alistigo — Architecture
 
-This document describes the technical architecture for Alistigo AI: stack, layering, runtime model, evolution path, and the non-negotiable principles that drive design choices.
+> **Platform scope (P0+):** Alistigo is a platform for AI artifacts. The list artifact (`@alistigo/artifact-list`) is the reference implementation. For platform-level architecture see [`docs/platform/`](platform/README.md) and [ADR 0018](adrs/0018-alistigo-platform.md).
+
+This document describes the technical architecture for the Alistigo platform and its reference implementation (the list artifact): stack, layering, runtime model, evolution path, and the non-negotiable principles that drive design choices.
 
 ---
 
 ## 1. Constraints
 
-These come from the project vision and are **load-bearing** — most architectural choices follow from them.
+These come from the project vision and are **load-bearing** — most architectural choices follow from them. C2–C4 and C6–C8 are **platform constraints** that apply to every `@alistigo` artifact; C1, C5 are implementation-wide.
 
 | # | Constraint | Implication |
 |---|------------|-------------|
 | C1 | TypeScript everywhere | One language, shared types from document → app → runner |
 | C2 | 100% frontend, no backend | All state lives in the browser. No network is required to run. |
-| C3 | iframe-embeddable | The app is a self-contained bundle. Host integration is via `postMessage` only (M4+). |
+| C3 | iframe-embeddable | Every artifact is a self-contained bundle. Host integration is via `postMessage` only (M5+). |
 | C4 | LLM-driven artifacts | Documents must be LLM-producible from prose, and human-readable when pretty-printed. |
 | C5 | Client-first, sync later | Today: `localStorage` (and other browser storage). Tomorrow: optional sync to an API without changing the document format. |
 | C6 | TDD via Gherkin | Every behavior is specified in a `.feature` file before code. A custom runner enforces that. |
-| C7 | DDD: domain ⟂ rendering | Domain logic (list, item, plugin) does not import UI code. UI does not own state. |
+| C7 | DDD: domain ⟂ rendering | Domain logic does not import UI code. UI does not own state. |
 | C8 | **Event sourcing + CQRS** | Mutations are **appended events**, never CRUD writes. The current document is a *projection* of the event stream. **At runtime**, the event log is the source of truth; the document is a derivable snapshot. (A Document arriving without a log — e.g. via URL fragment — is bootstrapped into the runtime by synthesizing a fresh log; from that point on, the log is authoritative.) |
 
 ---
 
-## 2. Layered Model (DDD)
+## 2. Platform Layer Model
+
+Alistigo is a four-tier platform. Each tier is independently versioned; platform tiers (Artifact Core + Platform Infra) are shared by all artifacts.
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  DEV TOOLS  (not shipped to end-users; used during development only)         │
+│  apps/alistigo-artifact-playground  packages/list-features                  │
+│  cli/list-features-runner-playwright  cli/agent-skill-tester                │
+└──────────────────────────────────────────┬───────────────────────────────────┘
+                                           │
+┌──────────────────────────────────────────▼───────────────────────────────────┐
+│  ARTIFACTS  (shipped via npm + jsDelivr; run inside Claude/host iframes)     │
+│  packages/artifact-list              @alistigo/artifact-list                │
+│  packages/list-domain                @alistigo/list-domain                  │
+│  packages/list-document-format       @alistigo/list-document-format         │
+│  packages/list-document-editor       @alistigo/list-document-editor         │
+│  packages/list-components-react      @alistigo/list-components-react        │
+│  packages/artifact-list-skill        @alistigo/artifact-list-skill          │
+└──────────────────────────────────────────┬───────────────────────────────────┘
+                                           │ uses
+┌──────────────────────────────────────────▼───────────────────────────────────┐
+│  ARTIFACT CORE  (shared by all artifacts; bundled into each artifact)         │
+│  packages/artifact-core              @alistigo/artifact-core                │
+│  packages/artifact-core-components-react  @alistigo/artifact-core-components-react │
+│  packages/artifact-plugin-api        @alistigo/artifact-plugin-api          │
+│  packages/ai-chat-async-api          @alistigo/ai-chat-async-api            │
+│  packages/logger                     @alistigo/logger                       │
+└──────────────────────────────────────────┬───────────────────────────────────┘
+                                           │
+┌──────────────────────────────────────────▼───────────────────────────────────┐
+│  PLATFORM INFRA  (CDN-loaded at runtime; independently versioned)            │
+│  packages/artifact-manager           @alistigo/artifact-manager             │
+│  packages/artifact-config-format     @alistigo/artifact-config-format       │
+│  packages/artifact-sentry-plugin     @alistigo/artifact-sentry-plugin       │
+│  packages/artifact-posthog-plugin    @alistigo/artifact-posthog-plugin      │
+│  packages/claude-storage-plugin      @alistigo/claude-storage-plugin        │
+│  packages/local-storage-plugin       @alistigo/local-storage-plugin         │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+See [`docs/platform/layer-diagram.md`](platform/layer-diagram.md) for the full diagram with all package names.
+
+---
+
+## 3. List Artifact Architecture (DDD)
+
+> _**Scope:** The sections below describe the **List Artifact** domain architecture. The DDD/event-sourcing model is specific to the list artifact; future artifacts may use different internal models._
+
+### 3.1 Layered Model (DDD)
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -79,14 +130,14 @@ These come from the project vision and are **load-bearing** — most architectur
 │  ADAPTERS  (implementations of Ports)                            │
 │  - LocalStorageEventStore  (event log → localStorage)            │
 │  - InMemoryEventStore      (used by the runner and tests)        │
-│  - JsonLdSerializer        (uses packages/alistigo-document-format)     │
-│  - AjvValidator            (uses packages/alistigo-document-format)     │
+│  - JsonLdSerializer        (uses packages/list-document-format)         │
+│  - AjvValidator            (uses packages/list-document-format)         │
 │  - PostMessageHostBridge   (M4+)                                 │
 │  - HttpSyncEventStore      (post-1.0 — sync events to backend)   │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-**Rules of dependency:**
+#### Rules of dependency
 - Domain has zero project-internal imports.
 - Application depends only on Domain + Ports (interfaces it owns).
 - Adapters and Presentation depend on Application + Ports.
@@ -98,13 +149,13 @@ This makes the runner trivial: the same Application + Domain code runs against a
 
 ---
 
-## 3. Workspace Layout
+### 3.2 Workspace Layout
 
-Implementation will be split across the monorepo so layers stay separable:
+Implementation is split across the monorepo so layers stay separable:
 
 ```
 apps/
-└── alistigo-artifact-playground/   # the iframe app (Vite + React)
+└── alistigo-artifact-playground/   # dev harness (Vite + React)
     ├── src/
     │   ├── presentation/          # UI components only — no domain logic
     │   ├── adapters/              # localStorage, postMessage, …
@@ -113,34 +164,45 @@ apps/
     ├── fixtures/                  # sample documents
     └── index.html                 # iframe entry
 
-apps/
-└── alistigo-host-demo/            # M4: reference host page
-
 packages/
-├── alistigo-document-format/      # PURE — no DOM, no browser APIs
-│   ├── src/
-│   │   ├── schema.json            # JSON Schema for the document (projection)
-│   │   ├── event-schema.json      # JSON Schema for events
-│   │   ├── types.ts               # TS types: Document, Event, Command
-│   │   ├── parse.ts               # parse + validate (document & event)
-│   │   └── serialize.ts
-│   └── README.md
-├── alistigo-domain/               # PURE — entities, value objects, event/command types
-├── alistigo-document-editor/          # PURE — command handlers, projector, queries, ports
-├── alistigo-plugin-api/           # M2 — plugin interface (events + projection contributions)
-├── alistigo-plugin-checkbox/      # M2
-├── alistigo-host-protocol/        # M4 — postMessage envelope + types
-├── alistigo-features/             # PURE — Gherkin .feature specs + tag taxonomy + tooling
-└── alistigo-features-runner/               # the Gherkin runner (see §7)
+│   # Artifact Core (shared by all artifacts)
+├── artifact-core/                 # lifecycle phases, startArtifact(), ArtifactErrorBoundary
+├── artifact-core-components-react/ # LoadingScreen, ErrorScreen, AlistigoBadge, ArtifactInfoModal
+├── artifact-plugin-api/           # AlistigoPlugin interface, loadPlugin(), event bus
+├── ai-chat-async-api/             # <api-calls> executor, ApiCallsExecutor, ArtifactApiDefinition
+├── logger/                        # pino-based structured logging
+│
+│   # List Artifact
+├── artifact-list/                 # @alistigo/artifact-list — UMD bundle
+├── artifact-config-list-format/   # list-specific config schema
+├── list-domain/                   # PURE — entities, value objects, event/command types
+├── list-document-format/          # PURE — JSON Schema, TS types, parse, validate, serialize
+├── list-document-editor/          # PURE — command handlers, projector, queries, ports
+├── list-components-react/         # list UI components (Storybook)
+├── artifact-list-skill/           # agent skill (SKILL.md + api.json)
+├── list-features/                 # Gherkin .feature specs
+│
+│   # Platform Infra (CDN-loaded)
+├── artifact-manager/              # CDN resolver + <script> injector
+├── artifact-config-format/        # discriminated union of all artifact config schemas
+├── artifact-sentry-plugin/        # Sentry error monitoring
+├── artifact-posthog-plugin/       # PostHog analytics
+├── claude-storage-plugin/         # window.storage backend
+└── local-storage-plugin/          # localStorage backend
+
+cli/
+├── document-validator/            # validate any artifact document against a JSON Schema
+├── list-features-runner-playwright/ # Gherkin runner for list features
+└── agent-skill-tester/            # skill trigger accuracy evaluation
 ```
 
 Each package follows the standard repo conventions (Nx `project.json`, `tsconfig.json` extending `tsconfig.base.json`, Bun runtime, Biome lint, `workspace:*` for cross-references).
 
 ---
 
-## 4. Runtime Model
+### 3.3 Runtime Model
 
-### 4.1 Iframe loading
+#### 3.3.1 Iframe loading
 
 The app is served as a static bundle. It loads in three phases:
 
@@ -152,7 +214,7 @@ The app is served as a static bundle. It loads in three phases:
    4. an empty list document conforming to the schema.
 3. **Render** — Presentation subscribes to Application state and dispatches user commands back.
 
-### 4.2 Persistence
+#### 3.3.2 Persistence
 
 We persist **events**, not documents. The document is recomputed (or restored from a snapshot cache) when needed.
 
@@ -164,7 +226,7 @@ A **snapshot cache** (current document) MAY be persisted alongside the log so bo
 
 The persistence layer is just an `EventStore` adapter — domain & application layers stay untouched.
 
-### 4.3 Host integration (M4)
+#### 3.3.3 Host integration (M5)
 
 A versioned `postMessage` envelope, schema lives in `packages/alistigo-host-protocol/`. Aligned with the event-sourced model, the host can:
 
@@ -177,11 +239,11 @@ The widget refuses messages from unallowed origins and validates every payload (
 
 ---
 
-## 5. Event Sourcing & CQRS
+### 3.4 Event Sourcing & CQRS
 
 This is the methodology that drives every mutation in the system. Read it once; it explains a lot of the surface area above.
 
-### 5.1 The contract
+#### 3.4.1 The contract
 
 The contract holds **at runtime** — once the app has booted and an event log exists in the runtime. The "Bootstrap from a Document" subsection below covers the import case, where a Document arrives without a log.
 
@@ -213,7 +275,7 @@ Command ──▶ CommandHandler ──▶ Event(s) ──▶ append to EventSto
                                             UI / queries
 ```
 
-### 5.2 Event types (M1)
+#### 3.4.2 Event types (M1)
 
 Each event is a typed record. The discriminator is `eventType`. Common envelope:
 
@@ -239,9 +301,9 @@ M1 catalog:
 
 The full schema for events lives in [the format spec, §4 The eventLog section](../../packages/alistigo-document-format/docs/spec.md#4-the-eventlog-section).
 
-### 5.3 The projector
+#### 3.4.3 The projector
 
-A pure function in `packages/alistigo-document-editor/`:
+A pure function in `packages/list-document-editor/`:
 
 ```ts
 function project(events: AlistigoEvent[]): AlistigoDocument {
@@ -255,7 +317,7 @@ Properties we hold:
 - **Order preservation**: events apply in `seq` order, not in insertion order. This makes future sync (events arriving out-of-order) trivially reorderable.
 - **Plugin contributions** (M2+): plugins register additional event types and corresponding `applyEvent` branches via the plugin API.
 
-### 5.4 What CQRS / Event Sourcing buys us
+#### 3.4.4 What CQRS / Event Sourcing buys us
 
 | Benefit | How it shows up |
 |---------|------------------|
@@ -266,13 +328,13 @@ Properties we hold:
 | **Testability** | Every test is "given these events, expect this document" — one of the cleanest tests you can write. |
 | **Refactor safety** | The projection logic is pure; we can rewrite it without migrating data, because the data (events) is independent of the projection (document). |
 
-### 5.5 Tradeoffs we are accepting
+#### 3.4.5 Tradeoffs we are accepting
 
 - **More moving parts than a CRUD model.** Events + commands + projector vs. just "edit the doc". For a small widget that's fine; for the project's goals (sync, undo, AI integration) it pays off quickly.
 - **Replay cost grows with the log.** Mitigated by snapshots (M2+). A list realistically has hundreds, not millions, of events.
 - **Schema migrations on events.** Events are immutable, so renaming an event type or changing its payload requires either an *upcaster* (transforms old events to the new shape on read) or a versioned event type. We document the policy in [the format spec, §8 event evolution policy](../../packages/alistigo-document-format/docs/spec.md#8-event-evolution-policy).
 
-### 5.6 What we are *not* doing
+#### 3.4.6 What we are *not* doing
 
 - **Not an event bus.** No pub/sub between distant subsystems for now. Events are local; the only "bus" is the in-memory dispatcher inside the Application layer.
 - **Not full DDD aggregates with optimistic concurrency.** A list is a single aggregate; we don't need version-vector concurrency control until M4+/sync.
@@ -280,34 +342,34 @@ Properties we hold:
 
 ---
 
-## 6. Document Format
+### 3.5 Document Format
 
 The list document is the **projection** — the current snapshot of the list, derivable at any time from the event log. It is a JSON-LD document built on schema.org `ItemList`, with an Alistigo extension namespace for properties schema.org doesn't cover.
 
-The full spec — including JSON Schema for the document, examples, evolution / versioning rules, validation guidance, and references to schema.org and iCalendar VTODO (RFC 5545 / jCal RFC 7265) — lives in the dedicated package: [`packages/alistigo-document-format/`](../../packages/alistigo-document-format/) (start with [`docs/spec.md`](../../packages/alistigo-document-format/docs/spec.md)).
+The full spec — including JSON Schema for the document, examples, evolution / versioning rules, validation guidance, and references to schema.org and iCalendar VTODO (RFC 5545 / jCal RFC 7265) — lives in the dedicated package: `packages/list-document-format/`.
 
-The `packages/alistigo-document-format/` package is the runtime expression of that spec: TS types (Document, Event, Command), JSON Schemas, `parse`, `validate`, `serialize`. **No other package re-implements the format.**
+The `list-document-format` package is the runtime expression of that spec: TS types (Document, Event, Command), JSON Schemas, `parse`, `validate`, `serialize`. **No other package re-implements the format.**
 
 ---
 
-## 7. The Gherkin Runner
+### 3.6 The Gherkin Runner
 
 We follow TDD: behavior is written in `.feature` files first. The runner reads them and asserts the app conforms.
 
-### 7.1 What the runner is
+#### 3.6.1 What the runner is
 
-- A small TS package: `packages/alistigo-features-runner/`
+- A small TS package: `cli/list-features-runner-playwright/`
 - Built on top of an existing Gherkin parser (`@cucumber/gherkin` + `@cucumber/messages`) — we do **not** reimplement Gherkin parsing.
 - Wires step definitions to the **Application layer directly** (commands in, events out, projection asserted) for fast, deterministic feedback.
 - Optional Playwright bridge for end-to-end runs that drive the real iframe in a headless browser (used in CI before tagging a milestone done).
 
-### 7.2 Why a custom runner instead of Cucumber-JS
+#### 3.6.2 Why a custom runner instead of Cucumber-JS
 
 - We want step definitions to operate on the **Application layer**, not on DOM selectors. Cucumber-JS works fine but a thin custom layer keeps step definitions tightly typed and lets the runner double as documentation.
 - The runner can produce structured reports (which scenarios are green for which milestone), used by `README.md`'s progress table.
 - It also lets us add event-aware steps cheaply: `Then the event log should contain an "ItemAdded" event with name "Buy bread"`.
 
-### 7.3 Step vocabulary (sketch)
+#### 3.6.3 Step vocabulary (sketch)
 
 ```
 Given a "<list-type>" document with N items
@@ -332,7 +394,7 @@ Then the exported document should validate against the JSON Schema
 
 The full step library lives in `packages/alistigo-features-runner/src/steps/` and is documented in its own README.
 
-### 7.4 Definition of done for any feature
+#### 3.6.4 Definition of done for any feature
 
 A `.feature` is "implemented" when:
 1. Every `Scenario` in it passes via the Application-level runner.
@@ -342,7 +404,7 @@ A `.feature` is "implemented" when:
 
 ---
 
-## 8. Tech Choices (subject to revisit before M1 implementation)
+## 4. Tech Choices
 
 | Concern | Choice | Why |
 |---------|--------|-----|
@@ -359,7 +421,7 @@ A decision to swap any of these is recorded in [notes.md](notes.md) with rationa
 
 ---
 
-## 9. Evolution Path (sync, multiplayer, persistence)
+## 5. Evolution Path (sync, multiplayer, persistence)
 
 The "client-first, sync later" promise dictates a few up-front choices, and event sourcing makes most of them straightforward:
 
@@ -372,18 +434,18 @@ The "client-first, sync later" promise dictates a few up-front choices, and even
 
 ---
 
-## 10. Non-Goals
+## 6. Non-Goals
 
 - A backend. Ever required for the widget to function.
 - Authentication. The widget is contextually authenticated by its host.
-- A general-purpose "structured artifact" framework. Alistigo is *lists*; if you want tables or kanban, those are different artifacts with different documents.
+- A general-purpose application framework outside the AI artifact context. Tables, kanban, etc. are different artifacts — the platform supports them, but does not abstract over arbitrary apps.
 - Server-side rendering. The widget is interactive-first.
 - A general event bus / pub-sub system. Events are local to the Application layer.
 - A full DDD aggregate model with optimistic concurrency. One list = one aggregate, single-writer for now.
 
 ---
 
-## 12. Artifact Contract — Config-Doc & State-Doc
+## 7. Artifact Contract — Config-Doc & State-Doc
 
 *Added in M2. Required reading before authoring a new `@alistigo` artifact.*
 
@@ -394,7 +456,7 @@ Every Alistigo artifact operates on exactly two documents. These are separate co
 | **Config document** | How the artifact should behave | Host (Claude, playground, app) | Per-load |
 | **State document** | What the artifact contains | Artifact + user actions | Persisted |
 
-### 12.1 Config Document
+### 7.1 Config Document
 
 The config document tells the artifact *how* to behave. It is supplied by the host and **read-only inside the artifact** — the artifact must never mutate it.
 
@@ -420,7 +482,7 @@ Artifact-specific extensions are validated by the leaf config package (e.g., `@a
 2. **DOM element** — `<script type="application/json" id="alistigo-config">{ … }</script>` — production embeds and Claude artifacts
 3. **postMessage** — `{ type: "alistigo:config", payload: { … } }` — M5+, dynamic host-to-artifact config push
 
-### 12.2 State Document
+### 7.2 State Document
 
 The state document is the artifact's persistent data. For the list artifact this is the Alistigo event log + projection (see §5 and §6).
 
@@ -450,7 +512,7 @@ Every artifact must guarantee this invariant. The Gherkin `@capability:persisten
 - Config: `configVersion` field (optional in M2, required in M3+)
 - State: `alistigo:schemaVersion` (required from M1)
 
-### 12.3 Package Dependency Graph
+### 7.3 Package Dependency Graph
 
 The config format system follows a strict leaf → aggregate → manager hierarchy:
 
@@ -469,7 +531,7 @@ apps/alistigo-artifact-playground       (dev harness; passes config via URL para
 - Adding a new artifact: create a leaf → add as dep of `artifact-config-format` → add an `if/then` branch to its discriminated union schema
 - Consumers import only the aggregate (`artifact-config-format`) for validation, not leaves directly
 
-### 12.4 Example: List Artifact Config + State
+### 7.4 Example: List Artifact Config + State
 
 **Config document** (passed via URL params or `#alistigo-config` DOM element):
 
@@ -527,7 +589,7 @@ See [milestones.md](./milestones.md) for the M2 context in which this pattern wa
 
 ---
 
-## 11. Open Architectural Questions (track in notes.md)
+## 8. Open Architectural Questions (track in notes.md)
 
 - Preact vs. Solid vs. vanilla web components — measure bundle and DX before locking in.
 - Do we ship the runner as a separate binary (`alistigo-features-runner features/`) or as a Vitest plugin?

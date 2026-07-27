@@ -21,3 +21,4 @@ This directory contains architectural decisions for the Holos monorepo — both 
 | [0015](0015-agent-skills-standard.md) | Agent Skills Standard (agentskills.io) | Accepted | 2026-06-30 |
 | [0016](0016-artifact-plugin-system.md) | Composable Artifact Plugin System | Accepted | 2026-07-09 |
 | [0017](0017-storage-plugin-system.md) | Storage Plugin System | Accepted | 2026-07-24 |
+| [0018](0018-alistigo-platform.md) | Alistigo as a Platform for AI Artifacts | Accepted | 2026-07-27 |
