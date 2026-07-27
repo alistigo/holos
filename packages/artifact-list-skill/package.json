@@ -35,7 +35,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/list-document-format": "workspace:*",
     "@alistigo/artifact-config-list-format": "workspace:*"
   }
 }

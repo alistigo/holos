@@ -48,7 +48,6 @@ export class LocalStorageListRepository implements AlistigoListStore {
    * Used by App to seed the initial document on first load without losing the
    * event log (a round-trip through serialize/deserialize would drop committed events).
    */
-  // fallow-ignore-next-line unused-class-member
   async seedIfEmpty(doc: AlistigoDocument): Promise<void> {
     const storageKey = `alistigo:list:${doc["alistigo:listId"]}`;
     try {

@@ -261,9 +261,6 @@ importers:
       '@alistigo/artifact-config-list-format':
         specifier: workspace:*
         version: link:../artifact-config-list-format
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../list-document-format
 
   packages/artifact-manager:
     dependencies:

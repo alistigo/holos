@@ -27,7 +27,9 @@
     "packages/list-features/tools/validate.ts",
 
     ".github/**",
-    "ai/**"
+    "ai/**",
+    "packages/claude-artifact-list-storage/**",
+    "packages/local-storage-repository/**"
   ],
   "dynamicallyLoaded": [
     "**/*.test.{ts,tsx}",
@@ -44,7 +46,7 @@
   },
   "ignoreDependencies": [
     "@alistigo/artifact-list",
-    "@alistigo/document-format",
+    "@alistigo/list-document-format",
     "@alistigo/artifact-config-list-format",
     "@alistigo/artifact-manager",
     "@alistigo/list-components-react",
