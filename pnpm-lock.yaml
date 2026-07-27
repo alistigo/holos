@@ -246,6 +246,12 @@ importers:
 
   packages/artifact-list:
     dependencies:
+      '@alistigo/artifact-core':
+        specifier: workspace:*
+        version: link:../artifact-core
+      '@alistigo/artifact-core-components-react':
+        specifier: workspace:*
+        version: link:../artifact-core-components-react
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api

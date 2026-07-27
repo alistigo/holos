@@ -36,6 +36,8 @@
     "access": "public"
   },
   "dependencies": {
+    "@alistigo/artifact-core": "workspace:*",
+    "@alistigo/artifact-core-components-react": "workspace:*",
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/list-document-editor": "workspace:*",
     "@alistigo/list-document-format": "workspace:*",
