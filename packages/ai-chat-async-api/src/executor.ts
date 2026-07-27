@@ -14,6 +14,7 @@ export class ApiCallsExecutor {
     this.#handlers = handlers;
   }
 
+  // fallow-ignore-next-line complexity
   async execute(): Promise<void> {
     const el = document.querySelector("api-calls");
     if (el === null) return;
