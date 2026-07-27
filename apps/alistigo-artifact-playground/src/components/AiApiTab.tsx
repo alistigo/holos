@@ -9,6 +9,7 @@ interface OperationFormProps {
   onSend: (action: string, params: Record<string, unknown>) => void;
 }
 
+// fallow-ignore-next-line complexity
 function OperationForm({ name, op, onSend }: OperationFormProps): JSX.Element {
   const properties = op.params?.properties ?? {};
   const required = op.params?.required ?? [];
