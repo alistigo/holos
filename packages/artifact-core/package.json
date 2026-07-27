@@ -1,0 +1,52 @@
+{
+  "name": "@alistigo/artifact-core",
+  "version": "0.1.0",
+  "description": "Shared lifecycle, phases, error boundary, and plugin integration for Alistigo artifacts.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/artifact-core"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-core#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "core",
+    "lifecycle",
+    "typescript"
+  ],
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "@alistigo/logger": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14"
+  }
+}
