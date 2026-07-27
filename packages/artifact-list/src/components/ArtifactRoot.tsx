@@ -78,6 +78,7 @@ interface ReadyState {
   storagePluginName: string;
 }
 
+// fallow-ignore-next-line complexity
 export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode {
   const lifecycle = useArtifactLifecycle();
   const [ready, setReady] = useState<ReadyState | null>(null);
