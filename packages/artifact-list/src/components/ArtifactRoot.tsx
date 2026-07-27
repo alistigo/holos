@@ -15,7 +15,7 @@ import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
-import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import pkg from "../../package.json" with { type: "json" };
 import { bootI18n } from "../i18n.js";
 import type { MountOptions } from "../types.js";
@@ -158,10 +158,8 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
             });
           }}
         >
-          <Fragment>
-            <App key={doc["alistigo:listId"]} initialDocument={doc} repository={store} />
-            <DebugRenderErrorTrigger />
-          </Fragment>
+          <App key={doc["alistigo:listId"]} initialDocument={doc} repository={store} />
+          <DebugRenderErrorTrigger />
         </ArtifactErrorBoundary>
       </I18nProvider>
     </div>
