@@ -1,0 +1,47 @@
+{
+  "info": {
+    "title": "Alistigo List API",
+    "version": "1.0.0",
+    "description": "AI chat async API for the Alistigo list artifact. AI writes <api-calls> tags; the artifact executes them on boot."
+  },
+  "operations": {
+    "addElement": {
+      "description": "Add a new item to the list.",
+      "params": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string", "description": "Text of the new list element." }
+        },
+        "required": ["text"]
+      }
+    },
+    "deleteElement": {
+      "description": "Delete a list element by its ID.",
+      "params": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "ID of the list element to delete." }
+        },
+        "required": ["id"]
+      }
+    },
+    "renameList": {
+      "description": "Rename the list.",
+      "params": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "New name for the list." }
+        },
+        "required": ["name"]
+      }
+    },
+    "clearList": {
+      "description": "Remove all elements from the list.",
+      "params": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  }
+}
