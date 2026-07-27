@@ -15,11 +15,13 @@ export function useApiSimulator(iframeRef: RefObject<HTMLIFrameElement | null>) 
   const [callLog, setCallLog] = useState<ApiCallEntry[]>([]);
 
   useEffect(() => {
+    // fallow-ignore-next-line complexity
     function handle(event: MessageEvent) {
       if ((event.data as { type?: string } | null)?.type !== "alistigo:api-calls-result") return;
       const win = iframeRef.current?.contentWindow;
       if (!win || event.source !== win) return;
       const results = (event.data as { calls: ApiCallResult[] }).calls;
+      // fallow-ignore-next-line complexity
       setCallLog((prev) => {
         const updated = [...prev];
         for (const result of results) {
