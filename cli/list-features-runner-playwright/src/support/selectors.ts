@@ -24,10 +24,6 @@ export const TEST_IDS = {
   fakePlugin: "fake-plugin-marker",
 } as const;
 
-export const HTML_IDS = {
-  document: "alistigo-document",
-} as const;
-
 export function deleteButtonName(elementText: string): string {
   return `Delete "${elementText}"`;
 }
