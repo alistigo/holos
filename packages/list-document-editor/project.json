@@ -1,0 +1,46 @@
+{
+  "name": "list-document-editor",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/list-document-editor/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/list-document-editor/dist",
+        "tsConfig": "packages/list-document-editor/tsconfig.json",
+        "main": "packages/list-document-editor/src/index.ts",
+        "rootDir": "packages/list-document-editor/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.test.json",
+        "cwd": "packages/list-document-editor"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "packages/list-document-editor"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/list-document-editor"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/list-document-editor"
+      }
+    }
+  }
+}

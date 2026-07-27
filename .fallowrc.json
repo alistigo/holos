@@ -23,8 +23,8 @@
     "apps/alistigo-artifact-playground/src/components/DevFixturePicker.tsx",
 
     "lingui.config.ts",
-    "packages/alistigo-features/gherklin.config.ts",
-    "packages/alistigo-features/tools/validate.ts",
+    "packages/list-features/gherklin.config.ts",
+    "packages/list-features/tools/validate.ts",
 
     ".github/**",
     "ai/**"
@@ -32,10 +32,10 @@
   "dynamicallyLoaded": [
     "**/*.test.{ts,tsx}",
     "**/tests/**/*.{ts,tsx}",
-    "cli/alistigo-features-runner-playwright/src/support/hooks.ts",
+    "cli/list-features-runner-playwright/src/support/hooks.ts",
     "**/*.steps.{ts,js}",
     "**/umd-entry.{ts,js}",
-    "cli/alistigo-features-runner-playwright/src/support/fixtures/*.js"
+    "cli/list-features-runner-playwright/src/support/fixtures/*.js"
   ],
   "rules": {
     "unused-files": "error",

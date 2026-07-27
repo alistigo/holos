@@ -6,9 +6,9 @@
       "request": "launch",
       "name": "Feature",
       "runtimeExecutable": "bun",
-      "program": "${workspaceFolder}/cli/alistigo-features-runner-playwright/node_modules/@cucumber/cucumber/bin/cucumber.js",
+      "program": "${workspaceFolder}/cli/list-features-runner-playwright/node_modules/@cucumber/cucumber/bin/cucumber.js",
       "args": ["${file}"],
-      "cwd": "${workspaceFolder}/cli/alistigo-features-runner-playwright",
+      "cwd": "${workspaceFolder}/cli/list-features-runner-playwright",
       "console": "integratedTerminal"
     },
     {
@@ -17,10 +17,10 @@
       "name": "Internal Debug Feature",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["--inspect-wait=6499/cucumber"],
-      "program": "${workspaceFolder}/cli/alistigo-features-runner-playwright/node_modules/@cucumber/cucumber/bin/cucumber.js",
+      "program": "${workspaceFolder}/cli/list-features-runner-playwright/node_modules/@cucumber/cucumber/bin/cucumber.js",
       "args": ["${file}"],
       "env": { "HEADED": "1" },
-      "cwd": "${workspaceFolder}/cli/alistigo-features-runner-playwright",
+      "cwd": "${workspaceFolder}/cli/list-features-runner-playwright",
       "console": "integratedTerminal"
     },
     {

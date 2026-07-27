@@ -9,7 +9,7 @@
  * no runtime locale state.
  *
  * Add a locale:
- *   1. Add it to `packages/alistigo-list-components-react/lingui.config.ts`.
+ *   1. Add it to `packages/list-components-react/lingui.config.ts`.
  *   2. Run `pnpm -F @alistigo/list-components-react i18n:extract`
  *      and translate `src/locales/<new>/messages.po`.
  *   3. Add a `build:<new>` target in this app's project.json.
@@ -24,7 +24,7 @@ import { defineConfig } from "vite";
 
 const LOCALE = process.env.LOCALE ?? "en";
 
-const artifactSrc = path.resolve(__dirname, "../../packages/alistigo-artifact-list/src/index.tsx");
+const artifactSrc = path.resolve(__dirname, "../../packages/artifact-list/src/index.tsx");
 
 // Absolute paths to each plugin package's source entry, so the playground can load
 // plugins straight from local source in dev instead of jsDelivr (see
@@ -33,25 +33,25 @@ const artifactSrc = path.resolve(__dirname, "../../packages/alistigo-artifact-li
 const devPluginSrcPaths: Record<string, string> = {
   "@alistigo/claude-storage-plugin": path.resolve(
     __dirname,
-    "../../packages/alistigo-claude-storage-plugin/src/index.ts",
+    "../../packages/claude-storage-plugin/src/index.ts",
   ),
   "@alistigo/local-storage-plugin": path.resolve(
     __dirname,
-    "../../packages/alistigo-local-storage-plugin/src/index.ts",
+    "../../packages/local-storage-plugin/src/index.ts",
   ),
   "@alistigo/artifact-sentry-plugin": path.resolve(
     __dirname,
-    "../../packages/alistigo-artifact-sentry-plugin/src/index.ts",
+    "../../packages/artifact-sentry-plugin/src/index.ts",
   ),
   "@alistigo/artifact-posthog-plugin": path.resolve(
     __dirname,
-    "../../packages/alistigo-artifact-posthog-plugin/src/index.ts",
+    "../../packages/artifact-posthog-plugin/src/index.ts",
   ),
 };
 
 const componentsPackageRoot = path.resolve(
   __dirname,
-  "../../packages/alistigo-list-components-react",
+  "../../packages/list-components-react",
 );
 
 const activeCatalogPath = path.join(componentsPackageRoot, `src/locales/${LOCALE}/messages.po`);
