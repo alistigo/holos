@@ -51,7 +51,11 @@ function SummaryLine({ passed, failed }: { passed: number; failed: number }): Re
   );
 }
 
-export function ValidatorOutput({ files, schema, onComplete }: ValidatorOutputProps): React.JSX.Element {
+export function ValidatorOutput({
+  files,
+  schema,
+  onComplete,
+}: ValidatorOutputProps): React.JSX.Element {
   const { exit } = useApp();
   const [results, setResults] = useState<FileResult[]>([]);
   const [done, setDone] = useState(false);
@@ -61,6 +65,7 @@ export function ValidatorOutput({ files, schema, onComplete }: ValidatorOutputPr
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
+    // fallow-ignore-next-line complexity
     const run = async () => {
       let customValidator: ((data: unknown) => { valid: boolean; errors: string[] }) | undefined;
       if (schemaRef.current != null) {
@@ -68,7 +73,13 @@ export function ValidatorOutput({ files, schema, onComplete }: ValidatorOutputPr
         try {
           jsonSchema = JSON.parse(readFileSync(schemaRef.current, "utf-8"));
         } catch {
-          setResults([{ file: schemaRef.current, valid: false, errors: ["cannot read or parse schema file as JSON"] }]);
+          setResults([
+            {
+              file: schemaRef.current,
+              valid: false,
+              errors: ["cannot read or parse schema file as JSON"],
+            },
+          ]);
           setDone(true);
           return;
         }
@@ -76,7 +87,11 @@ export function ValidatorOutput({ files, schema, onComplete }: ValidatorOutputPr
         const validate = ajv.compile(jsonSchema as object);
         customValidator = (data: unknown) => {
           const valid = validate(data) as boolean;
-          const errors = valid ? [] : (validate.errors ?? []).map((e) => `${e.instancePath} ${e.message ?? "invalid"}`.trim());
+          const errors = valid
+            ? []
+            : (validate.errors ?? []).map((e) =>
+                `${e.instancePath} ${e.message ?? "invalid"}`.trim(),
+              );
           return { valid, errors };
         };
       }

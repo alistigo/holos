@@ -1,8 +1,8 @@
+import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { ListApplicationService } from "@alistigo/list-document-editor";
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { parseListId } from "@alistigo/list-domain";
-import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
 import { createLogger } from "@alistigo/logger";
 import { type JSX, useEffect, useMemo, useState } from "react";
 import ListBody from "./ListBody.js";
