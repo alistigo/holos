@@ -18,7 +18,7 @@ import { I18nProvider } from "@lingui/react";
 import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 import pkg from "../../package.json" with { type: "json" };
 import { bootI18n } from "../i18n.js";
-import type { MountOptions } from "../mount.js";
+import type { MountOptions } from "../types.js";
 import { buildPluginSpec, loadPlugins } from "../plugins.js";
 import { registerLoadedPlugins } from "../runtime-state.js";
 import makeDefaultDocument from "../utils/document.js";
