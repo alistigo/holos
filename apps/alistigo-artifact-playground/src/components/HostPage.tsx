@@ -1,5 +1,7 @@
+import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import type { JSX } from "react";
 import { useCallback, useMemo } from "react";
+import listApiDef from "../../../../packages/artifact-list/api.json";
 import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useDocumentFixturesMap } from "../hooks/useDocumentFixtures";
@@ -109,6 +111,7 @@ function HostPage(): JSX.Element {
           iframeAllow={iframeAllow}
           configJson={configJson}
           docJson={docJson}
+          apiDefinition={listApiDef as ArtifactApiDefinition}
         />
       </div>
     </div>

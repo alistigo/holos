@@ -1,3 +1,4 @@
+import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
 import { ArtifactViewPanel } from "./ArtifactViewPanel";
@@ -34,6 +35,21 @@ const SAMPLE_DOC_JSON = JSON.stringify(
   2,
 );
 
+const SAMPLE_API_DEF: ArtifactApiDefinition = {
+  info: { title: "Alistigo List API", version: "1.0.0" },
+  operations: {
+    addElement: {
+      description: "Add a new item to the list.",
+      params: {
+        type: "object",
+        properties: { text: { type: "string", description: "Item text" } },
+        required: ["text"],
+      },
+    },
+    clearList: { description: "Remove all elements from the list." },
+  },
+};
+
 const meta: Meta<typeof ArtifactViewPanel> = {
   title: "Playground/ArtifactViewPanel",
   component: ArtifactViewPanel,
@@ -61,6 +77,7 @@ export const SourceTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
+        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },
@@ -78,6 +95,7 @@ export const AppTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
+        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },
@@ -95,6 +113,7 @@ export const ConfigTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
+        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },
@@ -112,6 +131,7 @@ export const DocumentTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
+        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },

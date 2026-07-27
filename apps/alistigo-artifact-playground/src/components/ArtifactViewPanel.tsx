@@ -1,11 +1,13 @@
+import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import JsonView from "@uiw/react-json-view";
 import { lightTheme } from "@uiw/react-json-view/light";
 import type React from "react";
 import type { JSX, RefObject } from "react";
 import { useMemo, useState } from "react";
+import { AiApiTab } from "./AiApiTab";
 import { SourceView } from "./SourceView";
 
-type Tab = "app" | "source" | "config" | "document";
+type Tab = "app" | "source" | "config" | "document" | "ai-api";
 
 interface ArtifactViewPanelProps {
   srcdoc: string;
@@ -14,6 +16,7 @@ interface ArtifactViewPanelProps {
   iframeAllow: string;
   configJson: string;
   docJson: string;
+  apiDefinition: ArtifactApiDefinition;
 }
 
 function JsonPanel({ json }: { json: string }): JSX.Element {
@@ -48,6 +51,7 @@ export function ArtifactViewPanel({
   iframeAllow,
   configJson,
   docJson,
+  apiDefinition,
 }: ArtifactViewPanelProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<Tab>("app");
 
@@ -56,6 +60,7 @@ export function ArtifactViewPanel({
     { id: "source", label: "Source" },
     { id: "config", label: "Config" },
     { id: "document", label: "Document" },
+    { id: "ai-api", label: "AI API" },
   ];
 
   return (
@@ -80,23 +85,24 @@ export function ArtifactViewPanel({
 
       {/* Content area */}
       <div className="flex-1 relative overflow-hidden">
-        {activeTab === "app" && (
-          <iframe
-            key={reloadKey}
-            ref={iframeRef}
-            srcDoc={srcdoc}
-            title="Artifact preview"
-            name="artifact-preview"
-            className="h-full w-full border-none"
-            sandbox="allow-scripts allow-same-origin"
-            referrerPolicy="no-referrer"
-            data-no-service-worker="true"
-            allow={iframeAllow}
-          />
-        )}
+        {/* Iframe always mounted to preserve state; hidden via CSS when not on app tab */}
+        <iframe
+          key={reloadKey}
+          ref={iframeRef}
+          srcDoc={srcdoc}
+          title="Artifact preview"
+          name="artifact-preview"
+          className="h-full w-full border-none"
+          style={{ display: activeTab === "app" ? "block" : "none" }}
+          sandbox="allow-scripts allow-same-origin"
+          referrerPolicy="no-referrer"
+          data-no-service-worker="true"
+          allow={iframeAllow}
+        />
         {activeTab === "source" && <SourceView html={srcdoc} />}
         {activeTab === "config" && <JsonPanel json={configJson} />}
         {activeTab === "document" && <JsonPanel json={docJson} />}
+        {activeTab === "ai-api" && <AiApiTab iframeRef={iframeRef} apiDefinition={apiDefinition} />}
       </div>
     </div>
   );
