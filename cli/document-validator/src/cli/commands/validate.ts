@@ -25,6 +25,11 @@ export class ValidateCommand extends Command {
     ],
   });
 
+  schema = Option.String("--schema", {
+    required: false,
+    description: "Path to a JSON Schema file. Defaults to the Alistigo list-document schema.",
+  });
+
   files = Option.Rest({ required: 1, name: "files" });
 
   // fallow-ignore-next-line unused-class-member complexity
@@ -33,6 +38,7 @@ export class ValidateCommand extends Command {
     const { waitUntilExit } = render(
       React.createElement(ValidatorOutput, {
         files: this.files,
+        schema: this.schema,
         onComplete: (code: number) => {
           exitCode = code;
         },

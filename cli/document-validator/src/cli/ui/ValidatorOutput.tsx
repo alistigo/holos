@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { validateDocument } from "@alistigo/list-document-format";
+import Ajv from "ajv";
 import { Box, Text, useApp } from "ink";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -12,6 +13,7 @@ interface FileResult {
 
 export interface ValidatorOutputProps {
   files: string[];
+  schema?: string | undefined;
   onComplete: (exitCode: number) => void;
 }
 
@@ -49,16 +51,36 @@ function SummaryLine({ passed, failed }: { passed: number; failed: number }): Re
   );
 }
 
-export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): React.JSX.Element {
+export function ValidatorOutput({ files, schema, onComplete }: ValidatorOutputProps): React.JSX.Element {
   const { exit } = useApp();
   const [results, setResults] = useState<FileResult[]>([]);
   const [done, setDone] = useState(false);
   const filesRef = useRef(files);
+  const schemaRef = useRef(schema);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const run = async () => {
+      let customValidator: ((data: unknown) => { valid: boolean; errors: string[] }) | undefined;
+      if (schemaRef.current != null) {
+        let jsonSchema: unknown;
+        try {
+          jsonSchema = JSON.parse(readFileSync(schemaRef.current, "utf-8"));
+        } catch {
+          setResults([{ file: schemaRef.current, valid: false, errors: ["cannot read or parse schema file as JSON"] }]);
+          setDone(true);
+          return;
+        }
+        const ajv = new Ajv({ allErrors: true });
+        const validate = ajv.compile(jsonSchema as object);
+        customValidator = (data: unknown) => {
+          const valid = validate(data) as boolean;
+          const errors = valid ? [] : (validate.errors ?? []).map((e) => `${e.instancePath} ${e.message ?? "invalid"}`.trim());
+          return { valid, errors };
+        };
+      }
+
       for (const file of filesRef.current) {
         let parsed: unknown;
         try {
@@ -70,8 +92,13 @@ export function ValidatorOutput({ files, onComplete }: ValidatorOutputProps): Re
           ]);
           continue;
         }
-        const result = await validateDocument(parsed);
-        setResults((prev) => [...prev, { file, valid: result.valid, errors: result.errors }]);
+        if (customValidator != null) {
+          const result = customValidator(parsed);
+          setResults((prev) => [...prev, { file, valid: result.valid, errors: result.errors }]);
+        } else {
+          const result = await validateDocument(parsed);
+          setResults((prev) => [...prev, { file, valid: result.valid, errors: result.errors }]);
+        }
       }
       setDone(true);
     };
