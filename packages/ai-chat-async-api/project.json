@@ -1,0 +1,39 @@
+{
+  "name": "ai-chat-async-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/ai-chat-async-api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/ai-chat-async-api/dist",
+        "tsConfig": "packages/ai-chat-async-api/tsconfig.json",
+        "main": "packages/ai-chat-async-api/src/index.ts",
+        "rootDir": "packages/ai-chat-async-api/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/ai-chat-async-api"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/ai-chat-async-api"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/ai-chat-async-api"
+      }
+    }
+  }
+}

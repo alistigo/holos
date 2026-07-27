@@ -187,6 +187,16 @@ importers:
         specifier: ^4.19.0
         version: 4.21.0
 
+  packages/ai-chat-async-api:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.2.5
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.14
+
   packages/artifact-config-format:
     dependencies:
       '@alistigo/artifact-config-list-format':
