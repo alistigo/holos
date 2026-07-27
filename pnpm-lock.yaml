@@ -195,6 +195,22 @@ importers:
 
   packages/artifact-config-list-format: {}
 
+  packages/artifact-core:
+    dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
+      '@alistigo/logger':
+        specifier: workspace:*
+        version: link:../logger
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.5
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+
   packages/artifact-list:
     dependencies:
       '@alistigo/artifact-plugin-api':
