@@ -16,10 +16,7 @@ export default defineConfig({
     {
       name: "serve-artifact-umd",
       configureServer(server) {
-        const umd = path.resolve(
-          __dirname,
-          "../../packages/artifact-list/dist/index.umd.js",
-        );
+        const umd = path.resolve(__dirname, "../../packages/artifact-list/dist/index.umd.js");
         server.middlewares.use("/index.umd.js", (_req, res) => {
           res.setHeader("Content-Type", "application/javascript");
           const stream = fs.createReadStream(umd);

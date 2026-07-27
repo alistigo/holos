@@ -2,7 +2,12 @@ import { describe, expect, test } from "bun:test";
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { ListDocumentSerializer } from "@alistigo/list-document-format";
 import type { ListId } from "@alistigo/list-domain";
-import { generateActorId, generateListId, type List, parseListElementId } from "@alistigo/list-domain";
+import {
+  generateActorId,
+  generateListId,
+  type List,
+  parseListElementId,
+} from "@alistigo/list-domain";
 import {
   type AlistigoListStore,
   ListApplicationService,

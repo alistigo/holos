@@ -49,10 +49,7 @@ const devPluginSrcPaths: Record<string, string> = {
   ),
 };
 
-const componentsPackageRoot = path.resolve(
-  __dirname,
-  "../../packages/list-components-react",
-);
+const componentsPackageRoot = path.resolve(__dirname, "../../packages/list-components-react");
 
 const activeCatalogPath = path.join(componentsPackageRoot, `src/locales/${LOCALE}/messages.po`);
 

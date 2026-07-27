@@ -24,10 +24,7 @@ export default defineConfig({
   catalogs: [
     {
       path: "<rootDir>/packages/list-components-react/src/locales/{locale}/messages",
-      include: [
-        "packages/list-components-react/src",
-        "apps/alistigo-artifact-playground/src",
-      ],
+      include: ["packages/list-components-react/src", "apps/alistigo-artifact-playground/src"],
     },
   ],
   format: formatter({ lineNumbers: false }),
