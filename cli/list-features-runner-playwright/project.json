@@ -17,7 +17,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["^build", { "projects": ["alistigo-artifact-playground"], "target": "build" }],
       "options": {
-        "command": "bash -c 'set -m; nx run alistigo-artifact-playground:dev & until curl -sf http://localhost:5173 > /dev/null; do sleep 1; done && nx run alistigo-features-runner-playwright:run-all-features; RESULT=$?; kill %1 2>/dev/null; wait %1 2>/dev/null; exit $RESULT'"
+        "command": "bash -c 'set -m; nx run alistigo-artifact-playground:dev & until curl -sf http://localhost:5173 > /dev/null; do sleep 1; done && nx run list-features-runner-playwright:run-all-features; RESULT=$?; kill %1 2>/dev/null; wait %1 2>/dev/null; exit $RESULT'"
       }
     },
     "install-browsers": {

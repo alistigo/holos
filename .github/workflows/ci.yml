@@ -98,7 +98,7 @@ jobs:
       # the cached browser dir — install them every run.
       - name: Install Playwright system deps
         if: steps.alistigo-affected.outputs.affected == 'true'
-        run: pnpm --filter @alistigo/features-runner-playwright exec playwright install-deps chromium
+        run: pnpm --filter @alistigo/list-features-runner-playwright exec playwright install-deps chromium
 
       # Order matters: cheap → expensive. A typecheck fail short-circuits
       # the build; a build fail short-circuits tests.
