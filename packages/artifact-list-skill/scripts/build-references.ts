@@ -16,11 +16,11 @@ const REFERENCES_DIR = path.join(PKG_DIR, "references");
 
 const SOURCES = [
   {
-    from: path.join(PACKAGES_DIR, "alistigo-document-format", "docs", "spec.md"),
+    from: path.join(PACKAGES_DIR, "list-document-format", "docs", "spec.md"),
     to: path.join(REFERENCES_DIR, "document-format.md"),
   },
   {
-    from: path.join(PACKAGES_DIR, "alistigo-artifact-config-list-format", "README.md"),
+    from: path.join(PACKAGES_DIR, "artifact-config-list-format", "README.md"),
     to: path.join(REFERENCES_DIR, "artifact-config-list-format.md"),
   },
 ];
