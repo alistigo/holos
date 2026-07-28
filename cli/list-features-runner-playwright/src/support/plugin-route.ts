@@ -30,8 +30,9 @@ export async function installPluginRoute(
   }
 
   // Dev server overrides point plugins at /@fs/<abs-path>/src/index.ts.
-  // The directory name is packageName with @ removed and the first / replaced by -.
-  const dirName = packageName.replace(/^@/, "").replace("/", "-");
+  // After P0 renames, the packages/ directory name equals the unscoped package name
+  // (the part after @scope/), e.g. @alistigo/artifact-sentry-plugin → artifact-sentry-plugin.
+  const dirName = packageName.replace(/^@[^/]+\//, "");
   await page.route(`**/${dirName}/src/**`, fulfill);
 
   // jsDelivr fallback for non-dev environments.
