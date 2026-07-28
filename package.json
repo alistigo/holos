@@ -29,7 +29,7 @@
     "dev": "nx run-many -t dev --parallel",
     "nx": "nx",
     "clean": "nx run-many -t clean",
-    "playwright:install": "pnpm --filter @alistigo/features-runner-playwright exec playwright install chromium",
+    "playwright:install": "pnpm --filter @alistigo/list-features-runner-playwright exec playwright install chromium",
     "i18n:extract": "lingui extract",
     "i18n:extract:clean": "lingui extract --clean",
     "i18n:compile": "lingui compile",
