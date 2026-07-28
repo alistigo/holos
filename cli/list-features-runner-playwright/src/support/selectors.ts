@@ -21,7 +21,7 @@ export const TEST_IDS = {
   app: "alistigo-app",
   emptyState: "empty-state",
   actionPending: "action-pending",
-  fakePlugin: "fake-plugin-marker",
+  badge: "alistigo-badge",
 } as const;
 
 export function deleteButtonName(elementText: string): string {

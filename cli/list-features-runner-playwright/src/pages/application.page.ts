@@ -3,6 +3,7 @@ import { deleteButtonName, ROLES, TEST_IDS } from "../support/selectors";
 
 declare global {
   var __alistigoDebugTriggerRenderError: (() => void) | undefined;
+  var __alistigoFakeSentryPlugin: { initialized: boolean; capturedError: boolean } | undefined;
 }
 
 export class ApplicationPage {
@@ -35,22 +36,28 @@ export class ApplicationPage {
 
   // fallow-ignore-next-line unused-class-member
   async waitForPluginInitialized(): Promise<void> {
+    const badge = this.artifactFrame.getByTestId(TEST_IDS.badge);
+    await badge.waitFor({ state: "visible" });
+    await badge.click();
     await this.artifactFrame
-      .locator(`[data-testid="${TEST_IDS.fakePlugin}"][data-initialized="true"]`)
-      .waitFor({ state: "attached" });
+      .locator('[data-plugin-status="loaded"]')
+      .first()
+      .waitFor({ state: "visible" });
+    await this.artifactFrame.getByLabel("Close artifact info").click();
   }
 
   // fallow-ignore-next-line unused-class-member
   async isPluginInitialized(): Promise<boolean> {
-    const marker = this.artifactFrame.getByTestId(TEST_IDS.fakePlugin);
-    return (await marker.getAttribute("data-initialized")) === "true";
+    const frame = this.page.frame("artifact-preview");
+    if (!frame) return false;
+    return frame.evaluate(() => __alistigoFakeSentryPlugin?.initialized === true);
   }
 
   // fallow-ignore-next-line unused-class-member
   async waitForPluginCapturedError(): Promise<void> {
-    await this.artifactFrame
-      .locator(`[data-testid="${TEST_IDS.fakePlugin}"][data-captured-error="true"]`)
-      .waitFor({ state: "attached" });
+    const frame = this.page.frame("artifact-preview");
+    if (!frame) throw new Error("artifact-preview frame not found");
+    await frame.waitForFunction(() => __alistigoFakeSentryPlugin?.capturedError === true);
   }
 
   // fallow-ignore-next-line unused-class-member
