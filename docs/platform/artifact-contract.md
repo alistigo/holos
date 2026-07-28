@@ -1,7 +1,9 @@
 # Artifact Contract
 
-Every `@alistigo` artifact must implement all eight items in this contract. The platform
-libraries handle most of it — each artifact only needs to wire them together.
+Every `@alistigo` artifact must implement the seven mandatory items in this contract.
+One additional item (AI Async API) is optional — include it when the artifact exposes
+actions the AI can call. The platform libraries handle most of it — each
+artifact only needs to wire them together.
 
 The list artifact (`packages/artifact-list/`) is the canonical reference implementation.
 
@@ -121,36 +123,7 @@ See [ADR 0016](../adrs/0016-artifact-plugin-system.md) for the full plugin inter
 
 ---
 
-## 6. AI Async API
-
-**Provided by:** `@alistigo/ai-chat-async-api`
-
-Each artifact:
-1. Publishes an `api.json` file describing its operations (AsyncAPI 3.0 subset)
-2. Registers action handlers via `ApiCallsExecutor`
-
-The executor runs on boot (after `ready` phase), reads any `<api-calls>` tag in the
-DOM, executes the calls, and removes the tag.
-
-```ts
-import { ApiCallsExecutor, defineApiAction } from "@alistigo/ai-chat-async-api";
-import apiDefinition from "../api.json";
-
-const executor = new ApiCallsExecutor(apiDefinition, {
-  addElement: defineApiAction("addElement", async ({ text }) => {
-    await applicationService.addElement(text);
-  }),
-  renameList: defineApiAction("renameList", async ({ name }) => {
-    await applicationService.renameList(name);
-  }),
-  // ...
-});
-executor.run();
-```
-
----
-
-## 7. Config-Doc + State-Doc Contract
+## 6. Config-Doc + State-Doc Contract
 
 **Provided by:** `@alistigo/artifact-config-format` (config); artifact-specific format package (state)
 
@@ -168,7 +141,7 @@ See `docs/architecture.md §12` for the full spec.
 
 ---
 
-## 8. Agent Skill
+## 7. Agent Skill
 
 **Per-artifact skill package** (e.g. `packages/artifact-list-skill/`)
 
@@ -176,6 +149,37 @@ Each artifact ships a skill that teaches the AI chat agent:
 1. What the artifact is
 2. When to use it (trigger phrases)
 3. How to write its config document
-4. How to use its AI API (actions + example `<api-calls>` tag)
+4. How to use its AI API — only if the artifact implements the AI async API
 
 See [skill-pattern.md](skill-pattern.md) for the full pattern.
+
+---
+
+## Optional: AI Async API
+
+**Provided by:** `@alistigo/ai-chat-async-api`
+
+Not all artifacts need an action API. A pure display widget, for example, has nothing
+for the AI to call after render. When an artifact _does_ expose actions, it should
+implement this:
+
+1. Publish an `api.json` file describing operations (AsyncAPI 3.0 subset)
+2. Register action handlers via `ApiCallsExecutor` (or wire it in as a plugin)
+
+The executor runs on boot (after `ready` phase), reads any `<api-calls>` tag injected
+into the DOM by the AI, executes the calls in order, removes the tag, and posts results
+via `parent.postMessage`.
+
+```ts
+import { ApiCallsExecutor, defineApiAction } from "@alistigo/ai-chat-async-api";
+import apiDefinition from "../api.json";
+
+const executor = new ApiCallsExecutor(apiDefinition, {
+  addElement: defineApiAction("addElement", async ({ text }) => {
+    await applicationService.addElement(text);
+  }),
+});
+executor.run();
+```
+
+The feature can also be wired as a plugin rather than hardcoded in the artifact.

@@ -49,7 +49,8 @@ artifact becomes the reference implementation, not the product.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  DEV TOOLS  (not shipped to end-users)                       │
+│  DEV TOOLS  (for artifact developers; published to npm +     │
+│             deployed as demo apps)                           │
 │  apps/alistigo-artifact-playground                           │
 │  cli/agent-skill-tester                                      │
 │  cli/list-features-runner-playwright                         │
@@ -91,16 +92,16 @@ artifact becomes the reference implementation, not the product.
 
 Every `@alistigo` artifact must implement:
 
-| Contract item | Provided by | Description |
-|---|---|---|
-| Lifecycle phases | `@alistigo/artifact-core` | `loading → ready \| error`; startup runs `startArtifact()` |
-| Loading screen | `@alistigo/artifact-core-components-react` | Shown during `loading` phase; shows logo + spinner |
-| Error screen | `@alistigo/artifact-core-components-react` | Shown on uncaught error; shows message + optional reset |
-| Alistigo badge | `@alistigo/artifact-core-components-react` | Top-right corner; collapsed logo; click → info modal |
-| Plugin hook | `@alistigo/artifact-plugin-api` | Lifecycle + event bus for all CDN-loaded plugins |
-| AI async API | `@alistigo/ai-chat-async-api` | `<api-calls>` tag executor; artifact publishes `api.json` |
-| Config-doc + State-doc | `@alistigo/artifact-config-format` | Two-document contract (see ADR 0012 §12) |
-| Agent skill | Per-artifact skill package | SKILL.md teaches AI when/how/config/API |
+| Contract item | Required | Provided by | Description |
+|---|---|---|---|
+| Lifecycle phases | **mandatory** | `@alistigo/artifact-core` | `loading → ready \| error`; startup runs `startArtifact()` |
+| Loading screen | **mandatory** | `@alistigo/artifact-core-components-react` | Shown during `loading` phase; shows logo + spinner |
+| Error screen | **mandatory** | `@alistigo/artifact-core-components-react` | Shown on uncaught error; shows message + optional reset |
+| Alistigo badge | **mandatory** | `@alistigo/artifact-core-components-react` | Top-right corner; collapsed logo; click → info modal |
+| Plugin hook | **mandatory** | `@alistigo/artifact-plugin-api` | Lifecycle + event bus for all CDN-loaded plugins |
+| Config-doc + State-doc | **mandatory** | `@alistigo/artifact-config-format` | Two-document contract (see ADR 0012 §12) |
+| Agent skill | **mandatory** | Per-artifact skill package | SKILL.md teaches AI when/how/config |
+| AI async API | **optional** | `@alistigo/ai-chat-async-api` | `<api-calls>` tag executor; artifact publishes `api.json`; can be omitted or added as a plugin if the artifact does not expose an action API |
 
 ### Skill Pattern
 
@@ -110,7 +111,7 @@ Every artifact ships a skill package (`packages/artifact-<name>-skill/`) with a
 1. **What** the artifact is (1-paragraph description)
 2. **When** to use it (trigger phrases, use-cases)
 3. **Config** — how to write the config document (fields, defaults, example JSON)
-4. **API** — how to call artifact actions (available operations, params, example `<api-calls>` tag)
+4. **API** — how to call artifact actions (operations, params, example `<api-calls>` tag); only included if the artifact implements the AI async API
 
 The skill follows the agentskills.io standard (ADR 0015). The list artifact's
 `packages/artifact-list-skill/SKILL.md` is the canonical reference.
@@ -134,7 +135,11 @@ The skill follows the agentskills.io standard (ADR 0015). The list artifact's
 - **Directory names**: drop the `alistigo-` prefix (e.g. `packages/alistigo-domain`
   → `packages/list-domain`). npm package names (`@alistigo/*`) are unchanged.
 
-### AI Async API Mechanism
+### AI Async API Mechanism (Optional)
+
+The AI async API is **not required** of every artifact. An artifact that has no
+meaningful action API (e.g. a pure display widget) does not need to implement it.
+When implemented, it works as follows:
 
 AI chat cannot `postMessage` into an iframe, but it can write HTML. We exploit this:
 
@@ -145,9 +150,11 @@ AI chat cannot `postMessage` into an iframe, but it can write HTML. We exploit t
 5. `parent.postMessage({ type: "alistigo:api-calls-result", … })` emits per-call status
    (for playground display; AI never reads the result)
 
-Each artifact publishes an `api.json` file describing its operations in an AsyncAPI
-3.0 subset. The playground reads this to show available actions in its AI API Simulator
-tab.
+Each artifact that exposes an API publishes an `api.json` file describing its operations
+in an AsyncAPI 3.0 subset. The playground reads this to show available actions in its
+AI API Simulator tab.
+
+The feature can also be wired in as a plugin rather than being hardcoded in the artifact.
 
 ### Milestone Reframing
 

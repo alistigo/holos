@@ -29,7 +29,7 @@ Alistigo is a four-tier platform. Each tier is independently versioned; platform
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│  DEV TOOLS  (not shipped to end-users; used during development only)         │
+│  DEV TOOLS  (for artifact developers; published to npm + deployed as demos)  │
 │  apps/alistigo-artifact-playground  packages/list-features                  │
 │  cli/list-features-runner-playwright  cli/agent-skill-tester                │
 └──────────────────────────────────────────┬───────────────────────────────────┘

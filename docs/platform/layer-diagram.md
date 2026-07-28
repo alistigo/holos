@@ -8,7 +8,7 @@ Full layer diagram with all package names as of P0 (2026-07-27).
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│  DEV TOOLS  (not shipped to end-users; used during development only)         │
+│  DEV TOOLS  (for artifact developers; published to npm + deployed as demos)  │
 │                                                                              │
 │  apps/alistigo-artifact-playground   — dev harness with Claude-like iframe  │
 │  cli/agent-skill-tester              — skill trigger accuracy evaluation     │
@@ -43,7 +43,7 @@ Full layer diagram with all package names as of P0 (2026-07-27).
 │  packages/artifact-plugin-api        @alistigo/artifact-plugin-api          │
 │    └─ AlistigoPlugin interface, PluginContext, event bus, loadPlugin()       │
 │                                                                              │
-│  packages/ai-chat-async-api          @alistigo/ai-chat-async-api            │
+│  packages/ai-chat-async-api          @alistigo/ai-chat-async-api  (optional) │
 │    └─ ApiCallsExecutor, ArtifactApiDefinition, <api-calls> tag executor     │
 │                                                                              │
 │  packages/logger                     @alistigo/logger                       │
