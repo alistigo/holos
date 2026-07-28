@@ -20,6 +20,7 @@ export function AlistigoBadge({
     <>
       <button
         type="button"
+        data-testid="alistigo-badge"
         onClick={() => setOpen(true)}
         className="absolute top-2 right-2 z-40 h-8 w-8 overflow-hidden rounded-full shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
         aria-label="Alistigo artifact info"

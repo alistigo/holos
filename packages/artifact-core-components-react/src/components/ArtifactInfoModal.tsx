@@ -42,7 +42,12 @@ export function ArtifactInfoModal({
           ) : (
             <ul className="flex flex-col gap-2">
               {plugins.map((plugin) => (
-                <li key={plugin.name} className="flex items-start justify-between gap-2">
+                <li
+                  key={plugin.name}
+                  data-plugin-name={plugin.name}
+                  data-plugin-status={plugin.status}
+                  className="flex items-start justify-between gap-2"
+                >
                   <div className="min-w-0">
                     <p className="truncate text-gray-800 text-xs font-medium">{plugin.name}</p>
                     <p className="text-gray-400 text-xs">v{plugin.version}</p>
