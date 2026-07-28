@@ -77,9 +77,10 @@ Document every field: name, type, required/optional, default, description.
 
 The agent must know how to produce the `<script type="application/json" id="alistigo-config">` block.
 
-### 4. How to use the AI API
+### 4. How to use the AI API _(only if the artifact implements `@alistigo/ai-chat-async-api`)_
 
-Describe the available operations and how to call them. Show the `<api-calls>` tag format:
+If the artifact exposes an action API, describe the available operations and how to call
+them. Show the `<api-calls>` tag format:
 
 ```html
 <api-calls>
@@ -93,6 +94,8 @@ Describe the available operations and how to call them. Show the `<api-calls>` t
 
 List each operation with its params and a one-line description. Reference the artifact's
 `api.json` for the authoritative schema.
+
+Omit this section entirely for artifacts that have no action API.
 
 ---
 
@@ -141,7 +144,7 @@ List each operation with its params and a one-line description. Reference the ar
 </script>
 \`\`\`
 
-## AI API
+## AI API _(omit if the artifact has no action API)_
 
 ### Available operations
 
