@@ -1,3 +1,18 @@
+## 0.2.0 (2026-07-29)
+
+### 🚀 Features
+
+- **document-validator:** add --schema flag for generic JSON Schema validation ([#47](https://github.com/alistigo/holos/issues/47))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.2.11
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.3 (2026-07-26)
 
 ### 🧱 Updated Dependencies

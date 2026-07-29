@@ -1,3 +1,27 @@
+## 0.2.16 (2026-07-29)
+
+### 🚀 Features
+
+- **playground:** add AI API Simulator tab for testing artifact API calls ([#52](https://github.com/alistigo/holos/issues/52))
+
+### 🩹 Fixes
+
+- **playground:** suppress fallow complexity warnings in new AI API components ([79a4d31](https://github.com/alistigo/holos/commit/79a4d31))
+
+### 🧱 Updated Dependencies
+
+- Updated list-components-react to 0.2.12
+- Updated list-document-format to 0.2.11
+- Updated local-storage-plugin to 0.2.12
+- Updated ai-chat-async-api to 0.2.0
+- Updated artifact-manager to 0.2.0
+- Updated artifact-list to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.15 (2026-07-27)
 
 ### 🩹 Fixes

@@ -1,3 +1,33 @@
+## 0.3.0 (2026-07-29)
+
+### 🚀 Features
+
+- **playground:** add AI API Simulator tab for testing artifact API calls ([#52](https://github.com/alistigo/holos/issues/52))
+- **ai-chat-async-api:** scaffold @alistigo/ai-chat-async-api package ([#51](https://github.com/alistigo/holos/issues/51))
+- **artifact-list:** integrate artifact-core and artifact-core-components-react ([#50](https://github.com/alistigo/holos/issues/50))
+
+### 🩹 Fixes
+
+- **artifact-list:** remove useless Fragment wrapper in ArtifactRoot ([43d1efe](https://github.com/alistigo/holos/commit/43d1efe))
+- **artifact-list:** suppress fallow complexity and break storybook clone ([79f6757](https://github.com/alistigo/holos/commit/79f6757))
+- **artifact-list:** extract MountOptions to types.ts to break circular dep ([#50](https://github.com/alistigo/holos/issues/50))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.2.0
+- Updated list-components-react to 0.2.12
+- Updated list-document-editor to 0.2.11
+- Updated list-document-format to 0.2.11
+- Updated artifact-plugin-api to 0.1.7
+- Updated artifact-core to 0.2.0
+- Updated list-domain to 0.2.11
+- Updated logger to 0.2.11
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.14 (2026-07-27)
 
 ### 🧱 Updated Dependencies

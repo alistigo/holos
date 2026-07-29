@@ -1,3 +1,19 @@
+## 0.1.8 (2026-07-29)
+
+### 🩹 Fixes
+
+- **artifact-list-skill:** update build-references paths after package renames ([daf4bf3](https://github.com/alistigo/holos/commit/daf4bf3))
+- **packages:** fix broken skill symlinks, stale fallow suppressions, unused export after rename ([fadfc7c](https://github.com/alistigo/holos/commit/fadfc7c))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-list-format to 0.1.9
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.7 (2026-07-26)
 
 ### 🧱 Updated Dependencies

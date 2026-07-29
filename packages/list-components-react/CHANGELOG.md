@@ -1,3 +1,12 @@
+## 0.2.12 (2026-07-29)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-editor to 0.2.11
+- Updated list-document-format to 0.2.11
+- Updated list-domain to 0.2.11
+- Updated logger to 0.2.11
+
 ## 0.2.11 (2026-07-26)
 
 ### 🧱 Updated Dependencies

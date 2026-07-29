@@ -1,3 +1,19 @@
+## 0.1.7 (2026-07-29)
+
+### 🩹 Fixes
+
+- **ci:** suppress fallow CRAP on lifecycle run fn; extract shared vite plugin build config ([0a6a532](https://github.com/alistigo/holos/commit/0a6a532))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.1.7
+- Updated logger to 0.2.11
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.6 (2026-07-27)
 
 ### 🧱 Updated Dependencies

@@ -1,3 +1,24 @@
+## 0.1.8 (2026-07-29)
+
+### 🩹 Fixes
+
+- **playwright:** use window variable in waitForPluginInitialized ([7df2acd](https://github.com/alistigo/holos/commit/7df2acd))
+- **playwright:** update plugin route interceptor for P0 directory renames ([5ac39d1](https://github.com/alistigo/holos/commit/5ac39d1))
+- **playwright:** replace DOM marker approach with modal + iframe window variable ([b6bfb3a](https://github.com/alistigo/holos/commit/b6bfb3a))
+- **ci:** update stale alistigo-features-runner-playwright references after rename ([8237d8e](https://github.com/alistigo/holos/commit/8237d8e))
+- **packages:** fix broken skill symlinks, stale fallow suppressions, unused export after rename ([fadfc7c](https://github.com/alistigo/holos/commit/fadfc7c))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.2.11
+- Updated artifact-plugin-api to 0.1.7
+- Updated list-features to 0.2.11
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.7 (2026-07-27)
 
 ### 🩹 Fixes
