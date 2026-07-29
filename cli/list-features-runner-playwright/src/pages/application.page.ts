@@ -36,14 +36,9 @@ export class ApplicationPage {
 
   // fallow-ignore-next-line unused-class-member
   async waitForPluginInitialized(): Promise<void> {
-    const badge = this.artifactFrame.getByTestId(TEST_IDS.badge);
-    await badge.waitFor({ state: "visible" });
-    await badge.click();
-    await this.artifactFrame
-      .locator('[data-plugin-status="loaded"]')
-      .first()
-      .waitFor({ state: "visible" });
-    await this.artifactFrame.getByLabel("Close artifact info").click();
+    const frame = this.page.frame("artifact-preview");
+    if (!frame) throw new Error("artifact-preview frame not found");
+    await frame.waitForFunction(() => __alistigoFakeSentryPlugin?.initialized === true);
   }
 
   // fallow-ignore-next-line unused-class-member
