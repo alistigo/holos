@@ -1,8 +1,8 @@
 ---
-status: draft
+status: published
 channel: linkedin
 createdAt: 2026-07-29
-publishedAt:
+publishedAt: 2026-07-29
 url:
 attachment: attachment.png
 ---
