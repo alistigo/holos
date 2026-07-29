@@ -7,9 +7,7 @@ url:
 attachment:
 ---
 
-After that family tree, I did what any developer would do. I opened the dev tools.
-
-I wanted to see how Claude was actually building these things.
+Last time, Claude built me a family tree inside a chat window, live, while I was cleaning up genealogical research. This time I did something else. I opened the dev tools to see how it was actually building it.
 
 Under the hood, it's plain and almost boring: a regular HTML page, dropped into a sandboxed iframe, running under a strict content security policy. The libraries it reaches for come straight from a CDN, jsdelivr, pulled in fresh each time.
 
@@ -29,9 +27,18 @@ If you could hand an AI one tool built specifically for it, what would you give 
 Draft notes (linkedin-post-writer + linkedin-humanizer --mode audit — not part of the post):
 - Formula: F9 Curiosity-Gap Teaser (topic type = emergent/surprise story), adapted to
   a developer's own curiosity rather than a system surprising the author. Goal: comments.
-- 1,109 chars, 201 words. No em/en dash, no double dash, no curly quotes. Clean on the
-  full AI-vocab blacklist and phrase blacklist. Opener is a concrete statement, not a
-  rhetorical question. Closer is a specific question tied to the thesis.
+- 1,173 chars, 213 words. No em/en dash, no double dash, no curly quotes. Clean on the
+  full AI-vocab blacklist and phrase blacklist. Closer is a specific question tied to
+  the thesis.
+- Opener revised: the user flagged that "After that family tree..." assumes readers
+  remember post 1, and floated a "Have you ever checked the code of a Claude artifact?"
+  rhetorical-question opener as an alternative. Rejected that literal phrasing —
+  "Have you ever...?" is on the hard-fail opener blacklist in
+  audit-ai-tells.md ("dead on LinkedIn") and the linkedin-post-writer anti-patterns
+  list — and instead folded the user's other suggestion ("put back some context")
+  into a concrete, non-rhetorical opener: one clause recapping what happened in post 1
+  (a Claude artifact building a family tree, live) so this post stands alone for
+  anyone who never saw it, then pivots into the dev-tools hook.
 - Named entities: Claude, jsdelivr (both real, factual). No fabricated numbers, no
   invented package name, star count, or download count for the to-do skill.
 - Positioned as post 2 of what is now a 3-post arc: (1) discovery/insight — published,
