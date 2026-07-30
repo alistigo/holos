@@ -6,6 +6,7 @@ import {
 import type { PluginInfo } from "@alistigo/artifact-core-components-react";
 import {
   AlistigoBadge,
+  ArtifactInfoPanel,
   ErrorScreen,
   LoadingScreen,
 } from "@alistigo/artifact-core-components-react";
@@ -143,11 +144,13 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
 
   return (
     <div style={{ position: "relative" }}>
-      <AlistigoBadge
-        artifactName="@alistigo/artifact-list"
-        artifactVersion={pkg.version}
-        plugins={pluginInfos}
-      />
+      <AlistigoBadge>
+        <ArtifactInfoPanel
+          artifactName="@alistigo/artifact-list"
+          artifactVersion={pkg.version}
+          plugins={pluginInfos}
+        />
+      </AlistigoBadge>
       <I18nProvider i18n={i18n}>
         <ArtifactErrorBoundary
           onError={(err, componentStack) => {
