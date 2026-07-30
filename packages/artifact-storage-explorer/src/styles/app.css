@@ -1,0 +1,3 @@
+@import "@alistigo/explorer-components-react/styles.css";
+
+@source "../**/*.{ts,tsx}";

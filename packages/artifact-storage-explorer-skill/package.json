@@ -1,0 +1,38 @@
+{
+  "name": "@alistigo/artifact-storage-explorer-skill",
+  "version": "0.1.0",
+  "description": "Alistigo artifact-storage-explorer agent skill (agentskills.io)",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/artifact-storage-explorer-skill"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-storage-explorer-skill#readme",
+  "keywords": [
+    "alistigo",
+    "storage",
+    "explorer",
+    "debugger",
+    "claude",
+    "skill",
+    "agent-skill"
+  ],
+  "private": false,
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

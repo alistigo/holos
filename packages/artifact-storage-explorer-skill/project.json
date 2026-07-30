@@ -1,0 +1,14 @@
+{
+  "name": "artifact-storage-explorer-skill",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}
