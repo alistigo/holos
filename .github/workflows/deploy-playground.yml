@@ -72,6 +72,9 @@ jobs:
           cp -r apps/alistigo-artifact-playground/dist/en _site/playground/en
           cp -r apps/alistigo-artifact-playground/dist/fr _site/playground/fr
 
+          # Custom domain — must match what's set in Settings → Pages → Custom domain.
+          echo "alistigo.com" > _site/CNAME
+
           # /playground/ — detect browser language and redirect to the right bundle.
           cat > _site/playground/index.html << 'HTMLEOF'
           <!doctype html>
