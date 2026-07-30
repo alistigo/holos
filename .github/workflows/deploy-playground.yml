@@ -68,6 +68,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site/playground
+          echo "www.alistigo.com" > _site/CNAME
 
           cp -r apps/alistigo-artifact-playground/dist/en _site/playground/en
           cp -r apps/alistigo-artifact-playground/dist/fr _site/playground/fr
