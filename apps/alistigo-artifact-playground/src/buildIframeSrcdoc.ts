@@ -13,6 +13,12 @@ export const SRCDOC_CSP = [
   "media-src 'self' blob:",
 ].join("; ");
 
+function buildEntryScript(scriptUrl: string, isDev: boolean): string {
+  return isDev
+    ? `<script type="module" src="${scriptUrl}"></script>`
+    : `<script src="${scriptUrl}"></script>`;
+}
+
 function buildClaudeHeadScripts(): string {
   return [
     `<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js" integrity="sha512-iZ2ORl595Wx6miw+GuadDet4WQbdSWS3JLMoNfY8cRGoEFy6oT3G9IbcrBeL6AfkgpA51ETt/faX6yLV+/gFJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`,
@@ -91,7 +97,7 @@ export function buildIframeSrcdoc({
   </head>
   <body id="artifacts-component-root-html">
     <script type="application/json" id="alistigo-document">${docJson}</script>
-    ${isDev ? `<script type="module" src="${scriptUrl}"></script>` : `<script src="${scriptUrl}"></script>`}
+    ${buildEntryScript(scriptUrl, isDev ?? false)}
   </body>
 </html>`;
 }
