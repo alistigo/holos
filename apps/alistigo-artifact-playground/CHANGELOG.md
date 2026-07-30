@@ -1,3 +1,16 @@
+## 0.2.17 (2026-07-30)
+
+### 🩹 Fixes
+
+- **playground:** extract helpers to satisfy complexity thresholds ([cfe0c70](https://github.com/alistigo/holos/commit/cfe0c70))
+- **playground:** address lint and complexity issues in CDN script fix ([390d401](https://github.com/alistigo/holos/commit/390d401))
+- **playground:** load artifact from CDN in production instead of broken data URI ([7b9f868](https://github.com/alistigo/holos/commit/7b9f868))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.16 (2026-07-29)
 
 ### 🚀 Features
