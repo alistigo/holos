@@ -1,4 +1,5 @@
 import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
+import { ARTIFACT_REGISTRY } from "@alistigo/artifact-manager";
 import type { JSX } from "react";
 import { useCallback, useMemo } from "react";
 import listApiDef from "../../../../packages/artifact-list/api.json";
@@ -11,8 +12,12 @@ import { useLocalStorageEntries } from "../hooks/useLocalStorageEntries";
 import { ArtifactViewPanel } from "./ArtifactViewPanel";
 import HostForm from "./HostForm";
 
-// Vite resolves this to the dev server URL in dev, or the compiled chunk URL in production.
-const ARTIFACT_ENTRY_URL = new URL("../artifact-entry.tsx", import.meta.url).href;
+// In dev: Vite serves this file directly from the dev server.
+// In production: Vite inlines it as a broken data-URI (bare specifiers can't be resolved
+// from data: modules), so we skip it entirely and use the registry's cdnUrl instead.
+const DEV_ENTRY_URL = import.meta.env.DEV
+  ? new URL("../artifact-entry.tsx", import.meta.url).href
+  : null;
 
 // Dev only: point plugin loading at local source (served by Vite's /@fs/ file
 // middleware) instead of jsDelivr, so the playground works without publishing or
@@ -79,18 +84,19 @@ function HostPage(): JSX.Element {
 
   const configJson = useMemo(() => JSON.stringify(buildArtifactConfig(config), null, 2), [config]);
 
-  const srcdoc = useMemo(
-    () =>
-      buildIframeSrcdoc({
-        config,
-        docJson,
-        scriptUrl: ARTIFACT_ENTRY_URL,
-        csp: SRCDOC_CSP,
-        isDev: import.meta.env.DEV,
-        devPluginUrlOverrides: DEV_PLUGIN_URL_OVERRIDES,
-      }),
-    [config, docJson],
-  );
+  const srcdoc = useMemo(() => {
+    const scriptUrl = import.meta.env.DEV
+      ? DEV_ENTRY_URL!
+      : (ARTIFACT_REGISTRY[config.app]?.cdnUrl ?? "");
+    return buildIframeSrcdoc({
+      config,
+      docJson,
+      scriptUrl,
+      csp: SRCDOC_CSP,
+      isDev: import.meta.env.DEV,
+      devPluginUrlOverrides: DEV_PLUGIN_URL_OVERRIDES,
+    });
+  }, [config, docJson]);
 
   return (
     <div className="flex h-full w-full font-sans text-sm">

@@ -91,7 +91,7 @@ export function buildIframeSrcdoc({
   </head>
   <body id="artifacts-component-root-html">
     <script type="application/json" id="alistigo-document">${docJson}</script>
-    <script type="module" src="${scriptUrl}"></script>
+    ${isDev ? `<script type="module" src="${scriptUrl}"></script>` : `<script src="${scriptUrl}"></script>`}
   </body>
 </html>`;
 }
