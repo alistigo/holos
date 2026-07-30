@@ -86,7 +86,7 @@ function HostPage(): JSX.Element {
 
   const srcdoc = useMemo(() => {
     const scriptUrl = import.meta.env.DEV
-      ? DEV_ENTRY_URL!
+      ? (DEV_ENTRY_URL ?? "")
       : (ARTIFACT_REGISTRY[config.app]?.cdnUrl ?? "");
     return buildIframeSrcdoc({
       config,
