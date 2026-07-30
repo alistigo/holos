@@ -1,0 +1,134 @@
+name: Deploy Playground
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege default; deploy job overrides with pages:write + id-token:write.
+permissions:
+  contents: read
+
+# Never cancel an in-flight deployment — a partial deploy is worse than a slow one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    # On workflow_run: only proceed when CI passed.
+    # On workflow_dispatch: always proceed (manual re-deploy).
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # workflow_run fires on the default branch's workflow file, but we
+          # want the commit that triggered CI — use head_sha for that.
+          # workflow_dispatch sets github.sha to the branch HEAD, which is correct.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Install mise + repo tool versions
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+          cache: true
+
+      - name: Resolve pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build playground (all locales)
+        run: pnpm exec nx run alistigo-artifact-playground:build:all
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site/playground
+
+          cp -r apps/alistigo-artifact-playground/dist/en _site/playground/en
+          cp -r apps/alistigo-artifact-playground/dist/fr _site/playground/fr
+
+          # /playground/ — detect browser language and redirect to the right bundle.
+          cat > _site/playground/index.html << 'HTMLEOF'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <title>Alistigo Playground</title>
+              <script>
+                var supported = ['en', 'fr'];
+                var loc = (navigator.languages || [navigator.language || 'en'])
+                  .map(function (l) { return l.slice(0, 2).toLowerCase(); })
+                  .find(function (l) { return supported.indexOf(l) !== -1; }) || 'en';
+                window.location.replace('./' + loc + '/');
+              </script>
+            </head>
+            <body>
+              <a href="./en/">English</a> | <a href="./fr/">Fran&#231;ais</a>
+            </body>
+          </html>
+          HTMLEOF
+
+          # Site root — redirect visitors straight to the playground.
+          cat > _site/index.html << 'HTMLEOF'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta http-equiv="refresh" content="0;url=./playground/" />
+              <title>Alistigo</title>
+              <script>window.location.replace('./playground/');</script>
+            </head>
+            <body>
+              <a href="./playground/">Open Playground</a>
+            </body>
+          </html>
+          HTMLEOF
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
