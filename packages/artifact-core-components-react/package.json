@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "license": "MIT",
   "type": "module",
-  "description": "Platform-level React UI components shared by all Alistigo artifacts — LoadingScreen, ErrorScreen, AlistigoBadge, ArtifactInfoModal. Built on Tailwind v4.",
+  "description": "Platform-level React UI components shared by all Alistigo artifacts — LoadingScreen, ErrorScreen, AlistigoBadge, ArtifactInfoPanel. Built on Tailwind v4.",
   "exports": {
     ".": {
       "import": "./dist/index.js",
