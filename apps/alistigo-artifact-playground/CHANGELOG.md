@@ -1,3 +1,14 @@
+## 0.2.18 (2026-07-30)
+
+### 🧱 Updated Dependencies
+
+- Updated list-components-react to 0.2.13
+- Updated list-document-format to 0.2.12
+- Updated local-storage-plugin to 0.2.13
+- Updated ai-chat-async-api to 0.2.1
+- Updated artifact-manager to 0.2.1
+- Updated artifact-list to 0.3.1
+
 ## 0.2.17 (2026-07-30)
 
 ### 🩹 Fixes

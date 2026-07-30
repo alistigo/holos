@@ -1,3 +1,13 @@
+## 0.2.13 (2026-07-30)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-editor to 0.2.12
+- Updated list-document-format to 0.2.12
+- Updated artifact-plugin-api to 0.1.8
+- Updated list-domain to 0.2.12
+- Updated logger to 0.2.12
+
 ## 0.2.12 (2026-07-29)
 
 ### 🩹 Fixes

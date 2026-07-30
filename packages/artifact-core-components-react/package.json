@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-core-components-react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "type": "module",
   "description": "Platform-level React UI components shared by all Alistigo artifacts — LoadingScreen, ErrorScreen, AlistigoBadge, ArtifactInfoModal. Built on Tailwind v4.",

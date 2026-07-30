@@ -1,3 +1,16 @@
+## 0.3.1 (2026-07-30)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.2.1
+- Updated list-components-react to 0.2.13
+- Updated list-document-editor to 0.2.12
+- Updated list-document-format to 0.2.12
+- Updated artifact-plugin-api to 0.1.8
+- Updated artifact-core to 0.2.1
+- Updated list-domain to 0.2.12
+- Updated logger to 0.2.12
+
 ## 0.3.0 (2026-07-29)
 
 ### 🚀 Features
