@@ -1,16 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArtifactInfoModal } from "./ArtifactInfoModal.js";
+import { ArtifactInfoPanel } from "./ArtifactInfoPanel.js";
 
-const meta: Meta<typeof ArtifactInfoModal> = {
-  component: ArtifactInfoModal,
-  title: "Platform/ArtifactInfoModal",
+const meta: Meta<typeof ArtifactInfoPanel> = {
+  component: ArtifactInfoPanel,
+  title: "Platform/ArtifactInfoPanel",
   parameters: { layout: "fullscreen" },
-  args: { onClose: () => {} },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ArtifactInfoModal>;
+type Story = StoryObj<typeof ArtifactInfoPanel>;
 
 export const AllLoaded: Story = {
   args: {
