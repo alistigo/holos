@@ -39,7 +39,7 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
             aria-label="Alistigo artifact info"
             aria-hidden={!open}
             inert={!open}
-            className="rounded-b-xl bg-white p-4 shadow-xl ring-1 ring-gray-200"
+            className="rounded-bl-xl relative z-15 bg-white p-4 ring-gray-200"
           >
             {children}
           </div>
@@ -49,7 +49,7 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
             onClick={() => setOpen((v) => !v)}
             aria-label="Alistigo artifact info"
             aria-expanded={open}
-            className="absolute top-full right-2 z-10 flex h-8 w-8 items-center justify-center rounded-b-lg bg-white shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
+            className="absolute cursor-pointer right-0 top-full z-10 flex h-8 w-8 items-center justify-center rounded-b-lg bg-white shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
           >
             <img src={logoUrl} alt="" className="h-5 w-5 object-contain" />
           </button>
