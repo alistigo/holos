@@ -1,11 +1,14 @@
 import { type ReactNode, useEffect, useState } from "react";
-import logoUrl from "../assets/logo.png";
 
-export interface AlistigoBadgeProps {
+export interface ArtifactContextMenuContainerProps {
+  icon: ReactNode;
   children: ReactNode;
 }
 
-export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
+export function ArtifactContextMenuContainer({
+  icon,
+  children,
+}: ArtifactContextMenuContainerProps): ReactNode {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
             aria-label="Alistigo artifact info"
             aria-hidden={!open}
             inert={!open}
-            className={`rounded-bl-xl relative z-15 bg-white p-4 ring-gray-200 transition-shadow duration-300 ${
+            className={`relative z-10 rounded-bl-xl border border-gray-200 bg-white p-4 transition-shadow duration-300 ${
               open ? "shadow-xl" : ""
             }`}
           >
@@ -51,9 +54,9 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
             onClick={() => setOpen((v) => !v)}
             aria-label="Alistigo artifact info"
             aria-expanded={open}
-            className="absolute cursor-pointer right-0 top-full z-10 flex h-8 w-8 items-center justify-center rounded-b-lg bg-white shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
+            className="absolute top-full right-0 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t-0 border-b border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"
           >
-            <img src={logoUrl} alt="" className="h-5 w-5 object-contain" />
+            {icon}
           </button>
         </div>
       </div>

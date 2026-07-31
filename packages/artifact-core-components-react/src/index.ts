@@ -1,5 +1,6 @@
-export type { AlistigoBadgeProps } from "./components/AlistigoBadge.js";
-export { AlistigoBadge } from "./components/AlistigoBadge.js";
+export { default as alistigoLogoUrl } from "./assets/logo.png";
+export type { ArtifactContextMenuContainerProps } from "./components/ArtifactContextMenuContainer.js";
+export { ArtifactContextMenuContainer } from "./components/ArtifactContextMenuContainer.js";
 export type { ArtifactInfoPanelProps } from "./components/ArtifactInfoPanel.js";
 export { ArtifactInfoPanel } from "./components/ArtifactInfoPanel.js";
 export type { ErrorScreenProps } from "./components/ErrorScreen.js";
