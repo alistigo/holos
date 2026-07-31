@@ -49,9 +49,9 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
             onClick={() => setOpen((v) => !v)}
             aria-label="Alistigo artifact info"
             aria-expanded={open}
-            className="absolute top-full right-2 z-10 h-8 w-8 overflow-hidden rounded-full shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
+            className="absolute top-full right-2 z-10 flex h-8 w-8 items-center justify-center rounded-b-lg bg-white shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
           >
-            <img src={logoUrl} alt="" className="h-full w-full object-cover" />
+            <img src={logoUrl} alt="" className="h-5 w-5 object-contain" />
           </button>
         </div>
       </div>
