@@ -28,7 +28,7 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-40 flex justify-end">
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-40 flex justify-end pr-4">
         <div
           className="pointer-events-auto relative w-72 transition-transform duration-300 ease-out"
           style={{ transform: open ? "translateY(0)" : "translateY(-100%)" }}
@@ -39,7 +39,9 @@ export function AlistigoBadge({ children }: AlistigoBadgeProps): ReactNode {
             aria-label="Alistigo artifact info"
             aria-hidden={!open}
             inert={!open}
-            className="rounded-bl-xl relative z-15 bg-white p-4 ring-gray-200"
+            className={`rounded-bl-xl relative z-15 bg-white p-4 ring-gray-200 transition-shadow duration-300 ${
+              open ? "shadow-xl" : ""
+            }`}
           >
             {children}
           </div>

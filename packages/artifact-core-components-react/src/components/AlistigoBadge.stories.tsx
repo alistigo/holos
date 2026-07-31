@@ -12,8 +12,6 @@ type Story = StoryObj<typeof AlistigoBadge>;
 
 export const Content: Story = {
   args: {
-    children: (
-      <p>Content</p>
-    ),
+    children: <p>Content</p>,
   },
 };
