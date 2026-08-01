@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import type { PluginInfo } from "./types.js";
 import { PluginList } from "./PluginList.js";
+import type { PluginInfo } from "./types.js";
 
 export interface ArtifactInfoPanelProps {
   artifactName: string;

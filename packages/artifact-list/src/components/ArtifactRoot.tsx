@@ -7,6 +7,7 @@ import type { PluginInfo } from "@alistigo/artifact-core-components-react";
 import {
   ArtifactContextMenuContainer,
   ArtifactInfoPanel,
+  Modal,
   alistigoLogoUrl,
   ErrorScreen,
   LoadingScreen,
@@ -142,18 +143,34 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
 
   const { runtime, store, pluginInfos } = ready;
   const doc = options.document ?? makeDefaultDocument();
+  const [infoOpen, setInfoOpen] = useState(false);
 
   return (
     <div style={{ position: "relative" }}>
       <ArtifactContextMenuContainer
         icon={<img src={alistigoLogoUrl} alt="" className="h-full w-full object-cover" />}
-        title="@alistigo/artifact-list"
       >
-        <ArtifactInfoPanel
-          artifactName="@alistigo/artifact-list"
-          artifactVersion={pkg.version}
-          plugins={pluginInfos}
-        />
+        <button
+          type="button"
+          onClick={() => setInfoOpen(true)}
+          aria-label="Open artifact info"
+          className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-gray-600" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="8.01" strokeLinecap="round" strokeWidth="2.5" />
+            <line x1="12" y1="12" x2="12" y2="16" strokeLinecap="round" />
+          </svg>
+        </button>
+        {infoOpen && (
+          <Modal title="@alistigo/artifact-list" onClose={() => setInfoOpen(false)}>
+            <ArtifactInfoPanel
+              artifactName="@alistigo/artifact-list"
+              artifactVersion={pkg.version}
+              plugins={pluginInfos}
+            />
+          </Modal>
+        )}
       </ArtifactContextMenuContainer>
       <I18nProvider i18n={i18n}>
         <ArtifactErrorBoundary
