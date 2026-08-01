@@ -22,7 +22,6 @@ type Story = StoryObj<typeof ArtifactContextMenuContainer>;
 export const Default: Story = {
   args: {
     icon: <img src={logoUrl} alt="" className="h-full w-full object-cover" />,
-    title: "@alistigo/artifact-list",
-    children: <p className="text-sm text-gray-600">Modal content goes here.</p>,
+    children: <p className="text-sm text-gray-600">Sheet content goes here.</p>,
   },
 };
