@@ -7,4 +7,8 @@ export type { ErrorScreenProps } from "./components/ErrorScreen.js";
 export { ErrorScreen } from "./components/ErrorScreen.js";
 export type { LoadingScreenProps } from "./components/LoadingScreen.js";
 export { LoadingScreen } from "./components/LoadingScreen.js";
+export type { ModalProps } from "./components/Modal.js";
+export { Modal } from "./components/Modal.js";
+export type { PluginListProps } from "./components/PluginList.js";
+export { PluginList } from "./components/PluginList.js";
 export type { PluginInfo } from "./components/types.js";

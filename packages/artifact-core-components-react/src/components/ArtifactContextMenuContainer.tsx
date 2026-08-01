@@ -1,65 +1,35 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
+import { Modal } from "./Modal.js";
 
 export interface ArtifactContextMenuContainerProps {
   icon: ReactNode;
+  title: string;
   children: ReactNode;
 }
 
 export function ArtifactContextMenuContainer({
   icon,
+  title,
   children,
 }: ArtifactContextMenuContainerProps): ReactNode {
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (e: KeyboardEvent): void => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open]);
 
   return (
     <>
       <button
         type="button"
-        aria-label="Close artifact info"
-        tabIndex={-1}
-        onClick={() => setOpen(false)}
-        className={`fixed inset-0 z-30 bg-black/20 transition-opacity duration-300 ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      />
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-40 flex justify-end pr-4">
-        <div
-          className="pointer-events-auto relative w-72 transition-transform duration-300 ease-out"
-          style={{ transform: open ? "translateY(0)" : "translateY(-100%)" }}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Alistigo artifact info"
-            aria-hidden={!open}
-            inert={!open}
-            className={`relative z-10 rounded-bl-xl border border-gray-200 bg-white p-4 transition-shadow duration-300 ${
-              open ? "shadow-xl" : ""
-            }`}
-          >
-            {children}
-          </div>
-          <button
-            type="button"
-            data-testid="alistigo-badge"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Alistigo artifact info"
-            aria-expanded={open}
-            className="-mt-px absolute top-full right-0 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t border-b border-t-white border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"
-          >
-            {icon}
-          </button>
-        </div>
-      </div>
+        data-testid="alistigo-badge"
+        onClick={() => setOpen(true)}
+        aria-label="Alistigo artifact info"
+        className="absolute top-2 right-2 z-40 h-8 w-8 overflow-hidden rounded-full shadow-md ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-400 focus:outline-none"
+      >
+        {icon}
+      </button>
+      {open && (
+        <Modal title={title} onClose={() => setOpen(false)}>
+          {children}
+        </Modal>
+      )}
     </>
   );
 }
