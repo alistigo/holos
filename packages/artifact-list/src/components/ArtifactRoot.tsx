@@ -146,7 +146,8 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
   return (
     <div style={{ position: "relative" }}>
       <ArtifactContextMenuContainer
-        icon={<img src={alistigoLogoUrl} alt="" className="h-5 w-5 object-contain" />}
+        icon={<img src={alistigoLogoUrl} alt="" className="h-full w-full object-cover" />}
+        title="@alistigo/artifact-list"
       >
         <ArtifactInfoPanel
           artifactName="@alistigo/artifact-list"
