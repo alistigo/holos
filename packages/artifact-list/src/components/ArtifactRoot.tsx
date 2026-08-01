@@ -3,12 +3,7 @@ import {
   useArtifactLifecycle,
   useStartArtifact,
 } from "@alistigo/artifact-core";
-import type { PluginInfo } from "@alistigo/artifact-core-components-react";
 import {
-  ArtifactContextMenuContainer,
-  ArtifactInfoPanel,
-  Modal,
-  alistigoLogoUrl,
   ErrorScreen,
   LoadingScreen,
 } from "@alistigo/artifact-core-components-react";
@@ -49,36 +44,12 @@ function resolveActiveStorage(plugins: AlistigoPlugin[]): {
   }
   return { store: new InMemoryListStore(), pluginName: "in-memory" };
 }
-
-function buildPluginInfos(
-  plugins: AlistigoPlugin[],
-  spec: Record<string, Record<string, unknown>>,
-): PluginInfo[] {
-  return Object.keys(spec).map((pkgName) => {
-    const plugin = plugins.find((p) => p.name === pkgName);
-    if (plugin !== undefined) {
-      return {
-        name: plugin.name,
-        version: "?",
-        type: plugin.type ?? "unknown",
-        status: "loaded" as const,
-      };
-    }
-    return {
-      name: pkgName,
-      version: "?",
-      type: "unknown",
-      status: "error" as const,
-      error: "Failed to load",
-    };
-  });
-}
-
 interface ReadyState {
   runtime: PluginRuntime;
   store: AlistigoListStore;
-  pluginInfos: PluginInfo[];
   storagePluginName: string;
+  plugins: AlistigoPlugin[];
+  spec: Record<string, Record<string, unknown>>;
 }
 
 // fallow-ignore-next-line complexity
@@ -107,8 +78,9 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
         setReady({
           runtime,
           store,
-          pluginInfos: buildPluginInfos(plugins, spec),
           storagePluginName: pluginName,
+          plugins,
+          spec
         });
       },
     },
@@ -141,37 +113,12 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
 
   if (ready === null) return null;
 
-  const { runtime, store, pluginInfos } = ready;
+  const { runtime, store, plugins, spec } = ready;
   const doc = options.document ?? makeDefaultDocument();
-  const [infoOpen, setInfoOpen] = useState(false);
+
 
   return (
     <div style={{ position: "relative" }}>
-      <ArtifactContextMenuContainer
-        icon={<img src={alistigoLogoUrl} alt="" className="h-full w-full object-cover" />}
-      >
-        <button
-          type="button"
-          onClick={() => setInfoOpen(true)}
-          aria-label="Open artifact info"
-          className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100 focus:outline-none"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-gray-600" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="8.01" strokeLinecap="round" strokeWidth="2.5" />
-            <line x1="12" y1="12" x2="12" y2="16" strokeLinecap="round" />
-          </svg>
-        </button>
-        {infoOpen && (
-          <Modal title="@alistigo/artifact-list" onClose={() => setInfoOpen(false)}>
-            <ArtifactInfoPanel
-              artifactName="@alistigo/artifact-list"
-              artifactVersion={pkg.version}
-              plugins={pluginInfos}
-            />
-          </Modal>
-        )}
-      </ArtifactContextMenuContainer>
       <I18nProvider i18n={i18n}>
         <ArtifactErrorBoundary
           onError={(err, componentStack) => {
@@ -182,7 +129,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
             });
           }}
         >
-          <App key={doc["alistigo:listId"]} initialDocument={doc} repository={store} />
+          <App key={doc["alistigo:listId"]} initialDocument={doc} repository={store} plugins={plugins} spec={spec}/>
           <DebugRenderErrorTrigger />
         </ArtifactErrorBoundary>
       </I18nProvider>
