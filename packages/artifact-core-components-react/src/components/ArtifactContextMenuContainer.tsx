@@ -54,7 +54,7 @@ export function ArtifactContextMenuContainer({
             onClick={() => setOpen((v) => !v)}
             aria-label="Alistigo artifact info"
             aria-expanded={open}
-            className="absolute top-full right-0 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t-0 border-b border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"
+            className="-mt-px absolute top-full right-0 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t border-b border-t-white border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"
           >
             {icon}
           </button>
