@@ -8,8 +8,6 @@ export type EntryStatus = "draft" | "saving" | "saved";
 export interface JsonDocumentViewerProps {
   value: unknown;
   isLoading: boolean;
-  onDelete?: () => void;
-  isDeleting?: boolean;
   // editing support
   editText?: string;
   onEditTextChange?: (text: string) => void;
@@ -64,7 +62,7 @@ function EditableTextArea({
   saveStatus: EntryStatus;
 }): JSX.Element {
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <div className="shrink-0 flex items-center justify-between px-2 py-1 border-b border-gray-100 bg-gray-50">
         <span className="text-xs text-gray-400 font-mono">JSON</span>
         <SaveStatusChip status={saveStatus} />
@@ -106,42 +104,10 @@ function ValueContent({ value }: { value: unknown }): JSX.Element {
   );
 }
 
-function DeleteButton({
-  onDelete,
-  isDeleting,
-  isLoading,
-}: {
-  onDelete: () => void;
-  isDeleting: boolean;
-  isLoading: boolean;
-}): JSX.Element {
-  return (
-    <div className="shrink-0 px-3 py-2 border-t border-gray-100">
-      <button
-        type="button"
-        onClick={onDelete}
-        disabled={isDeleting || isLoading}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors"
-      >
-        {isDeleting ? (
-          <>
-            <span className="inline-block w-3 h-3 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
-            Deleting…
-          </>
-        ) : (
-          "Delete key"
-        )}
-      </button>
-    </div>
-  );
-}
-
 // fallow-ignore-next-line complexity
 export function JsonDocumentViewer({
   value,
   isLoading,
-  onDelete,
-  isDeleting = false,
   editText,
   onEditTextChange,
   isInvalidJson = false,
@@ -151,7 +117,7 @@ export function JsonDocumentViewer({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="flex-1 overflow-auto min-h-0">
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         {isLoading ? (
           <SkeletonRows />
         ) : isEditable ? (
@@ -162,14 +128,11 @@ export function JsonDocumentViewer({
             saveStatus={saveStatus}
           />
         ) : (
-          <div className="p-2 h-full">
+          <div className="flex-1 overflow-auto p-2">
             <ValueContent value={value} />
           </div>
         )}
       </div>
-      {onDelete !== undefined && value !== undefined && (
-        <DeleteButton onDelete={onDelete} isDeleting={isDeleting} isLoading={isLoading} />
-      )}
     </div>
   );
 }

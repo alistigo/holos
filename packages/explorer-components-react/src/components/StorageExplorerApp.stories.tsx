@@ -22,22 +22,25 @@ function makeStorageStub(
   initialPrivate: Record<string, unknown>,
   initialShared: Record<string, unknown>,
 ): NonNullable<typeof window.storage> {
-  const priv = { ...initialPrivate };
-  const shared = { ...initialShared };
+  // Store values as JSON strings — matches the real Claude storage API contract
+  const priv = new Map(Object.entries(initialPrivate).map(([k, v]) => [k, JSON.stringify(v)]));
+  const shared = new Map(Object.entries(initialShared).map(([k, v]) => [k, JSON.stringify(v)]));
 
   return {
-    get: async (key, isShared = false) => (isShared ? shared[key] : priv[key]),
+    get: async (key, isShared = false) => {
+      const v = (isShared ? shared : priv).get(key);
+      if (v === undefined) throw new Error("Key not found");
+      return { value: v };
+    },
     set: async (key, value, isShared = false) => {
-      if (isShared) shared[key] = value;
-      else priv[key] = value;
+      (isShared ? shared : priv).set(key, value);
     },
     delete: async (key, isShared = false) => {
-      if (isShared) delete shared[key];
-      else delete priv[key];
+      (isShared ? shared : priv).delete(key);
     },
     list: async (prefix, isShared = false) => {
       const source = isShared ? shared : priv;
-      return Object.fromEntries(Object.entries(source).filter(([k]) => k.startsWith(prefix)));
+      return { keys: Array.from(source.keys()).filter((k) => k.startsWith(prefix)) };
     },
   };
 }

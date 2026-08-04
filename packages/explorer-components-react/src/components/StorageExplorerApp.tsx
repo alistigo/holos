@@ -5,10 +5,10 @@ import { StorageSection } from "./StorageSection.js";
 declare global {
   interface Window {
     storage?: {
-      get: (key: string, shared?: boolean) => Promise<unknown>;
-      set: (key: string, value: unknown, shared?: boolean) => Promise<void>;
-      delete: (key: string, shared?: boolean) => Promise<void>;
-      list: (prefix: string, shared?: boolean) => Promise<Record<string, unknown>>;
+      get: (key: string, shared?: boolean) => Promise<{ value: string }>;
+      set: (key: string, value: string, shared?: boolean) => Promise<unknown>;
+      delete: (key: string, shared?: boolean) => Promise<unknown>;
+      list: (prefix: string, shared?: boolean) => Promise<{ keys: string[] } | null>;
     };
   }
 }
@@ -39,13 +39,35 @@ export function StorageExplorerApp({
     const id = ++loadId.current;
     setLoading({ private: true, shared: true });
 
-    const [priv, shared] = await Promise.all([
-      window.storage.list(currentPrefix, false),
-      window.storage.list(currentPrefix, true),
+    async function fetchAll(pfx: string, isShared: boolean): Promise<Record<string, unknown>> {
+      const result = await window.storage!.list(pfx, isShared);
+      if (!result) return {};
+      const pairs = await Promise.all(
+        result.keys.map(async (key): Promise<[string, unknown]> => {
+          try {
+            const item = await window.storage!.get(key, isShared);
+            let parsed: unknown;
+            try {
+              parsed = JSON.parse(item.value) as unknown;
+            } catch {
+              parsed = item.value;
+            }
+            return [key, parsed];
+          } catch {
+            return [key, null];
+          }
+        }),
+      );
+      return Object.fromEntries(pairs);
+    }
+
+    const [priv, sharedResult] = await Promise.all([
+      fetchAll(currentPrefix, false),
+      fetchAll(currentPrefix, true),
     ]);
     if (id !== loadId.current) return;
     setPrivateEntries(priv);
-    setSharedEntries(shared);
+    setSharedEntries(sharedResult);
     setLoading({ private: false, shared: false });
   }, []);
 
@@ -70,13 +92,13 @@ export function StorageExplorerApp({
 
   async function handleCreate(key: string, value: unknown, isShared: boolean): Promise<void> {
     if (!window.storage) return;
-    await window.storage.set(key, value, isShared);
+    await window.storage.set(key, JSON.stringify(value), isShared);
     await reload(prefix);
   }
 
   async function handleUpdate(key: string, value: unknown, isShared: boolean): Promise<void> {
     if (!window.storage) return;
-    await window.storage.set(key, value, isShared);
+    await window.storage.set(key, JSON.stringify(value), isShared);
     // Optimistic local update — avoids a full reload that would reset the editor state
     if (isShared) {
       setSharedEntries((prev) => ({ ...prev, [key]: value }));

@@ -201,6 +201,8 @@ export function StorageSection({
             label={keyLabel}
             emptyText="No keys found."
             entryStatuses={entryStatuses}
+            onDeleteKey={onDelete}
+            isDeletingKey={isDeletingKey}
             {...(creationState === null ? { onCreateClick: handleStartCreate } : {})}
           />
         </div>
@@ -214,12 +216,6 @@ export function StorageSection({
               ? {
                   editText: currentEditText,
                   onEditTextChange: (text: string) => handleEditChange(selectedKey, text),
-                }
-              : {})}
-            {...(selectedKey !== null
-              ? {
-                  onDelete: () => onDelete(selectedKey),
-                  isDeleting: isDeletingKey === selectedKey,
                 }
               : {})}
           />
