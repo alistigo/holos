@@ -194,6 +194,7 @@ function StorageSection({
   );
 }
 
+// fallow-ignore-next-line complexity
 export function StorageExplorer({
   aiContext,
   localEntries,

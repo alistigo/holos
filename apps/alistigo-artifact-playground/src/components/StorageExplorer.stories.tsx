@@ -67,9 +67,7 @@ export const ClaudeWithEntries: Story = {
       ["lst_abc123", JSON.stringify({ title: "My List (Claude)", items: [] })],
       ["session/token", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEifQ.abc"],
     ],
-    sharedEntries: [
-      ["shared/config", JSON.stringify({ theme: "dark", lang: "en" })],
-    ],
+    sharedEntries: [["shared/config", JSON.stringify({ theme: "dark", lang: "en" })]],
     onDeleteEntry: () => {},
     onSetEntry: () => {},
     onClearAll: () => {},
