@@ -73,6 +73,7 @@ export function useClaudeStorageSimulator(
   useEffect(() => {
     if (!enabled) return;
 
+    // fallow-ignore-next-line complexity
     function processStorageMessage(event: MessageEvent, win: Window) {
       const { type, id, key, value, prefix, shared } = event.data as {
         type: string;
