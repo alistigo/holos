@@ -3,10 +3,7 @@ import {
   useArtifactLifecycle,
   useStartArtifact,
 } from "@alistigo/artifact-core";
-import {
-  ErrorScreen,
-  LoadingScreen,
-} from "@alistigo/artifact-core-components-react";
+import { ErrorScreen, LoadingScreen } from "@alistigo/artifact-core-components-react";
 import type { AlistigoPlugin, PluginRuntime } from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
@@ -80,7 +77,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
           store,
           storagePluginName: pluginName,
           plugins,
-          spec
+          spec,
         });
       },
     },
@@ -116,7 +113,6 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
   const { runtime, store, plugins, spec } = ready;
   const doc = options.document ?? makeDefaultDocument();
 
-
   return (
     <div style={{ position: "relative" }}>
       <I18nProvider i18n={i18n}>
@@ -129,7 +125,13 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
             });
           }}
         >
-          <App key={doc["alistigo:listId"]} initialDocument={doc} repository={store} plugins={plugins} spec={spec}/>
+          <App
+            key={doc["alistigo:listId"]}
+            initialDocument={doc}
+            repository={store}
+            plugins={plugins}
+            spec={spec}
+          />
           <DebugRenderErrorTrigger />
         </ArtifactErrorBoundary>
       </I18nProvider>

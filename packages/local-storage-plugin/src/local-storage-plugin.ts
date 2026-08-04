@@ -1,6 +1,6 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
-import { LocalStorageListRepository } from "./local-storage-list-repository.js";
 import pkg from "../package.json" with { type: "json" };
+import { LocalStorageListRepository } from "./local-storage-list-repository.js";
 
 const localStoragePlugin: AlistigoPlugin = {
   name: "@alistigo/local-storage-plugin",

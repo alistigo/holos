@@ -1,10 +1,10 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
+import pkg from "../package.json" with { type: "json" };
 import {
   ClaudeArtifactListRepository,
   isClaudeArtifactContext,
   withStorageTimeout,
 } from "./claude-artifact-list-repository.js";
-import pkg from "../package.json" with { type: "json" };
 
 const claudeStoragePlugin: AlistigoPlugin = {
   name: "@alistigo/claude-storage-plugin",
