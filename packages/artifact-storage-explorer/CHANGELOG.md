@@ -1,3 +1,18 @@
+## 0.2.0 (2026-08-04)
+
+### 🚀 Features
+
+- **artifact-storage-explorer:** add CRUD, debounced edit, and simulator delay ([b6d2f2f](https://github.com/alistigo/holos/commit/b6d2f2f))
+
+### 🧱 Updated Dependencies
+
+- Updated explorer-components-react to 0.2.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.2 (2026-08-04)
 
 ### 🧱 Updated Dependencies

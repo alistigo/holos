@@ -1,3 +1,27 @@
+## 0.2.16 (2026-08-04)
+
+### 🚀 Features
+
+- **claude-artifact-api:** add canonical types package and wire it into dependents ([843b307](https://github.com/alistigo/holos/commit/843b307))
+
+### 🩹 Fixes
+
+- **fallow:** suppress processStorageMessage complexity and make window-storage reachable ([cd6f3b3](https://github.com/alistigo/holos/commit/cd6f3b3))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-editor to 0.2.14
+- Updated list-document-format to 0.2.14
+- Updated artifact-plugin-api to 0.2.2
+- Updated claude-artifact-api to 0.2.0
+- Updated list-domain to 0.2.14
+- Updated logger to 0.2.14
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.15 (2026-08-04)
 
 ### 🧱 Updated Dependencies

@@ -1,3 +1,34 @@
+## 0.2.22 (2026-08-04)
+
+### 🚀 Features
+
+- **storage-explorer:** shared badge, per-key delete, edit mode, delete-all, and Load button ([caa5edb](https://github.com/alistigo/holos/commit/caa5edb))
+- **claude-artifact-api:** add canonical types package and wire it into dependents ([843b307](https://github.com/alistigo/holos/commit/843b307))
+- **artifact-storage-explorer:** add CRUD, debounced edit, and simulator delay ([b6d2f2f](https://github.com/alistigo/holos/commit/b6d2f2f))
+
+### 🩹 Fixes
+
+- **fallow:** suppress StorageExplorer complexity and apply biome format fixes ([9bce274](https://github.com/alistigo/holos/commit/9bce274))
+- **fallow:** suppress processStorageMessage complexity and make window-storage reachable ([cd6f3b3](https://github.com/alistigo/holos/commit/cd6f3b3))
+- **storage-explorer:** fix key display, JSON viewer layout, and delete UX ([ab1dba9](https://github.com/alistigo/holos/commit/ab1dba9))
+- **storage-explorer:** suppress fallow complexity annotations on legitimate branchy functions ([53ccf85](https://github.com/alistigo/holos/commit/53ccf85))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-storage-explorer to 0.2.0
+- Updated list-components-react to 0.2.15
+- Updated list-document-format to 0.2.14
+- Updated local-storage-plugin to 0.2.16
+- Updated claude-artifact-api to 0.2.0
+- Updated ai-chat-async-api to 0.2.3
+- Updated artifact-manager to 0.2.3
+- Updated artifact-list to 0.3.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.21 (2026-08-04)
 
 ### 🩹 Fixes

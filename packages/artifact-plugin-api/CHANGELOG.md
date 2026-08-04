@@ -1,3 +1,10 @@
+## 0.2.2 (2026-08-04)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-editor to 0.2.14
+- Updated list-document-format to 0.2.14
+
 ## 0.2.1 (2026-08-04)
 
 ### 🧱 Updated Dependencies
