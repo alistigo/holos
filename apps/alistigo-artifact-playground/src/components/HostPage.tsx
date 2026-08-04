@@ -1,7 +1,7 @@
 import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import { ARTIFACT_REGISTRY } from "@alistigo/artifact-manager";
 import type { JSX } from "react";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import listApiDef from "../../../../packages/artifact-list/api.json";
 import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
@@ -69,9 +69,11 @@ function useDocJson(config: Config): string {
 function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
+  const [simulatorDelayMs, setSimulatorDelayMs] = useState(0);
   const { clearStorage, storeEntries } = useClaudeStorageSimulator(
     iframeRef,
     config.aiContext === "claude",
+    simulatorDelayMs,
   );
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
@@ -111,6 +113,8 @@ function HostPage(): JSX.Element {
         documentNames={documentNames}
         localStorageEntries={localStorageEntries}
         storageEntries={storeEntries}
+        simulatorDelayMs={simulatorDelayMs}
+        onSimulatorDelayChange={setSimulatorDelayMs}
       />
       <div className="w-1/2">
         <ArtifactViewPanel

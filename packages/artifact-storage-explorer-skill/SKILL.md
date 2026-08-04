@@ -4,7 +4,7 @@ app: "@alistigo/artifact-storage-explorer"
 description: >
   Use this when a developer asks to inspect, browse, debug, or explore Claude artifact storage.
   Renders a storage explorer UI inside the artifact that lists all private and shared storage keys
-  with their JSON values, and allows deleting individual keys.
+  with their JSON values, and allows creating, editing, and deleting individual keys.
 triggers:
   - "explore storage"
   - "inspect claude storage"
@@ -27,8 +27,8 @@ see, debug, or clean up what's stored in `window.storage` — the key-value API 
 into every artifact iframe.
 
 The artifact displays private and shared keys in separate sections, lets the developer click any
-key to view its JSON value, and provides a delete button per key. A prefix field at the top
-filters both lists simultaneously.
+key to view and edit its JSON value (auto-saved after 1 second), create new entries, and delete
+individual keys. A prefix field at the top filters both lists simultaneously.
 
 ## Config fields
 
@@ -64,8 +64,7 @@ Clicking delete calls `window.storage.delete(key, isShared)` then reloads both l
 
 ## What this artifact cannot do
 
-- **Edit values** — read-only in v1; editing is planned for v2
-- **Bulk delete** — only individual key deletion in v1
+- **Bulk delete** — only individual key deletion is supported
 - **Work outside a Claude artifact** — `window.storage` is only available inside the Claude inject-script bridge
 
 ## NPM

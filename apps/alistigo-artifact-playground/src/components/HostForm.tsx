@@ -16,6 +16,8 @@ interface HostFormProps {
   documentNames: string[];
   localStorageEntries: [string, string][];
   storageEntries: [string, string][];
+  simulatorDelayMs: number;
+  onSimulatorDelayChange: (ms: number) => void;
 }
 
 function SectionHeader({ label }: { label: string }): JSX.Element {
@@ -35,7 +37,10 @@ function ConfigTab({
   onReload,
   onClearData,
   documentNames,
-}: Omit<HostFormProps, "storageEntries" | "localStorageEntries">): JSX.Element {
+}: Omit<
+  HostFormProps,
+  "storageEntries" | "localStorageEntries" | "simulatorDelayMs" | "onSimulatorDelayChange"
+>): JSX.Element {
   const showArtifactConfig =
     config.app === "@alistigo/artifact-list" || Object.keys(config.plugins).length > 0;
 
@@ -136,6 +141,8 @@ function HostForm({
   documentNames,
   localStorageEntries,
   storageEntries,
+  simulatorDelayMs,
+  onSimulatorDelayChange,
 }: HostFormProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<LeftTab>("config");
 
@@ -182,6 +189,8 @@ function HostForm({
             aiContext={config.aiContext}
             localEntries={localStorageEntries}
             claudeEntries={storageEntries}
+            simulatorDelayMs={simulatorDelayMs}
+            onSimulatorDelayChange={onSimulatorDelayChange}
           />
         </div>
       )}
