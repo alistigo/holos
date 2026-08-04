@@ -4,9 +4,11 @@ import {
   isClaudeArtifactContext,
   withStorageTimeout,
 } from "./claude-artifact-list-repository.js";
+import pkg from "../package.json" with { type: "json" };
 
 const claudeStoragePlugin: AlistigoPlugin = {
   name: "@alistigo/claude-storage-plugin",
+  version: pkg.version,
   type: "storage",
   storage: {
     isAvailable(): boolean {

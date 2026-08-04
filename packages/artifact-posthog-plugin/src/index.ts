@@ -1,6 +1,7 @@
 import type { AlistigoPlugin, PluginContext } from "@alistigo/artifact-plugin-api";
 import { createLogger } from "@alistigo/logger";
 import posthog from "posthog-js";
+import pkg from "../package.json" with { type: "json" };
 
 const PACKAGE_NAME = "@alistigo/artifact-posthog-plugin";
 const EU_HOST = "https://eu.i.posthog.com";
@@ -34,6 +35,7 @@ function setup(ctx: PluginContext): void {
 
 const posthogPlugin: AlistigoPlugin = {
   name: PACKAGE_NAME,
+  version: pkg.version,
   setup,
 };
 

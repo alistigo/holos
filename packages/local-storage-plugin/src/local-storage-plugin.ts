@@ -1,8 +1,10 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import { LocalStorageListRepository } from "./local-storage-list-repository.js";
+import pkg from "../package.json" with { type: "json" };
 
 const localStoragePlugin: AlistigoPlugin = {
   name: "@alistigo/local-storage-plugin",
+  version: pkg.version,
   type: "storage",
   storage: {
     isAvailable(): boolean {
