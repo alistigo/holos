@@ -47,6 +47,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
+    "@alistigo/claude-artifact-api": "workspace:*",
     "@uiw/react-json-view": "2.0.0-alpha.43"
   },
   "devDependencies": {

@@ -42,6 +42,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@alistigo/claude-artifact-api": "workspace:*",
     "@alistigo/logger": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
     "@alistigo/list-document-format": "workspace:*",

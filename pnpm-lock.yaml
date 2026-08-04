@@ -59,6 +59,9 @@ importers:
       '@alistigo/artifact-storage-explorer':
         specifier: workspace:*
         version: link:../../packages/artifact-storage-explorer
+      '@alistigo/claude-artifact-api':
+        specifier: workspace:*
+        version: link:../../packages/claude-artifact-api
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../../packages/list-components-react
@@ -439,8 +442,13 @@ importers:
 
   packages/artifact-storage-explorer-skill: {}
 
+  packages/claude-artifact-api: {}
+
   packages/claude-storage-plugin:
     dependencies:
+      '@alistigo/claude-artifact-api':
+        specifier: workspace:*
+        version: link:../claude-artifact-api
       '@alistigo/list-document-editor':
         specifier: workspace:*
         version: link:../list-document-editor
@@ -463,6 +471,9 @@ importers:
 
   packages/explorer-components-react:
     dependencies:
+      '@alistigo/claude-artifact-api':
+        specifier: workspace:*
+        version: link:../claude-artifact-api
       '@uiw/react-json-view':
         specifier: 2.0.0-alpha.43
         version: 2.0.0-alpha.43(@babel/runtime@7.28.6)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)

@@ -11,6 +11,7 @@
     "build:all": "pnpm run build:en && pnpm run build:fr"
   },
   "dependencies": {
+    "@alistigo/claude-artifact-api": "workspace:*",
     "@alistigo/ai-chat-async-api": "workspace:*",
     "@alistigo/artifact-list": "workspace:*",
     "@alistigo/artifact-manager": "workspace:*",

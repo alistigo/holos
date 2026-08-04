@@ -1,3 +1,4 @@
+import type { ClaudeStorage } from "@alistigo/claude-artifact-api";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { ListDocumentSerializer } from "@alistigo/list-document-format";

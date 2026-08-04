@@ -2,16 +2,7 @@ import type { JSX } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StorageSection } from "./StorageSection.js";
 
-declare global {
-  interface Window {
-    storage?: {
-      get: (key: string, shared?: boolean) => Promise<{ value: string }>;
-      set: (key: string, value: string, shared?: boolean) => Promise<unknown>;
-      delete: (key: string, shared?: boolean) => Promise<unknown>;
-      list: (prefix: string, shared?: boolean) => Promise<{ keys: string[] } | null>;
-    };
-  }
-}
+import "@alistigo/claude-artifact-api";
 
 export interface StorageExplorerAppProps {
   prefix?: string;
