@@ -56,6 +56,9 @@ importers:
       '@alistigo/artifact-manager':
         specifier: workspace:*
         version: link:../../packages/artifact-manager
+      '@alistigo/artifact-storage-explorer':
+        specifier: workspace:*
+        version: link:../../packages/artifact-storage-explorer
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../../packages/list-components-react
