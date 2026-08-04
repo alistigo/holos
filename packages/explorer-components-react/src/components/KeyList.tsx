@@ -15,6 +15,7 @@ function StatusBadge({ status }: { status: "draft" | "saving" }): JSX.Element {
   if (status === "saving") {
     return (
       <span
+        role="img"
         className="inline-block w-2.5 h-2.5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin shrink-0"
         aria-label="Saving"
       />
@@ -22,6 +23,7 @@ function StatusBadge({ status }: { status: "draft" | "saving" }): JSX.Element {
   }
   return (
     <span
+      role="img"
       className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"
       aria-label="Unsaved"
     />
