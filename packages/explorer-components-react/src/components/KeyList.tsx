@@ -1,16 +1,22 @@
 import type { JSX } from "react";
 
+export interface KeyListEntry {
+  id: string;
+  label: string;
+  isShared: boolean;
+}
+
 export interface KeyListProps {
-  keys: string[];
-  selectedKey: string | null;
-  onSelectKey: (key: string) => void;
+  entries: KeyListEntry[];
+  selectedId: string | null;
+  onSelectId: (id: string) => void;
   isLoading: boolean;
   label: string;
   emptyText?: string;
   entryStatuses?: Map<string, "draft" | "saving">;
   onCreateClick?: () => void;
-  onDeleteKey?: (key: string) => void;
-  isDeletingKey?: string | null;
+  onDeleteId?: (id: string) => void;
+  isDeletingId?: string | null;
 }
 
 function StatusBadge({ status }: { status: "draft" | "saving" }): JSX.Element {
@@ -34,43 +40,48 @@ function StatusBadge({ status }: { status: "draft" | "saving" }): JSX.Element {
 
 // fallow-ignore-next-line complexity
 function KeyListRow({
-  keyName,
-  selectedKey,
+  entry,
+  selectedId,
   status,
   isDeleting,
-  onSelectKey,
-  onDeleteKey,
+  onSelectId,
+  onDeleteId,
 }: {
-  keyName: string;
-  selectedKey: string | null;
+  entry: KeyListEntry;
+  selectedId: string | null;
   status: "draft" | "saving" | undefined;
   isDeleting: boolean;
-  onSelectKey: (key: string) => void;
-  onDeleteKey: ((key: string) => void) | undefined;
+  onSelectId: (id: string) => void;
+  onDeleteId: ((id: string) => void) | undefined;
 }): JSX.Element {
   return (
     <li className="group flex items-center">
       <button
         type="button"
-        onClick={() => onSelectKey(keyName)}
+        onClick={() => onSelectId(entry.id)}
         className={`flex-1 min-w-0 text-left px-3 py-1.5 text-xs font-mono cursor-pointer transition-colors flex items-center gap-1.5 ${
-          selectedKey === keyName
+          selectedId === entry.id
             ? "bg-blue-50 text-blue-700 font-semibold"
             : "text-gray-700 hover:bg-gray-100"
         }`}
-        title={keyName}
+        title={entry.label}
       >
-        <span className="truncate flex-1">{keyName}</span>
+        <span className="truncate flex-1">{entry.label}</span>
+        {entry.isShared && (
+          <span className="shrink-0 text-[10px] font-semibold text-purple-500 bg-purple-50 rounded px-1 leading-none py-0.5">
+            S
+          </span>
+        )}
         {status !== undefined && <StatusBadge status={status} />}
       </button>
-      {onDeleteKey !== undefined && (
+      {onDeleteId !== undefined && (
         <button
           type="button"
-          onClick={() => onDeleteKey(keyName)}
+          onClick={() => onDeleteId(entry.id)}
           disabled={isDeleting}
           className="shrink-0 px-2 py-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors opacity-0 group-hover:opacity-100"
           title="Delete"
-          aria-label={`Delete ${keyName}`}
+          aria-label={`Delete ${entry.label}`}
         >
           {isDeleting ? (
             <span
@@ -88,16 +99,16 @@ function KeyListRow({
 }
 
 export function KeyList({
-  keys,
-  selectedKey,
-  onSelectKey,
+  entries,
+  selectedId,
+  onSelectId,
   isLoading,
   label,
   emptyText = "No keys found.",
   entryStatuses,
   onCreateClick,
-  onDeleteKey,
-  isDeletingKey,
+  onDeleteId,
+  isDeletingId,
 }: KeyListProps): JSX.Element {
   return (
     <div className="flex flex-col h-full overflow-hidden border-r border-gray-100">
@@ -122,21 +133,21 @@ export function KeyList({
             <div key={i} className="h-4 bg-gray-100 rounded animate-pulse" />
           ))}
         </div>
-      ) : keys.length === 0 ? (
+      ) : entries.length === 0 ? (
         <div className="flex items-center justify-center flex-1 text-gray-400 text-xs p-4 text-center">
           {emptyText}
         </div>
       ) : (
         <ul className="py-1 overflow-y-auto flex-1">
-          {keys.map((key) => (
+          {entries.map((entry) => (
             <KeyListRow
-              key={key}
-              keyName={key}
-              selectedKey={selectedKey}
-              status={entryStatuses?.get(key)}
-              isDeleting={isDeletingKey === key}
-              onSelectKey={onSelectKey}
-              onDeleteKey={onDeleteKey}
+              key={entry.id}
+              entry={entry}
+              selectedId={selectedId}
+              status={entryStatuses?.get(entry.id)}
+              isDeleting={isDeletingId === entry.id}
+              onSelectId={onSelectId}
+              onDeleteId={onDeleteId}
             />
           ))}
         </ul>

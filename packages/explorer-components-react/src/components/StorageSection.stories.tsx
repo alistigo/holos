@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { UnifiedEntry } from "./StorageSection.js";
 import { StorageSection } from "./StorageSection.js";
 
 const meta: Meta<typeof StorageSection> = {
@@ -16,54 +17,62 @@ const meta: Meta<typeof StorageSection> = {
 export default meta;
 type Story = StoryObj<typeof StorageSection>;
 
-const SAMPLE_ENTRIES: Record<string, unknown> = {
-  "alistigo:list:abc123": {
-    id: "list:abc123",
-    items: [
-      { id: "item:1", text: "Buy milk", done: false },
-      { id: "item:2", text: "Walk the dog", done: true },
-    ],
+const SAMPLE_ENTRIES: UnifiedEntry[] = [
+  {
+    key: "alistigo:list:abc123",
+    value: {
+      id: "list:abc123",
+      items: [
+        { id: "item:1", text: "Buy milk", done: false },
+        { id: "item:2", text: "Walk the dog", done: true },
+      ],
+    },
+    shared: false,
   },
-  "alistigo:list:def456": { id: "list:def456", items: [] },
-  "alistigo:prefs:user": { locale: "en", theme: "light" },
-};
+  { key: "alistigo:list:def456", value: { id: "list:def456", items: [] }, shared: false },
+  { key: "alistigo:prefs:user", value: { locale: "en", theme: "light" }, shared: true },
+];
 
 export const WithEntries: Story = {
   args: {
-    label: "Private",
     entries: SAMPLE_ENTRIES,
     isLoading: false,
-    onDelete: (key) => alert(`delete: ${key}`),
-    isDeletingKey: null,
+    onDelete: (key, shared) => alert(`delete: ${key} (shared=${String(shared)})`),
+    isDeletingEntry: null,
+    onCreate: async () => {},
+    onUpdate: async () => {},
   },
 };
 
 export const Deleting: Story = {
   args: {
-    label: "Private",
     entries: SAMPLE_ENTRIES,
     isLoading: false,
     onDelete: () => {},
-    isDeletingKey: "alistigo:list:abc123",
+    isDeletingEntry: { key: "alistigo:list:abc123", shared: false },
+    onCreate: async () => {},
+    onUpdate: async () => {},
   },
 };
 
 export const Loading: Story = {
   args: {
-    label: "Shared",
-    entries: {},
+    entries: [],
     isLoading: true,
     onDelete: () => {},
-    isDeletingKey: null,
+    isDeletingEntry: null,
+    onCreate: async () => {},
+    onUpdate: async () => {},
   },
 };
 
 export const Empty: Story = {
   args: {
-    label: "Shared",
-    entries: {},
+    entries: [],
     isLoading: false,
     onDelete: () => {},
-    isDeletingKey: null,
+    isDeletingEntry: null,
+    onCreate: async () => {},
+    onUpdate: async () => {},
   },
 };
