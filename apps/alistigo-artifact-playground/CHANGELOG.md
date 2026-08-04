@@ -1,3 +1,9 @@
+## 0.2.19 (2026-08-04)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-list to 0.3.2
+
 ## 0.2.18 (2026-07-30)
 
 ### 🧱 Updated Dependencies

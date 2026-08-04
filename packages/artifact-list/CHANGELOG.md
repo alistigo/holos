@@ -1,3 +1,24 @@
+## 0.3.2 (2026-08-04)
+
+### 🚀 Features
+
+- **artifact-core-components-react:** add Modal, PluginList, refactor context menu to modal trigger ([2a0d9c8](https://github.com/alistigo/holos/commit/2a0d9c8))
+- **artifact-core-components-react:** wire AlistigoBadge sheet API through ([5d724c3](https://github.com/alistigo/holos/commit/5d724c3))
+
+### 🩹 Fixes
+
+- modal ui ([7b675ef](https://github.com/alistigo/holos/commit/7b675ef))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Claude Sonnet 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.1 (2026-07-30)
 
 ### 🧱 Updated Dependencies
