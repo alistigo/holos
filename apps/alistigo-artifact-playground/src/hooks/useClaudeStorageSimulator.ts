@@ -70,6 +70,26 @@ export function useClaudeStorageSimulator(
     setStorageVersion((v) => v + 1);
   }, [enabled]);
 
+  const deleteEntry = useCallback(
+    (key: string, shared: boolean) => {
+      if (!enabled) return;
+      const map = shared ? sharedRef.current : storeRef.current;
+      map.delete(key);
+      setStorageVersion((v) => v + 1);
+    },
+    [enabled],
+  );
+
+  const setEntry = useCallback(
+    (key: string, value: string, shared: boolean) => {
+      if (!enabled) return;
+      const map = shared ? sharedRef.current : storeRef.current;
+      map.set(key, value);
+      setStorageVersion((v) => v + 1);
+    },
+    [enabled],
+  );
+
   useEffect(() => {
     if (!enabled) return;
 
@@ -111,6 +131,8 @@ export function useClaudeStorageSimulator(
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: storageVersion is an intentional trigger dep — storeRef.current is a mutable map that doesn't re-render on its own
   const storeEntries = useMemo(() => Array.from(storeRef.current.entries()), [storageVersion]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: storageVersion is an intentional trigger dep — sharedRef.current is a mutable map that doesn't re-render on its own
+  const sharedEntries = useMemo(() => Array.from(sharedRef.current.entries()), [storageVersion]);
 
-  return { clearStorage, storeEntries };
+  return { clearStorage, storeEntries, sharedEntries, deleteEntry, setEntry };
 }

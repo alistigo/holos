@@ -117,15 +117,7 @@ export function StorageExplorerApp({
           onClick={applyPrefix}
           className="text-xs px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors shrink-0"
         >
-          Filter
-        </button>
-        <button
-          type="button"
-          onClick={() => void reload(prefix)}
-          className="text-xs px-2 py-1 border border-gray-200 rounded hover:bg-gray-100 transition-colors shrink-0"
-          title="Reload"
-        >
-          ↺
+          Load
         </button>
       </div>
 
