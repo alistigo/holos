@@ -68,6 +68,23 @@ export function StorageExplorerApp({
     }
   }
 
+  async function handleCreate(key: string, value: unknown, isShared: boolean): Promise<void> {
+    if (!window.storage) return;
+    await window.storage.set(key, value, isShared);
+    await reload(prefix);
+  }
+
+  async function handleUpdate(key: string, value: unknown, isShared: boolean): Promise<void> {
+    if (!window.storage) return;
+    await window.storage.set(key, value, isShared);
+    // Optimistic local update — avoids a full reload that would reset the editor state
+    if (isShared) {
+      setSharedEntries((prev) => ({ ...prev, [key]: value }));
+    } else {
+      setPrivateEntries((prev) => ({ ...prev, [key]: value }));
+    }
+  }
+
   const storageAvailable = typeof window !== "undefined" && window.storage !== undefined;
 
   return (
@@ -118,6 +135,8 @@ export function StorageExplorerApp({
               isLoading={loading.private}
               onDelete={(key) => void handleDelete(key, false)}
               isDeletingKey={deletingKey?.shared === false ? deletingKey.key : null}
+              onCreate={(key, value) => handleCreate(key, value, false)}
+              onUpdate={(key, value) => handleUpdate(key, value, false)}
             />
           </div>
           <div className="flex-1 min-h-0 overflow-hidden">
@@ -127,6 +146,8 @@ export function StorageExplorerApp({
               isLoading={loading.shared}
               onDelete={(key) => void handleDelete(key, true)}
               isDeletingKey={deletingKey?.shared === true ? deletingKey.key : null}
+              onCreate={(key, value) => handleCreate(key, value, true)}
+              onUpdate={(key, value) => handleUpdate(key, value, true)}
             />
           </div>
         </div>

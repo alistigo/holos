@@ -8,6 +8,8 @@ export interface StorageExplorerProps {
   aiContext: string;
   localEntries: [string, string][];
   claudeEntries: [string, string][];
+  simulatorDelayMs: number;
+  onSimulatorDelayChange: (ms: number) => void;
 }
 
 function parseValue(raw: string): unknown {
@@ -91,9 +93,25 @@ export function StorageExplorer({
   aiContext,
   localEntries,
   claudeEntries,
+  simulatorDelayMs,
+  onSimulatorDelayChange,
 }: StorageExplorerProps): JSX.Element {
   return (
     <div className="flex flex-col h-full overflow-hidden">
+      {/* Simulator delay control — always visible */}
+      <div className="shrink-0 flex items-center gap-2 px-3 py-2 border-b border-gray-200 bg-gray-50">
+        <span className="text-xs text-gray-500 shrink-0">Simulator delay</span>
+        <input
+          type="number"
+          min={0}
+          max={5000}
+          step={100}
+          value={simulatorDelayMs}
+          onChange={(e) => onSimulatorDelayChange(Math.max(0, Number(e.target.value)))}
+          className="w-20 text-xs border border-gray-200 rounded px-2 py-1 font-mono focus:outline-none focus:ring-1 focus:ring-blue-400"
+        />
+        <span className="text-xs text-gray-400">ms</span>
+      </div>
       {aiContext === "claude" ? (
         <StorageSection
           label="Claude Storage (simulated)"

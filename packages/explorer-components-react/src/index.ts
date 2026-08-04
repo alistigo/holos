@@ -1,4 +1,4 @@
-export type { JsonDocumentViewerProps } from "./components/JsonDocumentViewer.js";
+export type { EntryStatus, JsonDocumentViewerProps } from "./components/JsonDocumentViewer.js";
 export { JsonDocumentViewer } from "./components/JsonDocumentViewer.js";
 export type { KeyListProps } from "./components/KeyList.js";
 export { KeyList } from "./components/KeyList.js";
