@@ -24,7 +24,11 @@ import { defineConfig } from "vite";
 
 const LOCALE = process.env.LOCALE ?? "en";
 
-const artifactSrc = path.resolve(__dirname, "../../packages/artifact-list/src/index.tsx");
+const artifactListSrc = path.resolve(__dirname, "../../packages/artifact-list/src/index.tsx");
+const artifactStorageExplorerSrc = path.resolve(
+  __dirname,
+  "../../packages/artifact-storage-explorer/src/index.tsx",
+);
 
 // Absolute paths to each plugin package's source entry, so the playground can load
 // plugins straight from local source in dev instead of jsDelivr (see
@@ -78,7 +82,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@alistigo/artifact-list": artifactSrc,
+      "@alistigo/artifact-list": artifactListSrc,
+      "@alistigo/artifact-storage-explorer": artifactStorageExplorerSrc,
       "virtual:alistigo-active-catalog": activeCatalogPath,
     },
   },
