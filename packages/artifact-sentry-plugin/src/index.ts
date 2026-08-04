@@ -1,6 +1,7 @@
 import type { AlistigoPlugin, PluginContext } from "@alistigo/artifact-plugin-api";
 import { createLogger } from "@alistigo/logger";
 import * as Sentry from "@sentry/browser";
+import pkg from "../package.json" with { type: "json" };
 
 const PACKAGE_NAME = "@alistigo/artifact-sentry-plugin";
 const log = createLogger("alistigo:artifact-sentry-plugin");
@@ -31,6 +32,7 @@ function setup(ctx: PluginContext): void {
 
 const sentryPlugin: AlistigoPlugin = {
   name: PACKAGE_NAME,
+  version: pkg.version,
   setup,
 };
 
