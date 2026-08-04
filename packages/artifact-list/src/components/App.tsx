@@ -75,6 +75,15 @@ function App({ initialDocument, repository, plugins, spec }: AppProps): JSX.Elem
   if (!bootDoc) return null;
 
   return (<>
+    {infoOpen && (
+      <Modal title="@alistigo/artifact-list" onClose={() => setInfoOpen(false)}>
+        <ArtifactInfoPanel
+          artifactName="@alistigo/artifact-list"
+          artifactVersion={pkg.version}
+          plugins={pluginsInfos}
+        />
+      </Modal>
+    )}
     <ArtifactContextMenuContainer
         icon={<img src={alistigoLogoUrl} alt="" className="h-full w-full object-cover" />}
       >
@@ -90,15 +99,7 @@ function App({ initialDocument, repository, plugins, spec }: AppProps): JSX.Elem
             <line x1="12" y1="12" x2="12" y2="16" strokeLinecap="round" />
           </svg>
         </button>
-        {infoOpen && (
-          <Modal title="@alistigo/artifact-list" onClose={() => setInfoOpen(false)}>
-            <ArtifactInfoPanel
-              artifactName="@alistigo/artifact-list"
-              artifactVersion={pkg.version}
-              plugins={pluginsInfos}
-            />
-          </Modal>
-        )}
+
       </ArtifactContextMenuContainer>
     <AlistigoProvider service={service} listId={listId} initialDocument={bootDoc}>
       <AlistigoApp>
