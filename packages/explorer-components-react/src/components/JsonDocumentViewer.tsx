@@ -75,9 +75,7 @@ function EditableTextArea({
           onChange={(e) => onEditTextChange(e.target.value)}
           spellCheck={false}
           className={`absolute inset-0 w-full h-full resize-none text-xs font-mono p-2 focus:outline-none bg-white ${
-            isInvalidJson
-              ? "ring-1 ring-red-400 bg-red-50"
-              : "focus:ring-1 focus:ring-blue-300"
+            isInvalidJson ? "ring-1 ring-red-400 bg-red-50" : "focus:ring-1 focus:ring-blue-300"
           }`}
         />
       </div>
