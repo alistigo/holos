@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { UnifiedEntry } from "./StorageSection.js";
 import { StorageSection } from "./StorageSection.js";
 
 import "@alistigo/claude-artifact-api";
@@ -8,58 +9,50 @@ export interface StorageExplorerAppProps {
   prefix?: string;
 }
 
-interface LoadState {
-  private: boolean;
-  shared: boolean;
-}
-
 // fallow-ignore-next-line complexity
 export function StorageExplorerApp({
   prefix: initialPrefix = "",
 }: StorageExplorerAppProps): JSX.Element {
   const [prefix, setPrefix] = useState(initialPrefix);
   const [inputValue, setInputValue] = useState(initialPrefix);
-  const [privateEntries, setPrivateEntries] = useState<Record<string, unknown>>({});
-  const [sharedEntries, setSharedEntries] = useState<Record<string, unknown>>({});
-  const [loading, setLoading] = useState<LoadState>({ private: true, shared: true });
-  const [deletingKey, setDeletingKey] = useState<{ key: string; shared: boolean } | null>(null);
+  const [allEntries, setAllEntries] = useState<UnifiedEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [deletingEntry, setDeletingEntry] = useState<{ key: string; shared: boolean } | null>(null);
   const loadId = useRef(0);
 
   const reload = useCallback(async (currentPrefix: string) => {
     if (!window.storage) return;
     const id = ++loadId.current;
-    setLoading({ private: true, shared: true });
+    setIsLoading(true);
 
-    async function fetchAll(pfx: string, isShared: boolean): Promise<Record<string, unknown>> {
-      const result = await window.storage!.list(pfx, isShared);
-      if (!result) return {};
-      const pairs = await Promise.all(
-        result.keys.map(async (key): Promise<[string, unknown]> => {
+    async function fetchSection(pfx: string, shared: boolean): Promise<UnifiedEntry[]> {
+      const result = await window.storage?.list(pfx, shared);
+      if (!result) return [];
+      return await Promise.all(
+        result.keys.map(async (key): Promise<UnifiedEntry> => {
           try {
-            const item = await window.storage!.get(key, isShared);
-            let parsed: unknown;
+            const item = await window.storage?.get(key, shared);
+            let value: unknown;
             try {
-              parsed = JSON.parse(item.value) as unknown;
+              value = item !== undefined ? (JSON.parse(item.value) as unknown) : null;
             } catch {
-              parsed = item.value;
+              value = item?.value ?? null;
             }
-            return [key, parsed];
+            return { key, value, shared };
           } catch {
-            return [key, null];
+            return { key, value: null, shared };
           }
         }),
       );
-      return Object.fromEntries(pairs);
     }
 
-    const [priv, sharedResult] = await Promise.all([
-      fetchAll(currentPrefix, false),
-      fetchAll(currentPrefix, true),
+    const [priv, sharedEntries] = await Promise.all([
+      fetchSection(currentPrefix, false),
+      fetchSection(currentPrefix, true),
     ]);
     if (id !== loadId.current) return;
-    setPrivateEntries(priv);
-    setSharedEntries(sharedResult);
-    setLoading({ private: false, shared: false });
+    setAllEntries([...priv, ...sharedEntries]);
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -70,32 +63,30 @@ export function StorageExplorerApp({
     setPrefix(inputValue);
   }
 
-  async function handleDelete(key: string, isShared: boolean): Promise<void> {
+  async function handleDelete(key: string, shared: boolean): Promise<void> {
     if (!window.storage) return;
-    setDeletingKey({ key, shared: isShared });
+    setDeletingEntry({ key, shared });
     try {
-      await window.storage.delete(key, isShared);
+      await window.storage.delete(key, shared);
     } finally {
-      setDeletingKey(null);
+      setDeletingEntry(null);
       await reload(prefix);
     }
   }
 
-  async function handleCreate(key: string, value: unknown, isShared: boolean): Promise<void> {
+  async function handleCreate(key: string, value: unknown, shared: boolean): Promise<void> {
     if (!window.storage) return;
-    await window.storage.set(key, JSON.stringify(value), isShared);
+    await window.storage.set(key, JSON.stringify(value), shared);
     await reload(prefix);
   }
 
-  async function handleUpdate(key: string, value: unknown, isShared: boolean): Promise<void> {
+  async function handleUpdate(key: string, value: unknown, shared: boolean): Promise<void> {
     if (!window.storage) return;
-    await window.storage.set(key, JSON.stringify(value), isShared);
+    await window.storage.set(key, JSON.stringify(value), shared);
     // Optimistic local update — avoids a full reload that would reset the editor state
-    if (isShared) {
-      setSharedEntries((prev) => ({ ...prev, [key]: value }));
-    } else {
-      setPrivateEntries((prev) => ({ ...prev, [key]: value }));
-    }
+    setAllEntries((prev) =>
+      prev.map((e) => (e.key === key && e.shared === shared ? { ...e, value } : e)),
+    );
   }
 
   const storageAvailable = typeof window !== "undefined" && window.storage !== undefined;
@@ -132,29 +123,15 @@ export function StorageExplorerApp({
       )}
 
       {storageAvailable && (
-        <div className="flex flex-col flex-1 overflow-hidden divide-y divide-gray-100">
-          <div className="flex-1 min-h-0 overflow-hidden">
-            <StorageSection
-              label="Private"
-              entries={privateEntries}
-              isLoading={loading.private}
-              onDelete={(key) => void handleDelete(key, false)}
-              isDeletingKey={deletingKey?.shared === false ? deletingKey.key : null}
-              onCreate={(key, value) => handleCreate(key, value, false)}
-              onUpdate={(key, value) => handleUpdate(key, value, false)}
-            />
-          </div>
-          <div className="flex-1 min-h-0 overflow-hidden">
-            <StorageSection
-              label="Shared"
-              entries={sharedEntries}
-              isLoading={loading.shared}
-              onDelete={(key) => void handleDelete(key, true)}
-              isDeletingKey={deletingKey?.shared === true ? deletingKey.key : null}
-              onCreate={(key, value) => handleCreate(key, value, true)}
-              onUpdate={(key, value) => handleUpdate(key, value, true)}
-            />
-          </div>
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <StorageSection
+            entries={allEntries}
+            isLoading={isLoading}
+            onDelete={(key, shared) => void handleDelete(key, shared)}
+            isDeletingEntry={deletingEntry}
+            onCreate={(key, value, shared) => handleCreate(key, value, shared)}
+            onUpdate={(key, value, shared) => handleUpdate(key, value, shared)}
+          />
         </div>
       )}
     </div>

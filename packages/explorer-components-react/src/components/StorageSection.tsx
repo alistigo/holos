@@ -4,67 +4,85 @@ import type { EntryStatus } from "./JsonDocumentViewer.js";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
 import { KeyList } from "./KeyList.js";
 
+export interface UnifiedEntry {
+  key: string;
+  value: unknown;
+  shared: boolean;
+}
+
 export interface StorageSectionProps {
-  label: string;
-  entries: Record<string, unknown>;
+  entries: UnifiedEntry[];
   isLoading: boolean;
-  onDelete: (key: string) => void;
-  isDeletingKey: string | null;
-  onCreate: (key: string, value: unknown) => Promise<void>;
-  onUpdate: (key: string, value: unknown) => Promise<void>;
+  onDelete: (key: string, shared: boolean) => void;
+  isDeletingEntry: { key: string; shared: boolean } | null;
+  onCreate: (key: string, value: unknown, shared: boolean) => Promise<void>;
+  onUpdate: (key: string, value: unknown, shared: boolean) => Promise<void>;
 }
 
 const DEBOUNCE_MS = 1000;
 
+function eid(entry: { key: string; shared: boolean }): string {
+  return `${entry.shared ? "s" : "p"}:${entry.key}`;
+}
+
+function parseId(id: string): { key: string; shared: boolean } {
+  return { shared: id.startsWith("s:"), key: id.slice(2) };
+}
+
 // fallow-ignore-next-line complexity
 export function StorageSection({
-  label,
   entries,
   isLoading,
   onDelete,
-  isDeletingKey,
+  isDeletingEntry,
   onCreate,
   onUpdate,
 }: StorageSectionProps): JSX.Element {
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // Creation flow state
   const [creationState, setCreationState] = useState<{
     key: string;
+    shared: boolean;
     phase: "typing" | "saving";
   } | null>(null);
 
-  // Per-key status overlay (only draft/saving states; absent = saved)
   const [entryStatuses, setEntryStatuses] = useState<Map<string, "draft" | "saving">>(new Map());
-
-  // Per-key raw JSON being edited
   const [editTexts, setEditTexts] = useState<Map<string, string>>(new Map());
-
-  // Per-key invalid JSON tracking
-  const [invalidKeys, setInvalidKeys] = useState<Set<string>>(new Set());
-
-  // Debounce timers
+  const [invalidIds, setInvalidIds] = useState<Set<string>>(new Set());
   const saveTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
 
-  // Keys shown in the list: real keys + any key being saved (optimistic)
-  const realKeys = Object.keys(entries);
-  const allKeys =
-    creationState?.phase === "saving" && !realKeys.includes(creationState.key)
-      ? [...realKeys, creationState.key]
-      : realKeys;
+  const keyListEntries = entries.map((e) => ({
+    id: eid(e),
+    label: e.key,
+    isShared: e.shared,
+  }));
 
-  const totalKeyCount = allKeys.length;
-  const keyLabel = `${totalKeyCount} key${totalKeyCount !== 1 ? "s" : ""}`;
+  const isDeletingId = isDeletingEntry !== null ? eid(isDeletingEntry) : null;
 
-  // When a key is selected, initialize its edit text from the stored value
-  const handleSelectKey = useCallback(
-    (key: string) => {
-      setSelectedKey(key);
+  const creationEid =
+    creationState !== null ? eid({ key: creationState.key, shared: creationState.shared }) : null;
+  const allKeyListEntries =
+    creationState?.phase === "saving" &&
+    creationEid !== null &&
+    !keyListEntries.some((e) => e.id === creationEid)
+      ? [
+          ...keyListEntries,
+          { id: creationEid, label: creationState.key, isShared: creationState.shared },
+        ]
+      : keyListEntries;
+
+  const totalCount = allKeyListEntries.length;
+  const keyLabel = `${totalCount} key${totalCount !== 1 ? "s" : ""}`;
+
+  const handleSelectId = useCallback(
+    (id: string) => {
+      setSelectedId(id);
       setEditTexts((prev) => {
-        if (prev.has(key)) return prev;
-        const value = entries[key] ?? {};
+        if (prev.has(id)) return prev;
+        const entry = entries.find((e) => eid(e) === id);
+        const value = entry?.value ?? {};
         const next = new Map(prev);
-        next.set(key, JSON.stringify(value, null, 2));
+        next.set(id, JSON.stringify(value, null, 2));
         return next;
       });
     },
@@ -72,8 +90,8 @@ export function StorageSection({
   );
 
   const handleEditChange = useCallback(
-    (key: string, rawText: string) => {
-      setEditTexts((prev) => new Map(prev).set(key, rawText));
+    (id: string, rawText: string) => {
+      setEditTexts((prev) => new Map(prev).set(id, rawText));
 
       let isValid = true;
       try {
@@ -82,42 +100,40 @@ export function StorageSection({
         isValid = false;
       }
 
-      setInvalidKeys((prev) => {
+      setInvalidIds((prev) => {
         const next = new Set(prev);
-        if (isValid) next.delete(key);
-        else next.add(key);
+        if (isValid) next.delete(id);
+        else next.add(id);
         return next;
       });
 
-      setEntryStatuses((prev) => new Map(prev).set(key, "draft"));
+      setEntryStatuses((prev) => new Map(prev).set(id, "draft"));
 
-      // Clear any existing timer
-      const existing = saveTimers.current.get(key);
+      const existing = saveTimers.current.get(id);
       if (existing !== undefined) clearTimeout(existing);
 
-      if (!isValid) return; // Don't schedule save for invalid JSON
+      if (!isValid) return;
 
       const timer = setTimeout(() => {
-        // Re-read current text via closure-captured rawText (it's frozen at schedule time)
-        // The actual save uses the value as-of when the timer was set
         const parsed: unknown = JSON.parse(rawText);
-        setEntryStatuses((prev) => new Map(prev).set(key, "saving"));
-        void onUpdate(key, parsed).then(() => {
+        setEntryStatuses((prev) => new Map(prev).set(id, "saving"));
+        const { key, shared } = parseId(id);
+        void onUpdate(key, parsed, shared).then(() => {
           setEntryStatuses((prev) => {
             const next = new Map(prev);
-            next.delete(key); // back to saved
+            next.delete(id);
             return next;
           });
         });
-        saveTimers.current.delete(key);
+        saveTimers.current.delete(id);
       }, DEBOUNCE_MS);
-      saveTimers.current.set(key, timer);
+      saveTimers.current.set(id, timer);
     },
     [onUpdate],
   );
 
   const handleStartCreate = useCallback(() => {
-    setCreationState({ key: "", phase: "typing" });
+    setCreationState({ key: "", shared: false, phase: "typing" });
   }, []);
 
   const handleCancelCreate = useCallback(() => {
@@ -127,82 +143,119 @@ export function StorageSection({
   const handleConfirmCreate = useCallback(async () => {
     if (creationState === null) return;
     const key = creationState.key.trim();
-    if (key === "" || key in entries) return;
+    const { shared } = creationState;
+    if (key === "" || entries.some((e) => e.key === key && e.shared === shared)) return;
 
-    setCreationState({ key, phase: "saving" });
-    setEntryStatuses((prev) => new Map(prev).set(key, "saving"));
+    setCreationState({ key, shared, phase: "saving" });
+    const id = eid({ key, shared });
+    setEntryStatuses((prev) => new Map(prev).set(id, "saving"));
 
-    await onCreate(key, {});
+    await onCreate(key, {}, shared);
 
     setCreationState(null);
     setEntryStatuses((prev) => {
       const next = new Map(prev);
-      next.delete(key);
+      next.delete(id);
       return next;
     });
-    // Initialize edit text for the newly created key
-    setEditTexts((prev) => new Map(prev).set(key, JSON.stringify({}, null, 2)));
-    setSelectedKey(key);
+    setEditTexts((prev) => new Map(prev).set(id, JSON.stringify({}, null, 2)));
+    setSelectedId(id);
   }, [creationState, entries, onCreate]);
 
-  const selectedValue = selectedKey !== null ? entries[selectedKey] : undefined;
-  const currentEditText = selectedKey !== null ? editTexts.get(selectedKey) : undefined;
+  const handleDeleteId = useCallback(
+    (id: string) => {
+      if (selectedId === id) setSelectedId(null);
+      const { key, shared } = parseId(id);
+      onDelete(key, shared);
+    },
+    [selectedId, onDelete],
+  );
+
+  const selectedEntry =
+    selectedId !== null ? entries.find((e) => eid(e) === selectedId) : undefined;
+  const selectedValue = selectedEntry?.value;
+  const currentEditText = selectedId !== null ? editTexts.get(selectedId) : undefined;
   const currentSaveStatus: EntryStatus =
-    selectedKey !== null ? (entryStatuses.get(selectedKey) ?? "saved") : "saved";
-  const isCurrentKeyInvalid = selectedKey !== null && invalidKeys.has(selectedKey);
+    selectedId !== null ? (entryStatuses.get(selectedId) ?? "saved") : "saved";
+  const isCurrentEntryInvalid = selectedId !== null && invalidIds.has(selectedId);
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
-      <div className="px-3 py-1 bg-gray-100 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-wide shrink-0">
-        {label}
-      </div>
       <div className="flex flex-1 overflow-hidden min-h-0">
         <div className="w-2/5 shrink-0 flex flex-col overflow-hidden">
-          {/* Inline key name input for new entry creation */}
           {creationState?.phase === "typing" && (
-            <div className="px-2 py-1.5 border-b border-gray-100 bg-blue-50 shrink-0 flex items-center gap-1">
-              <input
-                // biome-ignore lint/a11y/noAutofocus: intentional — user just clicked "+"
-                autoFocus
-                type="text"
-                value={creationState.key}
-                onChange={(e) => setCreationState({ key: e.target.value, phase: "typing" })}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") void handleConfirmCreate();
-                  if (e.key === "Escape") handleCancelCreate();
-                }}
-                placeholder="Key name…"
-                className="flex-1 min-w-0 text-xs font-mono border border-blue-300 rounded px-1.5 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
-              />
-              <button
-                type="button"
-                onClick={() => void handleConfirmCreate()}
-                disabled={creationState.key.trim() === "" || creationState.key.trim() in entries}
-                className="text-xs px-1.5 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
-                title="Confirm"
-              >
-                ✓
-              </button>
-              <button
-                type="button"
-                onClick={handleCancelCreate}
-                className="text-xs px-1.5 py-1 border border-gray-200 rounded hover:bg-gray-100 transition-colors shrink-0"
-                title="Cancel"
-              >
-                ✕
-              </button>
+            <div className="px-2 py-1.5 border-b border-gray-100 bg-blue-50 shrink-0 flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <input
+                  // biome-ignore lint/a11y/noAutofocus: intentional — user just clicked "+"
+                  autoFocus
+                  type="text"
+                  value={creationState.key}
+                  onChange={(e) =>
+                    setCreationState({
+                      key: e.target.value,
+                      shared: creationState.shared,
+                      phase: "typing",
+                    })
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") void handleConfirmCreate();
+                    if (e.key === "Escape") handleCancelCreate();
+                  }}
+                  placeholder="Key name…"
+                  className="flex-1 min-w-0 text-xs font-mono border border-blue-300 rounded px-1.5 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => void handleConfirmCreate()}
+                  disabled={
+                    creationState.key.trim() === "" ||
+                    entries.some(
+                      (e) =>
+                        e.key === creationState.key.trim() && e.shared === creationState.shared,
+                    )
+                  }
+                  className="text-xs px-1.5 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                  title="Confirm"
+                >
+                  ✓
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelCreate}
+                  className="text-xs px-1.5 py-1 border border-gray-200 rounded hover:bg-gray-100 transition-colors shrink-0"
+                  title="Cancel"
+                >
+                  ✕
+                </button>
+              </div>
+              <label className="flex items-center gap-1.5 text-xs text-gray-600 px-0.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={creationState.shared}
+                  onChange={(e) =>
+                    setCreationState({
+                      key: creationState.key,
+                      shared: e.target.checked,
+                      phase: "typing",
+                    })
+                  }
+                  className="accent-purple-500"
+                />
+                Shared
+              </label>
             </div>
           )}
           <KeyList
-            keys={allKeys}
-            selectedKey={selectedKey}
-            onSelectKey={handleSelectKey}
+            entries={allKeyListEntries}
+            selectedId={selectedId}
+            onSelectId={handleSelectId}
             isLoading={isLoading}
             label={keyLabel}
             emptyText="No keys found."
             entryStatuses={entryStatuses}
-            onDeleteKey={onDelete}
-            isDeletingKey={isDeletingKey}
+            onDeleteId={handleDeleteId}
+            isDeletingId={isDeletingId}
             {...(creationState === null ? { onCreateClick: handleStartCreate } : {})}
           />
         </div>
@@ -210,12 +263,12 @@ export function StorageSection({
           <JsonDocumentViewer
             value={selectedValue}
             isLoading={isLoading}
-            isInvalidJson={isCurrentKeyInvalid}
+            isInvalidJson={isCurrentEntryInvalid}
             saveStatus={currentSaveStatus}
-            {...(currentEditText !== undefined && selectedKey !== null
+            {...(currentEditText !== undefined && selectedId !== null
               ? {
                   editText: currentEditText,
-                  onEditTextChange: (text: string) => handleEditChange(selectedKey, text),
+                  onEditTextChange: (text: string) => handleEditChange(selectedId, text),
                 }
               : {})}
           />

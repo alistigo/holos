@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import type { KeyListEntry } from "./KeyList.js";
 import { KeyList } from "./KeyList.js";
 
 const meta: Meta<typeof KeyList> = {
@@ -17,54 +18,54 @@ const meta: Meta<typeof KeyList> = {
 export default meta;
 type Story = StoryObj<typeof KeyList>;
 
-const SAMPLE_KEYS = [
-  "alistigo:list:abc123",
-  "alistigo:list:def456",
-  "alistigo:prefs:user",
-  "alistigo:prefs:theme",
+const SAMPLE_ENTRIES: KeyListEntry[] = [
+  { id: "p:alistigo:list:abc123", label: "alistigo:list:abc123", isShared: false },
+  { id: "p:alistigo:list:def456", label: "alistigo:list:def456", isShared: false },
+  { id: "s:alistigo:prefs:user", label: "alistigo:prefs:user", isShared: true },
+  { id: "p:alistigo:prefs:theme", label: "alistigo:prefs:theme", isShared: false },
 ];
 
 function InteractiveKeyList(args: React.ComponentProps<typeof KeyList>): React.JSX.Element {
-  const [selected, setSelected] = useState<string | null>(null);
-  return <KeyList {...args} selectedKey={selected} onSelectKey={setSelected} />;
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  return <KeyList {...args} selectedId={selectedId} onSelectId={setSelectedId} />;
 }
 
 export const Default: Story = {
   render: (args) => <InteractiveKeyList {...args} />,
   args: {
-    keys: SAMPLE_KEYS,
-    label: "Private",
+    entries: SAMPLE_ENTRIES,
+    label: "Keys",
     isLoading: false,
   },
 };
 
 export const Loading: Story = {
   args: {
-    keys: [],
-    selectedKey: null,
-    onSelectKey: () => {},
-    label: "Private",
+    entries: [],
+    selectedId: null,
+    onSelectId: () => {},
+    label: "Keys",
     isLoading: true,
   },
 };
 
 export const Empty: Story = {
   args: {
-    keys: [],
-    selectedKey: null,
-    onSelectKey: () => {},
-    label: "Shared",
+    entries: [],
+    selectedId: null,
+    onSelectId: () => {},
+    label: "Keys",
     isLoading: false,
-    emptyText: "No shared keys found.",
+    emptyText: "No keys found.",
   },
 };
 
 export const WithSelection: Story = {
   args: {
-    keys: SAMPLE_KEYS,
-    selectedKey: "alistigo:list:abc123",
-    onSelectKey: () => {},
-    label: "Private",
+    entries: SAMPLE_ENTRIES,
+    selectedId: "p:alistigo:list:abc123",
+    onSelectId: () => {},
+    label: "Keys",
     isLoading: false,
   },
 };
