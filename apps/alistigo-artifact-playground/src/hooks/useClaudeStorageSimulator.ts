@@ -85,6 +85,7 @@ export function useClaudeStorageSimulator(
       }
     }
 
+    // fallow-ignore-next-line complexity
     function handle(event: MessageEvent) {
       const win = iframeRef.current?.contentWindow;
       if (!win || event.source !== win) return;

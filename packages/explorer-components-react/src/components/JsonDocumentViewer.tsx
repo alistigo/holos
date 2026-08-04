@@ -136,6 +136,7 @@ function DeleteButton({
   );
 }
 
+// fallow-ignore-next-line complexity
 export function JsonDocumentViewer({
   value,
   isLoading,
