@@ -27,9 +27,9 @@ function buildPluginInfos(
     if (plugin !== undefined) {
       return {
         name: plugin.name,
-        version: "?",
+        version: plugin.version ?? "?",
         type: plugin.type ?? "unknown",
-        status: "loaded" as const,
+        status: "active" as const,
       };
     }
     return {
