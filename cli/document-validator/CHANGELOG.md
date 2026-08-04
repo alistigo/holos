@@ -1,3 +1,9 @@
+## 0.2.2 (2026-08-04)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.2.13
+
 ## 0.2.1 (2026-07-30)
 
 ### 🧱 Updated Dependencies

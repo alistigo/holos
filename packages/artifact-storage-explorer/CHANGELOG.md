@@ -1,3 +1,9 @@
+## 0.1.2 (2026-08-04)
+
+### 🧱 Updated Dependencies
+
+- Updated explorer-components-react to 0.1.2
+
 ## 0.1.1 (2026-07-30)
 
 ### 🚀 Features

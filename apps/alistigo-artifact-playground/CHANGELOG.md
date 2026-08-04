@@ -1,3 +1,24 @@
+## 0.2.21 (2026-08-04)
+
+### 🩹 Fixes
+
+- simplify config parsing and allow-list dynamic playground import ([41f513e](https://github.com/alistigo/holos/commit/41f513e))
+- artifact selection in playground dev mode ([dedd071](https://github.com/alistigo/holos/commit/dedd071))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-storage-explorer to 0.1.2
+- Updated list-components-react to 0.2.14
+- Updated list-document-format to 0.2.13
+- Updated local-storage-plugin to 0.2.15
+- Updated ai-chat-async-api to 0.2.2
+- Updated artifact-manager to 0.2.2
+- Updated artifact-list to 0.3.4
+
+### ❤️ Thank You
+
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.20 (2026-08-04)
 
 ### 🧱 Updated Dependencies
