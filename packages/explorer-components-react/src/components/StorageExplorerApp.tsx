@@ -28,22 +28,22 @@ export function StorageExplorerApp({
     async function fetchSection(pfx: string, shared: boolean): Promise<UnifiedEntry[]> {
       const result = await window.storage?.list(pfx, shared);
       if (!result) return [];
-      return await Promise.all(
-        result.keys.map(async (key): Promise<UnifiedEntry> => {
+      // fallow-ignore-next-line complexity
+      async function fetchEntry(key: string): Promise<UnifiedEntry> {
+        try {
+          const item = await window.storage?.get(key, shared);
+          let value: unknown;
           try {
-            const item = await window.storage?.get(key, shared);
-            let value: unknown;
-            try {
-              value = item !== undefined ? (JSON.parse(item.value) as unknown) : null;
-            } catch {
-              value = item?.value ?? null;
-            }
-            return { key, value, shared };
+            value = item !== undefined ? (JSON.parse(item.value) as unknown) : null;
           } catch {
-            return { key, value: null, shared };
+            value = item?.value ?? null;
           }
-        }),
-      );
+          return { key, value, shared };
+        } catch {
+          return { key, value: null, shared };
+        }
+      }
+      return await Promise.all(result.keys.map(fetchEntry));
     }
 
     const [priv, sharedEntries] = await Promise.all([
