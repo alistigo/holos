@@ -2,28 +2,34 @@ import type { RefObject } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type StorageReply = { result: unknown; error?: string };
-type OpParams = { key: string; value: string; prefix: string };
+type OpParams = { key: string; value: string; prefix: string; shared: boolean };
 type OpHandler = (map: Map<string, string>, params: OpParams) => StorageReply;
 
 const OPS: Record<string, OpHandler> = {
-  storageGet(map, { key }) {
+  storageGet(map, { key, shared }) {
     const v = map.get(key);
     return v === undefined
       ? { result: undefined, error: "Key not found" }
-      : { result: { value: v } };
+      : { result: { key, value: v, shared, "@type": "ClaudeStorageResult" } };
   },
-  storageSet(map, { key, value }) {
+  storageSet(map, { key, value, shared }) {
     map.set(key, value);
-    return { result: null };
+    return { result: { key, value, shared, "@type": "ClaudeStorageResult" } };
   },
-  storageDelete(map, { key }) {
+  storageDelete(map, { key, shared }) {
+    if (!map.has(key)) {
+      return { result: undefined, error: "Key not found" };
+    }
     map.delete(key);
-    return { result: null };
+    return { result: { key, deleted: true, shared, "@type": "ClaudeStorageDeleteResult" } };
   },
-  storageList(map, { prefix }) {
+  storageList(map, { prefix, shared }) {
     return {
       result: {
         keys: Array.from(map.keys()).filter((k) => k.startsWith(prefix)),
+        prefix,
+        shared,
+        "@type": "ClaudeStorageListResult",
       },
     };
   },
@@ -37,10 +43,11 @@ function applyStorageOp(
   key = "",
   value = "",
   prefix = "",
+  shared = false,
 ): StorageReply | null {
   const handler = OPS[type];
   if (!handler) return null;
-  return handler(map, { key, value, prefix });
+  return handler(map, { key, value, prefix, shared });
 }
 
 export function useClaudeStorageSimulator(
@@ -76,7 +83,7 @@ export function useClaudeStorageSimulator(
         shared?: boolean;
       };
       const map = shared ? sharedRef.current : storeRef.current;
-      const op = applyStorageOp(type, map, key, value, prefix);
+      const op = applyStorageOp(type, map, key, value, prefix, shared ?? false);
       if (op) {
         win.postMessage({ type, id, ...op }, "*");
         if (WRITE_OPS.has(type)) {

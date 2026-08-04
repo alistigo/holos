@@ -1,4 +1,4 @@
-import claudeBridgeHtml from "../../../ai/claude/inject-script.html?raw";
+import claudeBridgeHtml from "@alistigo/claude-artifact-api/inject-script.html?raw";
 import type { Config } from "./hooks/useHostConfig";
 
 export const SRCDOC_CSP = [
