@@ -1,3 +1,10 @@
+## 0.2.20 (2026-08-04)
+
+### 🧱 Updated Dependencies
+
+- Updated local-storage-plugin to 0.2.14
+- Updated artifact-list to 0.3.3
+
 ## 0.2.19 (2026-08-04)
 
 ### 🧱 Updated Dependencies

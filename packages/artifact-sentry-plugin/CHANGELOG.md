@@ -1,3 +1,18 @@
+## 0.1.9 (2026-08-04)
+
+### 🚀 Features
+
+- **plugins:** inject version from package.json into each plugin definition ([5f31fa7](https://github.com/alistigo/holos/commit/5f31fa7))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.2.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.8 (2026-07-30)
 
 ### 🧱 Updated Dependencies

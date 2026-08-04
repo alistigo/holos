@@ -1,3 +1,20 @@
+## 0.3.3 (2026-08-04)
+
+### 🩹 Fixes
+
+- **artifact-list:** update buildPluginInfos to use new PluginInfo status values ([3abc6d8](https://github.com/alistigo/holos/commit/3abc6d8))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.3.1
+- Updated artifact-plugin-api to 0.2.0
+- Updated artifact-core to 0.2.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.2 (2026-08-04)
 
 ### 🚀 Features

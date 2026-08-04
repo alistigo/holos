@@ -1,3 +1,14 @@
+## 0.2.0 (2026-08-04)
+
+### 🚀 Features
+
+- **artifact-plugin-api:** add version and active fields to AlistigoPlugin ([16bd8e3](https://github.com/alistigo/holos/commit/16bd8e3))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.8 (2026-07-30)
 
 ### 🧱 Updated Dependencies
