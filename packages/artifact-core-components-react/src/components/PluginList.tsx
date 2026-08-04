@@ -38,9 +38,10 @@ export function PluginList({ plugins }: PluginListProps): ReactNode {
 
 function StatusDot({ status }: { status: PluginInfo["status"] }): ReactNode {
   const colors: Record<PluginInfo["status"], string> = {
-    loaded: "bg-green-500",
+    active: "bg-green-500",
+    loading: "bg-amber-400",
+    inactive: "bg-gray-300",
     error: "bg-red-500",
-    "not-loaded": "bg-gray-300",
   };
   return <span className={`h-2 w-2 rounded-full ${colors[status]}`} />;
 }

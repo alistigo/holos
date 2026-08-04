@@ -67,8 +67,15 @@ export interface AlistigoStorageExtension {
 export interface AlistigoPlugin {
   /** Must match this plugin's own npm package name. */
   name: string;
+  /** The plugin's own npm package version, injected at build time from package.json. */
+  version?: string;
   /** Plugin category — informational, enables type-based queries by the host. */
   type?: PluginType;
+  /**
+   * Whether this plugin is the active one in its category within the current artifact context.
+   * Set by the host at runtime — e.g. only one storage plugin can be active at a time.
+   */
+  active?: boolean;
   /** Present when type === "storage". Provides the storage backend contract. */
   storage?: AlistigoStorageExtension;
 
