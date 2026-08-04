@@ -29,6 +29,15 @@ const defaultConfig = {
   plugins: {},
 };
 
+const noopStorage = {
+  localStorageEntries: [] as [string, string][],
+  privateEntries: [] as [string, string][],
+  sharedEntries: [] as [string, string][],
+  onDeleteEntry: () => {},
+  onSetEntry: () => {},
+  onClearSimulatorStorage: () => {},
+};
+
 export const ConfigTab: Story = {
   args: {
     config: defaultConfig,
@@ -36,7 +45,7 @@ export const ConfigTab: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    storageEntries: [],
+    ...noopStorage,
   },
 };
 
@@ -47,7 +56,7 @@ export const ReadOnly: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    storageEntries: [],
+    ...noopStorage,
   },
 };
 
@@ -64,7 +73,7 @@ export const WithPluginsEnabled: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    storageEntries: [],
+    ...noopStorage,
   },
 };
 
@@ -75,9 +84,14 @@ export const StorageTabWithData: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    storageEntries: [
+    localStorageEntries: [],
+    privateEntries: [
       ["lst_abc123/items", JSON.stringify([{ id: "1", text: "Buy milk" }])],
       ["lst_abc123/meta", JSON.stringify({ version: 3 })],
     ],
+    sharedEntries: [["shared/config", JSON.stringify({ theme: "dark" })]],
+    onDeleteEntry: () => {},
+    onSetEntry: () => {},
+    onClearSimulatorStorage: () => {},
   },
 };

@@ -70,11 +70,8 @@ function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
   const [simulatorDelayMs, setSimulatorDelayMs] = useState(0);
-  const { clearStorage, storeEntries } = useClaudeStorageSimulator(
-    iframeRef,
-    config.aiContext === "claude",
-    simulatorDelayMs,
-  );
+  const { clearStorage, storeEntries, sharedEntries, deleteEntry, setEntry } =
+    useClaudeStorageSimulator(iframeRef, config.aiContext === "claude", simulatorDelayMs);
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
@@ -112,9 +109,13 @@ function HostPage(): JSX.Element {
         onClearData={handleClearData}
         documentNames={documentNames}
         localStorageEntries={localStorageEntries}
-        storageEntries={storeEntries}
+        privateEntries={storeEntries}
+        sharedEntries={sharedEntries}
         simulatorDelayMs={simulatorDelayMs}
         onSimulatorDelayChange={setSimulatorDelayMs}
+        onDeleteEntry={deleteEntry}
+        onSetEntry={setEntry}
+        onClearSimulatorStorage={clearStorage}
       />
       <div className="w-1/2">
         <ArtifactViewPanel

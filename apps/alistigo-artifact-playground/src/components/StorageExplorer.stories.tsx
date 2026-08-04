@@ -21,7 +21,8 @@ export const LocalEmpty: Story = {
   args: {
     aiContext: "none",
     localEntries: [],
-    claudeEntries: [],
+    privateEntries: [],
+    sharedEntries: [],
   },
 };
 
@@ -41,7 +42,8 @@ export const LocalWithEntries: Story = {
         JSON.stringify({ version: 3, lastModified: "2026-07-24T12:00:00Z" }),
       ],
     ],
-    claudeEntries: [],
+    privateEntries: [],
+    sharedEntries: [],
   },
 };
 
@@ -49,7 +51,11 @@ export const ClaudeEmpty: Story = {
   args: {
     aiContext: "claude",
     localEntries: [],
-    claudeEntries: [],
+    privateEntries: [],
+    sharedEntries: [],
+    onDeleteEntry: () => {},
+    onSetEntry: () => {},
+    onClearAll: () => {},
   },
 };
 
@@ -57,9 +63,15 @@ export const ClaudeWithEntries: Story = {
   args: {
     aiContext: "claude",
     localEntries: [],
-    claudeEntries: [
+    privateEntries: [
       ["lst_abc123", JSON.stringify({ title: "My List (Claude)", items: [] })],
       ["session/token", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEifQ.abc"],
     ],
+    sharedEntries: [
+      ["shared/config", JSON.stringify({ theme: "dark", lang: "en" })],
+    ],
+    onDeleteEntry: () => {},
+    onSetEntry: () => {},
+    onClearAll: () => {},
   },
 };

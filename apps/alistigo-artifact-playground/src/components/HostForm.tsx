@@ -15,9 +15,13 @@ interface HostFormProps {
   onClearData: () => void;
   documentNames: string[];
   localStorageEntries: [string, string][];
-  storageEntries: [string, string][];
+  privateEntries: [string, string][];
+  sharedEntries: [string, string][];
   simulatorDelayMs: number;
   onSimulatorDelayChange: (ms: number) => void;
+  onDeleteEntry: (key: string, shared: boolean) => void;
+  onSetEntry: (key: string, value: string, shared: boolean) => void;
+  onClearSimulatorStorage: () => void;
 }
 
 function SectionHeader({ label }: { label: string }): JSX.Element {
@@ -39,7 +43,14 @@ function ConfigTab({
   documentNames,
 }: Omit<
   HostFormProps,
-  "storageEntries" | "localStorageEntries" | "simulatorDelayMs" | "onSimulatorDelayChange"
+  | "privateEntries"
+  | "sharedEntries"
+  | "localStorageEntries"
+  | "simulatorDelayMs"
+  | "onSimulatorDelayChange"
+  | "onDeleteEntry"
+  | "onSetEntry"
+  | "onClearSimulatorStorage"
 >): JSX.Element {
   const showArtifactConfig =
     config.app === "@alistigo/artifact-list" || Object.keys(config.plugins).length > 0;
@@ -140,9 +151,13 @@ function HostForm({
   onClearData,
   documentNames,
   localStorageEntries,
-  storageEntries,
+  privateEntries,
+  sharedEntries,
   simulatorDelayMs,
   onSimulatorDelayChange,
+  onDeleteEntry,
+  onSetEntry,
+  onClearSimulatorStorage,
 }: HostFormProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<LeftTab>("config");
 
@@ -188,9 +203,13 @@ function HostForm({
           <StorageExplorer
             aiContext={config.aiContext}
             localEntries={localStorageEntries}
-            claudeEntries={storageEntries}
+            privateEntries={privateEntries}
+            sharedEntries={sharedEntries}
             simulatorDelayMs={simulatorDelayMs}
             onSimulatorDelayChange={onSimulatorDelayChange}
+            onDeleteEntry={onDeleteEntry}
+            onSetEntry={onSetEntry}
+            onClearAll={onClearSimulatorStorage}
           />
         </div>
       )}
