@@ -9,6 +9,8 @@ export interface KeyListProps {
   emptyText?: string;
   entryStatuses?: Map<string, "draft" | "saving">;
   onCreateClick?: () => void;
+  onDeleteKey?: (key: string) => void;
+  isDeletingKey?: string | null;
 }
 
 function StatusBadge({ status }: { status: "draft" | "saving" }): JSX.Element {
@@ -39,6 +41,8 @@ export function KeyList({
   emptyText = "No keys found.",
   entryStatuses,
   onCreateClick,
+  onDeleteKey,
+  isDeletingKey,
 }: KeyListProps): JSX.Element {
   return (
     <div className="flex flex-col h-full overflow-hidden border-r border-gray-100">
@@ -71,12 +75,13 @@ export function KeyList({
         <ul className="py-1 overflow-y-auto flex-1">
           {keys.map((key) => {
             const status = entryStatuses?.get(key);
+            const isDeleting = isDeletingKey === key;
             return (
-              <li key={key}>
+              <li key={key} className="group flex items-center">
                 <button
                   type="button"
                   onClick={() => onSelectKey(key)}
-                  className={`w-full text-left px-3 py-1.5 text-xs font-mono cursor-pointer transition-colors flex items-center gap-1.5 ${
+                  className={`flex-1 min-w-0 text-left px-3 py-1.5 text-xs font-mono cursor-pointer transition-colors flex items-center gap-1.5 ${
                     selectedKey === key
                       ? "bg-blue-50 text-blue-700 font-semibold"
                       : "text-gray-700 hover:bg-gray-100"
@@ -86,6 +91,26 @@ export function KeyList({
                   <span className="truncate flex-1">{key}</span>
                   {status !== undefined && <StatusBadge status={status} />}
                 </button>
+                {onDeleteKey !== undefined && (
+                  <button
+                    type="button"
+                    onClick={() => onDeleteKey(key)}
+                    disabled={isDeleting}
+                    className="shrink-0 px-2 py-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors opacity-0 group-hover:opacity-100"
+                    title="Delete"
+                    aria-label={`Delete ${key}`}
+                  >
+                    {isDeleting ? (
+                      <span
+                        role="img"
+                        className="inline-block w-2.5 h-2.5 border-2 border-red-400 border-t-transparent rounded-full animate-spin"
+                        aria-label="Deleting"
+                      />
+                    ) : (
+                      "×"
+                    )}
+                  </button>
+                )}
               </li>
             );
           })}

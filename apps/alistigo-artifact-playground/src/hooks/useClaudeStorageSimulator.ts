@@ -22,9 +22,9 @@ const OPS: Record<string, OpHandler> = {
   },
   storageList(map, { prefix }) {
     return {
-      result: Array.from(map.entries())
-        .filter(([k]) => k.startsWith(prefix))
-        .map(([k, v]) => ({ key: k, value: v })),
+      result: {
+        keys: Array.from(map.keys()).filter((k) => k.startsWith(prefix)),
+      },
     };
   },
 };
