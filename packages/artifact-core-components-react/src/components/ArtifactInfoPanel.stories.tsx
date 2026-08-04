@@ -11,7 +11,7 @@ export default meta;
 
 type Story = StoryObj<typeof ArtifactInfoPanel>;
 
-export const AllLoaded: Story = {
+export const AllActive: Story = {
   args: {
     artifactName: "@alistigo/artifact-list",
     artifactVersion: "1.0.0",
@@ -20,19 +20,46 @@ export const AllLoaded: Story = {
         name: "@alistigo/artifact-sentry-plugin",
         version: "0.1.0",
         type: "infra",
-        status: "loaded",
+        status: "active",
       },
       {
         name: "@alistigo/artifact-posthog-plugin",
         version: "0.1.0",
         type: "infra",
-        status: "loaded",
+        status: "active",
       },
       {
         name: "@alistigo/claude-storage-plugin",
         version: "0.1.0",
         type: "storage",
-        status: "loaded",
+        status: "active",
+      },
+      {
+        name: "@alistigo/local-storage-plugin",
+        version: "0.1.0",
+        type: "storage",
+        status: "inactive",
+      },
+    ],
+  },
+};
+
+export const OneLoading: Story = {
+  args: {
+    artifactName: "@alistigo/artifact-list",
+    artifactVersion: "1.0.0",
+    plugins: [
+      {
+        name: "@alistigo/artifact-sentry-plugin",
+        version: "0.1.0",
+        type: "infra",
+        status: "active",
+      },
+      {
+        name: "@alistigo/claude-storage-plugin",
+        version: "0.1.0",
+        type: "storage",
+        status: "loading",
       },
     ],
   },
@@ -47,7 +74,7 @@ export const OneErrored: Story = {
         name: "@alistigo/artifact-sentry-plugin",
         version: "0.1.0",
         type: "infra",
-        status: "loaded",
+        status: "active",
       },
       {
         name: "@alistigo/artifact-posthog-plugin",
