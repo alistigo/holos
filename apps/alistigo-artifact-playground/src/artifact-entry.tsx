@@ -4,7 +4,7 @@ interface AlistigoConfig {
 
 function readConfig(): AlistigoConfig {
   const raw = document.getElementById("alistigo-config")?.textContent;
-  if (raw === undefined || raw === null) return {};
+  if (!raw) return {};
   try {
     return JSON.parse(raw) as AlistigoConfig;
   } catch {

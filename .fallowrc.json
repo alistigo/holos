@@ -46,6 +46,7 @@
   },
   "ignoreDependencies": [
     "@alistigo/artifact-list",
+    "@alistigo/artifact-storage-explorer",
     "@alistigo/list-document-format",
     "@alistigo/artifact-config-list-format",
     "@alistigo/artifact-manager",
