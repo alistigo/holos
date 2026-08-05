@@ -41,13 +41,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/logger": "workspace:*",
-    "@alistigo/list-domain": "workspace:*",
-    "@alistigo/list-document-format": "workspace:*",
-    "@alistigo/list-document-editor": "workspace:*"
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "@alistigo/logger": "workspace:*"
   },
   "devDependencies": {
-    "@alistigo/artifact-plugin-api": "workspace:*",
     "vite": "^7.0.0"
   }
 }
