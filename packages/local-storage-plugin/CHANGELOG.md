@@ -1,3 +1,19 @@
+## 0.3.0 (2026-08-05)
+
+### 🚀 Features
+
+- **local-storage-plugin:** implement generic KeyValueStore, remove list-domain deps ([879893a](https://github.com/alistigo/holos/commit/879893a))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.3.0
+- Updated logger to 0.2.15
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.16 (2026-08-04)
 
 ### 🧱 Updated Dependencies

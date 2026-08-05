@@ -1,3 +1,25 @@
+## 0.2.23 (2026-08-05)
+
+### 🚀 Features
+
+- **playground:** add suppress-responses checkbox to Claude storage simulator ([6e2e124](https://github.com/alistigo/holos/commit/6e2e124))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-storage-explorer to 0.3.0
+- Updated list-components-react to 0.2.16
+- Updated list-document-format to 0.2.15
+- Updated local-storage-plugin to 0.3.0
+- Updated claude-artifact-api to 0.2.1
+- Updated ai-chat-async-api to 0.2.4
+- Updated artifact-manager to 0.2.4
+- Updated artifact-list to 0.4.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.22 (2026-08-04)
 
 ### 🚀 Features

@@ -1,3 +1,11 @@
+## 0.2.15 (2026-08-05)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.2.15
+- Updated list-domain to 0.2.15
+- Updated logger to 0.2.15
+
 ## 0.2.14 (2026-08-04)
 
 ### 🧱 Updated Dependencies

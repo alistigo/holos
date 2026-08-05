@@ -1,3 +1,21 @@
+## 0.3.0 (2026-08-05)
+
+### 🚀 Features
+
+- **artifact-storage-explorer:** use artifact-core lifecycle and claude-storage-plugin for init ([f278827](https://github.com/alistigo/holos/commit/f278827))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.3.4
+- Updated explorer-components-react to 0.2.1
+- Updated claude-storage-plugin to 0.3.0
+- Updated artifact-core to 0.2.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.0 (2026-08-04)
 
 ### 🚀 Features

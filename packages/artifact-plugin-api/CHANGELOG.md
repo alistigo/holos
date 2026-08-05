@@ -1,3 +1,14 @@
+## 0.3.0 (2026-08-05)
+
+### 🚀 Features
+
+- **artifact-plugin-api:** add generic KeyValueStore, remove list-domain peer deps ([eebbe12](https://github.com/alistigo/holos/commit/eebbe12))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.2 (2026-08-04)
 
 ### 🧱 Updated Dependencies

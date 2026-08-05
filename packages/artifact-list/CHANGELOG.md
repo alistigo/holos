@@ -1,3 +1,30 @@
+## 0.4.0 (2026-08-05)
+
+### 🚀 Features
+
+- **artifact-list:** introduce ListKeyValueAdapter to bridge KeyValueStore → AlistigoListStore ([93929dd](https://github.com/alistigo/holos/commit/93929dd))
+
+### 🩹 Fixes
+
+- **fallow:** remove unused exports and suppress duck-typed class member ([da8fd46](https://github.com/alistigo/holos/commit/da8fd46))
+- **lint:** fix import order in claude-storage-plugin and artifact-list ([06473a1](https://github.com/alistigo/holos/commit/06473a1))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.3.4
+- Updated list-components-react to 0.2.16
+- Updated list-document-editor to 0.2.15
+- Updated list-document-format to 0.2.15
+- Updated artifact-plugin-api to 0.3.0
+- Updated artifact-core to 0.2.5
+- Updated list-domain to 0.2.15
+- Updated logger to 0.2.15
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.5 (2026-08-04)
 
 ### 🧱 Updated Dependencies

@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/local-storage-plugin",
-  "version": "0.2.16",
+  "version": "0.3.0",
   "description": "localStorage-backed AlistigoPlugin implementation (storage type) for standard browser contexts.",
   "license": "MIT",
   "author": {

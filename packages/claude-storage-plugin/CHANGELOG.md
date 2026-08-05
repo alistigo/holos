@@ -1,3 +1,25 @@
+## 0.3.0 (2026-08-05)
+
+### 🚀 Features
+
+- **claude-storage-plugin:** generic KeyValueStore + 3-retry timeout mechanism ([5856391](https://github.com/alistigo/holos/commit/5856391))
+
+### 🩹 Fixes
+
+- **fallow:** remove unused exports and suppress duck-typed class member ([da8fd46](https://github.com/alistigo/holos/commit/da8fd46))
+- **lint:** fix import order in claude-storage-plugin and artifact-list ([06473a1](https://github.com/alistigo/holos/commit/06473a1))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.3.0
+- Updated claude-artifact-api to 0.2.1
+- Updated logger to 0.2.15
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.16 (2026-08-04)
 
 ### 🚀 Features
