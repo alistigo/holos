@@ -8,7 +8,6 @@ import type { AlistigoPlugin, PluginRuntime } from "@alistigo/artifact-plugin-ap
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { createLogger } from "@alistigo/logger";
-import { ListKeyValueAdapter } from "../utils/list-key-value-adapter.js";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -19,6 +18,7 @@ import { registerLoadedPlugins } from "../runtime-state.js";
 import type { MountOptions } from "../types.js";
 import makeDefaultDocument from "../utils/document.js";
 import { InMemoryListStore } from "../utils/in-memory-store.js";
+import { ListKeyValueAdapter } from "../utils/list-key-value-adapter.js";
 import App from "./App.js";
 import DebugRenderErrorTrigger from "./DebugRenderErrorTrigger.js";
 
