@@ -54,14 +54,17 @@ export function useClaudeStorageSimulator(
   iframeRef: RefObject<HTMLIFrameElement | null>,
   enabled: boolean,
   delayMs: number,
+  suppressResponses = false,
 ) {
   const storeRef = useRef(new Map<string, string>());
   const sharedRef = useRef(new Map<string, string>());
   const [storageVersion, setStorageVersion] = useState(0);
-  // Store delay in a ref so the event handler always reads the latest value
-  // without needing to re-register on every delay change
+  // Store delay and suppressResponses in refs so the event handler always reads
+  // the latest value without needing to re-register on every change
   const delayMsRef = useRef(delayMs);
   delayMsRef.current = delayMs;
+  const suppressResponsesRef = useRef(suppressResponses);
+  suppressResponsesRef.current = suppressResponses;
 
   const clearStorage = useCallback(() => {
     if (!enabled) return;
@@ -117,6 +120,7 @@ export function useClaudeStorageSimulator(
     function handle(event: MessageEvent) {
       const win = iframeRef.current?.contentWindow;
       if (!win || event.source !== win) return;
+      if (suppressResponsesRef.current) return;
       const delay = delayMsRef.current;
       if (delay > 0) {
         setTimeout(() => processStorageMessage(event, win), delay);

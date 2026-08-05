@@ -19,6 +19,8 @@ interface HostFormProps {
   sharedEntries: [string, string][];
   simulatorDelayMs: number;
   onSimulatorDelayChange: (ms: number) => void;
+  suppressResponses: boolean;
+  onSuppressResponsesChange: (v: boolean) => void;
   onDeleteEntry: (key: string, shared: boolean) => void;
   onSetEntry: (key: string, value: string, shared: boolean) => void;
   onClearSimulatorStorage: () => void;
@@ -48,6 +50,8 @@ function ConfigTab({
   | "localStorageEntries"
   | "simulatorDelayMs"
   | "onSimulatorDelayChange"
+  | "suppressResponses"
+  | "onSuppressResponsesChange"
   | "onDeleteEntry"
   | "onSetEntry"
   | "onClearSimulatorStorage"
@@ -155,6 +159,8 @@ function HostForm({
   sharedEntries,
   simulatorDelayMs,
   onSimulatorDelayChange,
+  suppressResponses,
+  onSuppressResponsesChange,
   onDeleteEntry,
   onSetEntry,
   onClearSimulatorStorage,
@@ -207,6 +213,8 @@ function HostForm({
             sharedEntries={sharedEntries}
             simulatorDelayMs={simulatorDelayMs}
             onSimulatorDelayChange={onSimulatorDelayChange}
+            suppressResponses={suppressResponses}
+            onSuppressResponsesChange={onSuppressResponsesChange}
             onDeleteEntry={onDeleteEntry}
             onSetEntry={onSetEntry}
             onClearAll={onClearSimulatorStorage}

@@ -70,8 +70,14 @@ function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
   const [simulatorDelayMs, setSimulatorDelayMs] = useState(0);
+  const [suppressResponses, setSuppressResponses] = useState(false);
   const { clearStorage, storeEntries, sharedEntries, deleteEntry, setEntry } =
-    useClaudeStorageSimulator(iframeRef, config.aiContext === "claude", simulatorDelayMs);
+    useClaudeStorageSimulator(
+      iframeRef,
+      config.aiContext === "claude",
+      simulatorDelayMs,
+      suppressResponses,
+    );
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
@@ -113,6 +119,8 @@ function HostPage(): JSX.Element {
         sharedEntries={sharedEntries}
         simulatorDelayMs={simulatorDelayMs}
         onSimulatorDelayChange={setSimulatorDelayMs}
+        suppressResponses={suppressResponses}
+        onSuppressResponsesChange={setSuppressResponses}
         onDeleteEntry={deleteEntry}
         onSetEntry={setEntry}
         onClearSimulatorStorage={clearStorage}
