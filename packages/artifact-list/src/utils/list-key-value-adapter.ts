@@ -25,6 +25,7 @@ export class ListKeyValueAdapter implements AlistigoListStore {
     return raw as AlistigoDocument;
   }
 
+  // fallow-ignore-next-line unused-class-member
   async seedIfEmpty(document: AlistigoDocument): Promise<void> {
     const listId = document["alistigo:listId"];
     const keys = await this.store.list(listId);

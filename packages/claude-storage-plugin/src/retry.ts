@@ -2,8 +2,8 @@ import { createLogger } from "@alistigo/logger";
 
 const log = createLogger("alistigo:claude-storage:retry");
 
-export const STORAGE_TIMEOUT_MS = 1000;
-export const STORAGE_MAX_RETRIES = 3;
+const STORAGE_TIMEOUT_MS = 1000;
+const STORAGE_MAX_RETRIES = 3;
 
 type AttemptResult<T> =
   | { tag: "ok"; value: T }
