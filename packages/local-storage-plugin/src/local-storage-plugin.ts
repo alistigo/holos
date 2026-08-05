@@ -1,6 +1,6 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import pkg from "../package.json" with { type: "json" };
-import { LocalStorageListRepository } from "./local-storage-list-repository.js";
+import { LocalKeyValueStore } from "./local-key-value-store.js";
 
 const localStoragePlugin: AlistigoPlugin = {
   name: "@alistigo/local-storage-plugin",
@@ -17,15 +17,12 @@ const localStoragePlugin: AlistigoPlugin = {
       }
     },
     createStore() {
-      return new LocalStorageListRepository();
+      return new LocalKeyValueStore();
     },
     async listKeys(prefix = ""): Promise<Array<{ key: string; value: string }>> {
       return Object.entries(localStorage)
         .filter(([k]) => k.startsWith(prefix))
         .map(([key, value]) => ({ key, value }));
-    },
-    async seedIfEmpty(doc) {
-      await new LocalStorageListRepository().seedIfEmpty(doc);
     },
   },
 };
