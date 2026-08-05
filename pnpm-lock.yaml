@@ -359,13 +359,6 @@ importers:
         version: 2.8.2
 
   packages/artifact-plugin-api:
-    dependencies:
-      '@alistigo/list-document-editor':
-        specifier: workspace:*
-        version: link:../list-document-editor
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../list-document-format
     devDependencies:
       '@types/react':
         specifier: ^19.2.14

@@ -5,6 +5,7 @@ export type {
   AlistigoPlugin,
   AlistigoPluginEventMap,
   AlistigoStorageExtension,
+  KeyValueStore,
   PluginContext,
   PluginEventBus,
   PluginEventName,
