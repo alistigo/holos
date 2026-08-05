@@ -26,6 +26,13 @@
         "cwd": "packages/claude-storage-plugin"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "packages/claude-storage-plugin"
+      }
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

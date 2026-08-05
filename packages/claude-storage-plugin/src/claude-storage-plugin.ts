@@ -1,10 +1,7 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import pkg from "../package.json" with { type: "json" };
-import {
-  ClaudeArtifactListRepository,
-  isClaudeArtifactContext,
-  withStorageTimeout,
-} from "./claude-artifact-list-repository.js";
+import { ClaudeKeyValueStore, isClaudeArtifactContext } from "./claude-key-value-store.js";
+import { withStorageRetry } from "./retry.js";
 
 const claudeStoragePlugin: AlistigoPlugin = {
   name: "@alistigo/claude-storage-plugin",
@@ -15,20 +12,18 @@ const claudeStoragePlugin: AlistigoPlugin = {
       return isClaudeArtifactContext();
     },
     createStore() {
-      return new ClaudeArtifactListRepository();
+      return new ClaudeKeyValueStore();
     },
     async listKeys(prefix = ""): Promise<Array<{ key: string; value: string }>> {
       const storage = window.storage;
       if (!storage) return [];
       try {
-        // window.storage.list() returns ClaudeStorageListResult { keys: string[], prefix?, shared }
-        // — not an array of {key,value}. Fetch each value individually.
-        const result = await withStorageTimeout(storage.list(prefix));
+        const result = await withStorageRetry(() => storage.list(prefix));
         if (!result) return [];
         const entries = await Promise.all(
           result.keys.map(async (key) => {
             try {
-              const item = await withStorageTimeout(storage.get(key));
+              const item = await withStorageRetry(() => storage.get(key));
               return { key, value: item.value };
             } catch {
               return null;
