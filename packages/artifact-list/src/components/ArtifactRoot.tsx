@@ -8,6 +8,7 @@ import type { AlistigoPlugin, PluginRuntime } from "@alistigo/artifact-plugin-ap
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { createLogger } from "@alistigo/logger";
+import { ListKeyValueAdapter } from "../utils/list-key-value-adapter.js";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -36,7 +37,7 @@ function resolveActiveStorage(plugins: AlistigoPlugin[]): {
 } {
   for (const p of plugins) {
     if (p.type === "storage" && p.storage?.isAvailable() === true) {
-      return { store: p.storage.createStore(), pluginName: p.name };
+      return { store: new ListKeyValueAdapter(p.storage.createStore()), pluginName: p.name };
     }
   }
   return { store: new InMemoryListStore(), pluginName: "in-memory" };
