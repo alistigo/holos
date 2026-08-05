@@ -36,6 +36,9 @@
     "access": "public"
   },
   "dependencies": {
+    "@alistigo/artifact-core": "workspace:*",
+    "@alistigo/artifact-core-components-react": "workspace:*",
+    "@alistigo/claude-storage-plugin": "workspace:*",
     "@alistigo/explorer-components-react": "workspace:*",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
