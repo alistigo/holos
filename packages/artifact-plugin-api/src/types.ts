@@ -1,5 +1,3 @@
-import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
 import type { ReactNode } from "react";
 
 /**
@@ -50,11 +48,19 @@ export interface PluginContext {
 
 export type PluginType = "monitoring" | "storage" | (string & {});
 
+/** Generic key-value store — no domain knowledge. Values are JSON-serialisable objects. */
+export interface KeyValueStore {
+  get(key: string): Promise<unknown>;
+  set(key: string, value: unknown): Promise<void>;
+  del(key: string): Promise<void>;
+  list(prefix?: string): Promise<string[]>;
+}
+
 export interface AlistigoStorageExtension {
   isAvailable(): boolean;
-  createStore(): AlistigoListStore;
+  createStore(): KeyValueStore;
   listKeys(prefix?: string): Promise<Array<{ key: string; value: string }>>;
-  seedIfEmpty?(doc: AlistigoDocument): Promise<void>;
+  seedIfEmpty?(document: unknown): Promise<void>;
 }
 
 /**
