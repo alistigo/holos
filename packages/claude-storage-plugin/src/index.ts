@@ -1,7 +1,5 @@
-export {
-  ClaudeArtifactListRepository,
-  isClaudeArtifactContext,
-} from "./claude-artifact-list-repository.js";
+export { ClaudeKeyValueStore, isClaudeArtifactContext } from "./claude-key-value-store.js";
+export { withStorageRetry } from "./retry.js";
 export { default } from "./claude-storage-plugin.js";
 export type {
   ClaudeApi,

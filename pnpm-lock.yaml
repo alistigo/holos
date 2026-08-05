@@ -439,25 +439,16 @@ importers:
 
   packages/claude-storage-plugin:
     dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
       '@alistigo/claude-artifact-api':
         specifier: workspace:*
         version: link:../claude-artifact-api
-      '@alistigo/list-document-editor':
-        specifier: workspace:*
-        version: link:../list-document-editor
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../list-document-format
-      '@alistigo/list-domain':
-        specifier: workspace:*
-        version: link:../list-domain
       '@alistigo/logger':
         specifier: workspace:*
         version: link:../logger
     devDependencies:
-      '@alistigo/artifact-plugin-api':
-        specifier: workspace:*
-        version: link:../artifact-plugin-api
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
