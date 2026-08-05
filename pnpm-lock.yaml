@@ -401,6 +401,15 @@ importers:
 
   packages/artifact-storage-explorer:
     dependencies:
+      '@alistigo/artifact-core':
+        specifier: workspace:*
+        version: link:../artifact-core
+      '@alistigo/artifact-core-components-react':
+        specifier: workspace:*
+        version: link:../artifact-core-components-react
+      '@alistigo/claude-storage-plugin':
+        specifier: workspace:*
+        version: link:../claude-storage-plugin
       '@alistigo/explorer-components-react':
         specifier: workspace:*
         version: link:../explorer-components-react
