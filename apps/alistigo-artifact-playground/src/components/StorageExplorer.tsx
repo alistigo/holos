@@ -11,6 +11,8 @@ export interface StorageExplorerProps {
   sharedEntries: [string, string][];
   simulatorDelayMs: number;
   onSimulatorDelayChange: (ms: number) => void;
+  suppressResponses: boolean;
+  onSuppressResponsesChange: (v: boolean) => void;
   onDeleteEntry?: (key: string, shared: boolean) => void;
   onSetEntry?: (key: string, value: string, shared: boolean) => void;
   onClearAll?: () => void;
@@ -202,6 +204,8 @@ export function StorageExplorer({
   sharedEntries,
   simulatorDelayMs,
   onSimulatorDelayChange,
+  suppressResponses,
+  onSuppressResponsesChange,
   onDeleteEntry,
   onSetEntry,
   onClearAll,
@@ -231,6 +235,17 @@ export function StorageExplorer({
           className="w-20 text-xs border border-gray-200 rounded px-2 py-1 font-mono focus:outline-none focus:ring-1 focus:ring-blue-400"
         />
         <span className="text-xs text-gray-400">ms</span>
+        {aiContext === "claude" && (
+          <label className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={suppressResponses}
+              onChange={(e) => onSuppressResponsesChange(e.target.checked)}
+              className="accent-red-500"
+            />
+            Suppress responses
+          </label>
+        )}
         {aiContext === "claude" && onClearAll !== undefined && (
           <button
             type="button"
