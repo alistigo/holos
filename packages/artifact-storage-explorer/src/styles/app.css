@@ -1,3 +1,4 @@
 @import "@alistigo/explorer-components-react/styles.css";
+@import "@alistigo/artifact-core-components-react/styles.css";
 
 @source "../**/*.{ts,tsx}";
