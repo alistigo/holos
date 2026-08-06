@@ -3,11 +3,14 @@ import { type ReactNode, useEffect, useState } from "react";
 export interface ArtifactContextMenuContainerProps {
   icon: ReactNode;
   children: ReactNode;
+  /** Optional badge rendered to the left of the icon button (e.g. a Draft status pill). */
+  statusBadge?: ReactNode;
 }
 
 export function ArtifactContextMenuContainer({
   icon,
   children,
+  statusBadge,
 }: ArtifactContextMenuContainerProps): ReactNode {
   const [open, setOpen] = useState(false);
 
@@ -48,16 +51,19 @@ export function ArtifactContextMenuContainer({
           >
             {children}
           </div>
-          <button
-            type="button"
-            data-testid="alistigo-badge"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Alistigo artifact info"
-            aria-expanded={open}
-            className="-mt-px absolute top-full right-0 z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t border-b border-t-white border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"
-          >
-            {icon}
-          </button>
+          <div className="-mt-px absolute top-full right-0 z-20 flex items-start gap-1">
+            {statusBadge}
+            <button
+              type="button"
+              data-testid="alistigo-badge"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Alistigo artifact info"
+              aria-expanded={open}
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t border-b border-t-white border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"
+            >
+              {icon}
+            </button>
+          </div>
         </div>
       </div>
     </>

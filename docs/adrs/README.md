@@ -22,3 +22,4 @@ This directory contains architectural decisions for the Holos monorepo — both 
 | [0016](0016-artifact-plugin-system.md) | Composable Artifact Plugin System | Accepted | 2026-07-09 |
 | [0017](0017-storage-plugin-system.md) | Storage Plugin System | Accepted | 2026-07-24 |
 | [0018](0018-alistigo-platform.md) | Alistigo as a Platform for AI Artifacts | Accepted | 2026-07-27 |
+| [0019](0019-claude-artifact-draft-vs-published.md) | Claude Artifact Lifecycle — Draft vs. Published Storage Behavior | Accepted | 2026-08-06 |

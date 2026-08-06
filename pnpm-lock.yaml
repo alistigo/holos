@@ -407,6 +407,9 @@ importers:
       '@alistigo/artifact-core-components-react':
         specifier: workspace:*
         version: link:../artifact-core-components-react
+      '@alistigo/claude-artifact-api':
+        specifier: workspace:*
+        version: link:../claude-artifact-api
       '@alistigo/claude-storage-plugin':
         specifier: workspace:*
         version: link:../claude-storage-plugin
