@@ -16,6 +16,11 @@ export class ClaudeKeyValueStore implements KeyValueStore {
   }
 
   async get(key: string): Promise<unknown> {
+    if (!artifactContext().published) {
+      throw new Error(
+        "Storage reads are unavailable in draft mode — publish the artifact and open it via its public URL.",
+      );
+    }
     try {
       log.debug({ key }, "get");
       const result = await withStorageRetry(() => this.storage.get(key));
@@ -47,6 +52,11 @@ export class ClaudeKeyValueStore implements KeyValueStore {
   }
 
   async list(prefix = ""): Promise<string[]> {
+    if (!artifactContext().published) {
+      throw new Error(
+        "Storage reads are unavailable in draft mode — publish the artifact and open it via its public URL.",
+      );
+    }
     try {
       log.debug({ prefix }, "list");
       const result = await withStorageRetry(() => this.storage.list(prefix));
