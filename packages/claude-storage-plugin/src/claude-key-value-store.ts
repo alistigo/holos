@@ -1,5 +1,5 @@
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
-import type { ClaudeStorage } from "@alistigo/claude-artifact-api";
+import { artifactContext, type ClaudeStorage } from "@alistigo/claude-artifact-api";
 import { createLogger } from "@alistigo/logger";
 import { withStorageRetry } from "./retry.js";
 
@@ -27,11 +27,21 @@ export class ClaudeKeyValueStore implements KeyValueStore {
   }
 
   async set(key: string, value: unknown): Promise<void> {
+    if (!artifactContext().published) {
+      throw new Error(
+        "Storage writes are unavailable in draft mode — publish the artifact and open it via its public URL.",
+      );
+    }
     log.debug({ key }, "set");
     await withStorageRetry(() => this.storage.set(key, JSON.stringify(value)));
   }
 
   async del(key: string): Promise<void> {
+    if (!artifactContext().published) {
+      throw new Error(
+        "Storage deletes are unavailable in draft mode — publish the artifact and open it via its public URL.",
+      );
+    }
     log.debug({ key }, "del");
     await withStorageRetry(() => this.storage.delete(key));
   }

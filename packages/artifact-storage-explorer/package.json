@@ -38,6 +38,7 @@
   "dependencies": {
     "@alistigo/artifact-core": "workspace:*",
     "@alistigo/artifact-core-components-react": "workspace:*",
+    "@alistigo/claude-artifact-api": "workspace:*",
     "@alistigo/claude-storage-plugin": "workspace:*",
     "@alistigo/explorer-components-react": "workspace:*",
     "react": "^19.2.5",
