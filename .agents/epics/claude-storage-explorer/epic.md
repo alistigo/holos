@@ -1,10 +1,11 @@
 ---
 name: claude-storage-explorer
-status: in-progress
+status: completed
 created: 2026-07-30T00:00:00Z
-updated: 2026-07-30T00:00:00Z
-progress: 0%
+updated: 2026-08-06T20:14:46Z
+progress: 80%
 prd: .claude/prds/claude-storage-explorer.md
+superseded_by: artifact-claude-capabilities-demo
 ---
 
 # Epic: claude-storage-explorer

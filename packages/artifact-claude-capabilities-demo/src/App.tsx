@@ -18,7 +18,7 @@ interface AppProps {
   prefix: string;
 }
 
-const ARTIFACT_NAME = "@alistigo/artifact-storage-explorer";
+const ARTIFACT_NAME = "@alistigo/artifact-claude-capabilities-demo";
 
 const PLUGIN_INFOS: PluginInfo[] = [
   {

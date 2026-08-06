@@ -1,10 +1,10 @@
 ---
-name: alistigo-artifact-storage-explorer-skill
-app: "@alistigo/artifact-storage-explorer"
+name: alistigo-artifact-claude-capabilities-demo-skill
+app: "@alistigo/artifact-claude-capabilities-demo"
 description: >
-  Use this when a developer asks to inspect, browse, debug, or explore Claude artifact storage.
-  Renders a storage explorer UI inside the artifact that lists all private and shared storage keys
-  with their JSON values, and allows creating, editing, and deleting individual keys.
+  Use this when a developer asks to demo, explore, or inspect Claude artifact iframe APIs.
+  Renders a tabbed UI demonstrating storage, AI completions, file download, network proxy,
+  and external navigation — all inside a Claude artifact.
 triggers:
   - "explore storage"
   - "inspect claude storage"
@@ -16,9 +16,20 @@ triggers:
   - "inspect window.storage"
   - "see what's stored"
   - "storage debugger"
+  - "demo claude artifact capabilities"
+  - "show all claude artifact APIs"
+  - "artifact capabilities demo"
+  - "show window.claude.complete"
+  - "call claude from an artifact"
+  - "download file from artifact"
+  - "artifact file generation"
+  - "artifact network demo"
+  - "test window.fetch in artifact"
+  - "artifact external links"
+  - "window.open in artifact"
 ---
 
-# @alistigo/artifact-storage-explorer — AI usage guide
+# @alistigo/artifact-claude-capabilities-demo — AI usage guide
 
 ## When to use
 

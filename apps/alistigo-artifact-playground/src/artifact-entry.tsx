@@ -15,8 +15,8 @@ function readConfig(): AlistigoConfig {
 const { app } = readConfig();
 
 switch (app) {
-  case "@alistigo/artifact-storage-explorer":
-    await import("@alistigo/artifact-storage-explorer");
+  case "@alistigo/artifact-claude-capabilities-demo":
+    await import("@alistigo/artifact-claude-capabilities-demo");
     break;
   default:
     await import("@alistigo/artifact-list");

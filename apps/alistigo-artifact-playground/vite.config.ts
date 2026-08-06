@@ -25,9 +25,9 @@ import { defineConfig } from "vite";
 const LOCALE = process.env.LOCALE ?? "en";
 
 const artifactListSrc = path.resolve(__dirname, "../../packages/artifact-list/src/index.tsx");
-const artifactStorageExplorerSrc = path.resolve(
+const artifactClaudeCapabilitiesDemoSrc = path.resolve(
   __dirname,
-  "../../packages/artifact-storage-explorer/src/index.tsx",
+  "../../packages/artifact-claude-capabilities-demo/src/index.tsx",
 );
 
 // Absolute paths to each plugin package's source entry, so the playground can load
@@ -83,7 +83,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@alistigo/artifact-list": artifactListSrc,
-      "@alistigo/artifact-storage-explorer": artifactStorageExplorerSrc,
+      "@alistigo/artifact-claude-capabilities-demo": artifactClaudeCapabilitiesDemoSrc,
       "virtual:alistigo-active-catalog": activeCatalogPath,
     },
   },
