@@ -1,10 +1,10 @@
-<script>(function() {
+<script>(() => {
   const realParent = window.parent;
   const cryptoObj = window.crypto;
   const newRequestId =
     cryptoObj && typeof cryptoObj.randomUUID === "function"
-      ? function () { return cryptoObj.randomUUID(); }
-      : function () { return Date.now() + "-" + Math.random(); };
+      ? (() => cryptoObj.randomUUID())
+      : (() => `${Date.now()}-${Math.random()}`);
   const originalConsole = window.console;
   window.console = {
     log: (...args) => {
@@ -13,16 +13,16 @@
     },
     error: (...args) => {
       originalConsole.error(...args);
-      realParent.postMessage({ type: 'console', message: 'Error: ' + args.join(' ') }, '*');
+      realParent.postMessage({ type: 'console', message: `Error: ${args.join(' ')}` }, '*');
     },
     warn: (...args) => {
       originalConsole.warn(...args);
-      realParent.postMessage({ type: 'console', message: 'Warning: ' + args.join(' ') }, '*');
+      realParent.postMessage({ type: 'console', message: `Warning: ${args.join(' ')}` }, '*');
     }
   };
 
-  let callbacksMap = new Map();
-  let streamControllers = new Map();
+  const callbacksMap = new Map();
+  const streamControllers = new Map();
 
   window.claude = {
     complete: (prompt) => {
@@ -65,7 +65,7 @@
     }
   };
 
-  let pendingBlobs = new Map();
+  const pendingBlobs = new Map();
   URL.createObjectURL = (blob) => {
     const blobId = `blob-${Date.now()}-${Math.random()}`;
     pendingBlobs.set(blobId, blob);
@@ -97,7 +97,7 @@
                 headers: response.headers
               }));
             } catch (err) {
-              reject(new TypeError('Bridge fetch: unconstructable response (status ' + response.status + ')'));
+              reject(new TypeError(`Bridge fetch: unconstructable response (status ${response.status})`));
             }
             return;
           }
@@ -113,7 +113,7 @@
             }));
           } catch (err) {
             streamControllers.delete(channelId);
-            reject(new TypeError('Bridge fetch: unconstructable response (status ' + response.status + ')'));
+            reject(new TypeError(`Bridge fetch: unconstructable response (status ${response.status})`));
           }
         },
         reject,
@@ -210,11 +210,11 @@
     }
   });
 
-  window.open = function (url) {
+  window.open = (url) => {
     realParent.postMessage({ type: "openExternal", href: url }, "*");
   };
 
   window.addEventListener('error', (event) => {
-    realParent.postMessage({ type: 'console', message: 'Uncaught Error: ' + event.message }, '*');
+    realParent.postMessage({ type: 'console', message: `Uncaught Error: ${event.message}` }, '*');
   });
 })();</script>
