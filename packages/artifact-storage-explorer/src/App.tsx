@@ -2,10 +2,10 @@ import { useArtifactLifecycle, useStartArtifact } from "@alistigo/artifact-core"
 import {
   ArtifactContextMenuContainer,
   ArtifactInfoPanel,
+  alistigoLogoUrl,
   ErrorScreen,
   LoadingScreen,
   Modal,
-  alistigoLogoUrl,
   type PluginInfo,
 } from "@alistigo/artifact-core-components-react";
 import { artifactContext } from "@alistigo/claude-artifact-api";
@@ -182,6 +182,7 @@ export function App({ prefix }: AppProps): JSX.Element {
   useStartArtifact(
     {
       onReady: async () => {
+        if (isDraft) return;
         if (!claudeStoragePlugin.storage?.isAvailable()) {
           throw new Error(
             "Claude storage is not available — this artifact must run inside a Claude conversation.",
