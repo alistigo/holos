@@ -27,6 +27,7 @@ const defaultConfig = {
   document: "",
   rawDocument: "",
   plugins: {},
+  published: false,
 };
 
 const noopStorage = {

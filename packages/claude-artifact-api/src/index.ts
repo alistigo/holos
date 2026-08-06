@@ -43,6 +43,8 @@ declare global {
   interface Window {
     storage?: ClaudeStorage;
     claude?: ClaudeApi;
+    /** Dev-mode override injected by the playground — supersedes URL-based detection in artifactContext(). */
+    claudeArtifactStatus?: "published";
   }
 }
 
@@ -61,6 +63,11 @@ export interface ArtifactContext {
  * Published: https://www.claudeusercontent.com/artifact/<uuid>  → published: true
  */
 export function artifactContext(): ArtifactContext {
+  // Playground dev-mode override: window.claudeArtifactStatus is injected into the iframe
+  // srcdoc when the "Published" checkbox is checked, bypassing URL-based detection.
+  if (typeof window !== "undefined" && window.claudeArtifactStatus === "published") {
+    return { published: true, artifactId: null };
+  }
   let path = "";
   try {
     path = new URL(document.baseURI).pathname;

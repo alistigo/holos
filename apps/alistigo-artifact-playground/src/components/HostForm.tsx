@@ -80,6 +80,18 @@ function ConfigTab({
             </select>
           </label>
 
+          {config.aiContext === "claude" && (
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={config.published}
+                onChange={(e) => onConfigChange((c) => ({ ...c, published: e.target.checked }))}
+                className="rounded"
+              />
+              <span className="text-xs text-gray-600">Published</span>
+            </label>
+          )}
+
           <div className="flex gap-2">
             <button
               type="button"

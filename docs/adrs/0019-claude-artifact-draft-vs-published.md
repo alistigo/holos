@@ -59,9 +59,32 @@ export function artifactContext(): ArtifactContext {
 
 ### 2. Guard writes in `@alistigo/claude-storage-plugin`
 
-`ClaudeKeyValueStore.set()` and `ClaudeKeyValueStore.del()` throw immediately when called in draft mode. `get()` and `list()` are not guarded — they silently return undefined/empty, which is safe and consistent with existing behavior.
+All four `ClaudeKeyValueStore` methods (`get`, `set`, `del`, `list`) throw immediately when called in draft mode via a shared `requirePublished()` helper.
 
-### 3. Surface draft state in artifact UIs
+### 3. Dev-mode override in the playground
+
+`alistigo-artifact-playground` runs all artifacts in a srcdoc iframe. In that context `document.baseURI` is always the playground's own development URL — never a Claude published URL — so `artifactContext()` would always return `{ published: false }`, making it impossible to test published-mode behavior locally.
+
+To work around this, `buildIframeSrcdoc()` injects a global variable when the `aiContext === "claude"` and the **Published** checkbox is checked:
+
+```html
+<script>window.claudeArtifactStatus = "published";</script>
+```
+
+`artifactContext()` checks this override before inspecting `document.baseURI`:
+
+```typescript
+if (typeof window !== "undefined" && window.claudeArtifactStatus === "published") {
+  return { published: true, artifactId: null };
+}
+// … URL-based detection …
+```
+
+The **Published** checkbox is visible in the playground's Config tab only when the AI context is set to `claude`. When unchecked, URL-based detection runs — which always resolves to draft inside the playground, correctly simulating the Claude preview panel.
+
+`artifactId` is `null` in this mode (no real UUID is available), which is a known limitation of playground simulation.
+
+### 4. Surface draft state in artifact UIs
 
 Artifacts that rely on storage (particularly `artifact-storage-explorer`) must:
 - Detect draft mode at mount time via `artifactContext()`

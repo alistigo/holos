@@ -40,6 +40,11 @@ function buildClaudeHeadScripts(): string {
   ].join("\n    ");
 }
 
+function buildArtifactStatusScript(published: boolean): string {
+  if (!published) return "";
+  return `<script>window.claudeArtifactStatus = "published";</script>`;
+}
+
 /** Builds the config object injected into the artifact iframe. */
 export function buildArtifactConfig(config: Config): Record<string, unknown> {
   const cfg: Record<string, unknown> = {
@@ -88,6 +93,7 @@ export function buildIframeSrcdoc({
 <html lang="en">
   <head>
     ${isClaude ? buildClaudeHeadScripts() : ""}
+    ${isClaude ? buildArtifactStatusScript(config.published) : ""}
     <meta http-equiv="Content-Security-Policy" content="${csp}" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

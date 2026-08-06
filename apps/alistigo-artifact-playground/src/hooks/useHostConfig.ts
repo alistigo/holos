@@ -11,6 +11,8 @@ export interface Config {
   rawDocument: string;
   /** Enabled plugins, keyed by npm package name, each with its own (currently empty) config. */
   plugins: Record<string, Record<string, unknown>>;
+  /** Simulates a published artifact — injects window.claudeArtifactStatus into the iframe. Only relevant when aiContext === "claude". */
+  published: boolean;
 }
 
 export function useHostConfig() {
@@ -22,6 +24,7 @@ export function useHostConfig() {
     document: "",
     rawDocument: "",
     plugins: {},
+    published: false,
   });
   return { config, setConfig };
 }
