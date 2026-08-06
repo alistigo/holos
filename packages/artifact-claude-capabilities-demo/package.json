@@ -1,6 +1,6 @@
 {
-  "name": "@alistigo/artifact-storage-explorer",
-  "version": "0.3.1",
+  "name": "@alistigo/artifact-claude-capabilities-demo",
+  "version": "0.1.0",
   "license": "MIT",
   "author": {
     "name": "Mikael Labrut",
@@ -9,24 +9,26 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/artifact-storage-explorer"
+    "directory": "packages/artifact-claude-capabilities-demo"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-storage-explorer#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-claude-capabilities-demo#readme",
   "keywords": [
     "alistigo",
     "claude",
-    "storage",
-    "explorer",
     "artifact",
-    "debugger",
+    "capabilities",
+    "demo",
+    "storage",
+    "ai",
+    "fetch",
     "umd"
   ],
   "private": false,
   "type": "module",
-  "description": "Self-contained UMD bundle — a Claude artifact that lets developers inspect, browse, and delete entries from window.storage (the Claude artifact storage API).",
+  "description": "Self-contained UMD bundle — a Claude artifact that demonstrates all Claude iframe APIs: storage, AI completions, file download, network proxy, and external navigation.",
   "main": "./dist/index.umd.js",
   "types": "./src/index.tsx",
   "files": [

@@ -75,6 +75,7 @@ LinkedIn Skills: [vendoring pattern gap](feedback_vendor_symlink_gap.md) discove
 - [UI library selection — AI docs + linting are part of the bar](feedback_ui_library_criteria.md) — when evaluating libraries, always check llms.txt/MCP/agent skills (P2) and library-aware linting (P3)
 - [Home-dir shell profile edits are blocked by a hook](feedback_home_dir_edits.md) — hand the user a paste-able snippet for `~/.profile`/`~/.bashrc`/etc., don't retry Edit/Write
 - [Always branch before changes on main](feedback_branch_before_changes.md) — Task 0 in every plan must create a feature branch when starting from `main`
+- [Run biome fix before push](feedback_biome_before_push.md) — `pnpm biome check --write .` before every commit/push; stage any auto-fixed files in the same commit
 
 ## Active Projects
 

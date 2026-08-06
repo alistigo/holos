@@ -1,5 +1,5 @@
 {
-  "name": "artifact-storage-explorer-skill",
+  "name": "artifact-claude-capabilities-demo-skill",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "targets": {
