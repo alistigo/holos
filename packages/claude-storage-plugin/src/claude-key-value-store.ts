@@ -15,12 +15,16 @@ export class ClaudeKeyValueStore implements KeyValueStore {
     return s;
   }
 
-  async get(key: string): Promise<unknown> {
+  private requirePublished(): void {
     if (!artifactContext().published) {
       throw new Error(
-        "Storage reads are unavailable in draft mode — publish the artifact and open it via its public URL.",
+        "Storage is unavailable in draft mode — publish the artifact and open it via its public URL.",
       );
     }
+  }
+
+  async get(key: string): Promise<unknown> {
+    this.requirePublished();
     try {
       log.debug({ key }, "get");
       const result = await withStorageRetry(() => this.storage.get(key));
@@ -32,31 +36,19 @@ export class ClaudeKeyValueStore implements KeyValueStore {
   }
 
   async set(key: string, value: unknown): Promise<void> {
-    if (!artifactContext().published) {
-      throw new Error(
-        "Storage writes are unavailable in draft mode — publish the artifact and open it via its public URL.",
-      );
-    }
+    this.requirePublished();
     log.debug({ key }, "set");
     await withStorageRetry(() => this.storage.set(key, JSON.stringify(value)));
   }
 
   async del(key: string): Promise<void> {
-    if (!artifactContext().published) {
-      throw new Error(
-        "Storage deletes are unavailable in draft mode — publish the artifact and open it via its public URL.",
-      );
-    }
+    this.requirePublished();
     log.debug({ key }, "del");
     await withStorageRetry(() => this.storage.delete(key));
   }
 
   async list(prefix = ""): Promise<string[]> {
-    if (!artifactContext().published) {
-      throw new Error(
-        "Storage reads are unavailable in draft mode — publish the artifact and open it via its public URL.",
-      );
-    }
+    this.requirePublished();
     try {
       log.debug({ prefix }, "list");
       const result = await withStorageRetry(() => this.storage.list(prefix));
