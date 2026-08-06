@@ -1,18 +1,20 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App.js";
+import type { TabId } from "./Tabs.js";
 
-interface StorageExplorerConfig {
+interface ArtifactConfig {
   app?: string;
   container?: string;
   prefix?: string;
+  defaultTab?: string;
 }
 
-function parseConfig(): StorageExplorerConfig {
+function parseConfig(): ArtifactConfig {
   const el = document.getElementById("alistigo-config");
   if (el === null) return {};
   try {
-    return JSON.parse(el.textContent ?? "{}") as StorageExplorerConfig;
+    return JSON.parse(el.textContent ?? "{}") as ArtifactConfig;
   } catch {
     console.error("[StorageExplorer] Failed to parse #alistigo-config:", el.textContent);
     return {};
@@ -38,7 +40,10 @@ export function autoMount(): void {
   const root = createRoot(container);
   root.render(
     <StrictMode>
-      <App prefix={config.prefix ?? ""} />
+      <App
+        prefix={config.prefix ?? ""}
+        {...(config.defaultTab ? { defaultTab: config.defaultTab as TabId } : {})}
+      />
     </StrictMode>,
   );
 }
