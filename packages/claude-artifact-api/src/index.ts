@@ -62,16 +62,19 @@ export interface ArtifactContext {
  * Draft:     https://www.claudeusercontent.com/?domain=…        → published: false
  * Published: https://www.claudeusercontent.com/artifact/<uuid>  → published: true
  */
+function baseURIPath(): string {
+  try {
+    return new URL(document.baseURI).pathname;
+  } catch {
+    return "";
+  }
+}
+
 export function artifactContext(): ArtifactContext {
-  // Playground dev-mode override: window.claudeArtifactStatus is injected into the iframe
-  // srcdoc when the "Published" checkbox is checked, bypassing URL-based detection.
-  if (typeof window !== "undefined" && window.claudeArtifactStatus === "published") {
+  // Playground injects window.claudeArtifactStatus = "published" to simulate published mode.
+  if (window.claudeArtifactStatus === "published") {
     return { published: true, artifactId: null };
   }
-  let path = "";
-  try {
-    path = new URL(document.baseURI).pathname;
-  } catch {}
-  const m = path.match(/^\/artifact\/([0-9a-f-]{36})/i);
+  const m = baseURIPath().match(/^\/artifact\/([0-9a-f-]{36})/i);
   return { published: Boolean(m), artifactId: m?.[1] ?? null };
 }

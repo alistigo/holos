@@ -92,8 +92,7 @@ export function buildIframeSrcdoc({
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
-    ${isClaude ? buildClaudeHeadScripts() : ""}
-    ${isClaude ? buildArtifactStatusScript(config.published) : ""}
+    ${isClaude ? `${buildClaudeHeadScripts()}\n    ${buildArtifactStatusScript(config.published)}` : ""}
     <meta http-equiv="Content-Security-Policy" content="${csp}" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
