@@ -74,7 +74,7 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
   const [activeTab, setActiveTab] = useState<TabId>(defaultTab);
 
   return (
-    <>
+    <div className="flex h-full flex-col">
       {infoOpen && (
         <Modal title={ARTIFACT_NAME} onClose={() => setInfoOpen(false)}>
           <ArtifactInfoPanel
@@ -120,14 +120,14 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
 
       <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {activeTab === "storage" && <StorageTab isDraft={isDraft} prefix={prefix} />}
         {activeTab === "ai" && <AiTab />}
         {activeTab === "file-generation" && <FileGenerationTab />}
         {activeTab === "api-calls" && <ApiCallsTab />}
         {activeTab === "external-navigation" && <ExternalNavigationTab />}
       </div>
-    </>
+    </div>
   );
 }
 
