@@ -30,8 +30,7 @@ export function AiTab(): JSX.Element {
   const [entries, setEntries] = useState<RequestEntry[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  async function handleSubmit(e: React.FormEvent): Promise<void> {
-    e.preventDefault();
+  async function handleSubmit(): Promise<void> {
     const trimmed = prompt.trim();
     if (!trimmed) return;
 
@@ -54,7 +53,7 @@ export function AiTab(): JSX.Element {
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <form onSubmit={handleSubmit} className="shrink-0 border-b border-gray-200 p-4">
+      <div className="shrink-0 border-b border-gray-200 p-4">
         <p className="mb-2 text-xs font-medium tracking-wide text-gray-500 uppercase">
           window.claude.complete(prompt)
         </p>
@@ -62,18 +61,26 @@ export function AiTab(): JSX.Element {
           ref={textareaRef}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+              void handleSubmit();
+            }
+          }}
           rows={3}
-          placeholder="Enter a prompt…"
+          placeholder="Enter a prompt… (Ctrl+Enter to send)"
           className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
         />
         <button
-          type="submit"
+          type="button"
           disabled={!prompt.trim()}
+          onClick={() => {
+            void handleSubmit();
+          }}
           className="mt-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none"
         >
           Ask Claude
         </button>
-      </form>
+      </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {entries.length === 0 && (

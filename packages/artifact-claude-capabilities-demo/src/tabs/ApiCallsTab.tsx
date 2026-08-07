@@ -55,8 +55,7 @@ export function ApiCallsTab(): JSX.Element {
     setHeaders((prev) => prev.map((h) => (h.id === id ? { ...h, [field]: val } : h)));
   }
 
-  async function handleSubmit(e: React.FormEvent): Promise<void> {
-    e.preventDefault();
+  async function handleSubmit(): Promise<void> {
     const trimmedUrl = url.trim();
     if (!trimmedUrl) return;
 
@@ -100,7 +99,7 @@ export function ApiCallsTab(): JSX.Element {
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <form onSubmit={handleSubmit} className="shrink-0 border-b border-gray-200 p-4 space-y-3">
+      <div className="shrink-0 border-b border-gray-200 p-4 space-y-3">
         <p className="text-xs font-medium tracking-wide text-gray-500 uppercase">
           window.fetch (proxied network request)
         </p>
@@ -169,8 +168,11 @@ export function ApiCallsTab(): JSX.Element {
 
         <div className="flex gap-3">
           <button
-            type="submit"
+            type="button"
             disabled={!url.trim()}
+            onClick={() => {
+              void handleSubmit();
+            }}
             className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none"
           >
             Send
@@ -183,7 +185,7 @@ export function ApiCallsTab(): JSX.Element {
             + Header
           </button>
         </div>
-      </form>
+      </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {entries.length === 0 && (
