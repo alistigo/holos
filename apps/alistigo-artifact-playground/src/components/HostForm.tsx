@@ -1,5 +1,5 @@
 import type { Dispatch, JSX, SetStateAction } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AI_CONTEXTS, KNOWN_APPS } from "../constants";
 import type { Config } from "../hooks/useHostConfig";
 import { ClaudeSimulator, type ClaudeSimulatorProps } from "./ClaudeSimulator";
@@ -148,10 +148,17 @@ function HostForm({
   simulator,
 }: HostFormProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<LeftTab>("config");
+  const isClaudeContext = config.aiContext === "claude";
+
+  useEffect(() => {
+    if (!isClaudeContext && activeTab === "claude-simulator") {
+      setActiveTab("config");
+    }
+  }, [isClaudeContext, activeTab]);
 
   const tabs: { id: LeftTab; label: string }[] = [
     { id: "config", label: "Config" },
-    { id: "claude-simulator", label: "Claude Simulator" },
+    ...(isClaudeContext ? [{ id: "claude-simulator" as LeftTab, label: "Claude Simulator" }] : []),
   ];
 
   return (
