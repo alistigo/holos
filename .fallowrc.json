@@ -29,12 +29,19 @@
     ".github/**",
     "ai/**",
     "packages/claude-artifact-list-storage/**",
-    "packages/local-storage-repository/**"
+    "packages/local-storage-repository/**",
+
+    "packages/alistigo-*",
+    "cli/alistigo-*",
+    "packages/artifact-storage-explorer"
   ],
   "dynamicallyLoaded": [
     "**/*.test.{ts,tsx}",
     "**/tests/**/*.{ts,tsx}",
     "cli/list-features-runner-playwright/src/support/hooks.ts",
+    "cli/list-features-runner-playwright/src/support/world.ts",
+    "cli/list-features-runner-playwright/src/pages/application.page.ts",
+    "**/cli/commands/*.{ts,js}",
     "**/*.steps.{ts,js}",
     "**/umd-entry.{ts,js}",
     "cli/list-features-runner-playwright/src/support/fixtures/*.js"
