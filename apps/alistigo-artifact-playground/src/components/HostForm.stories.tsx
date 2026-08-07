@@ -57,6 +57,9 @@ const noopSimulator: ClaudeSimulatorProps = {
   onClearNavLogs: () => {},
   autoOpen: false,
   onAutoOpenChange: () => {},
+  published: false,
+  onPublishedChange: () => {},
+  onClearData: () => {},
 };
 
 export const ConfigTab: Story = {
@@ -64,7 +67,6 @@ export const ConfigTab: Story = {
     config: defaultConfig,
     onConfigChange: () => {},
     onReload: () => {},
-    onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
     simulator: noopSimulator,
   },
@@ -75,7 +77,6 @@ export const ReadOnly: Story = {
     config: { ...defaultConfig, readonly: true },
     onConfigChange: () => {},
     onReload: () => {},
-    onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
     simulator: noopSimulator,
   },
@@ -92,7 +93,6 @@ export const WithPluginsEnabled: Story = {
     },
     onConfigChange: () => {},
     onReload: () => {},
-    onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
     simulator: noopSimulator,
   },
@@ -103,7 +103,6 @@ export const StorageTabWithData: Story = {
     config: defaultConfig,
     onConfigChange: () => {},
     onReload: () => {},
-    onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
     simulator: {
       ...noopSimulator,
