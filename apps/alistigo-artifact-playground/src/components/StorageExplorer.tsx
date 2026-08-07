@@ -9,10 +9,6 @@ export interface StorageExplorerProps {
   localEntries: [string, string][];
   privateEntries: [string, string][];
   sharedEntries: [string, string][];
-  simulatorDelayMs: number;
-  onSimulatorDelayChange: (ms: number) => void;
-  suppressResponses: boolean;
-  onSuppressResponsesChange: (v: boolean) => void;
   onDeleteEntry?: (key: string, shared: boolean) => void;
   onSetEntry?: (key: string, value: string, shared: boolean) => void;
   onClearAll?: () => void;
@@ -202,10 +198,6 @@ export function StorageExplorer({
   localEntries,
   privateEntries,
   sharedEntries,
-  simulatorDelayMs,
-  onSimulatorDelayChange,
-  suppressResponses,
-  onSuppressResponsesChange,
   onDeleteEntry,
   onSetEntry,
   onClearAll,
@@ -222,31 +214,8 @@ export function StorageExplorer({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Simulator controls */}
-      <div className="shrink-0 flex items-center gap-2 px-3 py-2 border-b border-gray-200 bg-gray-50">
-        <span className="text-xs text-gray-500 shrink-0">Simulator delay</span>
-        <input
-          type="number"
-          min={0}
-          max={5000}
-          step={100}
-          value={simulatorDelayMs}
-          onChange={(e) => onSimulatorDelayChange(Math.max(0, Number(e.target.value)))}
-          className="w-20 text-xs border border-gray-200 rounded px-2 py-1 font-mono focus:outline-none focus:ring-1 focus:ring-blue-400"
-        />
-        <span className="text-xs text-gray-400">ms</span>
-        {aiContext === "claude" && (
-          <label className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={suppressResponses}
-              onChange={(e) => onSuppressResponsesChange(e.target.checked)}
-              className="accent-red-500"
-            />
-            Suppress responses
-          </label>
-        )}
-        {aiContext === "claude" && onClearAll !== undefined && (
+      {aiContext === "claude" && onClearAll !== undefined && (
+        <div className="shrink-0 flex items-center px-3 py-1.5 border-b border-gray-100 bg-gray-50">
           <button
             type="button"
             onClick={onClearAll}
@@ -254,8 +223,8 @@ export function StorageExplorer({
           >
             Delete all
           </button>
-        )}
-      </div>
+        </div>
+      )}
       {aiContext === "claude" ? (
         <StorageSection
           entries={claudeEntries}
