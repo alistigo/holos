@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLogs } from "./useLogs";
 
 export type NavLogEntry = {
   id: string;
@@ -11,13 +12,10 @@ export function useNavigationSimulator(
   iframeRef: RefObject<HTMLIFrameElement | null>,
   enabled: boolean,
 ) {
-  const [logs, setLogs] = useState<NavLogEntry[]>([]);
+  const { logs, setLogs, clearLogs } = useLogs<NavLogEntry>();
   const [autoOpen, setAutoOpen] = useState(false);
   const autoOpenRef = useRef(autoOpen);
   autoOpenRef.current = autoOpen;
-
-  // fallow-ignore-next-line code-duplication
-  const clearLogs = useCallback(() => setLogs([]), []);
 
   useEffect(() => {
     if (!enabled) return;
@@ -39,7 +37,7 @@ export function useNavigationSimulator(
 
     window.addEventListener("message", handle);
     return () => window.removeEventListener("message", handle);
-  }, [iframeRef, enabled]);
+  }, [iframeRef, enabled, setLogs]);
 
   return { logs, clearLogs, autoOpen, setAutoOpen };
 }

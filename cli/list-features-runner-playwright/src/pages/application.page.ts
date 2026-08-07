@@ -28,34 +28,29 @@ export class ApplicationPage {
     await this.artifactFrame.getByTestId(TEST_IDS.app).waitFor({ state: "visible" });
   }
 
-  // fallow-ignore-next-line unused-class-member
   async reload(): Promise<void> {
     await this.page.reload();
     await this.waitForArtifactReady();
   }
 
-  // fallow-ignore-next-line unused-class-member
   async waitForPluginInitialized(): Promise<void> {
     const frame = this.page.frame("artifact-preview");
     if (!frame) throw new Error("artifact-preview frame not found");
     await frame.waitForFunction(() => __alistigoFakeSentryPlugin?.initialized === true);
   }
 
-  // fallow-ignore-next-line unused-class-member
   async isPluginInitialized(): Promise<boolean> {
     const frame = this.page.frame("artifact-preview");
     if (!frame) return false;
     return frame.evaluate(() => __alistigoFakeSentryPlugin?.initialized === true);
   }
 
-  // fallow-ignore-next-line unused-class-member
   async waitForPluginCapturedError(): Promise<void> {
     const frame = this.page.frame("artifact-preview");
     if (!frame) throw new Error("artifact-preview frame not found");
     await frame.waitForFunction(() => __alistigoFakeSentryPlugin?.capturedError === true);
   }
 
-  // fallow-ignore-next-line unused-class-member
   async triggerDebugRenderError(): Promise<void> {
     const frame = this.page.frame("artifact-preview");
     if (!frame) throw new Error("artifact-preview frame not found");
@@ -63,7 +58,6 @@ export class ApplicationPage {
     await frame.evaluate(() => __alistigoDebugTriggerRenderError?.());
   }
 
-  // fallow-ignore-next-line unused-class-member
   async addElement(text: string): Promise<void> {
     const input = this.artifactFrame.getByRole(ROLES.addInput.role, { name: ROLES.addInput.name });
     await input.fill(text);
@@ -71,7 +65,6 @@ export class ApplicationPage {
     await this.waitForIdle();
   }
 
-  // fallow-ignore-next-line unused-class-member
   async deleteElement(text: string): Promise<void> {
     const button = this.artifactFrame.getByRole(ROLES.rowDelete.role, {
       name: deleteButtonName(text),
@@ -89,7 +82,6 @@ export class ApplicationPage {
     await this.waitForIdle();
   }
 
-  // fallow-ignore-next-line unused-class-member
   async deleteRow(rowNumber: number): Promise<void> {
     const list = this.artifactFrame.getByRole(ROLES.list.role);
     const row = list.getByRole(ROLES.row.role).nth(rowNumber - 1);
@@ -97,7 +89,6 @@ export class ApplicationPage {
     await this.waitForIdle();
   }
 
-  // fallow-ignore-next-line unused-class-member
   async getListItems(): Promise<string[]> {
     const list = this.artifactFrame.getByRole(ROLES.list.role);
     const rows = list.getByRole(ROLES.row.role);
@@ -112,7 +103,6 @@ export class ApplicationPage {
     return texts;
   }
 
-  // fallow-ignore-next-line unused-class-member
   async isEmptyStateVisible(): Promise<boolean> {
     return this.artifactFrame.getByTestId(TEST_IDS.emptyState).isVisible();
   }

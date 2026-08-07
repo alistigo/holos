@@ -43,7 +43,21 @@ pnpm exec fallow watch
 
 ## Config File
 
-`.fallowrc.json` at repo root. Edit `ignorePatterns` to suppress false positives (e.g. dynamic imports, reflection-based code, generated files).
+`.fallowrc.json` at repo root. Key sections:
+
+- `ignorePatterns` — whole files/directories to exclude (generated files, build artifacts, legacy packages with no source)
+- `dynamicallyLoaded` — files whose class members or exports are consumed by a framework at runtime (not via TS imports). Use this instead of inline `// fallow-ignore-next-line unused-class-member` comments. Examples:
+  - Playwright `World` subclasses and Page Objects — their methods are called from `.steps.ts` files (which are themselves dynamically loaded)
+  - Clipanion `Command` subclasses — Clipanion reads `static paths`, `static usage`, and calls `execute()` via its router
+  - Cucumber hooks — lifecycle methods called by the runner
+- `ignoreDependencies` — npm packages listed in package.json that fallow can't trace (loaded as UMD, peer deps, or Lingui-compiled)
+
+**Rule of thumb:** when fallow flags `unused-class-member` on a class whose methods are called by a framework (not by TS imports), add that file to `dynamicallyLoaded` in config — don't scatter inline suppression comments.
+
+**Complexity ignores:** `// fallow-ignore-next-line complexity` suppresses both pure complexity (cognitive > 15, cyclomatic > 20) AND CRAP score (>= 30). CRAP fires when a function has no direct test path AND is complex. The remaining ignores in this repo fall into:
+- Genuinely complex domain logic (large switch dispatchers, multi-step CLI `execute()`)
+- CRAP on functions without a direct test reference (the ignore is correct until tests are added)
+- Simulator hooks with inherent multi-case protocol dispatch
 
 ## Workflow
 
