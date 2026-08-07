@@ -141,6 +141,9 @@ function HostPage(): JSX.Element {
     onClearNavLogs: navSimulator.clearLogs,
     autoOpen: navSimulator.autoOpen,
     onAutoOpenChange: navSimulator.setAutoOpen,
+    published: config.published,
+    onPublishedChange: (published) => setConfig((c) => ({ ...c, published })),
+    onClearData: handleClearData,
   };
 
   return (
@@ -149,7 +152,6 @@ function HostPage(): JSX.Element {
         config={config}
         onConfigChange={setConfig}
         onReload={reload}
-        onClearData={handleClearData}
         documentNames={documentNames}
         simulator={simulator}
       />

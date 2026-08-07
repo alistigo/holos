@@ -12,7 +12,6 @@ interface HostFormProps {
   config: Config;
   onConfigChange: Dispatch<SetStateAction<Config>>;
   onReload: () => void;
-  onClearData: () => void;
   documentNames: string[];
   simulator: ClaudeSimulatorProps;
 }
@@ -32,9 +31,8 @@ function ConfigTab({
   config,
   onConfigChange,
   onReload,
-  onClearData,
   documentNames,
-}: Omit<HostFormProps, "simulator">): JSX.Element {
+}: Omit<HostFormProps, "simulator" | "onClearData">): JSX.Element {
   const showArtifactConfig =
     config.app === "@alistigo/artifact-list" || Object.keys(config.plugins).length > 0;
 
@@ -59,18 +57,6 @@ function ConfigTab({
             </select>
           </label>
 
-          {config.aiContext === "claude" && (
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={config.published}
-                onChange={(e) => onConfigChange((c) => ({ ...c, published: e.target.checked }))}
-                className="rounded"
-              />
-              <span className="text-xs text-gray-600">Published</span>
-            </label>
-          )}
-
           <div className="flex gap-2">
             <button
               type="button"
@@ -78,13 +64,6 @@ function ConfigTab({
               onClick={onReload}
             >
               Reload
-            </button>
-            <button
-              type="button"
-              className="px-3 py-1.5 border border-gray-300 rounded bg-white cursor-pointer text-xs hover:bg-gray-100"
-              onClick={onClearData}
-            >
-              Clear data
             </button>
           </div>
         </div>
@@ -143,7 +122,6 @@ function HostForm({
   config,
   onConfigChange,
   onReload,
-  onClearData,
   documentNames,
   simulator,
 }: HostFormProps): JSX.Element {
@@ -187,7 +165,6 @@ function HostForm({
           config={config}
           onConfigChange={onConfigChange}
           onReload={onReload}
-          onClearData={onClearData}
           documentNames={documentNames}
         />
       )}

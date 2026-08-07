@@ -34,6 +34,9 @@ export interface ClaudeSimulatorProps {
   onClearNavLogs: () => void;
   autoOpen: boolean;
   onAutoOpenChange: (v: boolean) => void;
+  published: boolean;
+  onPublishedChange: (v: boolean) => void;
+  onClearData: () => void;
 }
 
 const SIM_TABS: { id: SimTab; label: string }[] = [
@@ -374,6 +377,9 @@ export function ClaudeSimulator({
   onClearNavLogs,
   autoOpen,
   onAutoOpenChange,
+  published,
+  onPublishedChange,
+  onClearData,
 }: ClaudeSimulatorProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<SimTab>("storage");
 
@@ -403,6 +409,22 @@ export function ClaudeSimulator({
             Suppress storage
           </label>
         )}
+        <label className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={published}
+            onChange={(e) => onPublishedChange(e.target.checked)}
+            className="accent-blue-500"
+          />
+          Published
+        </label>
+        <button
+          type="button"
+          onClick={onClearData}
+          className="ml-auto text-xs text-gray-400 hover:text-red-500 transition-colors"
+        >
+          Clear data
+        </button>
       </div>
 
       {/* Sub-tab bar */}
