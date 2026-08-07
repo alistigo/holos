@@ -1,3 +1,14 @@
+## 0.2.3 (2026-08-07)
+
+### 🩹 Fixes
+
+- **playground:** hide Claude Simulator tab outside claude context, default to claude, fix download postMessage ([b72444e](https://github.com/alistigo/holos/commit/b72444e))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.2 (2026-08-07)
 
 ### 🚀 Features

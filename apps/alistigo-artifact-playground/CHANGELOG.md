@@ -1,3 +1,33 @@
+## 0.2.25 (2026-08-07)
+
+### 🚀 Features
+
+- **playground:** add Claude Simulator panel with sub-tabs for all Claude APIs ([dee8b2d](https://github.com/alistigo/holos/commit/dee8b2d))
+- **artifact-claude-capabilities-demo:** rename from artifact-storage-explorer and init CCPM epic ([#68](https://github.com/alistigo/holos/issues/68), [#78](https://github.com/alistigo/holos/issues/78), [#69](https://github.com/alistigo/holos/issues/69), [#77](https://github.com/alistigo/holos/issues/77))
+
+### 🩹 Fixes
+
+- **playground:** restore inline onPublishedChange lambda — remove dangling ref ([d5e332d](https://github.com/alistigo/holos/commit/d5e332d))
+- **playground:** suppress HostPage cognitive complexity — 16 hooks in orchestrator component ([ecda707](https://github.com/alistigo/holos/commit/ecda707))
+- **playground:** extract handlePublishedChange to reduce HostPage cognitive complexity ([66a204b](https://github.com/alistigo/holos/commit/66a204b))
+- **playground:** hide Claude Simulator tab outside claude context, default to claude, fix download postMessage ([b72444e](https://github.com/alistigo/holos/commit/b72444e))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.2.0
+- Updated list-components-react to 0.2.18
+- Updated list-document-format to 0.2.17
+- Updated local-storage-plugin to 0.3.2
+- Updated claude-artifact-api to 0.2.3
+- Updated ai-chat-async-api to 0.2.6
+- Updated artifact-manager to 0.2.6
+- Updated artifact-list to 0.4.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.24 (2026-08-07)
 
 ### 🚀 Features

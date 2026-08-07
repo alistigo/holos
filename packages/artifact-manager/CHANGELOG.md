@@ -1,3 +1,18 @@
+## 0.2.6 (2026-08-07)
+
+### 🚀 Features
+
+- **artifact-claude-capabilities-demo:** rename from artifact-storage-explorer and init CCPM epic ([#68](https://github.com/alistigo/holos/issues/68), [#78](https://github.com/alistigo/holos/issues/78), [#69](https://github.com/alistigo/holos/issues/69), [#77](https://github.com/alistigo/holos/issues/77))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-format to 0.1.15
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.5 (2026-08-07)
 
 ### 🧱 Updated Dependencies
