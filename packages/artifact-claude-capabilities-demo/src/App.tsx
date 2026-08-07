@@ -13,10 +13,12 @@ import claudeStoragePlugin from "@alistigo/claude-storage-plugin";
 import { type JSX, useState } from "react";
 import pkg from "../package.json" with { type: "json" };
 import { type TabId, Tabs } from "./Tabs";
+import { AboutTab } from "./tabs/AboutTab";
 import { AiTab } from "./tabs/AiTab";
 import { ApiCallsTab } from "./tabs/ApiCallsTab";
 import { ExternalNavigationTab } from "./tabs/ExternalNavigationTab";
 import { FileGenerationTab } from "./tabs/FileGenerationTab";
+import { InjectScriptTab } from "./tabs/InjectScriptTab";
 import { StorageTab } from "./tabs/StorageTab";
 
 interface AppProps {
@@ -121,11 +123,13 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
       <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        {activeTab === "about" && <AboutTab />}
         {activeTab === "storage" && <StorageTab isDraft={isDraft} prefix={prefix} />}
         {activeTab === "ai" && <AiTab />}
         {activeTab === "file-generation" && <FileGenerationTab />}
         {activeTab === "api-calls" && <ApiCallsTab />}
         {activeTab === "external-navigation" && <ExternalNavigationTab />}
+        {activeTab === "inject-script" && <InjectScriptTab />}
       </div>
     </div>
   );
@@ -162,5 +166,5 @@ export function App({ prefix, defaultTab }: AppProps): JSX.Element {
     return <ErrorScreen error={error ?? new Error("Unknown startup error")} />;
   }
 
-  return <ReadyContent isDraft={isDraft} prefix={prefix} defaultTab={defaultTab ?? "storage"} />;
+  return <ReadyContent isDraft={isDraft} prefix={prefix} defaultTab={defaultTab ?? "about"} />;
 }
