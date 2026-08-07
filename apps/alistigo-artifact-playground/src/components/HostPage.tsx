@@ -91,6 +91,11 @@ function HostPage(): JSX.Element {
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
 
+  const handlePublishedChange = useCallback(
+    (published: boolean) => setConfig((c) => ({ ...c, published })),
+    [setConfig],
+  );
+
   const handleClearData = useCallback(async () => {
     clearStorage();
     await clearData();
@@ -142,7 +147,7 @@ function HostPage(): JSX.Element {
     autoOpen: navSimulator.autoOpen,
     onAutoOpenChange: navSimulator.setAutoOpen,
     published: config.published,
-    onPublishedChange: (published) => setConfig((c) => ({ ...c, published })),
+    onPublishedChange: handlePublishedChange,
     onClearData: handleClearData,
   };
 
