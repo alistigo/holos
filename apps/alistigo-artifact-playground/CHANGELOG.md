@@ -1,3 +1,25 @@
+## 0.2.24 (2026-08-07)
+
+### 🚀 Features
+
+- **playground:** add Published checkbox to simulate artifact published mode ([cc9d6bd](https://github.com/alistigo/holos/commit/cc9d6bd))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-storage-explorer to 0.3.1
+- Updated list-components-react to 0.2.17
+- Updated list-document-format to 0.2.16
+- Updated local-storage-plugin to 0.3.1
+- Updated claude-artifact-api to 0.2.2
+- Updated ai-chat-async-api to 0.2.5
+- Updated artifact-manager to 0.2.5
+- Updated artifact-list to 0.4.1
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.23 (2026-08-05)
 
 ### 🚀 Features

@@ -1,3 +1,14 @@
+## 0.3.5 (2026-08-07)
+
+### 🚀 Features
+
+- **artifacts:** surface draft/published lifecycle and guard storage writes ([75ae725](https://github.com/alistigo/holos/commit/75ae725))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

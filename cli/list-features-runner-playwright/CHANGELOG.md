@@ -1,3 +1,11 @@
+## 0.1.14 (2026-08-07)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.2.16
+- Updated artifact-plugin-api to 0.3.1
+- Updated list-features to 0.2.16
+
 ## 0.1.13 (2026-08-05)
 
 ### 🧱 Updated Dependencies

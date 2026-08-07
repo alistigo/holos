@@ -1,3 +1,9 @@
+## 0.2.2 (2026-08-07)
+
+### 🧱 Updated Dependencies
+
+- Updated claude-artifact-api to 0.2.2
+
 ## 0.2.1 (2026-08-05)
 
 ### 🧱 Updated Dependencies

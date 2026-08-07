@@ -1,3 +1,27 @@
+## 0.3.1 (2026-08-07)
+
+### 🚀 Features
+
+- **claude-storage-plugin:** throw on get/list in draft mode ([2e87217](https://github.com/alistigo/holos/commit/2e87217))
+- **artifacts:** surface draft/published lifecycle and guard storage writes ([75ae725](https://github.com/alistigo/holos/commit/75ae725))
+
+### 🩹 Fixes
+
+- **artifact-storage-explorer:** include artifact-core-components-react CSS in Tailwind scan ([2e84389](https://github.com/alistigo/holos/commit/2e84389))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.3.5
+- Updated explorer-components-react to 0.2.2
+- Updated claude-storage-plugin to 0.4.0
+- Updated claude-artifact-api to 0.2.2
+- Updated artifact-core to 0.2.6
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.0 (2026-08-05)
 
 ### 🚀 Features

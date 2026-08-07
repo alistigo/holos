@@ -1,3 +1,21 @@
+## 0.4.0 (2026-08-07)
+
+### 🚀 Features
+
+- **claude-storage-plugin:** throw on get/list in draft mode ([2e87217](https://github.com/alistigo/holos/commit/2e87217))
+- **artifacts:** surface draft/published lifecycle and guard storage writes ([75ae725](https://github.com/alistigo/holos/commit/75ae725))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.3.1
+- Updated claude-artifact-api to 0.2.2
+- Updated logger to 0.2.16
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.0 (2026-08-05)
 
 ### 🚀 Features
