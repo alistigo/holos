@@ -76,6 +76,7 @@ LinkedIn Skills: [vendoring pattern gap](feedback_vendor_symlink_gap.md) discove
 - [Home-dir shell profile edits are blocked by a hook](feedback_home_dir_edits.md) — hand the user a paste-able snippet for `~/.profile`/`~/.bashrc`/etc., don't retry Edit/Write
 - [Always branch before changes on main](feedback_branch_before_changes.md) — Task 0 in every plan must create a feature branch when starting from `main`
 - [Run biome fix before push](feedback_biome_before_push.md) — `pnpm biome check --write .` before every commit/push; stage any auto-fixed files in the same commit
+- [Fallow CI vs local version gap](feedback_fallow_ci_vs_local.md) — CI installs latest `^2.x.x` (not local `2.80.0`); always install that exact version and use `--base <merge-base>` to reproduce CI findings before writing a fix
 
 ## Active Projects
 
