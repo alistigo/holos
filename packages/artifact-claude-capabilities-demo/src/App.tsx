@@ -131,6 +131,7 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
   );
 }
 
+// fallow-ignore-next-line complexity
 export function App({ prefix, defaultTab }: AppProps): JSX.Element {
   const lifecycle = useArtifactLifecycle();
   const isDraft = !artifactContext().published;
