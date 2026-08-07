@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useLogs } from "./useLogs";
 
 export type DownloadLogEntry = {
   id: string;
@@ -13,10 +14,7 @@ export function useDownloadSimulator(
   iframeRef: RefObject<HTMLIFrameElement | null>,
   enabled: boolean,
 ) {
-  const [logs, setLogs] = useState<DownloadLogEntry[]>([]);
-
-  // fallow-ignore-next-line code-duplication
-  const clearLogs = useCallback(() => setLogs([]), []);
+  const { logs, setLogs, clearLogs } = useLogs<DownloadLogEntry>();
 
   useEffect(() => {
     if (!enabled) return;
@@ -61,7 +59,7 @@ export function useDownloadSimulator(
 
     window.addEventListener("message", handle);
     return () => window.removeEventListener("message", handle);
-  }, [iframeRef, enabled]);
+  }, [iframeRef, enabled, setLogs]);
 
   return { logs, clearLogs };
 }

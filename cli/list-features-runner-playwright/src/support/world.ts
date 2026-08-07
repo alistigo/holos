@@ -26,7 +26,6 @@ export class AlistigoWorld extends World {
     this.baseUrl = process.env.ALISTIGO_APP_URL ?? "http://localhost:5173";
   }
 
-  // fallow-ignore-next-line unused-class-member
   async beforeScenario(browser: Browser): Promise<void> {
     if (this.browser && this.browser !== browser) {
       throw new Error("Browser instance already initialized with a different instance.");
@@ -45,19 +44,16 @@ export class AlistigoWorld extends World {
    * before any navigation that triggers the plugin loader's fetch (every
    * scenario's "Given the ... plugin" step runs first, guaranteeing this).
    */
-  // fallow-ignore-next-line unused-class-member
   async setPluginUnderTest(packageName: string): Promise<void> {
     this.pluginPackageName = packageName;
     await installPluginRoute(this.page, packageName, fakePluginSource(packageName));
   }
 
-  // fallow-ignore-next-line unused-class-member
   setPluginConfig(config: Record<string, unknown>): void {
     this.pluginConfig = config;
   }
 
   /** Enables the plugin under test via the playground's checkbox, optionally filling config. */
-  // fallow-ignore-next-line unused-class-member
   async initializeArtifactWithPlugin(): Promise<void> {
     if (!this.pluginPackageName) {
       throw new Error("No plugin under test — call setPluginUnderTest first");
@@ -83,13 +79,11 @@ export class AlistigoWorld extends World {
     await this.applicationPage.waitForArtifactReady();
   }
 
-  // fallow-ignore-next-line unused-class-member
   async afterScenario(): Promise<void> {
     await this.page?.close().catch(() => undefined);
     await this.context?.close().catch(() => undefined);
   }
 
-  // fallow-ignore-next-line unused-class-member
   async setDocument(document: AlistigoDocument): Promise<void> {
     if (!this.applicationPage) return;
     this.lastDocument = document;
@@ -104,7 +98,6 @@ export class AlistigoWorld extends World {
     await this.applicationPage.waitForArtifactReady();
   }
 
-  // fallow-ignore-next-line unused-class-member
   async reloadList(): Promise<void> {
     if (!this.lastDocument) throw new Error("No document set — call setDocument first");
     await this.page.reload();

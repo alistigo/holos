@@ -4,10 +4,8 @@ import React from "react";
 import { ValidatorOutput } from "../ui/ValidatorOutput.js";
 
 export class ValidateCommand extends Command {
-  // fallow-ignore-next-line unused-class-member
   static override paths = [Command.Default];
 
-  // fallow-ignore-next-line unused-class-member
   static override usage = Command.Usage({
     description: "Validate Alistigo document JSON files against the schema",
     details: `
@@ -32,7 +30,6 @@ export class ValidateCommand extends Command {
 
   files = Option.Rest({ required: 1, name: "files" });
 
-  // fallow-ignore-next-line unused-class-member complexity
   async execute(): Promise<number> {
     let exitCode = 0;
     const { waitUntilExit } = render(

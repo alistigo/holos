@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLogs } from "./useLogs";
 
 export type AiLogEntry = {
   id: string;
@@ -19,7 +20,7 @@ export function useClaudeCompleteSimulator(
     "This is a simulated claude.complete() response from the playground.",
   );
   const [errorMode, setErrorMode] = useState(false);
-  const [logs, setLogs] = useState<AiLogEntry[]>([]);
+  const { logs, setLogs, clearLogs } = useLogs<AiLogEntry>();
 
   const delayMsRef = useRef(delayMs);
   delayMsRef.current = delayMs;
@@ -27,9 +28,6 @@ export function useClaudeCompleteSimulator(
   cannedRef.current = cannedResponse;
   const errorRef = useRef(errorMode);
   errorRef.current = errorMode;
-
-  // fallow-ignore-next-line code-duplication
-  const clearLogs = useCallback(() => setLogs([]), []);
 
   useEffect(() => {
     if (!enabled) return;
@@ -75,7 +73,7 @@ export function useClaudeCompleteSimulator(
 
     window.addEventListener("message", handle);
     return () => window.removeEventListener("message", handle);
-  }, [iframeRef, enabled]);
+  }, [iframeRef, enabled, setLogs]);
 
   return { logs, clearLogs, cannedResponse, setCannedResponse, errorMode, setErrorMode };
 }
