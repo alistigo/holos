@@ -193,7 +193,7 @@
       const blob = getBlobFromURL(linkEl.href);
       if (!blob) return;
       void blob.arrayBuffer().then((data) => {
-        realParent.postMessage({ type: "downloadFile", filename: linkEl.download, data, mimeType: blob.type || "application/octet-stream" });
+        realParent.postMessage({ type: "downloadFile", filename: linkEl.download, data, mimeType: blob.type || "application/octet-stream" }, '*');
       });
     } else if (linkEl.href.startsWith("data:")) {
       const [header, base64Data] = linkEl.href.split(",");
@@ -201,7 +201,7 @@
       const mimeType = mimeMatch ? mimeMatch[1] : "application/octet-stream";
       const binaryString = atob(base64Data);
       const data = Uint8Array.from(binaryString, (c) => c.charCodeAt(0)).buffer;
-      realParent.postMessage({ type: "downloadFile", filename: linkEl.download, data, mimeType });
+      realParent.postMessage({ type: "downloadFile", filename: linkEl.download, data, mimeType }, '*');
     } else {
       let linkUrl;
       try { linkUrl = new URL(linkEl.href); } catch { return; }
