@@ -143,7 +143,7 @@ function HostPage(): JSX.Element {
     autoOpen: navSimulator.autoOpen,
     onAutoOpenChange: navSimulator.setAutoOpen,
     published: config.published,
-    onPublishedChange: handlePublishedChange,
+    onPublishedChange: (published) => setConfig((c) => ({ ...c, published })),
     onClearData: handleClearData,
   };
 
