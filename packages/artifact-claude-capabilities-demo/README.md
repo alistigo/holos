@@ -1,69 +1,84 @@
-# @alistigo/artifact-storage-explorer
+# @alistigo/artifact-claude-capabilities-demo
 
-A Claude artifact that lets developers inspect, create, edit, and delete entries from `window.storage` — the key-value API that Claude injects into every artifact iframe.
+A self-contained Claude artifact that exercises every API Claude injects into artifact iframes. Drop one `<script>` tag into any Claude HTML artifact and get a seven-tab interactive explorer.
 
 ## Why this exists
 
-Every HTML artifact Claude generates runs in an iframe. Before it loads, Claude injects a small bridge script that wires up a few APIs your JavaScript can call — including `window.storage`. It's a promise-based key-value store backed by the conversation: `get`, `set`, `delete`, `list`. Private namespace (scoped to your artifact) and a shared namespace (available across artifacts in the same conversation).
+Every HTML artifact Claude generates runs inside a sandboxed iframe. Before it loads, Claude silently prepends a bridge script that patches the global environment: it installs `window.storage`, `window.claude`, `window.fetch`, `window.open`, and `URL.createObjectURL` as postMessage proxies to the parent Claude frame. This artifact makes all of those APIs tangible — each tab demonstrates one capability with live interaction so you can verify the bridge works, see exactly what data flows through, and understand the constraints (draft mode, same-origin links, etc.).
 
-We'd been using it for persistence in `@alistigo/artifact-list`. But we had no way to see what was actually accumulating in there. No inspector, no reset, nothing.
+## Tabs
 
-So we built one.
+### About
+Capability overview: what each tab does, usage snippet, and an explanation of the inject-script. The default landing tab.
 
-## What it does
+### Storage — `window.storage`
+A promise-based key-value store backed by the Claude conversation. Supports a private namespace (scoped to the artifact) and a shared namespace (available across all artifacts in the same conversation). The tab provides a full browser: list keys by prefix, inspect JSON values, create, edit with auto-save, and delete entries.
 
-A split-pane explorer for Claude artifact storage:
+> **Draft mode:** `window.storage` is unavailable until the artifact is published. This tab is disabled in draft mode.
 
-- **Browse** — lists all private and shared keys in separate sections, filtered by an optional prefix
-- **Inspect** — click any key to see its JSON value in an editable panel
-- **Create** — add a new entry; key name is editable inline, default value is `{}`
-- **Edit** — modify the JSON value directly; changes are auto-saved after a 1-second debounce. The key shows its state: `draft` while typing, `saving` during the write, then returns to clean.
-- **Delete** — remove individual keys with a single click
+### AI — `window.claude.complete()`
+Sends a prompt to the Claude model that generated the artifact and returns the completion as a string. The call routes through a postMessage bridge and resolves when Claude replies. No external API key needed.
+
+### File Generation — `URL.createObjectURL` / `data:` URI
+Two download paths side by side:
+
+- **Blob path** — `URL.createObjectURL(blob)` produces a `blob-request://` URL. The inject-script intercepts the anchor click, reads the blob as an `ArrayBuffer`, and forwards it to the parent frame for download.
+- **data: URI path** — encode content as `data:text/csv;base64,…` directly in the anchor `href`. The inject-script parses the MIME type and base64 payload inline — no blob or object URL needed.
+
+Both paths work in draft mode.
+
+### API Calls — `window.fetch`
+The inject-script replaces `window.fetch` with a postMessage bridge that proxies HTTP requests through the parent Claude frame. Supports all methods, custom headers, request bodies, and streaming responses via `ReadableStream` chunks. The tab includes ready-made examples for httpbingo.org — basic requests, status codes, delays, and streaming endpoints.
+
+### External Navigation — `window.open` / `<a>` links
+External links (href pointing to a different hostname) and `window.open()` calls are intercepted by the inject-script and forwarded to the parent frame as `openExternal` postMessages. The parent decides whether to open them. Same-origin links pass through normally.
+
+### Inject Script
+Shows the full source of Claude's inject-script with JavaScript syntax highlighting. Includes an explanation of what each section does.
+
+> **Note:** Claude hides this script from the artifact's source tab inside the Claude UI. It is not user-visible code — it is infrastructure that Claude always injects before your artifact HTML.
 
 ## Usage
 
-Paste the script tag into a Claude HTML artifact:
+Paste into a Claude HTML artifact:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-storage-explorer/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-claude-capabilities-demo@0/dist/index.umd.js"></script>
 ```
 
-The artifact auto-mounts to a full-height container it creates in `<body>`. To target an existing element, add a config block before the script:
-
-```html
-<script id="alistigo-config" type="application/json">
-  { "app": "@alistigo/artifact-storage-explorer" }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-storage-explorer/dist/index.umd.js"></script>
-```
+The artifact mounts itself to a full-height container it creates in `<body>`.
 
 ## Configuration
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `prefix` | `string` | `""` | Filter both private and shared keys to those starting with this prefix |
-| `container` | `string` | auto-created `<div>` | CSS selector for the mount target element |
-
-### With prefix filter
+Pass a config block before the script tag to customise behaviour:
 
 ```html
 <script id="alistigo-config" type="application/json">
   {
-    "app": "@alistigo/artifact-storage-explorer",
+    "app": "@alistigo/artifact-claude-capabilities-demo",
     "prefix": "myapp:"
   }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-claude-capabilities-demo@0/dist/index.umd.js"></script>
 ```
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prefix` | `string` | `""` | Filter Storage tab keys to those starting with this prefix |
+| `container` | `string` | auto-created `<div>` | CSS selector for an existing mount target |
+
+## Draft mode
+
+The Storage tab requires a published artifact (`window.storage` is unavailable until Claude assigns the artifact a stable identity). All other tabs — AI, File Generation, API Calls, External Navigation, Inject Script, and About — work immediately from a freshly pasted draft.
+
+The artifact shows a **Draft** badge in the top-right corner when running unpublished. Clicking it explains why the Storage tab is disabled.
 
 ## How it works
 
-On mount, calls `window.storage.list(prefix, false)` for private keys and `window.storage.list(prefix, true)` for shared keys in parallel. Both lists reload on prefix change or after any write operation.
+The artifact is a UMD bundle built with Vite + React + Tailwind. It uses:
 
-- **Creating an entry** calls `window.storage.set(key, {}, isShared)` then reloads the list.
-- **Editing a value** calls `window.storage.set(key, parsedValue, isShared)` after a 1-second debounce — no manual save button needed.
-- **Deleting an entry** calls `window.storage.delete(key, isShared)` then reloads.
+- `@alistigo/artifact-core` — lifecycle hooks (`useArtifactLifecycle`, `useStartArtifact`)
+- `@alistigo/claude-storage-plugin` — typed wrapper around `window.storage`
+- `@alistigo/artifact-core-components-react` — loading/error screens, context menu, modal
 
-## Limitations
-
-- Only works inside a Claude artifact iframe — `window.storage` is only available via the Claude inject-script bridge.
-- Bulk operations (select-all delete, export) are not supported.
+The inject-script source (`packages/claude-artifact-api/inject-script.html`) is inlined at build time via Vite's `?raw` import and displayed in the Inject Script tab.
