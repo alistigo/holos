@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ClaudeSimulatorProps } from "./ClaudeSimulator";
 import HostForm from "./HostForm";
 
 const meta: Meta<typeof HostForm> = {
@@ -30,13 +31,32 @@ const defaultConfig = {
   published: false,
 };
 
-const noopStorage = {
-  localStorageEntries: [] as [string, string][],
-  privateEntries: [] as [string, string][],
-  sharedEntries: [] as [string, string][],
+const noopSimulator: ClaudeSimulatorProps = {
+  aiContext: "claude",
+  simulatorDelayMs: 0,
+  onSimulatorDelayChange: () => {},
+  suppressResponses: false,
+  onSuppressResponsesChange: () => {},
+  localEntries: [],
+  privateEntries: [],
+  sharedEntries: [],
   onDeleteEntry: () => {},
   onSetEntry: () => {},
   onClearSimulatorStorage: () => {},
+  aiLogs: [],
+  onClearAiLogs: () => {},
+  cannedResponse: "Simulated response.",
+  onCannedResponseChange: () => {},
+  errorMode: false,
+  onErrorModeChange: () => {},
+  fetchLogs: [],
+  onClearFetchLogs: () => {},
+  downloadLogs: [],
+  onClearDownloadLogs: () => {},
+  navLogs: [],
+  onClearNavLogs: () => {},
+  autoOpen: false,
+  onAutoOpenChange: () => {},
 };
 
 export const ConfigTab: Story = {
@@ -46,7 +66,7 @@ export const ConfigTab: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    ...noopStorage,
+    simulator: noopSimulator,
   },
 };
 
@@ -57,7 +77,7 @@ export const ReadOnly: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    ...noopStorage,
+    simulator: noopSimulator,
   },
 };
 
@@ -74,7 +94,7 @@ export const WithPluginsEnabled: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    ...noopStorage,
+    simulator: noopSimulator,
   },
 };
 
@@ -85,14 +105,13 @@ export const StorageTabWithData: Story = {
     onReload: () => {},
     onClearData: () => {},
     documentNames: ["duplicates", "empty", "groceries"],
-    localStorageEntries: [],
-    privateEntries: [
-      ["lst_abc123/items", JSON.stringify([{ id: "1", text: "Buy milk" }])],
-      ["lst_abc123/meta", JSON.stringify({ version: 3 })],
-    ],
-    sharedEntries: [["shared/config", JSON.stringify({ theme: "dark" })]],
-    onDeleteEntry: () => {},
-    onSetEntry: () => {},
-    onClearSimulatorStorage: () => {},
+    simulator: {
+      ...noopSimulator,
+      privateEntries: [
+        ["lst_abc123/items", JSON.stringify([{ id: "1", text: "Buy milk" }])],
+        ["lst_abc123/meta", JSON.stringify({ version: 3 })],
+      ],
+      sharedEntries: [["shared/config", JSON.stringify({ theme: "dark" })]],
+    },
   },
 };

@@ -2,11 +2,11 @@ import type { Dispatch, JSX, SetStateAction } from "react";
 import { useState } from "react";
 import { AI_CONTEXTS, KNOWN_APPS } from "../constants";
 import type { Config } from "../hooks/useHostConfig";
+import { ClaudeSimulator, type ClaudeSimulatorProps } from "./ClaudeSimulator";
 import { ConfigFormArtifact } from "./ConfigFormArtifact";
 import { ConfigFormListArtifact } from "./ConfigFormListArtifact";
-import { StorageExplorer } from "./StorageExplorer";
 
-type LeftTab = "config" | "storage" | "api";
+type LeftTab = "config" | "claude-simulator";
 
 interface HostFormProps {
   config: Config;
@@ -14,16 +14,7 @@ interface HostFormProps {
   onReload: () => void;
   onClearData: () => void;
   documentNames: string[];
-  localStorageEntries: [string, string][];
-  privateEntries: [string, string][];
-  sharedEntries: [string, string][];
-  simulatorDelayMs: number;
-  onSimulatorDelayChange: (ms: number) => void;
-  suppressResponses: boolean;
-  onSuppressResponsesChange: (v: boolean) => void;
-  onDeleteEntry: (key: string, shared: boolean) => void;
-  onSetEntry: (key: string, value: string, shared: boolean) => void;
-  onClearSimulatorStorage: () => void;
+  simulator: ClaudeSimulatorProps;
 }
 
 function SectionHeader({ label }: { label: string }): JSX.Element {
@@ -43,19 +34,7 @@ function ConfigTab({
   onReload,
   onClearData,
   documentNames,
-}: Omit<
-  HostFormProps,
-  | "privateEntries"
-  | "sharedEntries"
-  | "localStorageEntries"
-  | "simulatorDelayMs"
-  | "onSimulatorDelayChange"
-  | "suppressResponses"
-  | "onSuppressResponsesChange"
-  | "onDeleteEntry"
-  | "onSetEntry"
-  | "onClearSimulatorStorage"
->): JSX.Element {
+}: Omit<HostFormProps, "simulator">): JSX.Element {
   const showArtifactConfig =
     config.app === "@alistigo/artifact-list" || Object.keys(config.plugins).length > 0;
 
@@ -166,23 +145,13 @@ function HostForm({
   onReload,
   onClearData,
   documentNames,
-  localStorageEntries,
-  privateEntries,
-  sharedEntries,
-  simulatorDelayMs,
-  onSimulatorDelayChange,
-  suppressResponses,
-  onSuppressResponsesChange,
-  onDeleteEntry,
-  onSetEntry,
-  onClearSimulatorStorage,
+  simulator,
 }: HostFormProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<LeftTab>("config");
 
   const tabs: { id: LeftTab; label: string }[] = [
     { id: "config", label: "Config" },
-    { id: "storage", label: "Storage" },
-    { id: "api", label: "API" },
+    { id: "claude-simulator", label: "Claude Simulator" },
   ];
 
   return (
@@ -216,27 +185,9 @@ function HostForm({
         />
       )}
 
-      {activeTab === "storage" && (
+      {activeTab === "claude-simulator" && (
         <div className="flex-1 overflow-hidden">
-          <StorageExplorer
-            aiContext={config.aiContext}
-            localEntries={localStorageEntries}
-            privateEntries={privateEntries}
-            sharedEntries={sharedEntries}
-            simulatorDelayMs={simulatorDelayMs}
-            onSimulatorDelayChange={onSimulatorDelayChange}
-            suppressResponses={suppressResponses}
-            onSuppressResponsesChange={onSuppressResponsesChange}
-            onDeleteEntry={onDeleteEntry}
-            onSetEntry={onSetEntry}
-            onClearAll={onClearSimulatorStorage}
-          />
-        </div>
-      )}
-
-      {activeTab === "api" && (
-        <div className="flex-1 flex items-center justify-center text-gray-400 text-xs">
-          API tools — coming soon.
+          <ClaudeSimulator {...simulator} />
         </div>
       )}
     </div>

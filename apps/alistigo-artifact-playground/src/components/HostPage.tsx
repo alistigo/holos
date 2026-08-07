@@ -4,12 +4,17 @@ import type { JSX } from "react";
 import { useCallback, useMemo, useState } from "react";
 import listApiDef from "../../../../packages/artifact-list/api.json";
 import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
+import { useClaudeCompleteSimulator } from "../hooks/useClaudeCompleteSimulator";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useDocumentFixturesMap } from "../hooks/useDocumentFixtures";
+import { useDownloadSimulator } from "../hooks/useDownloadSimulator";
 import { type Config, useHostConfig } from "../hooks/useHostConfig";
 import { useIframeControls } from "../hooks/useIframeControls";
 import { useLocalStorageEntries } from "../hooks/useLocalStorageEntries";
+import { useNavigationSimulator } from "../hooks/useNavigationSimulator";
+import { useProxyFetchSimulator } from "../hooks/useProxyFetchSimulator";
 import { ArtifactViewPanel } from "./ArtifactViewPanel";
+import type { ClaudeSimulatorProps } from "./ClaudeSimulator";
 import HostForm from "./HostForm";
 
 // In dev: Vite serves this file directly from the dev server.
@@ -71,13 +76,17 @@ function HostPage(): JSX.Element {
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
   const [simulatorDelayMs, setSimulatorDelayMs] = useState(0);
   const [suppressResponses, setSuppressResponses] = useState(false);
+
+  const isClaudeContext = config.aiContext === "claude";
+
   const { clearStorage, storeEntries, sharedEntries, deleteEntry, setEntry } =
-    useClaudeStorageSimulator(
-      iframeRef,
-      config.aiContext === "claude",
-      simulatorDelayMs,
-      suppressResponses,
-    );
+    useClaudeStorageSimulator(iframeRef, isClaudeContext, simulatorDelayMs, suppressResponses);
+
+  const aiSimulator = useClaudeCompleteSimulator(iframeRef, isClaudeContext, simulatorDelayMs);
+  const fetchSimulator = useProxyFetchSimulator(iframeRef, isClaudeContext, simulatorDelayMs);
+  const downloadSimulator = useDownloadSimulator(iframeRef, isClaudeContext);
+  const navSimulator = useNavigationSimulator(iframeRef, isClaudeContext);
+
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
@@ -106,6 +115,34 @@ function HostPage(): JSX.Element {
     [config, docJson],
   );
 
+  const simulator: ClaudeSimulatorProps = {
+    aiContext: config.aiContext,
+    simulatorDelayMs,
+    onSimulatorDelayChange: setSimulatorDelayMs,
+    suppressResponses,
+    onSuppressResponsesChange: setSuppressResponses,
+    localEntries: localStorageEntries,
+    privateEntries: storeEntries,
+    sharedEntries,
+    onDeleteEntry: deleteEntry,
+    onSetEntry: setEntry,
+    onClearSimulatorStorage: clearStorage,
+    aiLogs: aiSimulator.logs,
+    onClearAiLogs: aiSimulator.clearLogs,
+    cannedResponse: aiSimulator.cannedResponse,
+    onCannedResponseChange: aiSimulator.setCannedResponse,
+    errorMode: aiSimulator.errorMode,
+    onErrorModeChange: aiSimulator.setErrorMode,
+    fetchLogs: fetchSimulator.logs,
+    onClearFetchLogs: fetchSimulator.clearLogs,
+    downloadLogs: downloadSimulator.logs,
+    onClearDownloadLogs: downloadSimulator.clearLogs,
+    navLogs: navSimulator.logs,
+    onClearNavLogs: navSimulator.clearLogs,
+    autoOpen: navSimulator.autoOpen,
+    onAutoOpenChange: navSimulator.setAutoOpen,
+  };
+
   return (
     <div className="flex h-full w-full font-sans text-sm">
       <HostForm
@@ -114,16 +151,7 @@ function HostPage(): JSX.Element {
         onReload={reload}
         onClearData={handleClearData}
         documentNames={documentNames}
-        localStorageEntries={localStorageEntries}
-        privateEntries={storeEntries}
-        sharedEntries={sharedEntries}
-        simulatorDelayMs={simulatorDelayMs}
-        onSimulatorDelayChange={setSimulatorDelayMs}
-        suppressResponses={suppressResponses}
-        onSuppressResponsesChange={setSuppressResponses}
-        onDeleteEntry={deleteEntry}
-        onSetEntry={setEntry}
-        onClearSimulatorStorage={clearStorage}
+        simulator={simulator}
       />
       <div className="w-1/2">
         <ArtifactViewPanel
