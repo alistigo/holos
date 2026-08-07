@@ -1,13 +1,22 @@
 import type { JSX } from "react";
 
-export type TabId = "storage" | "ai" | "file-generation" | "api-calls" | "external-navigation";
+export type TabId =
+  | "about"
+  | "storage"
+  | "ai"
+  | "file-generation"
+  | "api-calls"
+  | "external-navigation"
+  | "inject-script";
 
 const TABS: { id: TabId; label: string }[] = [
+  { id: "about", label: "About" },
   { id: "storage", label: "Storage" },
   { id: "ai", label: "AI" },
   { id: "file-generation", label: "File Generation" },
   { id: "api-calls", label: "API Calls" },
   { id: "external-navigation", label: "External Navigation" },
+  { id: "inject-script", label: "Inject Script" },
 ];
 
 interface TabsProps {

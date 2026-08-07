@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { useState } from "react";
+import { JsonEditor } from "../CodeHighlight";
 
 const SAMPLE_JSON = JSON.stringify(
   {
@@ -78,16 +79,11 @@ export function FileGenerationTab(): JSX.Element {
             the parent frame.
           </p>
         </div>
-        <textarea
+        <JsonEditor
           value={jsonText}
-          onChange={(e) => handleChange(e.target.value)}
+          onChange={handleChange}
           rows={8}
-          className={`resize-none rounded-lg border px-3 py-2 font-mono text-sm focus:outline-none ${
-            parseError
-              ? "border-red-400 focus:border-red-500"
-              : "border-gray-300 focus:border-blue-500"
-          }`}
-          spellCheck={false}
+          hasError={parseError !== null}
         />
         {parseError && <p className="text-sm text-red-600">JSON error: {parseError}</p>}
         <div className="flex items-center gap-4">
