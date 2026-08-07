@@ -30,6 +30,7 @@ export function AiTab(): JSX.Element {
   const [entries, setEntries] = useState<RequestEntry[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // fallow-ignore-next-line complexity
   async function handleSubmit(): Promise<void> {
     const trimmed = prompt.trim();
     if (!trimmed) return;

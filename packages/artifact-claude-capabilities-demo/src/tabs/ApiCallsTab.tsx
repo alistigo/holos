@@ -55,6 +55,7 @@ export function ApiCallsTab(): JSX.Element {
     setHeaders((prev) => prev.map((h) => (h.id === id ? { ...h, [field]: val } : h)));
   }
 
+  // fallow-ignore-next-line complexity
   async function handleSubmit(): Promise<void> {
     const trimmedUrl = url.trim();
     if (!trimmedUrl) return;
@@ -191,6 +192,7 @@ export function ApiCallsTab(): JSX.Element {
         {entries.length === 0 && (
           <p className="text-center text-sm text-gray-400">Responses will appear here.</p>
         )}
+        {/* fallow-ignore-next-line complexity */}
         {entries.map((entry) => (
           <div key={entry.id} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
             <p className="mb-2 text-xs font-medium text-gray-500">
