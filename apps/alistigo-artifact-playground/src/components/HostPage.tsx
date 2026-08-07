@@ -71,6 +71,7 @@ function useDocJson(config: Config): string {
   }, [config.document, config.rawDocument, fixturesMap]);
 }
 
+// fallow-ignore-next-line complexity
 function HostPage(): JSX.Element {
   const { config, setConfig } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
@@ -90,11 +91,6 @@ function HostPage(): JSX.Element {
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
   const docJson = useDocJson(config);
-
-  const handlePublishedChange = useCallback(
-    (published: boolean) => setConfig((c) => ({ ...c, published })),
-    [setConfig],
-  );
 
   const handleClearData = useCallback(async () => {
     clearStorage();
