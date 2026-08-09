@@ -7,39 +7,19 @@ url:
 attachment:
 ---
 
-Last time, Claude built me a family tree inside a chat window, live, while I was cleaning up genealogical research. That got me curious about what else that panel could actually do.
+I built a demo of everything Claude's artifact sandbox can actually do.
 
-I opened the dev tools and found the artifact sandbox wired to 5 live APIs, not just HTML with no backend. I'd been building on top of them one at a time for weeks, but there was no single place to see all five together. No "try it now." Just docs.
+Storage that persists across sessions. Calling Claude from inside the artifact itself. Real file downloads. Live network requests, no CORS drama. Even navigation.
 
-So I built one.
+Packaged it as `@alistigo/artifact-claude-capabilities-demo` on npm — one script tag, no build step.
 
-Here is what the inject-script gives every Claude artifact iframe:
+Live demo link is in the first comment. Which one would you reach for first?
 
-`window.storage`
-Read, write, delete key-value pairs. Private namespace scoped to your artifact, or a shared namespace across the conversation. Data persists across sessions.
-
-`window.claude.complete()`
-Call Claude from inside Claude. Type a prompt in the artifact, get a response back. The artifact can reason about its own output.
-
-`URL.createObjectURL`
-Generate a Blob in JavaScript, trigger a real file download. Claude intercepts `blob-request://` URLs and routes the file to your desktop.
-
-`window.fetch`
-HTTP requests from a sandboxed iframe, via a network proxy. I ran `GET https://httpbin.org/get` this morning with zero CORS issues.
-
-`window.open`
-Link clicks and programmatic navigation both work. The inject-script intercepts and opens in the parent frame.
-
-I packaged all 5 into an interactive demo and published it: `@alistigo/artifact-claude-capabilities-demo`. One script tag, no build step, no account. Paste the config into any Claude conversation and every API becomes interactive immediately.
-
-Which one would you reach for first?
-
-(npm + CDN link in the first comment)
-
-<!-- Draft notes (rewrite pass — repositioned as post 2 of the origin-story arc)
-- Formula: F9 Curiosity-Gap Teaser, adapted to open on a callback rather than a cold
-  pitch. Goal: comments.
-- ~252 words / ~1,610 chars. No em/en dash, no double dash, no curly quotes. Clean on
+<!-- Draft notes (rewrite pass 2 — shortened, capability detail cut to one line)
+- Formula: F9 Curiosity-Gap Teaser. Goal: clicks to the first-comment link, not a
+  detailed capability breakdown — the per-API paragraphs from rewrite pass 1 are
+  gone, replaced with a single terse list line.
+- ~55 words / ~370 chars. No em/en dash, no double dash, no curly quotes. Clean on
   the AI-vocab and phrase blacklists ("game-changing", "seamless", "deep dive", etc.
   all absent).
 - This post now takes the post-2 slot in the arc: (1) discovery/insight (family tree,
@@ -63,8 +43,9 @@ Which one would you reach for first?
 - No fabricated numbers beyond what's real: 5 APIs is an accurate count of what the
   inject-script exposes; the httpbin call is a real, repeatable test.
 - Attachment: none planned — text carries this one.
-- Outbound links: npm + CDN link goes in the first comment, not the body, to avoid
-  the reach penalty.
+- Outbound links: first comment carries two things now — the npm/CDN link and the
+  live published-artifact demo link — not the body, to avoid the reach penalty.
+  The "Live demo link is in the first comment" line is the CTA doing the pushing.
 - Posting window: a few days after post 1 (not same day), Tue/Wed/Thu 7:30-9:00 AM
   local, per algorithm-heuristics.md.
 - Publora auto-post path intentionally not invoked — draft only, human posts manually.
