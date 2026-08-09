@@ -9,17 +9,22 @@ attachment:
 
 I built a demo of everything Claude's artifact sandbox can actually do.
 
-Storage that persists across sessions. Calling Claude from inside the artifact itself. Real file downloads. Live network requests, no CORS drama. Even navigation.
+Storage that persists across sessions. Calling Claude from inside the artifact itself. Real file downloads. Live network requests, no CORS drama. Even navigation. Five APIs Claude injects into every artifact iframe, all in one interactive UI.
 
-Packaged it as `@alistigo/artifact-claude-capabilities-demo` on npm — one script tag, no build step.
+It ships two ways. `@alistigo/artifact-claude-capabilities-demo` is the artifact itself: one script tag, no build step. `@alistigo/artifact-claude-capabilities-demo-skill` is an agent skill that teaches Claude when and how to build it, so you can just ask for the demo and it appears.
 
-Live demo link is in the first comment. Which one would you reach for first?
+Live demo link is in the first comment. Which capability would you reach for first?
 
-<!-- Draft notes (rewrite pass 2 — shortened, capability detail cut to one line)
-- Formula: F9 Curiosity-Gap Teaser. Goal: clicks to the first-comment link, not a
-  detailed capability breakdown — the per-API paragraphs from rewrite pass 1 are
-  gone, replaced with a single terse list line.
-- ~55 words / ~370 chars. No em/en dash, no double dash, no curly quotes. Clean on
+<!-- Draft notes (rewrite pass 3 — restored some breathing room, added the skill package)
+- Formula: F9 Curiosity-Gap Teaser. Goal: clicks to the first-comment link. Rewrite
+  pass 2 (~55 words) came back "too short" — this pass keeps the compressed capability
+  list from pass 2 (one line, no per-API paragraphs) but gives the two-package split
+  its own paragraph instead of a single clause, and adds the skill package.
+- New in this pass: `@alistigo/artifact-claude-capabilities-demo-skill`, the agent
+  skill that teaches Claude (as an AI, via SKILL.md trigger phrases) when and how to
+  render the demo artifact, so a developer can just ask for it instead of pasting the
+  npm config by hand. Distinct package from the artifact itself, mentioned by name.
+- ~110 words / ~700 chars. No em/en dash, no double dash, no curly quotes. Clean on
   the AI-vocab and phrase blacklists ("game-changing", "seamless", "deep dive", etc.
   all absent).
 - This post now takes the post-2 slot in the arc: (1) discovery/insight (family tree,
