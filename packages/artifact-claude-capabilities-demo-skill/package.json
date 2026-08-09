@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-claude-capabilities-demo-skill",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Alistigo artifact-claude-capabilities-demo agent skill — demonstrates all Claude artifact iframe APIs",
   "license": "MIT",
   "author": {

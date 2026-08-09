@@ -1,3 +1,14 @@
+## 0.1.2 (2026-08-09)
+
+### 🚀 Features
+
+- **artifact-demo:** fix window.fetch scope, add PostMessage Log tab, ADR 0020 ([575f579](https://github.com/alistigo/holos/commit/575f579))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

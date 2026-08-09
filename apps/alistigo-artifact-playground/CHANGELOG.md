@@ -1,3 +1,19 @@
+## 0.2.27 (2026-08-09)
+
+### 🩹 Fixes
+
+- **playground:** fix fetch simulator URL gate, add footer to ArtifactViewPanel ([2bab37b](https://github.com/alistigo/holos/commit/2bab37b))
+- **artifact-demo:** capture blob-request: downloads, add fixture-only fetch simulator ([23e0704](https://github.com/alistigo/holos/commit/23e0704))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.2.1
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 ## 0.2.25 (2026-08-07)

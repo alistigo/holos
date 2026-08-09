@@ -1,3 +1,19 @@
+## 0.2.1 (2026-08-09)
+
+### 🚀 Features
+
+- **artifact-demo:** fix PostMessage Log capture for downloads and links; update About tab ([73c28be](https://github.com/alistigo/holos/commit/73c28be))
+- **artifact-demo:** fix window.fetch scope, add PostMessage Log tab, ADR 0020 ([575f579](https://github.com/alistigo/holos/commit/575f579))
+
+### 🩹 Fixes
+
+- **artifact-demo:** capture blob-request: downloads, add fixture-only fetch simulator ([23e0704](https://github.com/alistigo/holos/commit/23e0704))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.1 (2026-08-07)
 
 ### 🚀 Features
