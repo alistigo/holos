@@ -19,6 +19,7 @@ import { ApiCallsTab } from "./tabs/ApiCallsTab";
 import { ExternalNavigationTab } from "./tabs/ExternalNavigationTab";
 import { FileGenerationTab } from "./tabs/FileGenerationTab";
 import { InjectScriptTab } from "./tabs/InjectScriptTab";
+import { PostMessageLogTab } from "./tabs/PostMessageLogTab";
 import { StorageTab } from "./tabs/StorageTab";
 
 interface AppProps {
@@ -130,6 +131,7 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
         {activeTab === "api-calls" && <ApiCallsTab />}
         {activeTab === "external-navigation" && <ExternalNavigationTab />}
         {activeTab === "inject-script" && <InjectScriptTab />}
+        {activeTab === "post-message-log" && <PostMessageLogTab />}
       </div>
     </div>
   );

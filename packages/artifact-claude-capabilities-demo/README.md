@@ -1,6 +1,6 @@
 # @alistigo/artifact-claude-capabilities-demo
 
-A self-contained Claude artifact that exercises every API Claude injects into artifact iframes. Drop one `<script>` tag into any Claude HTML artifact and get a seven-tab interactive explorer.
+A self-contained Claude artifact that exercises every API Claude injects into artifact iframes. Drop one `<script>` tag into any Claude HTML artifact and get an eight-tab interactive explorer.
 
 ## Why this exists
 
@@ -28,7 +28,12 @@ Two download paths side by side:
 Both paths work in draft mode.
 
 ### API Calls — `window.fetch`
-The inject-script replaces `window.fetch` with a postMessage bridge that proxies HTTP requests through the parent Claude frame. Supports all methods, custom headers, request bodies, and streaming responses via `ReadableStream` chunks. The tab includes ready-made examples for httpbingo.org — basic requests, status codes, delays, and streaming endpoints.
+The inject-script replaces `window.fetch` with a postMessage bridge, but this bridge is a **mediation layer scoped to the Anthropic API** — not a general HTTP client. Only requests to `api.anthropic.com` are forwarded by the parent frame; all other origins are rejected at the network layer regardless of what is listed in the Capabilities domain allowlist (which governs code execution, not artifact fetch).
+
+The tab ships with pre-built examples for common Anthropic API patterns (simple completions, streaming, web search tool), plus two deliberately-blocked examples (httpbingo.org, api.github.com) that demonstrate the failure mode. For external data from arbitrary hosts, use the `web_search` tool via the Anthropic API or an MCP connector — both route through the parent rather than the iframe.
+
+### PostMessage Log — bridge protocol inspector
+Captures and displays every postMessage sent between the artifact iframe and the parent Claude frame in real time. Messages accumulate across all tab switches so you can use Storage, AI, API Calls, or any other tab and then review the full message traffic here. Each entry shows direction (↑ OUT / ↓ IN), timestamp with milliseconds, message type, and the full JSON payload — collapsed by default, click to expand.
 
 ### External Navigation — `window.open` / `<a>` links
 External links (href pointing to a different hostname) and `window.open()` calls are intercepted by the inject-script and forwarded to the parent frame as `openExternal` postMessages. The parent decides whether to open them. Same-origin links pass through normally.
@@ -69,7 +74,7 @@ Pass a config block before the script tag to customise behaviour:
 
 ## Draft mode
 
-The Storage tab requires a published artifact (`window.storage` is unavailable until Claude assigns the artifact a stable identity). All other tabs — AI, File Generation, API Calls, External Navigation, Inject Script, and About — work immediately from a freshly pasted draft.
+The Storage tab requires a published artifact (`window.storage` is unavailable until Claude assigns the artifact a stable identity). All other tabs — AI, File Generation, API Calls, External Navigation, Inject Script, PostMessage Log, and About — work immediately from a freshly pasted draft.
 
 The artifact shows a **Draft** badge in the top-right corner when running unpublished. Clicking it explains why the Storage tab is disabled.
 

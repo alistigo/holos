@@ -7,7 +7,8 @@ export type TabId =
   | "file-generation"
   | "api-calls"
   | "external-navigation"
-  | "inject-script";
+  | "inject-script"
+  | "post-message-log";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "about", label: "About" },
@@ -17,6 +18,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "api-calls", label: "API Calls" },
   { id: "external-navigation", label: "External Navigation" },
   { id: "inject-script", label: "Inject Script" },
+  { id: "post-message-log", label: "PostMessage Log" },
 ];
 
 interface TabsProps {
