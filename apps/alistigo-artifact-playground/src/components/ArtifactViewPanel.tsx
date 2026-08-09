@@ -104,6 +104,24 @@ export function ArtifactViewPanel({
         {activeTab === "document" && <JsonPanel json={docJson} />}
         {activeTab === "ai-api" && <AiApiTab iframeRef={iframeRef} apiDefinition={apiDefinition} />}
       </div>
+
+      {/* Footer */}
+      <div className="shrink-0 border-t border-gray-100 px-3 py-1.5 bg-gray-50">
+        <p className="text-[10px] text-gray-400">
+          Built with the{" "}
+          <span className="font-medium text-gray-500">alistigo framework for artifacts</span>. The
+          full source — framework, plugins, and this demo — is available at{" "}
+          <a
+            href="https://github.com/alistigo/holos"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:underline"
+          >
+            github.com/alistigo/holos
+          </a>
+          . Open source and free to use.
+        </p>
+      </div>
     </div>
   );
 }

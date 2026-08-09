@@ -81,15 +81,18 @@ export function useProxyFetchSimulator(
     function proxyFetch(event: MessageEvent, win: Window): void {
       const { id, url, init, channelId } = event.data as {
         id: string;
-        url: string;
+        url: unknown;
         init: RequestInit;
         channelId: string;
       };
 
+      // Normalize: inject-script may pass a URL object or string
+      const urlStr = String(url);
+
       setLogs((prev) => [
         {
           id,
-          url,
+          url: urlStr,
           method: String(init.method ?? "GET"),
           status: "pending",
           timestamp: Date.now(),
@@ -97,34 +100,33 @@ export function useProxyFetchSimulator(
         ...prev,
       ]);
 
-      if (!url.startsWith(`${ANTHROPIC_ORIGIN}/`)) {
+      if (urlStr.startsWith(`${ANTHROPIC_ORIGIN}/`)) {
+        const streaming = isStreamingRequest(init);
+        const body = streaming ? buildStreamingFixture() : buildNonStreamingFixture();
+        const contentType = streaming ? "text/event-stream" : "application/json";
+
+        win.postMessage(
+          {
+            type: "proxyFetchResponse",
+            id,
+            status: 200,
+            statusText: "OK",
+            headers: { "content-type": contentType },
+          },
+          "*",
+        );
+        setLogs((prev) =>
+          prev.map((e) => (e.id === id ? { ...e, status: "done", statusCode: 200 } : e)),
+        );
+
+        const encoded = new TextEncoder().encode(body);
+        win.postMessage({ type: "proxyFetchStream", channelId, chunk: Array.from(encoded) }, "*");
+        win.postMessage({ type: "proxyFetchStream", channelId, done: true }, "*");
+      } else {
         const error = "NetworkError — the playground only forwards requests to api.anthropic.com";
         win.postMessage({ type: "proxyFetchResponse", id, error }, "*");
         setLogs((prev) => prev.map((e) => (e.id === id ? { ...e, status: "error", error } : e)));
-        return;
       }
-
-      const streaming = isStreamingRequest(init);
-      const body = streaming ? buildStreamingFixture() : buildNonStreamingFixture();
-      const contentType = streaming ? "text/event-stream" : "application/json";
-
-      win.postMessage(
-        {
-          type: "proxyFetchResponse",
-          id,
-          status: 200,
-          statusText: "OK",
-          headers: { "content-type": contentType },
-        },
-        "*",
-      );
-      setLogs((prev) =>
-        prev.map((e) => (e.id === id ? { ...e, status: "done", statusCode: 200 } : e)),
-      );
-
-      const encoded = new TextEncoder().encode(body);
-      win.postMessage({ type: "proxyFetchStream", channelId, chunk: Array.from(encoded) }, "*");
-      win.postMessage({ type: "proxyFetchStream", channelId, done: true }, "*");
     }
 
     // fallow-ignore-next-line complexity
