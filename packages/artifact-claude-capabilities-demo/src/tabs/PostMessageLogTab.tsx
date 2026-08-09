@@ -23,49 +23,48 @@ function addEntry(entry: LogEntry): void {
   for (const fn of SUBSCRIBERS) fn();
 }
 
+// fallow-ignore-next-line complexity
+function handleClickCapture(event: MouseEvent): void {
+  const el = event.target;
+  if (!(el instanceof Element)) return;
+  const anchor = el.closest("a");
+  if (!anchor) return;
+
+  const href = anchor.getAttribute("href") ?? "";
+  if (anchor.hasAttribute("download") && (href.startsWith("blob:") || href.startsWith("data:"))) {
+    addEntry({
+      id: crypto.randomUUID(),
+      direction: "out",
+      timestamp: new Date(),
+      messageType: "downloadFile",
+      source: "a[download] click",
+      payload: {
+        type: "downloadFile",
+        filename: anchor.download || null,
+        href: href.startsWith("data:") ? `${href.slice(0, 64)}…` : href,
+      },
+    });
+  } else if (
+    anchor.target === "_blank" &&
+    href &&
+    !href.startsWith("#") &&
+    !href.startsWith("javascript:")
+  ) {
+    addEntry({
+      id: crypto.randomUUID(),
+      direction: "out",
+      timestamp: new Date(),
+      messageType: "openExternal",
+      source: "a[target=_blank] click",
+      payload: { type: "openExternal", href },
+    });
+  }
+}
+
 // Capture download and link-based navigation clicks at module load — before any user
 // interaction and before initCapture runs. The inject-script sends these via a captured
 // realParent reference (not wrappable), so DOM click interception is the only hook.
-document.addEventListener(
-  "click",
-  (event) => {
-    const el = event.target;
-    if (!(el instanceof Element)) return;
-    const anchor = el.closest("a");
-    if (!anchor) return;
-
-    const href = anchor.getAttribute("href") ?? "";
-    if (anchor.hasAttribute("download") && (href.startsWith("blob:") || href.startsWith("data:"))) {
-      addEntry({
-        id: crypto.randomUUID(),
-        direction: "out",
-        timestamp: new Date(),
-        messageType: "downloadFile",
-        source: "a[download] click",
-        payload: {
-          type: "downloadFile",
-          filename: anchor.download || null,
-          href: href.startsWith("data:") ? `${href.slice(0, 64)}…` : href,
-        },
-      });
-    } else if (
-      anchor.target === "_blank" &&
-      href &&
-      !href.startsWith("#") &&
-      !href.startsWith("javascript:")
-    ) {
-      addEntry({
-        id: crypto.randomUUID(),
-        direction: "out",
-        timestamp: new Date(),
-        messageType: "openExternal",
-        source: "a[target=_blank] click",
-        payload: { type: "openExternal", href },
-      });
-    }
-  },
-  true,
-);
+document.addEventListener("click", handleClickCapture, true);
 
 type WindowWithClaudeApis = typeof window & {
   claude?: { complete: (prompt: string) => Promise<string> };
