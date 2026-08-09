@@ -192,9 +192,12 @@ function FetchSubTab({
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
-      <div className="shrink-0 px-3 py-2 border-b border-gray-100 bg-blue-50">
-        <p className="text-xs text-blue-700">
-          Proxied via the playground page and subject to CORS restrictions.
+      <div className="shrink-0 px-3 py-2 border-b border-gray-100 bg-amber-50">
+        <p className="text-xs text-amber-700">
+          <strong>Restriction:</strong> Only{" "}
+          <code className="rounded bg-amber-100 px-0.5">api.anthropic.com</code> requests are
+          forwarded — all other origins return a NetworkError, matching Claude's production
+          behavior. Responses are fixture data; the real Anthropic API is not called.
         </p>
       </div>
       <LogHeader count={logs.length} onClear={onClearLogs} />

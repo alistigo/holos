@@ -31,7 +31,10 @@ function handleClickCapture(event: MouseEvent): void {
   if (!anchor) return;
 
   const href = anchor.getAttribute("href") ?? "";
-  if (anchor.hasAttribute("download") && (href.startsWith("blob:") || href.startsWith("data:"))) {
+  if (
+    anchor.hasAttribute("download") &&
+    (href.startsWith("blob:") || href.startsWith("blob-request:") || href.startsWith("data:"))
+  ) {
     addEntry({
       id: crypto.randomUUID(),
       direction: "out",
