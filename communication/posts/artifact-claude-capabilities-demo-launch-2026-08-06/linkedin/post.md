@@ -7,13 +7,15 @@ url:
 attachment:
 ---
 
-I built a demo of everything Claude's artifact sandbox can actually do.
+I built a demo of everything Claude's artifact can actually do.
 
-Storage that persists across sessions. Calling Claude from inside the artifact itself. Real file downloads. Live network requests, no CORS drama. Even navigation. Five APIs Claude injects into every artifact iframe, all in one interactive UI.
+Storage that persists across sessions. Calling Claude from inside the artifact itself. Real file downloads. Even navigation. All APIs Claude injects into every artifact iframe, in one interactive UI.
 
-It ships two ways. `@alistigo/artifact-claude-capabilities-demo` is the artifact itself: one script tag, no build step. `@alistigo/artifact-claude-capabilities-demo-skill` is an agent skill that teaches Claude when and how to build it, so you can just ask for the demo and it appears.
+It ships two ways. `@alistigo/artifact-claude-capabilities-demo` is the artifact itself: one script tag and that's it, it loads itself, everything is included in the package.
 
-Live demo link is in the first comment. Which capability would you reach for first?
+And `@alistigo/artifact-claude-capabilities-demo-skill` is an agent skill that teaches Claude when and how to build it, so you can just ask for the demo and it appears.
+
+Live demo link is in the first comment. Which capability do you find the most useful?
 
 <!-- Draft notes (rewrite pass 3 — restored some breathing room, added the skill package)
 - Formula: F9 Curiosity-Gap Teaser. Goal: clicks to the first-comment link. Rewrite
@@ -27,6 +29,12 @@ Live demo link is in the first comment. Which capability would you reach for fir
 - ~110 words / ~700 chars. No em/en dash, no double dash, no curly quotes. Clean on
   the AI-vocab and phrase blacklists ("game-changing", "seamless", "deep dive", etc.
   all absent).
+- Rewrite pass 4 (manual edit by the author): split the two-package paragraph into
+  two short ones, dropped the explicit "Five APIs" count in favor of "All APIs"
+  (also dropped the `window.fetch`/CORS line from the capability list), and tightened
+  the closer to "which capability do you find the most useful". Fixed a run-on
+  sentence in the artifact-package line and a typo ("usefull" -> "useful") on
+  review before push. ~106 words after fixes.
 - This post now takes the post-2 slot in the arc: (1) discovery/insight (family tree,
   published), (2) this post — opened the dev tools, found 5 live artifact APIs, built
   and shared an interactive demo covering all of them, (3) next up — a real small app
