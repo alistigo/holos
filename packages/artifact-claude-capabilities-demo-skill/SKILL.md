@@ -149,11 +149,36 @@ detail modal. The other seven tabs are fully functional in both draft and publis
 - **Work outside a Claude artifact** — all APIs are injected by the Claude iframe bridge and
   are not available in a plain browser tab
 
-## NPM
+## Embed — the only thing needed
 
-```
-@alistigo/artifact-claude-capabilities-demo
+The artifact ships with a built-in loading and error UI. **Do not add any loading overlay,
+spinner, or `#loader-status` div** — the bundle handles all of that itself.
+
+The complete embed is a single script tag:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-claude-capabilities-demo@0/dist/index.umd.js"></script>
 ```
 
-Published on npm. Paste the jsDelivr CDN script tag into a Claude artifact to demo all eight
-Claude iframe APIs without leaving the conversation.
+That is the entire artifact. Nothing else is required.
+
+## Config (optional)
+
+A config block is only needed when you want to override defaults. If you have no overrides,
+omit it entirely — the artifact runs fine without it.
+
+```html
+<!-- Only include this when you actually need to set a field -->
+<script id="alistigo-config" type="application/json">
+{
+  "app": "@alistigo/artifact-claude-capabilities-demo",
+  "prefix": "myapp:"
+}
+</script>
+```
+
+## Rules for AI-generated artifacts
+
+- **One script tag. That's it.** No `<div>` wrappers, no loading divs, no `onload`/`onerror` handlers, no inline CSS for spinners.
+- **Do not add a loading layer.** The bundle includes its own loading and error states. Adding one outside creates a double-loading flash.
+- **Config is optional.** Only emit the `<script id="alistigo-config">` block when you need to pass `prefix` or another field. Omit it when there are no overrides.
