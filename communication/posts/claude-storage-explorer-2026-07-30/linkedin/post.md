@@ -1,11 +1,21 @@
 ---
-status: draft
+status: superseded
 channel: linkedin
 createdAt: 2026-07-30
 publishedAt:
 url:
 attachment:
 ---
+
+<!-- SUPERSEDED 2026-08-09: `@alistigo/artifact-storage-explorer` (window.storage only)
+was expanded into `@alistigo/artifact-claude-capabilities-demo`, covering all 5
+inject-script APIs (storage, window.claude.complete, blob download, fetch, window.open).
+This draft is not being published on its own — see
+posts/artifact-claude-capabilities-demo-launch-2026-08-06/linkedin/post.md, which is
+now positioned as post 2 of the origin-story arc. Kept here for reference, not deleted. -->
+
+<!-- Original draft body below, unchanged -->
+
 
 I got curious about what's actually inside the Claude artifact sandbox.
 
