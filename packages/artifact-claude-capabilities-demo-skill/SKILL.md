@@ -41,30 +41,6 @@ developer wants to explore, debug, or demonstrate any of the APIs Claude injects
 iframes: `window.storage`, `window.claude.complete`, `URL.createObjectURL`, `window.fetch`, or
 `window.open`. Also shows the raw postMessage bridge traffic in the PostMessage Log tab.
 
-## Config fields
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `prefix` | `string` | `""` | Filter Storage tab keys to those starting with this prefix |
-| `container` | `string` | auto-created `<div>` | CSS selector for an existing mount target |
-
-## Minimal config
-
-```json
-{
-  "app": "@alistigo/artifact-claude-capabilities-demo"
-}
-```
-
-## Config with options
-
-```json
-{
-  "app": "@alistigo/artifact-claude-capabilities-demo",
-  "prefix": "myapp:"
-}
-```
-
 ## Tab descriptions
 
 ### About
@@ -149,33 +125,36 @@ detail modal. The other seven tabs are fully functional in both draft and publis
 - **Work outside a Claude artifact** — all APIs are injected by the Claude iframe bridge and
   are not available in a plain browser tab
 
-## Embed — the only thing needed
+## Usage
 
-The artifact ships with a built-in loading and error UI. **Do not add any loading overlay,
-spinner, or `#loader-status` div** — the bundle handles all of that itself.
-
-The complete embed is a single script tag:
+Paste into a Claude HTML artifact:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-claude-capabilities-demo@0/dist/index.umd.js"></script>
 ```
 
-That is the entire artifact. Nothing else is required.
+The artifact mounts itself to a full-height container it creates in `<body>`.
 
-## Config (optional)
+## Configuration
 
-A config block is only needed when you want to override defaults. If you have no overrides,
-omit it entirely — the artifact runs fine without it.
+Pass a config block **before** the script tag to customise behaviour:
 
 ```html
-<!-- Only include this when you actually need to set a field -->
 <script id="alistigo-config" type="application/json">
-{
-  "app": "@alistigo/artifact-claude-capabilities-demo",
-  "prefix": "myapp:"
-}
+  {
+    "app": "@alistigo/artifact-claude-capabilities-demo",
+    "prefix": "myapp:"
+  }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-claude-capabilities-demo@0/dist/index.umd.js"></script>
 ```
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prefix` | `string` | `""` | Filter Storage tab keys to those starting with this prefix |
+| `container` | `string` | auto-created `<div>` | CSS selector for an existing mount target |
+
+A config block is only needed when you want to override defaults. Omit it entirely when there are no overrides — the artifact runs fine without it.
 
 ## Rules for AI-generated artifacts
 
