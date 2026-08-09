@@ -36,10 +36,29 @@ triggers:
 
 ## When to use
 
-Renders an demo artifact that showcases every Claude artifact API. Use it whenever a
+Renders a demo artifact that showcases every Claude artifact API. Use it whenever a
 developer wants to explore, debug, or demonstrate any of the APIs Claude injects into artifact
 iframes: `window.storage`, `window.claude.complete`, `URL.createObjectURL`, `window.fetch`, or
-`window.open`.
+`window.open`. Also logs raw postMessage bridge traffic in a PostMessage Log tab.
+
+## Tabs
+
+`About` · `Storage` · `AI` · `File Generation` · `API Calls` · `External Navigation` ·
+`Inject Script` · `PostMessage Log`
+
+- **Storage** — browse/edit `window.storage` keys; write-blocked in draft/preview mode (every other tab works normally in draft).
+- **AI** — prompt box calling `window.claude.complete`.
+- **File Generation** — downloads via `URL.createObjectURL`.
+- **API Calls** — `window.fetch` proxy scoped to `api.anthropic.com` only, not a general HTTP proxy.
+- **External Navigation** — link/`window.open` interception routed through the parent frame.
+- **Inject Script** — shows Claude's inject-script source.
+- **PostMessage Log** — live log of iframe↔parent postMessage traffic.
+
+## Limits
+
+- No bulk storage-key delete — individual keys only
+- `fetch` is scoped to `api.anthropic.com` — use `web_search`/MCP connectors for other origins
+- Only works inside a Claude artifact iframe, not a plain browser tab
 
 ## Usage
 
