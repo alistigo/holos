@@ -1,11 +1,22 @@
 ---
-status: draft
+status: shelved
 channel: linkedin
 createdAt: 2026-07-29
 publishedAt:
 url:
 attachment:
 ---
+
+<!-- SHELVED 2026-08-09: no longer in the post-2 slot of the origin-story arc.
+Post 2 is now posts/artifact-claude-capabilities-demo-launch-2026-08-06/linkedin/post.md
+("I built something to test all of Claude's artifact capabilities and shared it with
+the community") — a more logical follow-up to post 1 than this narrower dev-tools +
+to-do-list-skill test. This draft's "opened the dev tools" beat was folded into that
+post's second paragraph so the detail isn't lost. Kept here for reference / possible
+reuse, not deleted. -->
+
+<!-- Original draft body below, unchanged -->
+
 
 Last time, Claude built me a family tree inside a chat window, live, while I was cleaning up genealogical research. This time I did something else. I opened the dev tools to see how it was actually building it.
 
