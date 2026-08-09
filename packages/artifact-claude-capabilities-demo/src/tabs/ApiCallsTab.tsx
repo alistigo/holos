@@ -29,47 +29,79 @@ type Example = {
   url: string;
   body?: string;
   extraHeaders?: Record<string, string>;
+  blocked?: boolean;
 };
 
-const BASE = "https://httpbingo.org";
+const ANTHROPIC_BASE = "https://api.anthropic.com/v1";
 
 const EXAMPLES: { group: string; items: Example[] }[] = [
   {
-    group: "Basic",
+    group: "Anthropic API (window.fetch proxy)",
     items: [
-      { label: "GET request info", method: "GET", url: `${BASE}/get` },
-      { label: "Origin IP", method: "GET", url: `${BASE}/ip` },
-      { label: "Random UUID", method: "GET", url: `${BASE}/uuid` },
-      { label: "Inspect headers", method: "GET", url: `${BASE}/headers` },
       {
-        label: "Echo POST body",
+        label: "Simple completion",
         method: "POST",
-        url: `${BASE}/anything`,
-        body: '{"hello":"world"}',
-        extraHeaders: { "Content-Type": "application/json" },
+        url: `${ANTHROPIC_BASE}/messages`,
+        extraHeaders: { "Content-Type": "application/json", "anthropic-version": "2023-06-01" },
+        body: JSON.stringify(
+          {
+            model: "claude-haiku-4-5-20251001",
+            max_tokens: 64,
+            messages: [{ role: "user", content: "Reply with exactly: hello from the artifact" }],
+          },
+          null,
+          2,
+        ),
       },
-    ],
-  },
-  {
-    group: "Status & delay",
-    items: [
-      { label: "200 OK", method: "GET", url: `${BASE}/status/200` },
-      { label: "404 Not Found", method: "GET", url: `${BASE}/status/404` },
-      { label: "500 Server Error", method: "GET", url: `${BASE}/status/500` },
-      { label: "Delay 2 seconds", method: "GET", url: `${BASE}/delay/2` },
-    ],
-  },
-  {
-    group: "Streaming",
-    items: [
-      { label: "Stream 10 JSON lines", method: "GET", url: `${BASE}/stream/10` },
       {
-        label: "Drip 200 bytes over 4s",
-        method: "GET",
-        url: `${BASE}/drip?numbytes=200&duration=4`,
+        label: "Streaming completion",
+        method: "POST",
+        url: `${ANTHROPIC_BASE}/messages`,
+        extraHeaders: { "Content-Type": "application/json", "anthropic-version": "2023-06-01" },
+        body: JSON.stringify(
+          {
+            model: "claude-haiku-4-5-20251001",
+            max_tokens: 128,
+            stream: true,
+            messages: [{ role: "user", content: "Count from 1 to 10, one number per line." }],
+          },
+          null,
+          2,
+        ),
       },
-      { label: "Server-sent events / 5s", method: "GET", url: `${BASE}/sse?duration=5s` },
-      { label: "JSONL 8 lines / 3s", method: "GET", url: `${BASE}/jsonl?count=8&duration=3s` },
+      {
+        label: "Web search tool",
+        method: "POST",
+        url: `${ANTHROPIC_BASE}/messages`,
+        extraHeaders: { "Content-Type": "application/json", "anthropic-version": "2023-06-01" },
+        body: JSON.stringify(
+          {
+            model: "claude-haiku-4-5-20251001",
+            max_tokens: 512,
+            tools: [{ type: "web_search_20250305", name: "web_search" }],
+            messages: [{ role: "user", content: "What is today's date?" }],
+          },
+          null,
+          2,
+        ),
+      },
+    ],
+  },
+  {
+    group: "Blocked origins (CSP demo)",
+    items: [
+      {
+        label: "httpbingo.org — blocked",
+        method: "GET",
+        url: "https://httpbingo.org/get",
+        blocked: true,
+      },
+      {
+        label: "api.github.com — blocked",
+        method: "GET",
+        url: "https://api.github.com",
+        blocked: true,
+      },
     ],
   },
 ];
@@ -105,10 +137,23 @@ function Spinner(): JSX.Element {
 
 // fallow-ignore-next-line complexity
 export function ApiCallsTab(): JSX.Element {
-  const [url, setUrl] = useState(`${BASE}/get`);
-  const [method, setMethod] = useState<HttpMethod>("GET");
-  const [headers, setHeaders] = useState<{ id: string; key: string; value: string }[]>([]);
-  const [body, setBody] = useState("");
+  const [url, setUrl] = useState(`${ANTHROPIC_BASE}/messages`);
+  const [method, setMethod] = useState<HttpMethod>("POST");
+  const [headers, setHeaders] = useState<{ id: string; key: string; value: string }[]>([
+    { id: crypto.randomUUID(), key: "Content-Type", value: "application/json" },
+    { id: crypto.randomUUID(), key: "anthropic-version", value: "2023-06-01" },
+  ]);
+  const [body, setBody] = useState(
+    JSON.stringify(
+      {
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 64,
+        messages: [{ role: "user", content: "Reply with exactly: hello from the artifact" }],
+      },
+      null,
+      2,
+    ),
+  );
   const [entries, setEntries] = useState<CallEntry[]>([]);
   const [showExamples, setShowExamples] = useState(true);
 
@@ -214,6 +259,17 @@ export function ApiCallsTab(): JSX.Element {
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
+      {/* Scope notice */}
+      <div className="shrink-0 border-b border-amber-200 bg-amber-50 px-4 py-2 text-xs text-amber-800">
+        <strong>Scope:</strong> The inject-script's{" "}
+        <code className="rounded bg-amber-100 px-0.5">window.fetch</code> proxy is a mediation
+        layer, not a general HTTP client. Only{" "}
+        <code className="rounded bg-amber-100 px-0.5">api.anthropic.com</code> calls are forwarded
+        by the parent frame — all other origins fail at the network layer. External data from
+        arbitrary hosts requires the <code className="rounded bg-amber-100 px-0.5">web_search</code>{" "}
+        tool or MCP connectors instead.
+      </div>
+
       {/* Examples panel */}
       <div className="shrink-0 border-b border-gray-200">
         <button
@@ -234,10 +290,10 @@ export function ApiCallsTab(): JSX.Element {
                 <div className="space-y-0.5">
                   {group.items.map((ex) => (
                     <button
-                      key={ex.url}
+                      key={`${ex.method}-${ex.url}-${ex.label}`}
                       type="button"
                       onClick={() => applyExample(ex)}
-                      className="flex w-full items-center gap-2 rounded px-2 py-1 text-xs text-left hover:bg-blue-50"
+                      className={`flex w-full items-center gap-2 rounded px-2 py-1 text-xs text-left hover:bg-blue-50 ${ex.blocked ? "opacity-60" : ""}`}
                     >
                       <span
                         className={`w-11 shrink-0 font-mono font-semibold ${METHOD_COLOR[ex.method]}`}
@@ -245,6 +301,11 @@ export function ApiCallsTab(): JSX.Element {
                         {ex.method}
                       </span>
                       <span className="truncate text-gray-700">{ex.label}</span>
+                      {ex.blocked && (
+                        <span className="ml-auto shrink-0 rounded bg-red-100 px-1 text-[10px] font-semibold text-red-600">
+                          fails
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>

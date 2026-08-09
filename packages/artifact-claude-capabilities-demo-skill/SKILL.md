@@ -4,7 +4,7 @@ app: "@alistigo/artifact-claude-capabilities-demo"
 description: >
   Use this when a developer asks to demo, explore, or inspect Claude artifact iframe APIs.
   Renders a tabbed UI demonstrating storage, AI completions, file download, network proxy,
-  and external navigation — all inside a Claude artifact.
+  external navigation, and postMessage bridge inspection — all inside a Claude artifact.
 triggers:
   - "explore storage"
   - "inspect claude storage"
@@ -27,23 +27,26 @@ triggers:
   - "test window.fetch in artifact"
   - "artifact external links"
   - "window.open in artifact"
+  - "postmessage log"
+  - "inspect postmessage"
+  - "artifact bridge traffic"
 ---
 
 # @alistigo/artifact-claude-capabilities-demo — AI usage guide
 
 ## When to use
 
-Renders a five-tab demo artifact that showcases every Claude iframe API. Use it whenever a
+Renders an eight-tab demo artifact that showcases every Claude iframe API. Use it whenever a
 developer wants to explore, debug, or demonstrate any of the APIs Claude injects into artifact
 iframes: `window.storage`, `window.claude.complete`, `URL.createObjectURL`, `window.fetch`, or
-`window.open`.
+`window.open`. Also shows the raw postMessage bridge traffic in the PostMessage Log tab.
 
 ## Config fields
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prefix` | `string` | `""` | Filter Storage tab keys to those starting with this prefix |
-| `defaultTab` | `string` | `"storage"` | Which tab opens first (`"storage"`, `"ai"`, `"file-generation"`, `"api-calls"`, `"external-navigation"`) |
+| `container` | `string` | auto-created `<div>` | CSS selector for an existing mount target |
 
 ## Minimal config
 
@@ -58,12 +61,15 @@ iframes: `window.storage`, `window.claude.complete`, `URL.createObjectURL`, `win
 ```json
 {
   "app": "@alistigo/artifact-claude-capabilities-demo",
-  "prefix": "myapp:",
-  "defaultTab": "ai"
+  "prefix": "myapp:"
 }
 ```
 
 ## Tab descriptions
+
+### About
+Default landing tab. Capability overview: what each tab does, usage snippet, and an explanation
+of the inject-script.
 
 ### Storage (`window.storage`)
 
@@ -73,7 +79,7 @@ allows clicking any key to view/edit its JSON value (auto-saved after 1 s), crea
 and delete individual keys.
 
 In **draft mode** this tab is overlaid — `window.storage` is version-siloed and write-blocked
-in the AI preview panel. The other four tabs work normally in draft.
+in the AI preview panel. The other tabs work normally in draft.
 
 ### AI (`window.claude.complete`)
 
@@ -90,10 +96,16 @@ routes the download through the parent frame.
 
 ### API Calls (`window.fetch`)
 
-Form with URL, method (GET/POST/PUT/DELETE/PATCH), optional key-value headers, and a body
-textarea (shown for non-GET methods). Submitting calls `fetch(url, { method, headers, body })`
-via the Claude network proxy. A call history shows pending (spinner), result (status code +
-truncated body), or error rows. Pre-filled with `https://httpbin.org/get` for instant demo use.
+The inject-script replaces `window.fetch` with a postMessage bridge, but this bridge is scoped
+to the Anthropic API only — it is not a general HTTP proxy. Only `api.anthropic.com` requests
+are forwarded; all other origins are rejected at the network layer.
+
+The tab ships pre-filled with working Anthropic API examples (simple completions, streaming,
+web search tool) and two deliberately-blocked examples (httpbingo.org, api.github.com) that
+show the failure mode. Form with URL, method, optional key-value headers, and a body textarea.
+
+For external data from arbitrary origins: use the `web_search` tool via the Anthropic API, or
+an MCP connector — both route through the parent frame rather than the iframe.
 
 ### External Navigation (`<a>` + `window.open`)
 
@@ -102,17 +114,39 @@ to demonstrate link interception. Also includes a URL input + "Open in new tab" 
 calls `window.open(url)`. Both paths route through the inject-script to open in the parent frame,
 working around the iframe sandbox restriction on navigation.
 
+### Inject Script
+Shows the full source of Claude's inject-script with JavaScript syntax highlighting. Includes
+an explanation of what each section does.
+
+> **Note:** Claude hides this script from the artifact's source tab inside the Claude UI. It is
+> not user-visible code — it is infrastructure that Claude always injects before your artifact HTML.
+
+### PostMessage Log
+Captures all postMessage traffic between the iframe and the parent Claude frame in real time.
+Messages accumulate regardless of which tab is active, so you can use other tabs and review
+the full bridge protocol here afterwards.
+
+- **↑ OUT** (blue) — messages sent to the parent (proxied by wrapping the high-level APIs)
+- **↓ IN** (green) — messages received from the parent (captured in the event listener capture phase)
+
+Each entry shows: direction badge, timestamp with milliseconds, message type, and full JSON
+payload. Collapsed by default — click to expand and see the full payload plus ISO timestamp.
+The inject-script's `realParent` is a closed-over reference, so outgoing messages are captured
+by wrapping `window.fetch`, `window.storage.*`, `window.claude.complete`, and `window.open`
+rather than by patching `window.parent.postMessage` (which is already captured by the script).
+
 ## Draft mode behavior
 
 Only the **Storage tab** is blocked in draft mode. The overlay explains why and links to the
-detail modal. The other four tabs (`ai`, `file-generation`, `api-calls`, `external-navigation`)
-are fully functional in both draft and published mode. A `DraftBadge` in the context menu
-header remains visible on all tabs as a reminder.
+detail modal. The other seven tabs are fully functional in both draft and published mode. A
+`DraftBadge` in the context menu header remains visible on all tabs as a reminder.
 
 ## What this artifact cannot do
 
 - **Bulk delete storage keys** — only individual key deletion is supported
-- **Work outside a Claude artifact** — all five APIs are injected by the Claude iframe bridge and
+- **Fetch arbitrary external APIs** — `window.fetch` is scoped to `api.anthropic.com` only;
+  use the `web_search` tool or MCP connectors for other origins
+- **Work outside a Claude artifact** — all APIs are injected by the Claude iframe bridge and
   are not available in a plain browser tab
 
 ## NPM
@@ -121,5 +155,5 @@ header remains visible on all tabs as a reminder.
 @alistigo/artifact-claude-capabilities-demo
 ```
 
-Published on npm. Paste the jsDelivr CDN script tag into a Claude artifact to demo all five
+Published on npm. Paste the jsDelivr CDN script tag into a Claude artifact to demo all eight
 Claude iframe APIs without leaving the conversation.

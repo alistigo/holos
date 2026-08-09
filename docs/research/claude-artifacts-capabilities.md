@@ -64,7 +64,7 @@ In React artifacts, only **core utility classes** from the pre-defined base styl
 
 ## `connect-src` — fetch() / XHR Targets
 
-Only these origins can be reached from artifact JS:
+Only these origins can be reached from **native** artifact JS (direct `XMLHttpRequest` or native `fetch` not replaced by the inject-script):
 
 ```
 https://cdnjs.cloudflare.com
@@ -76,25 +76,48 @@ https://code.jquery.com
 https://www.claudeusercontent.com
 ```
 
-⚠️ **Arbitrary `fetch()` to external APIs is blocked.** For example, `fetch('https://api.github.com/...')` will fail. Only the origins above are reachable.
+⚠️ **Arbitrary native `fetch()` to external APIs is blocked.** For example, `fetch('https://api.github.com/...')` will fail. Only the origins above are reachable by native fetch.
+
+> **Important:** `script-src` and `connect-src` are independent CSP gates. A CDN loading successfully from `cdn.jsdelivr.net` (via `script-src`) says nothing about whether `fetch()` can reach that same origin. Both gates must allow an origin for it to be usable in both contexts.
 
 ---
 
-## Anthropic API (Claude-in-Claude)
+## `window.fetch` (inject-script bridge) — Anthropic API only
 
-Despite `api.anthropic.com` not appearing in `connect-src`, the Claude API works from artifacts — calls are **proxied through `claudeusercontent.com`**, not made directly. No API key needed; auth is injected server-side.
+The inject-script **replaces `window.fetch`** with a postMessage proxy before artifact code runs. This is a separate mechanism from the native CSP `connect-src`. However, the proxy is a **mediation layer, not a general HTTP client** — the parent frame only forwards requests to `api.anthropic.com`. All other origins fail with `NetworkError` even though they are listed in `connect-src` or the Capabilities domain allowlist.
+
+- **The Capabilities domain allowlist** (Settings → Capabilities → Code execution) controls the code-execution sandbox, not artifact iframe network access. Adding a domain there has no effect on artifact `fetch`.
+
+Confirmed via live testing (2026-08-08):
+- `fetch('https://httpbingo.org/get')` → `NetworkError`
+- `fetch('https://api.anthropic.com/v1/messages')` → success
+- See [ADR 0020](../adrs/0020-artifact-fetch-scope.md) for full findings.
+
+### Anthropic API (Claude-in-Claude)
+
+`api.anthropic.com` is reachable via the inject-script proxy. No API key needed; auth is injected server-side by the parent frame.
 
 ```js
 const response = await fetch("https://api.anthropic.com/v1/messages", {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    "anthropic-version": "2023-06-01"
+  },
   body: JSON.stringify({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-haiku-4-5-20251001",
     max_tokens: 1000,
     messages: [{ role: "user", content: "Your prompt here" }]
   })
 });
 ```
+
+### Escape hatches for external data
+
+For external data from arbitrary origins, use one of these approaches — both route through the parent frame rather than requiring direct iframe access:
+
+- **`web_search` tool** — pass `tools: [{ type: "web_search_20250305", name: "web_search" }]` in the Anthropic API call. Claude performs the fetch server-side.
+- **MCP connectors** — a separate bridge channel, not `window.fetch`.
 
 ---
 
@@ -185,8 +208,8 @@ https://logs.browser-intake-us5-datadoghq.com/api/v2/logs?dd-api-key=pub718...
 | `window.storage` | ✅ Persistent, key-value, cross-session |
 | `localStorage` / `sessionStorage` | ❌ Not supported |
 | Own `.html` files | ⚠️ Via paste/copy, not direct mount |
-| Anthropic API (no key needed) | ✅ Proxied via claudeusercontent.com |
-| Arbitrary `fetch` to external APIs | ❌ Blocked by connect-src |
+| Anthropic API via inject-script `window.fetch` | ✅ Proxied via parent frame — no key needed |
+| Arbitrary `fetch` to external APIs | ❌ Blocked — inject-script proxy is Anthropic-API-only |
 | External images via URL | ❌ Blocked (data: and blob: only) |
 | Maps (OpenStreetMap tiles) | ✅ Explicitly allowed |
 | WebRTC | ❌ Explicitly blocked |
