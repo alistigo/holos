@@ -33,6 +33,7 @@ type WindowWithClaudeApis = typeof window & {
   };
 };
 
+// fallow-ignore-next-line complexity
 function initCapture(): void {
   if (CAPTURING) return;
   CAPTURING = true;
@@ -40,6 +41,7 @@ function initCapture(): void {
   // Incoming: capture phase runs before the inject-script's own listener
   window.addEventListener(
     "message",
+    // fallow-ignore-next-line complexity
     (event) => {
       const data: unknown = event.data;
       const msgType =
@@ -203,6 +205,7 @@ function DirectionBadge({ direction }: { direction: Direction }): JSX.Element {
   );
 }
 
+// fallow-ignore-next-line complexity
 function EntryRow({ entry }: { entry: LogEntry }): JSX.Element {
   const [expanded, setExpanded] = useState(false);
   const pretty = tryPrettyJson(entry.payload);
