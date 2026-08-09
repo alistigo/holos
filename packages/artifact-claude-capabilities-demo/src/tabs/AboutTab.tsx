@@ -68,7 +68,8 @@ export function AboutTab(): JSX.Element {
             <Capability
               title="Network proxy — window.fetch"
               badge="API Calls tab"
-              description="The inject-script replaces window.fetch with a postMessage bridge that proxies HTTP requests through the parent Claude frame. Supports all methods, custom headers, request bodies, and streaming responses via ReadableStream chunks. The tab lets you fire requests and watch the response stream in real time using httpbingo.org test endpoints."
+              description="The inject-script replaces window.fetch with a postMessage bridge that forwards HTTP requests to the parent Claude frame. The bridge supports all HTTP methods, custom headers, request bodies, and streaming responses via ReadableStream — but it is a mediation layer, not a general HTTP client. The parent frame only forwards requests to api.anthropic.com; all other origins fail with a NetworkError regardless of CORS headers or Capabilities domain settings. The API Calls tab lets you send requests and watch streaming responses in real time, with two deliberately blocked examples (httpbingo.org, api.github.com) showing the failure mode."
+              note="Anthropic API only — arbitrary fetch to external origins is blocked. For external data, use the web_search tool or MCP connectors instead. Artifacts relying on window.fetch require an active Claude session and cannot be shared fully publicly."
             />
             <Capability
               title="External navigation — window.open / <a> links"
@@ -93,7 +94,7 @@ export function AboutTab(): JSX.Element {
             Inject Script tab
           </p>
           <p className="text-sm text-gray-700">
-            The last tab shows the full source of the bridge script Claude silently prepends to
+            The seventh tab shows the full source of the bridge script Claude silently prepends to
             every artifact before it loads. It patches{" "}
             <code className="rounded bg-gray-100 px-1">window.storage</code>,{" "}
             <code className="rounded bg-gray-100 px-1">window.claude</code>,{" "}
@@ -102,6 +103,44 @@ export function AboutTab(): JSX.Element {
             <code className="rounded bg-gray-100 px-1">URL.createObjectURL</code> as postMessage
             bridges to the parent frame. Claude hides this script from the artifact's source view —
             it does not appear if you inspect the artifact source inside Claude's UI.
+          </p>
+        </div>
+
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+            PostMessage Log tab
+          </p>
+          <p className="text-sm text-gray-700">
+            The last tab captures every postMessage crossing the bridge in real time — both
+            directions. Outgoing messages (artifact → parent) are color-coded blue{" "}
+            <span className="inline rounded bg-blue-100 px-1 font-mono text-[10px] font-semibold text-blue-700">
+              ↑ OUT
+            </span>{" "}
+            and incoming replies (parent → artifact) are green{" "}
+            <span className="inline rounded bg-emerald-100 px-1 font-mono text-[10px] font-semibold text-emerald-700">
+              ↓ IN
+            </span>
+            . Each row shows the message type, timestamp, and API source; click to expand the full
+            JSON payload. The log uses a module-level singleton so messages accumulate regardless of
+            which tab is active — useful for correlating what you triggered in one tab with the raw
+            protocol visible here.
+          </p>
+        </div>
+
+        <div className="border-t border-gray-200 pt-4">
+          <p className="text-xs text-gray-400">
+            Built with the{" "}
+            <span className="font-medium text-gray-500">alistigo framework for artifacts</span>. The
+            full source — framework, plugins, and this demo — is available at{" "}
+            <a
+              href="https://github.com/alistigo/holos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              github.com/alistigo/holos
+            </a>
+            . Open source and free to use.
           </p>
         </div>
       </div>
