@@ -15,6 +15,7 @@ export interface FileUploadFormProps {
   onCancel: () => void;
 }
 
+// fallow-ignore-next-line complexity
 export function FileUploadForm({ onUpload, onCancel }: FileUploadFormProps): JSX.Element {
   const [file, setFile] = useState<File | null>(null);
   const [key, setKey] = useState("");
