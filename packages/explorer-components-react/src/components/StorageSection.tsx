@@ -26,6 +26,8 @@ export interface StorageSectionProps {
 }
 
 const DEBOUNCE_MS = 1000;
+const MAX_TOTAL_MIB = 17;
+const MAX_TOTAL_BYTES = MAX_TOTAL_MIB * 1024 * 1024;
 
 function eid(entry: { key: string; shared: boolean }): string {
   return `${entry.shared ? "s" : "p"}:${entry.key}`;
@@ -69,6 +71,9 @@ export function StorageSection({
   const [editTexts, setEditTexts] = useState<Map<string, string>>(new Map());
   const [invalidIds, setInvalidIds] = useState<Set<string>>(new Set());
   const saveTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
+
+  const totalStoredBytes = entries.reduce((sum, e) => sum + JSON.stringify(e.value).length, 0);
+  const availableBytes = Math.max(0, MAX_TOTAL_BYTES - totalStoredBytes);
 
   const keyListEntries = entries.map((e) => ({
     id: eid(e),
@@ -212,6 +217,7 @@ export function StorageSection({
               onUpload={handleUpload}
               onCreateText={handleCreateText}
               onCancel={() => setShowNewEntryPanel(false)}
+              availableBytes={availableBytes}
             />
           ) : isSelectedFile && selectedEntry !== undefined ? (
             <FileViewer entry={selectedEntry as UnifiedEntry & { value: FileEntry }} />

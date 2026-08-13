@@ -9,7 +9,7 @@ const meta: Meta<typeof FileUploadForm> = {
   args: {
     onUpload: fn(),
     onCancel: fn(),
-    maxPerKeyMb: 5,
+    maxPerKeyMib: 5,
   },
 };
 
@@ -18,7 +18,17 @@ type Story = StoryObj<typeof FileUploadForm>;
 
 export const Default: Story = {};
 
-export const SmallMaxLimit: Story = {
-  args: { maxPerKeyMb: 1 },
-  name: "Tight limit (1 MB)",
+export const TightLimit: Story = {
+  args: { maxPerKeyMib: 1 },
+  name: "Tight limit (1 MiB)",
+};
+
+export const StorageFull: Story = {
+  args: { availableBytes: 0 },
+  name: "Storage full",
+};
+
+export const AlmostFull: Story = {
+  args: { availableBytes: 512 * 1024 },
+  name: "Almost full (512 KiB left)",
 };

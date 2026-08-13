@@ -3,6 +3,9 @@ import { useCallback, useState } from "react";
 import type { FileEntry } from "./FileUploadForm.js";
 import { FileUploadForm } from "./FileUploadForm.js";
 
+const MIB = 1024 * 1024;
+const DEFAULT_MAX_PER_KEY_BYTES = 5 * MIB;
+
 type EntryTab = "file" | "text";
 type TextFormat = "plain" | "json" | "yaml";
 
@@ -11,6 +14,10 @@ export interface NewEntryPanelProps {
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
   onCreateText: (key: string, text: string, shared: boolean) => Promise<void>;
   onCancel: () => void;
+  /** Free bytes remaining before hitting the artifact's total storage cap. */
+  availableBytes?: number;
+  /** Per-key ceiling in bytes. Default: 5 MiB. */
+  maxPerKeyBytes?: number;
 }
 
 function validateJson(text: string): string | null {
@@ -61,12 +68,18 @@ function TabButton({
   );
 }
 
+function formatMib(bytes: number): string {
+  return `${(bytes / MIB).toFixed(2)} MiB`;
+}
+
 // fallow-ignore-next-line complexity
 export function NewEntryPanel({
   existingEntries,
   onUpload,
   onCreateText,
   onCancel,
+  availableBytes,
+  maxPerKeyBytes = DEFAULT_MAX_PER_KEY_BYTES,
 }: NewEntryPanelProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<EntryTab>("file");
   const [shared, setShared] = useState(false);
@@ -77,12 +90,23 @@ export function NewEntryPanel({
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  const isFull = availableBytes !== undefined && availableBytes <= 0;
+
   const textKeyTrimmed = textKey.trim();
   const keyExists = existingEntries.some((e) => e.key === textKeyTrimmed && e.shared === shared);
+
+  const textStoredBytes = new TextEncoder().encode(textContent).length;
+  const isTextOverPerKey = textStoredBytes >= maxPerKeyBytes;
+  const isTextOverSpace =
+    !isFull && availableBytes !== undefined && textStoredBytes > availableBytes;
+
   const canSave =
     textKeyTrimmed !== "" &&
     !keyExists &&
     !isSaving &&
+    !isFull &&
+    !isTextOverPerKey &&
+    !isTextOverSpace &&
     (textFormat !== "json" || jsonError === null);
 
   const handleTextChange = useCallback(
@@ -166,12 +190,23 @@ export function NewEntryPanel({
           onCancel={onCancel}
           externalShared={shared}
           hideHeader
+          {...(availableBytes !== undefined ? { availableBytes } : {})}
         />
       )}
 
       {/* Text document tab */}
       {activeTab === "text" && (
         <div className="flex flex-col flex-1 overflow-hidden p-3 gap-3">
+          {isFull && (
+            <div className="shrink-0 rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-800">
+              <p className="font-semibold mb-0.5">Storage full</p>
+              <p>
+                This artifact has reached its 17 MiB storage limit. Delete existing keys to free
+                space.
+              </p>
+            </div>
+          )}
+
           {/* Key name */}
           <div className="shrink-0">
             <label htmlFor="new-entry-key" className="block text-xs text-gray-500 mb-1">
@@ -226,12 +261,26 @@ export function NewEntryPanel({
               onChange={(e) => handleTextChange(e.target.value)}
               spellCheck={false}
               className={`flex-1 min-h-0 w-full font-mono text-xs leading-relaxed p-2 border rounded resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 bg-gray-50 ${
-                jsonError !== null ? "border-red-300 focus:ring-red-400" : "border-gray-200"
+                jsonError !== null || isTextOverPerKey
+                  ? "border-red-300 focus:ring-red-400"
+                  : "border-gray-200"
               }`}
             />
             {jsonError !== null && (
               <p className="mt-0.5 text-[10px] text-red-600 font-mono shrink-0 truncate">
                 {jsonError}
+              </p>
+            )}
+            {isTextOverPerKey && (
+              <p className="mt-0.5 text-[10px] text-red-600 shrink-0">
+                Content too large — {formatMib(textStoredBytes)} exceeds the{" "}
+                {formatMib(maxPerKeyBytes)} per-key limit.
+              </p>
+            )}
+            {isTextOverSpace && availableBytes !== undefined && (
+              <p className="mt-0.5 text-[10px] text-amber-700 shrink-0">
+                Not enough space — {formatMib(textStoredBytes)} needed, {formatMib(availableBytes)}{" "}
+                available.
               </p>
             )}
           </div>

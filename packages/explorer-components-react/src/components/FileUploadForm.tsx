@@ -1,6 +1,8 @@
 import type { JSX } from "react";
 import { useCallback, useState } from "react";
 
+const MIB = 1024 * 1024;
+
 export interface FileEntry {
   _type: "file";
   name: string;
@@ -13,7 +15,10 @@ export interface FileEntry {
 export interface FileUploadFormProps {
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
   onCancel: () => void;
-  maxPerKeyMb?: number;
+  /** Per-key size ceiling in MiB (exclusive). Default: 5 */
+  maxPerKeyMib?: number;
+  /** Free bytes remaining in the artifact before hitting the 17 MiB total cap. */
+  availableBytes?: number;
   /** When provided, the shared checkbox is hidden and this value is used instead. */
   externalShared?: boolean;
   /** When true, the form header bar is not rendered (use when embedding inside another panel). */
@@ -24,15 +29,16 @@ function estimateStoredBytes(file: File): number {
   return Math.ceil(file.size / 3) * 4 + 200;
 }
 
-function formatMb(bytes: number): string {
-  return (bytes / (1024 * 1024)).toFixed(2);
+function formatMib(bytes: number): string {
+  return `${(bytes / MIB).toFixed(2)} MiB`;
 }
 
 // fallow-ignore-next-line complexity
 export function FileUploadForm({
   onUpload,
   onCancel,
-  maxPerKeyMb = 5,
+  maxPerKeyMib = 5,
+  availableBytes,
   externalShared,
   hideHeader,
 }: FileUploadFormProps): JSX.Element {
@@ -40,20 +46,23 @@ export function FileUploadForm({
   const [key, setKey] = useState("");
   const [internalShared, setInternalShared] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [bypassLimit, setBypassLimit] = useState(false);
 
   const showSharedCheckbox = externalShared === undefined;
 
-  const maxBytes = maxPerKeyMb * 1024 * 1024;
+  const maxPerKeyBytes = maxPerKeyMib * MIB;
   const estimatedBytes = file !== null ? estimateStoredBytes(file) : 0;
-  const isOverLimit = file !== null && estimatedBytes > maxBytes;
+
+  const isFull = availableBytes !== undefined && availableBytes <= 0;
+  const isOverPerKey = file !== null && estimatedBytes >= maxPerKeyBytes;
+  const isOverSpace =
+    !isFull && file !== null && availableBytes !== undefined && estimatedBytes > availableBytes;
+
   const canStore =
-    file !== null && key.trim() !== "" && !isUploading && (!isOverLimit || bypassLimit);
+    file !== null && key.trim() !== "" && !isUploading && !isFull && !isOverPerKey && !isOverSpace;
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0] ?? null;
     setFile(selected);
-    setBypassLimit(false);
     if (selected !== null) {
       setKey((prev) => (prev.trim() === "" ? selected.name : prev));
     }
@@ -81,6 +90,8 @@ export function FileUploadForm({
     reader.readAsDataURL(file);
   }, [file, key, externalShared, internalShared, onUpload, onCancel]);
 
+  const maxSafeFileMib = ((maxPerKeyBytes - 200) * (3 / 4)) / MIB;
+
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
       {!hideHeader && (
@@ -100,6 +111,16 @@ export function FileUploadForm({
       )}
 
       <div className="flex flex-col gap-3 p-3 overflow-auto">
+        {isFull && (
+          <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-800">
+            <p className="font-semibold mb-0.5">Storage full</p>
+            <p>
+              This artifact has reached its {17} MiB storage limit. Delete existing keys to free
+              space before uploading.
+            </p>
+          </div>
+        )}
+
         <div>
           <label htmlFor="file-upload-input" className="block text-xs text-gray-500 mb-1">
             File
@@ -108,41 +129,41 @@ export function FileUploadForm({
             id="file-upload-input"
             type="file"
             onChange={handleFileChange}
-            className="block w-full text-xs text-gray-700 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+            disabled={isFull}
+            className="block w-full text-xs text-gray-700 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           />
           {file !== null && (
             <>
               <p className="mt-1 text-[10px] text-gray-400 font-mono truncate">
-                {file.type || "application/octet-stream"} · {(file.size / 1024).toFixed(1)} KB
+                {file.type || "application/octet-stream"} · {(file.size / 1024).toFixed(1)} KiB
               </p>
               <p className="mt-0.5 text-[10px] text-gray-400 font-mono">
-                ~{formatMb(estimatedBytes)} MB stored (base64 encoded)
+                ~{formatMib(estimatedBytes)} stored (base64 encoded)
               </p>
             </>
           )}
           <p className="mt-1 text-[10px] text-gray-400">
-            Limit: {maxPerKeyMb} MB per key · max safe file ≈{" "}
-            {(((maxBytes - 200) * (3 / 4)) / (1024 * 1024)).toFixed(2)} MB
+            {maxPerKeyMib} MiB/key limit &middot; max safe file ≈ {maxSafeFileMib.toFixed(2)} MiB
           </p>
         </div>
 
-        {isOverLimit && (
-          <div className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+        {isOverPerKey && (
+          <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-800">
             <p className="font-semibold mb-0.5">File too large</p>
             <p>
-              Estimated stored size ~{formatMb(estimatedBytes)} MB exceeds the {maxPerKeyMb} MB
-              per-key limit. Enable &ldquo;Bypass limit&rdquo; below to upload anyway and observe
-              Claude&rsquo;s error.
+              Estimated stored size ~{formatMib(estimatedBytes)} exceeds the {maxPerKeyMib} MiB
+              per-key limit. Choose a smaller file.
             </p>
-            <label className="flex items-center gap-2 mt-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={bypassLimit}
-                onChange={(e) => setBypassLimit(e.target.checked)}
-                className="accent-amber-600"
-              />
-              Bypass {maxPerKeyMb} MB limit (will likely error — for testing only)
-            </label>
+          </div>
+        )}
+
+        {isOverSpace && availableBytes !== undefined && (
+          <div className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            <p className="font-semibold mb-0.5">Not enough space</p>
+            <p>
+              ~{formatMib(estimatedBytes)} needed, only {formatMib(availableBytes)} available.
+              Delete some keys to free space.
+            </p>
           </div>
         )}
 

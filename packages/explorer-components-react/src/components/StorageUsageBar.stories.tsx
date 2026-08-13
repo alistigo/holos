@@ -10,36 +10,49 @@ const meta: Meta<typeof StorageUsageBar> = {
 export default meta;
 type Story = StoryObj<typeof StorageUsageBar>;
 
-const repeat = (n: number): string => "x".repeat(Math.floor(n * 1024 * 1024));
+const mib = (n: number): string => "x".repeat(Math.floor(n * 1024 * 1024));
 
 export const Empty: Story = {
-  args: { entries: [], maxPerKeyMb: 5 },
+  args: { entries: [], maxPerKeyMib: 5, maxTotalMib: 17 },
 };
 
 export const LowUsage: Story = {
   args: {
-    entries: [{ value: { theme: "dark", lang: "en" } }, { value: { text: repeat(0.1) } }],
-    maxPerKeyMb: 5,
+    entries: [{ value: { theme: "dark", lang: "en" } }, { value: { text: mib(0.1) } }],
+    maxPerKeyMib: 5,
+    maxTotalMib: 17,
   },
 };
 
 export const MediumUsage: Story = {
   args: {
-    entries: [{ value: { data: repeat(2) } }, { value: { x: 1 } }],
-    maxPerKeyMb: 5,
+    entries: [{ value: { data: mib(5) } }, { value: { data2: mib(3) } }, { value: { x: 1 } }],
+    maxPerKeyMib: 5,
+    maxTotalMib: 17,
   },
 };
 
 export const NearLimit: Story = {
   args: {
-    entries: [{ value: { data: repeat(4.2) } }, { value: { ok: true } }],
-    maxPerKeyMb: 5,
+    entries: [
+      { value: { data: mib(5) } },
+      { value: { data2: mib(4.9) } },
+      { value: { data3: mib(4.6) } },
+    ],
+    maxPerKeyMib: 5,
+    maxTotalMib: 17,
   },
 };
 
-export const AtLimit: Story = {
+export const Full: Story = {
   args: {
-    entries: [{ value: { data: repeat(5) } }],
-    maxPerKeyMb: 5,
+    entries: [
+      { value: { data: mib(5) } },
+      { value: { data2: mib(5) } },
+      { value: { data3: mib(4.9) } },
+      { value: { data4: mib(2.1) } },
+    ],
+    maxPerKeyMib: 5,
+    maxTotalMib: 17,
   },
 };
