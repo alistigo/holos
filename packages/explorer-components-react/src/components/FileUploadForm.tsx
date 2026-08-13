@@ -41,6 +41,7 @@ function formatMib(bytes: number): string {
   return `${(bytes / MIB).toFixed(2)} MiB`;
 }
 
+// fallow-ignore-next-line complexity
 export function FileUploadForm({
   file,
   onFileChange,

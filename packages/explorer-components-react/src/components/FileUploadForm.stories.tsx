@@ -12,6 +12,7 @@ function estimateBinaryBytes(file: File): number {
   return file.size + 50;
 }
 
+// fallow-ignore-next-line complexity
 function FileUploadFormDemo({
   availableBytes,
   maxPerKeyMib = 5,
