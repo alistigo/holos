@@ -13,18 +13,39 @@ export interface FileEntry {
 export interface FileUploadFormProps {
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
   onCancel: () => void;
+  maxPerKeyMb?: number;
+}
+
+function estimateStoredBytes(file: File): number {
+  return Math.ceil(file.size / 3) * 4 + 200;
+}
+
+function formatMb(bytes: number): string {
+  return (bytes / (1024 * 1024)).toFixed(2);
 }
 
 // fallow-ignore-next-line complexity
-export function FileUploadForm({ onUpload, onCancel }: FileUploadFormProps): JSX.Element {
+export function FileUploadForm({
+  onUpload,
+  onCancel,
+  maxPerKeyMb = 5,
+}: FileUploadFormProps): JSX.Element {
   const [file, setFile] = useState<File | null>(null);
   const [key, setKey] = useState("");
   const [shared, setShared] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [bypassLimit, setBypassLimit] = useState(false);
+
+  const maxBytes = maxPerKeyMb * 1024 * 1024;
+  const estimatedBytes = file !== null ? estimateStoredBytes(file) : 0;
+  const isOverLimit = file !== null && estimatedBytes > maxBytes;
+  const canStore =
+    file !== null && key.trim() !== "" && !isUploading && (!isOverLimit || bypassLimit);
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0] ?? null;
     setFile(selected);
+    setBypassLimit(false);
     if (selected !== null) {
       setKey((prev) => (prev.trim() === "" ? selected.name : prev));
     }
@@ -79,11 +100,40 @@ export function FileUploadForm({ onUpload, onCancel }: FileUploadFormProps): JSX
             className="block w-full text-xs text-gray-700 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
           />
           {file !== null && (
-            <p className="mt-1 text-[10px] text-gray-400 font-mono truncate">
-              {file.type || "application/octet-stream"} · {(file.size / 1024).toFixed(1)} KB
-            </p>
+            <>
+              <p className="mt-1 text-[10px] text-gray-400 font-mono truncate">
+                {file.type || "application/octet-stream"} · {(file.size / 1024).toFixed(1)} KB
+              </p>
+              <p className="mt-0.5 text-[10px] text-gray-400 font-mono">
+                ~{formatMb(estimatedBytes)} MB stored (base64 encoded)
+              </p>
+            </>
           )}
+          <p className="mt-1 text-[10px] text-gray-400">
+            Limit: {maxPerKeyMb} MB per key · max safe file ≈{" "}
+            {(((maxBytes - 200) * (3 / 4)) / (1024 * 1024)).toFixed(2)} MB
+          </p>
         </div>
+
+        {isOverLimit && (
+          <div className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            <p className="font-semibold mb-0.5">File too large</p>
+            <p>
+              Estimated stored size ~{formatMb(estimatedBytes)} MB exceeds the {maxPerKeyMb} MB
+              per-key limit. Enable &ldquo;Bypass limit&rdquo; below to upload anyway and observe
+              Claude&rsquo;s error.
+            </p>
+            <label className="flex items-center gap-2 mt-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={bypassLimit}
+                onChange={(e) => setBypassLimit(e.target.checked)}
+                className="accent-amber-600"
+              />
+              Bypass {maxPerKeyMb} MB limit (will likely error — for testing only)
+            </label>
+          </div>
+        )}
 
         <div>
           <label htmlFor="file-upload-key" className="block text-xs text-gray-500 mb-1">
@@ -114,7 +164,7 @@ export function FileUploadForm({ onUpload, onCancel }: FileUploadFormProps): JSX
           <button
             type="button"
             onClick={handleStore}
-            disabled={file === null || key.trim() === "" || isUploading}
+            disabled={!canStore}
             className="flex-1 text-xs py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium"
           >
             {isUploading ? "Storing…" : "Store"}

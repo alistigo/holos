@@ -10,3 +10,5 @@ export type { StorageExplorerAppProps } from "./components/StorageExplorerApp.js
 export { StorageExplorerApp } from "./components/StorageExplorerApp.js";
 export type { StorageSectionProps, UnifiedEntry } from "./components/StorageSection.js";
 export { StorageSection } from "./components/StorageSection.js";
+export type { StorageUsageBarProps } from "./components/StorageUsageBar.js";
+export { StorageUsageBar } from "./components/StorageUsageBar.js";
