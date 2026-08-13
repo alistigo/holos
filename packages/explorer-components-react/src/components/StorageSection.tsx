@@ -5,8 +5,10 @@ import { FileViewer } from "./FileViewer.js";
 import type { EntryStatus } from "./JsonDocumentViewer.js";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
 import { KeyList } from "./KeyList.js";
+import type { TextDocumentEntry } from "./NewEntryPanel.js";
 import { NewEntryPanel } from "./NewEntryPanel.js";
 import { StorageUsageBar } from "./StorageUsageBar.js";
+import type { TextDocumentFormat } from "./TextDocumentEditor.js";
 
 export interface UnifiedEntry {
   key: string;
@@ -21,7 +23,12 @@ export interface StorageSectionProps {
   isDeletingEntry: { key: string; shared: boolean } | null;
   onCreate: (key: string, value: unknown, shared: boolean) => Promise<void>;
   onUpdate: (key: string, value: unknown, shared: boolean) => Promise<void>;
-  onCreateText?: (key: string, text: string, shared: boolean) => Promise<void>;
+  onCreateText?: (
+    key: string,
+    text: string,
+    shared: boolean,
+    format: TextDocumentFormat,
+  ) => Promise<void>;
   onReload?: () => void;
 }
 
@@ -42,7 +49,16 @@ function isFileEntry(value: unknown): value is FileEntry {
     typeof value === "object" &&
     value !== null &&
     "_type" in value &&
-    (value as Record<string, unknown>)["_type"] === "file"
+    (value as Record<string, unknown>)._type === "file"
+  );
+}
+
+function isTextDocumentEntry(value: unknown): value is TextDocumentEntry {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "_type" in value &&
+    (value as Record<string, unknown>)._type === "document"
   );
 }
 
@@ -98,7 +114,12 @@ export function StorageSection({
         const value = entry?.value ?? {};
         if (isFileEntry(value)) return prev;
         const next = new Map(prev);
-        next.set(id, JSON.stringify(value, null, 2));
+        // For text document entries, edit the content directly (not the envelope)
+        if (isTextDocumentEntry(value)) {
+          next.set(id, value.content);
+        } else {
+          next.set(id, JSON.stringify(value, null, 2));
+        }
         return next;
       });
     },
@@ -106,14 +127,23 @@ export function StorageSection({
   );
 
   const handleEditChange = useCallback(
+    // fallow-ignore-next-line complexity
     (id: string, rawText: string) => {
       setEditTexts((prev) => new Map(prev).set(id, rawText));
 
+      // Determine entry type to drive validation and save logic
+      const entry = entries.find((e) => eid(e) === id);
+      const textDoc = isTextDocumentEntry(entry?.value) ? entry.value : undefined;
+      // YAML text docs are never JSON-validated; everything else is
+      const validateAsJson = textDoc?.format !== "yaml";
+
       let isValid = true;
-      try {
-        JSON.parse(rawText);
-      } catch {
-        isValid = false;
+      if (validateAsJson) {
+        try {
+          JSON.parse(rawText);
+        } catch {
+          isValid = false;
+        }
       }
 
       setInvalidIds((prev) => {
@@ -131,10 +161,19 @@ export function StorageSection({
       if (!isValid) return;
 
       const timer = setTimeout(() => {
-        const parsed: unknown = JSON.parse(rawText);
         setEntryStatuses((prev) => new Map(prev).set(id, "saving"));
         const { key, shared } = parseId(id);
-        void onUpdate(key, parsed, shared).then(() => {
+
+        // Build the value to persist
+        let valueToSave: unknown;
+        if (textDoc !== undefined) {
+          // Update the envelope's content, preserving _type / format / createdAt
+          valueToSave = { ...textDoc, content: rawText };
+        } else {
+          valueToSave = JSON.parse(rawText) as unknown;
+        }
+
+        void onUpdate(key, valueToSave, shared).then(() => {
           setEntryStatuses((prev) => {
             const next = new Map(prev);
             next.delete(id);
@@ -145,7 +184,7 @@ export function StorageSection({
       }, DEBOUNCE_MS);
       saveTimers.current.set(id, timer);
     },
-    [onUpdate],
+    [onUpdate, entries],
   );
 
   const handleOpenNewEntryPanel = useCallback(() => {
@@ -163,9 +202,9 @@ export function StorageSection({
   );
 
   const handleCreateText = useCallback(
-    async (key: string, text: string, shared: boolean) => {
+    async (key: string, text: string, shared: boolean, format: TextDocumentFormat) => {
       if (onCreateText !== undefined) {
-        await onCreateText(key, text, shared);
+        await onCreateText(key, text, shared, format);
       }
       setShowNewEntryPanel(false);
       setSelectedId(eid({ key, shared }));
@@ -186,6 +225,7 @@ export function StorageSection({
     selectedId !== null ? entries.find((e) => eid(e) === selectedId) : undefined;
   const selectedValue = selectedEntry?.value;
   const isSelectedFile = isFileEntry(selectedValue);
+  const selectedTextDoc = isTextDocumentEntry(selectedValue) ? selectedValue : undefined;
   const currentEditText =
     !isSelectedFile && selectedId !== null ? editTexts.get(selectedId) : undefined;
   const currentSaveStatus: EntryStatus =
@@ -227,6 +267,7 @@ export function StorageSection({
               isLoading={isLoading}
               isInvalidJson={isCurrentEntryInvalid}
               saveStatus={currentSaveStatus}
+              {...(selectedTextDoc !== undefined ? { format: selectedTextDoc.format } : {})}
               {...(currentEditText !== undefined && selectedId !== null
                 ? {
                     editText: currentEditText,

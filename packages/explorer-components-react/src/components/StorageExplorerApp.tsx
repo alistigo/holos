@@ -2,6 +2,7 @@ import type { JSX } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { UnifiedEntry } from "./StorageSection.js";
 import { StorageSection } from "./StorageSection.js";
+import type { TextDocumentFormat } from "./TextDocumentEditor.js";
 
 import "@alistigo/claude-artifact-api";
 
@@ -65,9 +66,25 @@ export function StorageExplorerApp(): JSX.Element {
     await reload();
   }
 
-  async function handleCreateText(key: string, text: string, shared: boolean): Promise<void> {
+  async function handleCreateText(
+    key: string,
+    text: string,
+    shared: boolean,
+    format: TextDocumentFormat,
+  ): Promise<void> {
     if (!window.storage) return;
-    await window.storage.set(key, text, shared);
+    let storedValue: string;
+    if (format === "plain") {
+      storedValue = text;
+    } else {
+      storedValue = JSON.stringify({
+        _type: "document",
+        format,
+        content: text,
+        createdAt: new Date().toISOString(),
+      });
+    }
+    await window.storage.set(key, storedValue, shared);
     await reload();
   }
 
@@ -103,7 +120,9 @@ export function StorageExplorerApp(): JSX.Element {
             isDeletingEntry={deletingEntry}
             onCreate={(key, value, shared) => handleCreate(key, value, shared)}
             onUpdate={(key, value, shared) => handleUpdate(key, value, shared)}
-            onCreateText={(key, text, shared) => handleCreateText(key, text, shared)}
+            onCreateText={(key, text, shared, format) =>
+              handleCreateText(key, text, shared, format)
+            }
             onReload={() => void reload()}
           />
         </div>

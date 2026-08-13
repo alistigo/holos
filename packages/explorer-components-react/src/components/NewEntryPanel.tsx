@@ -10,10 +10,18 @@ const DEFAULT_MAX_PER_KEY_BYTES = 5 * MIB;
 
 type EntryTab = "file" | "text";
 
+/** Envelope stored for JSON and YAML text documents (not used for plain text). */
+export interface TextDocumentEntry {
+  _type: "document";
+  format: "json" | "yaml";
+  content: string;
+  createdAt: string;
+}
+
 export interface NewEntryPanelProps {
   existingEntries: { key: string; shared: boolean }[];
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
-  onCreateText: (key: string, text: string, shared: boolean) => Promise<void>;
+  onCreateText: (key: string, text: string, shared: boolean, format: TextDocumentFormat) => Promise<void>;
   onCancel: () => void;
   /** Free bytes remaining before hitting the artifact's total storage cap. */
   availableBytes?: number;
@@ -138,7 +146,7 @@ export function NewEntryPanel({
     if (!canSave) return;
     setIsSaving(true);
     try {
-      await onCreateText(textKeyTrimmed, textContent, shared);
+      await onCreateText(textKeyTrimmed, textContent, shared, textFormat);
       onCancel();
     } finally {
       setIsSaving(false);
