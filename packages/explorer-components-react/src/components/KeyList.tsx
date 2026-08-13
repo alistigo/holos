@@ -127,11 +127,11 @@ export function KeyList({
           <button
             type="button"
             onClick={onReloadClick}
-            className="normal-case tracking-normal font-medium text-xs px-1.5 py-0.5 border border-gray-200 rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
+            className="normal-case tracking-normal font-medium text-xs w-6 h-6 flex items-center justify-center border border-gray-200 rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
             title="Reload"
             aria-label="Reload"
           >
-            Reload
+            ↻
           </button>
         )}
         {onCreateClick !== undefined && (
