@@ -1,3 +1,7 @@
+export type { FileEntry, FileUploadFormProps } from "./components/FileUploadForm.js";
+export { FileUploadForm } from "./components/FileUploadForm.js";
+export type { FileViewerProps } from "./components/FileViewer.js";
+export { FileViewer } from "./components/FileViewer.js";
 export type { EntryStatus, JsonDocumentViewerProps } from "./components/JsonDocumentViewer.js";
 export { JsonDocumentViewer } from "./components/JsonDocumentViewer.js";
 export type { KeyListEntry, KeyListProps } from "./components/KeyList.js";

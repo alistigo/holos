@@ -1,5 +1,8 @@
 import type { JSX } from "react";
 import { useCallback, useRef, useState } from "react";
+import type { FileEntry } from "./FileUploadForm.js";
+import { FileUploadForm } from "./FileUploadForm.js";
+import { FileViewer } from "./FileViewer.js";
 import type { EntryStatus } from "./JsonDocumentViewer.js";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
 import { KeyList } from "./KeyList.js";
@@ -29,6 +32,22 @@ function parseId(id: string): { key: string; shared: boolean } {
   return { shared: id.startsWith("s:"), key: id.slice(2) };
 }
 
+function isFileEntry(value: unknown): value is FileEntry {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "_type" in value &&
+    (value as Record<string, unknown>)["_type"] === "file"
+  );
+}
+
+function fileTypeBadge(mimeType: string): string {
+  if (mimeType.startsWith("image/")) return "IMG";
+  if (mimeType === "application/pdf") return "PDF";
+  if (mimeType.startsWith("text/")) return "TXT";
+  return "FILE";
+}
+
 // fallow-ignore-next-line complexity
 export function StorageSection({
   entries,
@@ -39,6 +58,7 @@ export function StorageSection({
   onUpdate,
 }: StorageSectionProps): JSX.Element {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showUploadForm, setShowUploadForm] = useState(false);
 
   const [creationState, setCreationState] = useState<{
     key: string;
@@ -55,6 +75,7 @@ export function StorageSection({
     id: eid(e),
     label: e.key,
     isShared: e.shared,
+    ...(isFileEntry(e.value) ? { fileTypeBadge: fileTypeBadge(e.value.mimeType) } : {}),
   }));
 
   const isDeletingId = isDeletingEntry !== null ? eid(isDeletingEntry) : null;
@@ -76,11 +97,13 @@ export function StorageSection({
 
   const handleSelectId = useCallback(
     (id: string) => {
+      setShowUploadForm(false);
       setSelectedId(id);
       setEditTexts((prev) => {
         if (prev.has(id)) return prev;
         const entry = entries.find((e) => eid(e) === id);
         const value = entry?.value ?? {};
+        if (isFileEntry(value)) return prev;
         const next = new Map(prev);
         next.set(id, JSON.stringify(value, null, 2));
         return next;
@@ -133,6 +156,7 @@ export function StorageSection({
   );
 
   const handleStartCreate = useCallback(() => {
+    setShowUploadForm(false);
     setCreationState({ key: "", shared: false, phase: "typing" });
   }, []);
 
@@ -171,10 +195,22 @@ export function StorageSection({
     [selectedId, onDelete],
   );
 
+  const handleUpload = useCallback(
+    async (key: string, fileEntry: FileEntry, shared: boolean) => {
+      await onCreate(key, fileEntry, shared);
+      setShowUploadForm(false);
+      const id = eid({ key, shared });
+      setSelectedId(id);
+    },
+    [onCreate],
+  );
+
   const selectedEntry =
     selectedId !== null ? entries.find((e) => eid(e) === selectedId) : undefined;
   const selectedValue = selectedEntry?.value;
-  const currentEditText = selectedId !== null ? editTexts.get(selectedId) : undefined;
+  const isSelectedFile = isFileEntry(selectedValue);
+  const currentEditText =
+    !isSelectedFile && selectedId !== null ? editTexts.get(selectedId) : undefined;
   const currentSaveStatus: EntryStatus =
     selectedId !== null ? (entryStatuses.get(selectedId) ?? "saved") : "saved";
   const isCurrentEntryInvalid = selectedId !== null && invalidIds.has(selectedId);
@@ -256,22 +292,32 @@ export function StorageSection({
             entryStatuses={entryStatuses}
             onDeleteId={handleDeleteId}
             isDeletingId={isDeletingId}
+            onUploadClick={() => {
+              setCreationState(null);
+              setShowUploadForm(true);
+            }}
             {...(creationState === null ? { onCreateClick: handleStartCreate } : {})}
           />
         </div>
         <div className="flex-1 overflow-hidden flex flex-col">
-          <JsonDocumentViewer
-            value={selectedValue}
-            isLoading={isLoading}
-            isInvalidJson={isCurrentEntryInvalid}
-            saveStatus={currentSaveStatus}
-            {...(currentEditText !== undefined && selectedId !== null
-              ? {
-                  editText: currentEditText,
-                  onEditTextChange: (text: string) => handleEditChange(selectedId, text),
-                }
-              : {})}
-          />
+          {showUploadForm ? (
+            <FileUploadForm onUpload={handleUpload} onCancel={() => setShowUploadForm(false)} />
+          ) : isSelectedFile && selectedEntry !== undefined ? (
+            <FileViewer entry={selectedEntry as UnifiedEntry & { value: FileEntry }} />
+          ) : (
+            <JsonDocumentViewer
+              value={selectedValue}
+              isLoading={isLoading}
+              isInvalidJson={isCurrentEntryInvalid}
+              saveStatus={currentSaveStatus}
+              {...(currentEditText !== undefined && selectedId !== null
+                ? {
+                    editText: currentEditText,
+                    onEditTextChange: (text: string) => handleEditChange(selectedId, text),
+                  }
+                : {})}
+            />
+          )}
         </div>
       </div>
     </div>
