@@ -25,16 +25,25 @@ const SAMPLE_ENTRIES: KeyListEntry[] = [
   { id: "p:alistigo:prefs:theme", label: "alistigo:prefs:theme", isShared: false },
 ];
 
+const ENTRIES_WITH_FILES: KeyListEntry[] = [
+  { id: "p:avatar.png", label: "avatar.png", isShared: false, fileTypeBadge: "IMG" },
+  { id: "p:report.pdf", label: "report.pdf", isShared: false, fileTypeBadge: "PDF" },
+  { id: "s:banner.png", label: "banner.png", isShared: true, fileTypeBadge: "IMG" },
+  { id: "p:alistigo:list:abc123", label: "alistigo:list:abc123", isShared: false },
+];
+
 function InteractiveKeyList(args: React.ComponentProps<typeof KeyList>): React.JSX.Element {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   return <KeyList {...args} selectedId={selectedId} onSelectId={setSelectedId} />;
 }
 
+// ── Basic states ──────────────────────────────────────────────────────────────
+
 export const Default: Story = {
   render: (args) => <InteractiveKeyList {...args} />,
   args: {
     entries: SAMPLE_ENTRIES,
-    label: "Keys",
+    label: "4 keys",
     isLoading: false,
   },
 };
@@ -54,7 +63,7 @@ export const Empty: Story = {
     entries: [],
     selectedId: null,
     onSelectId: () => {},
-    label: "Keys",
+    label: "0 keys",
     isLoading: false,
     emptyText: "No keys found.",
   },
@@ -65,7 +74,93 @@ export const WithSelection: Story = {
     entries: SAMPLE_ENTRIES,
     selectedId: "p:alistigo:list:abc123",
     onSelectId: () => {},
-    label: "Keys",
+    label: "4 keys",
     isLoading: false,
+  },
+};
+
+// ── Feature variants ──────────────────────────────────────────────────────────
+
+export const WithFileBadges: Story = {
+  name: "With file type badges",
+  render: (args) => <InteractiveKeyList {...args} />,
+  args: {
+    entries: ENTRIES_WITH_FILES,
+    label: "4 keys",
+    isLoading: false,
+  },
+};
+
+export const WithDeleteButton: Story = {
+  name: "With delete button",
+  render: (args) => <InteractiveKeyList {...args} />,
+  args: {
+    entries: SAMPLE_ENTRIES,
+    label: "4 keys",
+    isLoading: false,
+    onDeleteId: (id) => alert(`delete: ${id}`),
+  },
+};
+
+export const WithDeleteInProgress: Story = {
+  name: "With delete in progress",
+  args: {
+    entries: SAMPLE_ENTRIES,
+    selectedId: null,
+    onSelectId: () => {},
+    label: "4 keys",
+    isLoading: false,
+    onDeleteId: () => {},
+    isDeletingId: "p:alistigo:list:def456",
+  },
+};
+
+export const WithStatusBadges: Story = {
+  name: "With draft / saving status badges",
+  args: {
+    entries: SAMPLE_ENTRIES,
+    selectedId: "p:alistigo:list:abc123",
+    onSelectId: () => {},
+    label: "4 keys",
+    isLoading: false,
+    entryStatuses: new Map([
+      ["p:alistigo:list:abc123", "draft"],
+      ["s:alistigo:prefs:user", "saving"],
+    ]),
+  },
+};
+
+export const WithCreateButton: Story = {
+  name: "With + New button",
+  render: (args) => <InteractiveKeyList {...args} />,
+  args: {
+    entries: SAMPLE_ENTRIES,
+    label: "4 keys",
+    isLoading: false,
+    onCreateClick: () => alert("new entry"),
+  },
+};
+
+export const WithReloadButton: Story = {
+  name: "With Reload button",
+  render: (args) => <InteractiveKeyList {...args} />,
+  args: {
+    entries: SAMPLE_ENTRIES,
+    label: "4 keys",
+    isLoading: false,
+    onReloadClick: () => alert("reload"),
+  },
+};
+
+export const WithAllButtons: Story = {
+  name: "With + New and Reload buttons",
+  render: (args) => <InteractiveKeyList {...args} />,
+  args: {
+    entries: SAMPLE_ENTRIES,
+    label: "4 keys",
+    isLoading: false,
+    onCreateClick: () => alert("new entry"),
+    onReloadClick: () => alert("reload"),
+    onDeleteId: (id) => alert(`delete: ${id}`),
   },
 };

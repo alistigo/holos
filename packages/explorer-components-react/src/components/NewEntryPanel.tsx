@@ -2,12 +2,13 @@ import type { JSX } from "react";
 import { useCallback, useState } from "react";
 import type { FileEntry } from "./FileUploadForm.js";
 import { FileUploadForm } from "./FileUploadForm.js";
+import type { TextDocumentFormat } from "./TextDocumentEditor.js";
+import { TextDocumentEditor } from "./TextDocumentEditor.js";
 
 const MIB = 1024 * 1024;
 const DEFAULT_MAX_PER_KEY_BYTES = 5 * MIB;
 
 type EntryTab = "file" | "text";
-type TextFormat = "plain" | "json" | "yaml";
 
 export interface NewEntryPanelProps {
   existingEntries: { key: string; shared: boolean }[];
@@ -30,7 +31,10 @@ function validateJson(text: string): string | null {
 }
 
 // fallow-ignore-next-line complexity
-function formatText(text: string, format: TextFormat): { result: string; error: string | null } {
+function formatText(
+  text: string,
+  format: TextDocumentFormat,
+): { result: string; error: string | null } {
   if (format === "json") {
     try {
       return { result: JSON.stringify(JSON.parse(text), null, 2), error: null };
@@ -85,7 +89,7 @@ export function NewEntryPanel({
   const [shared, setShared] = useState(false);
 
   const [textKey, setTextKey] = useState("");
-  const [textFormat, setTextFormat] = useState<TextFormat>("json");
+  const [textFormat, setTextFormat] = useState<TextDocumentFormat>("json");
   const [textContent, setTextContent] = useState("{}");
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -118,7 +122,7 @@ export function NewEntryPanel({
     [textFormat],
   );
 
-  const handleFormatChange = useCallback((format: TextFormat) => {
+  const handleFormatChange = useCallback((format: TextDocumentFormat) => {
     setTextFormat(format);
     setTextContent(format === "json" ? "{}" : "");
     setJsonError(null);
@@ -228,62 +232,25 @@ export function NewEntryPanel({
             {keyExists && <p className="mt-0.5 text-[10px] text-red-600">Key already exists</p>}
           </div>
 
-          {/* Format selector + Format button */}
-          <div className="shrink-0 flex items-center gap-2">
-            <label htmlFor="new-entry-format" className="text-xs text-gray-500 shrink-0">
-              Format
-            </label>
-            <select
-              id="new-entry-format"
-              value={textFormat}
-              onChange={(e) => handleFormatChange(e.target.value as TextFormat)}
-              className="text-xs border border-gray-200 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
-            >
-              <option value="json">JSON</option>
-              <option value="yaml">YAML</option>
-              <option value="plain">Plain text</option>
-            </select>
-            <button
-              type="button"
-              onClick={handleFormat}
-              disabled={textFormat === "yaml"}
-              title={textFormat === "yaml" ? "Format not available for YAML" : undefined}
-              className="text-xs px-2 py-0.5 border border-gray-200 rounded text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Format
-            </button>
-          </div>
-
-          {/* Editor */}
-          <div className="flex flex-col flex-1 min-h-0">
-            <textarea
-              value={textContent}
-              onChange={(e) => handleTextChange(e.target.value)}
-              spellCheck={false}
-              className={`flex-1 min-h-0 w-full font-mono text-xs leading-relaxed p-2 border rounded resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 bg-gray-50 ${
-                jsonError !== null || isTextOverPerKey
-                  ? "border-red-300 focus:ring-red-400"
-                  : "border-gray-200"
-              }`}
-            />
-            {jsonError !== null && (
-              <p className="mt-0.5 text-[10px] text-red-600 font-mono shrink-0 truncate">
-                {jsonError}
-              </p>
-            )}
-            {isTextOverPerKey && (
-              <p className="mt-0.5 text-[10px] text-red-600 shrink-0">
-                Content too large — {formatMib(textStoredBytes)} exceeds the{" "}
-                {formatMib(maxPerKeyBytes)} per-key limit.
-              </p>
-            )}
-            {isTextOverSpace && availableBytes !== undefined && (
-              <p className="mt-0.5 text-[10px] text-amber-700 shrink-0">
-                Not enough space — {formatMib(textStoredBytes)} needed, {formatMib(availableBytes)}{" "}
-                available.
-              </p>
-            )}
-          </div>
+          {/* Shared text editor — format selector lives in its header */}
+          <TextDocumentEditor
+            text={textContent}
+            onTextChange={handleTextChange}
+            format={textFormat}
+            onFormatChange={handleFormatChange}
+            onFormat={handleFormat}
+            error={jsonError}
+            {...(isTextOverPerKey
+              ? {
+                  overLimitMessage: `Content too large — ${formatMib(textStoredBytes)} exceeds the ${formatMib(maxPerKeyBytes)} per-key limit.`,
+                }
+              : {})}
+            {...(isTextOverSpace && availableBytes !== undefined
+              ? {
+                  overSpaceMessage: `Not enough space — ${formatMib(textStoredBytes)} needed, ${formatMib(availableBytes)} available.`,
+                }
+              : {})}
+          />
 
           {/* Actions */}
           <div className="flex gap-2 shrink-0">

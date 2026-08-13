@@ -2,17 +2,21 @@ import JsonView from "@uiw/react-json-view";
 import { lightTheme } from "@uiw/react-json-view/light";
 import type React from "react";
 import type { JSX } from "react";
+import type { TextDocumentFormat } from "./TextDocumentEditor.js";
+import { TextDocumentEditor } from "./TextDocumentEditor.js";
 
 export type EntryStatus = "draft" | "saving" | "saved";
 
 export interface JsonDocumentViewerProps {
   value: unknown;
   isLoading: boolean;
-  // editing support
+  /** When provided together with onEditTextChange, switches to edit mode. */
   editText?: string;
   onEditTextChange?: (text: string) => void;
   isInvalidJson?: boolean;
   saveStatus?: EntryStatus;
+  /** Format shown in the editor header when in edit mode. Defaults to "json". */
+  format?: TextDocumentFormat;
 }
 
 const SKELETON_IDS = ["sk-0", "sk-1", "sk-2", "sk-3", "sk-4"] as const;
@@ -28,60 +32,6 @@ function SkeletonRows(): JSX.Element {
           style={{ width: `${SKELETON_WIDTHS[i]}%` }}
         />
       ))}
-    </div>
-  );
-}
-
-function SaveStatusChip({ status }: { status: EntryStatus }): JSX.Element | null {
-  if (status === "saved") return null;
-  if (status === "saving") {
-    return (
-      <div className="flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-500">
-        <span className="inline-block w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-        Saving…
-      </div>
-    );
-  }
-  return (
-    <div className="flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-amber-50 text-amber-600 font-medium">
-      <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400" />
-      Unsaved
-    </div>
-  );
-}
-
-function EditableTextArea({
-  editText,
-  onEditTextChange,
-  isInvalidJson,
-  saveStatus,
-}: {
-  editText: string;
-  onEditTextChange: (text: string) => void;
-  isInvalidJson: boolean;
-  saveStatus: EntryStatus;
-}): JSX.Element {
-  return (
-    <div className="flex flex-col flex-1 overflow-hidden">
-      <div className="shrink-0 flex items-center justify-between px-2 py-1 border-b border-gray-100 bg-gray-50">
-        <span className="text-xs text-gray-400 font-mono">JSON</span>
-        <SaveStatusChip status={saveStatus} />
-      </div>
-      <div className="flex-1 overflow-hidden relative">
-        <textarea
-          value={editText}
-          onChange={(e) => onEditTextChange(e.target.value)}
-          spellCheck={false}
-          className={`absolute inset-0 w-full h-full resize-none text-xs font-mono p-2 focus:outline-none bg-white ${
-            isInvalidJson ? "ring-1 ring-red-400 bg-red-50" : "focus:ring-1 focus:ring-blue-300"
-          }`}
-        />
-      </div>
-      {isInvalidJson && (
-        <div className="shrink-0 px-2 py-1 text-xs text-red-500 bg-red-50 border-t border-red-200">
-          Invalid JSON — fix to auto-save
-        </div>
-      )}
     </div>
   );
 }
@@ -112,6 +62,7 @@ export function JsonDocumentViewer({
   onEditTextChange,
   isInvalidJson = false,
   saveStatus = "saved",
+  format = "json",
 }: JsonDocumentViewerProps): JSX.Element {
   const isEditable = editText !== undefined && onEditTextChange !== undefined;
 
@@ -121,11 +72,12 @@ export function JsonDocumentViewer({
         {isLoading ? (
           <SkeletonRows />
         ) : isEditable ? (
-          <EditableTextArea
-            editText={editText}
-            onEditTextChange={onEditTextChange}
-            isInvalidJson={isInvalidJson}
+          <TextDocumentEditor
+            text={editText}
+            onTextChange={onEditTextChange}
+            format={format}
             saveStatus={saveStatus}
+            error={isInvalidJson ? "Invalid JSON — fix to auto-save" : null}
           />
         ) : (
           <div className="flex-1 overflow-auto p-2">
