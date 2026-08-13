@@ -1,13 +1,13 @@
 export interface ClaudeStorageGetResult {
   key: string;
-  value: string;
+  value: unknown;
   shared: boolean;
   "@type": string;
 }
 
 export interface ClaudeStorageSetResult {
   key: string;
-  value: string;
+  value: unknown;
   shared: boolean;
   "@type": string;
 }
@@ -29,7 +29,7 @@ export interface ClaudeStorageListResult {
 export interface ClaudeStorage {
   /** Rejects (never resolves) when the key does not exist. */
   get(key: string, shared?: boolean): Promise<ClaudeStorageGetResult>;
-  set(key: string, value: string, shared?: boolean): Promise<ClaudeStorageSetResult>;
+  set(key: string, value: unknown, shared?: boolean): Promise<ClaudeStorageSetResult>;
   /** Rejects (never resolves) when the key does not exist. */
   delete(key: string, shared?: boolean): Promise<ClaudeStorageDeleteResult>;
   list(prefix?: string, shared?: boolean): Promise<ClaudeStorageListResult>;

@@ -3,14 +3,27 @@ import { useCallback, useState } from "react";
 
 const MIB = 1024 * 1024;
 
-export interface FileEntry {
+export type FileStorageFormat = "base64" | "blob" | "arraybuffer";
+
+interface FileEntryBase {
   _type: "file";
   name: string;
   mimeType: string;
   size: number;
   uploadedAt: string;
+}
+
+export interface FileEntryBase64 extends FileEntryBase {
+  storageFormat?: "base64";
   data: string;
 }
+
+export interface FileEntryBinary extends FileEntryBase {
+  storageFormat: "blob" | "arraybuffer";
+  data: Blob | ArrayBuffer;
+}
+
+export type FileEntry = FileEntryBase64 | FileEntryBinary;
 
 export interface FileUploadFormProps {
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
@@ -25,8 +38,12 @@ export interface FileUploadFormProps {
   hideHeader?: boolean;
 }
 
-function estimateStoredBytes(file: File): number {
+function estimateBase64Bytes(file: File): number {
   return Math.ceil(file.size / 3) * 4 + 200;
+}
+
+function estimateBinaryBytes(file: File): number {
+  return file.size + 50;
 }
 
 function formatMib(bytes: number): string {
@@ -46,11 +63,17 @@ export function FileUploadForm({
   const [key, setKey] = useState("");
   const [internalShared, setInternalShared] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [storageFormat, setStorageFormat] = useState<FileStorageFormat>("base64");
 
   const showSharedCheckbox = externalShared === undefined;
 
   const maxPerKeyBytes = maxPerKeyMib * MIB;
-  const estimatedBytes = file !== null ? estimateStoredBytes(file) : 0;
+  const estimatedBytes =
+    file !== null
+      ? storageFormat === "base64"
+        ? estimateBase64Bytes(file)
+        : estimateBinaryBytes(file)
+      : 0;
 
   const isFull = availableBytes !== undefined && availableBytes <= 0;
   const isOverPerKey = file !== null && estimatedBytes >= maxPerKeyBytes;
@@ -72,23 +95,49 @@ export function FileUploadForm({
     if (file === null || key.trim() === "") return;
     setIsUploading(true);
     const currentShared = externalShared !== undefined ? externalShared : internalShared;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const entry: FileEntry = {
-        _type: "file",
-        name: file.name,
-        mimeType: file.type || "application/octet-stream",
-        size: file.size,
-        uploadedAt: new Date().toISOString(),
-        data: reader.result as string,
-      };
-      void onUpload(key.trim(), entry, currentShared).finally(() => {
-        setIsUploading(false);
-        onCancel();
-      });
+    const keyTrimmed = key.trim();
+    const base: FileEntryBase = {
+      _type: "file",
+      name: file.name,
+      mimeType: file.type || "application/octet-stream",
+      size: file.size,
+      uploadedAt: new Date().toISOString(),
     };
-    reader.readAsDataURL(file);
-  }, [file, key, externalShared, internalShared, onUpload, onCancel]);
+
+    const finish = (): void => {
+      setIsUploading(false);
+      onCancel();
+    };
+
+    if (storageFormat === "blob") {
+      const entry: FileEntryBinary = { ...base, storageFormat: "blob", data: file };
+      void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+      return;
+    }
+
+    const reader = new FileReader();
+    if (storageFormat === "arraybuffer") {
+      reader.onload = () => {
+        const entry: FileEntryBinary = {
+          ...base,
+          storageFormat: "arraybuffer",
+          data: reader.result as ArrayBuffer,
+        };
+        void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      reader.onload = () => {
+        const entry: FileEntryBase64 = {
+          ...base,
+          storageFormat: "base64",
+          data: reader.result as string,
+        };
+        void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, [file, key, externalShared, internalShared, onUpload, onCancel, storageFormat]);
 
   const maxSafeFileMib = ((maxPerKeyBytes - 200) * (3 / 4)) / MIB;
 
@@ -138,13 +187,37 @@ export function FileUploadForm({
                 {file.type || "application/octet-stream"} · {(file.size / 1024).toFixed(1)} KiB
               </p>
               <p className="mt-0.5 text-[10px] text-gray-400 font-mono">
-                ~{formatMib(estimatedBytes)} stored (base64 encoded)
+                ~{formatMib(estimatedBytes)} stored
+                {storageFormat === "base64" ? " (base64 encoded)" : " (binary, no overhead)"}
               </p>
             </>
           )}
-          <p className="mt-1 text-[10px] text-gray-400">
-            {maxPerKeyMib} MiB/key limit &middot; max safe file ≈ {maxSafeFileMib.toFixed(2)} MiB
-          </p>
+          {storageFormat === "base64" ? (
+            <p className="mt-1 text-[10px] text-gray-400">
+              {maxPerKeyMib} MiB/key limit &middot; max safe file ≈ {maxSafeFileMib.toFixed(2)} MiB
+            </p>
+          ) : (
+            <p className="mt-1 text-[10px] text-amber-600">
+              {maxPerKeyMib} MiB/key limit &middot; experimental &mdash; window.storage may not
+              support binary values
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="file-storage-format" className="block text-xs text-gray-500 mb-1">
+            Storage format
+          </label>
+          <select
+            id="file-storage-format"
+            value={storageFormat}
+            onChange={(e) => setStorageFormat(e.target.value as FileStorageFormat)}
+            className="w-full text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
+          >
+            <option value="base64">Base64 (default, +33% size overhead)</option>
+            <option value="blob">Blob (experimental, no overhead)</option>
+            <option value="arraybuffer">ArrayBuffer (experimental, no overhead)</option>
+          </select>
         </div>
 
         {isOverPerKey && (

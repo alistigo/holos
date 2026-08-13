@@ -1,10 +1,26 @@
 import type { JSX } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { FileEntry, FileEntryBinary } from "./FileUploadForm.js";
 import type { UnifiedEntry } from "./StorageSection.js";
 import { StorageSection } from "./StorageSection.js";
 import type { TextDocumentFormat } from "./TextDocumentEditor.js";
 
 import "@alistigo/claude-artifact-api";
+
+const FILE_META_SUFFIX = ".__file-meta";
+
+function isFileEntry(v: unknown): v is FileEntry {
+  return (
+    typeof v === "object" &&
+    v !== null &&
+    "_type" in v &&
+    (v as Record<string, unknown>)._type === "file"
+  );
+}
+
+function isBinaryFileEntry(e: FileEntry): e is FileEntryBinary {
+  return e.storageFormat === "blob" || e.storageFormat === "arraybuffer";
+}
 
 // fallow-ignore-next-line complexity
 export function StorageExplorerApp(): JSX.Element {
@@ -21,22 +37,53 @@ export function StorageExplorerApp(): JSX.Element {
     async function fetchSection(shared: boolean): Promise<UnifiedEntry[]> {
       const result = await window.storage?.list("", shared);
       if (!result) return [];
+
+      // Companion metadata keys are internal — hide from the entry list
+      const userKeys = result.keys.filter((k) => !k.endsWith(FILE_META_SUFFIX));
+
       // fallow-ignore-next-line complexity
       async function fetchEntry(key: string): Promise<UnifiedEntry> {
         try {
           const item = await window.storage?.get(key, shared);
+          const rawValue = item?.value;
           let value: unknown;
-          try {
-            value = item !== undefined ? (JSON.parse(item.value) as unknown) : null;
-          } catch {
-            value = item?.value ?? null;
+
+          if (rawValue instanceof Blob || rawValue instanceof ArrayBuffer) {
+            // Binary data stored directly — fetch companion metadata
+            try {
+              const metaItem = await window.storage?.get(`${key}${FILE_META_SUFFIX}`, shared);
+              const metaRaw = metaItem?.value;
+              const meta =
+                typeof metaRaw === "string" ? (JSON.parse(metaRaw) as Record<string, unknown>) : {};
+              value = { ...meta, data: rawValue };
+            } catch {
+              value = {
+                _type: "file",
+                storageFormat: rawValue instanceof Blob ? "blob" : "arraybuffer",
+                data: rawValue,
+                name: key,
+                mimeType: "application/octet-stream",
+                size: rawValue instanceof ArrayBuffer ? rawValue.byteLength : rawValue.size,
+                uploadedAt: new Date().toISOString(),
+              };
+            }
+          } else if (typeof rawValue === "string") {
+            try {
+              value = JSON.parse(rawValue) as unknown;
+            } catch {
+              value = rawValue;
+            }
+          } else {
+            value = rawValue ?? null;
           }
+
           return { key, value, shared };
         } catch {
           return { key, value: null, shared };
         }
       }
-      return await Promise.all(result.keys.map(fetchEntry));
+
+      return await Promise.all(userKeys.map(fetchEntry));
     }
 
     const [priv, sharedEntries] = await Promise.all([fetchSection(false), fetchSection(true)]);
@@ -54,6 +101,12 @@ export function StorageExplorerApp(): JSX.Element {
     setDeletingEntry({ key, shared });
     try {
       await window.storage.delete(key, shared);
+      // Delete companion metadata key if it exists (binary file entries only)
+      try {
+        await window.storage.delete(`${key}${FILE_META_SUFFIX}`, shared);
+      } catch {
+        // No companion key — expected for non-binary entries
+      }
     } finally {
       setDeletingEntry(null);
       await reload();
@@ -62,7 +115,14 @@ export function StorageExplorerApp(): JSX.Element {
 
   async function handleCreate(key: string, value: unknown, shared: boolean): Promise<void> {
     if (!window.storage) return;
-    await window.storage.set(key, JSON.stringify(value), shared);
+    if (isFileEntry(value) && isBinaryFileEntry(value)) {
+      // Store binary data directly; metadata goes in companion key
+      await window.storage.set(key, value.data, shared);
+      const { data: _, ...meta } = value;
+      await window.storage.set(`${key}${FILE_META_SUFFIX}`, JSON.stringify(meta), shared);
+    } else {
+      await window.storage.set(key, JSON.stringify(value), shared);
+    }
     await reload();
   }
 
