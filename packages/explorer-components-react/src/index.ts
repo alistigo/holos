@@ -1,4 +1,10 @@
-export type { FileEntry, FileUploadFormProps } from "./components/FileUploadForm.js";
+export type {
+  FileEntry,
+  FileEntryBase64,
+  FileEntryBinary,
+  FileStorageFormat,
+  FileUploadFormProps,
+} from "./components/FileUploadForm.js";
 export { FileUploadForm } from "./components/FileUploadForm.js";
 export type { FileViewerProps } from "./components/FileViewer.js";
 export { FileViewer } from "./components/FileViewer.js";
