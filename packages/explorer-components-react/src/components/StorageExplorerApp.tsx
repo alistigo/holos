@@ -65,6 +65,12 @@ export function StorageExplorerApp(): JSX.Element {
     await reload();
   }
 
+  async function handleCreateText(key: string, text: string, shared: boolean): Promise<void> {
+    if (!window.storage) return;
+    await window.storage.set(key, text, shared);
+    await reload();
+  }
+
   async function handleUpdate(key: string, value: unknown, shared: boolean): Promise<void> {
     if (!window.storage) return;
     await window.storage.set(key, JSON.stringify(value), shared);
@@ -97,6 +103,7 @@ export function StorageExplorerApp(): JSX.Element {
             isDeletingEntry={deletingEntry}
             onCreate={(key, value, shared) => handleCreate(key, value, shared)}
             onUpdate={(key, value, shared) => handleUpdate(key, value, shared)}
+            onCreateText={(key, text, shared) => handleCreateText(key, text, shared)}
             onReload={() => void reload()}
           />
         </div>

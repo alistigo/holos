@@ -14,6 +14,10 @@ export interface FileUploadFormProps {
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
   onCancel: () => void;
   maxPerKeyMb?: number;
+  /** When provided, the shared checkbox is hidden and this value is used instead. */
+  externalShared?: boolean;
+  /** When true, the form header bar is not rendered (use when embedding inside another panel). */
+  hideHeader?: boolean;
 }
 
 function estimateStoredBytes(file: File): number {
@@ -29,12 +33,16 @@ export function FileUploadForm({
   onUpload,
   onCancel,
   maxPerKeyMb = 5,
+  externalShared,
+  hideHeader,
 }: FileUploadFormProps): JSX.Element {
   const [file, setFile] = useState<File | null>(null);
   const [key, setKey] = useState("");
-  const [shared, setShared] = useState(false);
+  const [internalShared, setInternalShared] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [bypassLimit, setBypassLimit] = useState(false);
+
+  const showSharedCheckbox = externalShared === undefined;
 
   const maxBytes = maxPerKeyMb * 1024 * 1024;
   const estimatedBytes = file !== null ? estimateStoredBytes(file) : 0;
@@ -54,6 +62,7 @@ export function FileUploadForm({
   const handleStore = useCallback(() => {
     if (file === null || key.trim() === "") return;
     setIsUploading(true);
+    const currentShared = externalShared !== undefined ? externalShared : internalShared;
     const reader = new FileReader();
     reader.onload = () => {
       const entry: FileEntry = {
@@ -64,29 +73,31 @@ export function FileUploadForm({
         uploadedAt: new Date().toISOString(),
         data: reader.result as string,
       };
-      void onUpload(key.trim(), entry, shared).finally(() => {
+      void onUpload(key.trim(), entry, currentShared).finally(() => {
         setIsUploading(false);
         onCancel();
       });
     };
     reader.readAsDataURL(file);
-  }, [file, key, shared, onUpload, onCancel]);
+  }, [file, key, externalShared, internalShared, onUpload, onCancel]);
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
-      <div className="shrink-0 flex items-center justify-between px-2 py-1 border-b border-gray-100 bg-gray-50">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-          Upload file
-        </span>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="text-gray-400 hover:text-gray-600 text-xs px-1 py-0.5 rounded hover:bg-gray-200 transition-colors"
-          aria-label="Cancel upload"
-        >
-          ✕
-        </button>
-      </div>
+      {!hideHeader && (
+        <div className="shrink-0 flex items-center justify-between px-2 py-1 border-b border-gray-100 bg-gray-50">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+            Upload file
+          </span>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="text-gray-400 hover:text-gray-600 text-xs px-1 py-0.5 rounded hover:bg-gray-200 transition-colors"
+            aria-label="Cancel upload"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       <div className="flex flex-col gap-3 p-3 overflow-auto">
         <div>
@@ -150,15 +161,17 @@ export function FileUploadForm({
           />
         </div>
 
-        <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={shared}
-            onChange={(e) => setShared(e.target.checked)}
-            className="accent-purple-500"
-          />
-          Shared (accessible by all users on this artifact URL)
-        </label>
+        {showSharedCheckbox && (
+          <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={internalShared}
+              onChange={(e) => setInternalShared(e.target.checked)}
+              className="accent-purple-500"
+            />
+            Shared (accessible by all users on this artifact URL)
+          </label>
+        )}
 
         <div className="flex gap-2 pt-1">
           <button

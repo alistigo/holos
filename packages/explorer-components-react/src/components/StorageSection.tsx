@@ -1,11 +1,11 @@
 import type { JSX } from "react";
 import { useCallback, useRef, useState } from "react";
 import type { FileEntry } from "./FileUploadForm.js";
-import { FileUploadForm } from "./FileUploadForm.js";
 import { FileViewer } from "./FileViewer.js";
 import type { EntryStatus } from "./JsonDocumentViewer.js";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
 import { KeyList } from "./KeyList.js";
+import { NewEntryPanel } from "./NewEntryPanel.js";
 import { StorageUsageBar } from "./StorageUsageBar.js";
 
 export interface UnifiedEntry {
@@ -21,6 +21,7 @@ export interface StorageSectionProps {
   isDeletingEntry: { key: string; shared: boolean } | null;
   onCreate: (key: string, value: unknown, shared: boolean) => Promise<void>;
   onUpdate: (key: string, value: unknown, shared: boolean) => Promise<void>;
+  onCreateText?: (key: string, text: string, shared: boolean) => Promise<void>;
   onReload?: () => void;
 }
 
@@ -58,16 +59,11 @@ export function StorageSection({
   isDeletingEntry,
   onCreate,
   onUpdate,
+  onCreateText,
   onReload,
 }: StorageSectionProps): JSX.Element {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [showUploadForm, setShowUploadForm] = useState(false);
-
-  const [creationState, setCreationState] = useState<{
-    key: string;
-    shared: boolean;
-    phase: "typing" | "saving";
-  } | null>(null);
+  const [showNewEntryPanel, setShowNewEntryPanel] = useState(false);
 
   const [entryStatuses, setEntryStatuses] = useState<Map<string, "draft" | "saving">>(new Map());
   const [editTexts, setEditTexts] = useState<Map<string, string>>(new Map());
@@ -83,24 +79,12 @@ export function StorageSection({
 
   const isDeletingId = isDeletingEntry !== null ? eid(isDeletingEntry) : null;
 
-  const creationEid =
-    creationState !== null ? eid({ key: creationState.key, shared: creationState.shared }) : null;
-  const allKeyListEntries =
-    creationState?.phase === "saving" &&
-    creationEid !== null &&
-    !keyListEntries.some((e) => e.id === creationEid)
-      ? [
-          ...keyListEntries,
-          { id: creationEid, label: creationState.key, isShared: creationState.shared },
-        ]
-      : keyListEntries;
-
-  const totalCount = allKeyListEntries.length;
+  const totalCount = keyListEntries.length;
   const keyLabel = `${totalCount} key${totalCount !== 1 ? "s" : ""}`;
 
   const handleSelectId = useCallback(
     (id: string) => {
-      setShowUploadForm(false);
+      setShowNewEntryPanel(false);
       setSelectedId(id);
       // fallow-ignore-next-line complexity
       setEditTexts((prev) => {
@@ -159,36 +143,30 @@ export function StorageSection({
     [onUpdate],
   );
 
-  const handleStartCreate = useCallback(() => {
-    setShowUploadForm(false);
-    setCreationState({ key: "", shared: false, phase: "typing" });
+  const handleOpenNewEntryPanel = useCallback(() => {
+    setSelectedId(null);
+    setShowNewEntryPanel(true);
   }, []);
 
-  const handleCancelCreate = useCallback(() => {
-    setCreationState(null);
-  }, []);
+  const handleUpload = useCallback(
+    async (key: string, fileEntry: FileEntry, shared: boolean) => {
+      await onCreate(key, fileEntry, shared);
+      setShowNewEntryPanel(false);
+      setSelectedId(eid({ key, shared }));
+    },
+    [onCreate],
+  );
 
-  const handleConfirmCreate = useCallback(async () => {
-    if (creationState === null) return;
-    const key = creationState.key.trim();
-    const { shared } = creationState;
-    if (key === "" || entries.some((e) => e.key === key && e.shared === shared)) return;
-
-    setCreationState({ key, shared, phase: "saving" });
-    const id = eid({ key, shared });
-    setEntryStatuses((prev) => new Map(prev).set(id, "saving"));
-
-    await onCreate(key, {}, shared);
-
-    setCreationState(null);
-    setEntryStatuses((prev) => {
-      const next = new Map(prev);
-      next.delete(id);
-      return next;
-    });
-    setEditTexts((prev) => new Map(prev).set(id, JSON.stringify({}, null, 2)));
-    setSelectedId(id);
-  }, [creationState, entries, onCreate]);
+  const handleCreateText = useCallback(
+    async (key: string, text: string, shared: boolean) => {
+      if (onCreateText !== undefined) {
+        await onCreateText(key, text, shared);
+      }
+      setShowNewEntryPanel(false);
+      setSelectedId(eid({ key, shared }));
+    },
+    [onCreateText],
+  );
 
   const handleDeleteId = useCallback(
     (id: string) => {
@@ -197,16 +175,6 @@ export function StorageSection({
       onDelete(key, shared);
     },
     [selectedId, onDelete],
-  );
-
-  const handleUpload = useCallback(
-    async (key: string, fileEntry: FileEntry, shared: boolean) => {
-      await onCreate(key, fileEntry, shared);
-      setShowUploadForm(false);
-      const id = eid({ key, shared });
-      setSelectedId(id);
-    },
-    [onCreate],
   );
 
   const selectedEntry =
@@ -223,71 +191,8 @@ export function StorageSection({
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
       <div className="flex flex-1 overflow-hidden min-h-0">
         <div className="w-2/5 shrink-0 flex flex-col overflow-hidden">
-          {creationState?.phase === "typing" && (
-            <div className="px-2 py-1.5 border-b border-gray-100 bg-blue-50 shrink-0 flex flex-col gap-1">
-              <div className="flex items-center gap-1">
-                <input
-                  // biome-ignore lint/a11y/noAutofocus: intentional — user just clicked "+"
-                  autoFocus
-                  type="text"
-                  value={creationState.key}
-                  onChange={(e) =>
-                    setCreationState({
-                      key: e.target.value,
-                      shared: creationState.shared,
-                      phase: "typing",
-                    })
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") void handleConfirmCreate();
-                    if (e.key === "Escape") handleCancelCreate();
-                  }}
-                  placeholder="Key name…"
-                  className="flex-1 min-w-0 text-xs font-mono border border-blue-300 rounded px-1.5 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => void handleConfirmCreate()}
-                  disabled={
-                    creationState.key.trim() === "" ||
-                    entries.some(
-                      (e) =>
-                        e.key === creationState.key.trim() && e.shared === creationState.shared,
-                    )
-                  }
-                  className="text-xs px-1.5 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
-                  title="Confirm"
-                >
-                  ✓
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancelCreate}
-                  className="text-xs px-1.5 py-1 border border-gray-200 rounded hover:bg-gray-100 transition-colors shrink-0"
-                  title="Cancel"
-                >
-                  ✕
-                </button>
-              </div>
-              <label className="flex items-center gap-1.5 text-xs text-gray-600 px-0.5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={creationState.shared}
-                  onChange={(e) =>
-                    setCreationState({
-                      key: creationState.key,
-                      shared: e.target.checked,
-                      phase: "typing",
-                    })
-                  }
-                  className="accent-purple-500"
-                />
-                Shared
-              </label>
-            </div>
-          )}
           <KeyList
-            entries={allKeyListEntries}
+            entries={keyListEntries}
             selectedId={selectedId}
             onSelectId={handleSelectId}
             isLoading={isLoading}
@@ -296,17 +201,18 @@ export function StorageSection({
             entryStatuses={entryStatuses}
             onDeleteId={handleDeleteId}
             isDeletingId={isDeletingId}
+            onCreateClick={handleOpenNewEntryPanel}
             {...(onReload !== undefined ? { onReloadClick: onReload } : {})}
-            onUploadClick={() => {
-              setCreationState(null);
-              setShowUploadForm(true);
-            }}
-            {...(creationState === null ? { onCreateClick: handleStartCreate } : {})}
           />
         </div>
         <div className="flex-1 overflow-hidden flex flex-col">
-          {showUploadForm ? (
-            <FileUploadForm onUpload={handleUpload} onCancel={() => setShowUploadForm(false)} />
+          {showNewEntryPanel ? (
+            <NewEntryPanel
+              existingEntries={entries.map((e) => ({ key: e.key, shared: e.shared }))}
+              onUpload={handleUpload}
+              onCreateText={handleCreateText}
+              onCancel={() => setShowNewEntryPanel(false)}
+            />
           ) : isSelectedFile && selectedEntry !== undefined ? (
             <FileViewer entry={selectedEntry as UnifiedEntry & { value: FileEntry }} />
           ) : (

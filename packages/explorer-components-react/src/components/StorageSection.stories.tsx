@@ -41,6 +41,7 @@ export const WithEntries: Story = {
     isDeletingEntry: null,
     onCreate: async () => {},
     onUpdate: async () => {},
+    onCreateText: async () => {},
   },
 };
 
@@ -52,6 +53,7 @@ export const Deleting: Story = {
     isDeletingEntry: { key: "alistigo:list:abc123", shared: false },
     onCreate: async () => {},
     onUpdate: async () => {},
+    onCreateText: async () => {},
   },
 };
 
@@ -63,6 +65,7 @@ export const Loading: Story = {
     isDeletingEntry: null,
     onCreate: async () => {},
     onUpdate: async () => {},
+    onCreateText: async () => {},
   },
 };
 
@@ -74,5 +77,6 @@ export const Empty: Story = {
     isDeletingEntry: null,
     onCreate: async () => {},
     onUpdate: async () => {},
+    onCreateText: async () => {},
   },
 };

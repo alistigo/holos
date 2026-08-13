@@ -16,7 +16,6 @@ export interface KeyListProps {
   emptyText?: string;
   entryStatuses?: Map<string, "draft" | "saving">;
   onCreateClick?: () => void;
-  onUploadClick?: () => void;
   onReloadClick?: () => void;
   onDeleteId?: (id: string) => void;
   isDeletingId?: string | null;
@@ -116,7 +115,6 @@ export function KeyList({
   emptyText = "No keys found.",
   entryStatuses,
   onCreateClick,
-  onUploadClick,
   onReloadClick,
   onDeleteId,
   isDeletingId,
@@ -134,17 +132,6 @@ export function KeyList({
             aria-label="Reload"
           >
             Reload
-          </button>
-        )}
-        {onUploadClick !== undefined && (
-          <button
-            type="button"
-            onClick={onUploadClick}
-            className="normal-case tracking-normal font-medium text-xs px-1.5 py-0.5 bg-blue-50 border border-blue-200 rounded text-blue-700 hover:bg-blue-100 transition-colors shrink-0"
-            title="Upload file"
-            aria-label="Upload file"
-          >
-            ↑ Upload
           </button>
         )}
         {onCreateClick !== undefined && (
