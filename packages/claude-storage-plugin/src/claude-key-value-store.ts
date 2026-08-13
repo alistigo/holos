@@ -28,7 +28,8 @@ export class ClaudeKeyValueStore implements KeyValueStore {
     try {
       log.debug({ key }, "get");
       const result = await withStorageRetry(() => this.storage.get(key));
-      return JSON.parse(result.value) as unknown;
+      const raw = result.value;
+      return typeof raw === "string" ? (JSON.parse(raw) as unknown) : raw;
     } catch (err) {
       log.debug({ key, err }, "get returned nothing (key may not exist)");
       return undefined;
