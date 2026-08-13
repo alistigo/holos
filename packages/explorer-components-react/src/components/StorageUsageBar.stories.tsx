@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StorageUsageBar } from "./StorageUsageBar.js";
 
 const meta: Meta<typeof StorageUsageBar> = {
