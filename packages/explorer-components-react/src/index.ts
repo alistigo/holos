@@ -6,7 +6,6 @@ export type { EntryStatus, JsonDocumentViewerProps } from "./components/JsonDocu
 export { JsonDocumentViewer } from "./components/JsonDocumentViewer.js";
 export type { KeyListEntry, KeyListProps } from "./components/KeyList.js";
 export { KeyList } from "./components/KeyList.js";
-export type { StorageExplorerAppProps } from "./components/StorageExplorerApp.js";
 export { StorageExplorerApp } from "./components/StorageExplorerApp.js";
 export type { StorageSectionProps, UnifiedEntry } from "./components/StorageSection.js";
 export { StorageSection } from "./components/StorageSection.js";

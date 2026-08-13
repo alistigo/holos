@@ -21,6 +21,7 @@ export interface StorageSectionProps {
   isDeletingEntry: { key: string; shared: boolean } | null;
   onCreate: (key: string, value: unknown, shared: boolean) => Promise<void>;
   onUpdate: (key: string, value: unknown, shared: boolean) => Promise<void>;
+  onReload?: () => void;
 }
 
 const DEBOUNCE_MS = 1000;
@@ -57,6 +58,7 @@ export function StorageSection({
   isDeletingEntry,
   onCreate,
   onUpdate,
+  onReload,
 }: StorageSectionProps): JSX.Element {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showUploadForm, setShowUploadForm] = useState(false);
@@ -219,7 +221,6 @@ export function StorageSection({
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
-      <StorageUsageBar entries={entries} />
       <div className="flex flex-1 overflow-hidden min-h-0">
         <div className="w-2/5 shrink-0 flex flex-col overflow-hidden">
           {creationState?.phase === "typing" && (
@@ -295,6 +296,7 @@ export function StorageSection({
             entryStatuses={entryStatuses}
             onDeleteId={handleDeleteId}
             isDeletingId={isDeletingId}
+            {...(onReload !== undefined ? { onReloadClick: onReload } : {})}
             onUploadClick={() => {
               setCreationState(null);
               setShowUploadForm(true);
@@ -323,6 +325,7 @@ export function StorageSection({
           )}
         </div>
       </div>
+      <StorageUsageBar entries={entries} />
     </div>
   );
 }

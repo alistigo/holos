@@ -17,6 +17,7 @@ export interface KeyListProps {
   entryStatuses?: Map<string, "draft" | "saving">;
   onCreateClick?: () => void;
   onUploadClick?: () => void;
+  onReloadClick?: () => void;
   onDeleteId?: (id: string) => void;
   isDeletingId?: string | null;
 }
@@ -116,33 +117,45 @@ export function KeyList({
   entryStatuses,
   onCreateClick,
   onUploadClick,
+  onReloadClick,
   onDeleteId,
   isDeletingId,
 }: KeyListProps): JSX.Element {
   return (
     <div className="flex flex-col h-full overflow-hidden border-r border-gray-100">
-      <div className="px-3 py-1.5 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wide shrink-0 flex items-center gap-1">
+      <div className="px-3 py-1.5 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wide shrink-0 flex items-center gap-1.5">
         <span className="flex-1">{label}</span>
+        {onReloadClick !== undefined && (
+          <button
+            type="button"
+            onClick={onReloadClick}
+            className="normal-case tracking-normal font-medium text-xs px-1.5 py-0.5 border border-gray-200 rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
+            title="Reload"
+            aria-label="Reload"
+          >
+            Reload
+          </button>
+        )}
         {onUploadClick !== undefined && (
           <button
             type="button"
             onClick={onUploadClick}
-            className="text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded px-1 py-0.5 transition-colors leading-none text-sm"
+            className="normal-case tracking-normal font-medium text-xs px-1.5 py-0.5 bg-blue-50 border border-blue-200 rounded text-blue-700 hover:bg-blue-100 transition-colors shrink-0"
             title="Upload file"
             aria-label="Upload file"
           >
-            ↑
+            ↑ Upload
           </button>
         )}
         {onCreateClick !== undefined && (
           <button
             type="button"
             onClick={onCreateClick}
-            className="text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded px-1 py-0.5 transition-colors leading-none font-bold text-sm"
+            className="normal-case tracking-normal font-medium text-xs px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded text-gray-600 hover:bg-gray-200 transition-colors shrink-0"
             title="Create entry"
             aria-label="Create entry"
           >
-            +
+            + New
           </button>
         )}
       </div>
