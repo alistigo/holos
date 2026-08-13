@@ -75,16 +75,15 @@ function DraftOverlay({ onLearnMore }: { onLearnMore: () => void }): JSX.Element
 
 interface StorageTabProps {
   isDraft: boolean;
-  prefix: string;
 }
 
-export function StorageTab({ isDraft, prefix }: StorageTabProps): JSX.Element {
+export function StorageTab({ isDraft }: StorageTabProps): JSX.Element {
   const [draftModalOpen, setDraftModalOpen] = useState(false);
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       {draftModalOpen && <DraftWarningModal onClose={() => setDraftModalOpen(false)} />}
-      <StorageExplorerApp prefix={prefix} />
+      <StorageExplorerApp />
       {isDraft && <DraftOverlay onLearnMore={() => setDraftModalOpen(true)} />}
     </div>
   );
