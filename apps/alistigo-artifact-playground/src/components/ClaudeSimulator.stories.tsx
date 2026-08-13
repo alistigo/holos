@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ClaudeSimulator } from "./ClaudeSimulator";
+
+const noop = () => {};
 
 const meta: Meta<typeof ClaudeSimulator> = {
   title: "Components/ClaudeSimulator",
@@ -9,32 +10,32 @@ const meta: Meta<typeof ClaudeSimulator> = {
   args: {
     aiContext: "",
     simulatorDelayMs: 500,
-    onSimulatorDelayChange: fn(),
+    onSimulatorDelayChange: noop,
     suppressResponses: false,
-    onSuppressResponsesChange: fn(),
+    onSuppressResponsesChange: noop,
     localEntries: [],
     privateEntries: [],
     sharedEntries: [],
-    onDeleteEntry: fn(),
-    onSetEntry: fn(),
-    onClearSimulatorStorage: fn(),
+    onDeleteEntry: noop,
+    onSetEntry: noop,
+    onClearSimulatorStorage: noop,
     aiLogs: [],
-    onClearAiLogs: fn(),
+    onClearAiLogs: noop,
     cannedResponse: "",
-    onCannedResponseChange: fn(),
+    onCannedResponseChange: noop,
     errorMode: false,
-    onErrorModeChange: fn(),
+    onErrorModeChange: noop,
     fetchLogs: [],
-    onClearFetchLogs: fn(),
+    onClearFetchLogs: noop,
     downloadLogs: [],
-    onClearDownloadLogs: fn(),
+    onClearDownloadLogs: noop,
     navLogs: [],
-    onClearNavLogs: fn(),
+    onClearNavLogs: noop,
     autoOpen: false,
-    onAutoOpenChange: fn(),
+    onAutoOpenChange: noop,
     published: false,
-    onPublishedChange: fn(),
-    onClearData: fn(),
+    onPublishedChange: noop,
+    onClearData: noop,
   },
 };
 
