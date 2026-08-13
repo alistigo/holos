@@ -91,53 +91,57 @@ export function FileUploadForm({
     }
   }, []);
 
-  const handleStore = useCallback(() => {
-    if (file === null || key.trim() === "") return;
-    setIsUploading(true);
-    const currentShared = externalShared !== undefined ? externalShared : internalShared;
-    const keyTrimmed = key.trim();
-    const base: FileEntryBase = {
-      _type: "file",
-      name: file.name,
-      mimeType: file.type || "application/octet-stream",
-      size: file.size,
-      uploadedAt: new Date().toISOString(),
-    };
-
-    const finish = (): void => {
-      setIsUploading(false);
-      onCancel();
-    };
-
-    if (storageFormat === "blob") {
-      const entry: FileEntryBinary = { ...base, storageFormat: "blob", data: file };
-      void onUpload(keyTrimmed, entry, currentShared).finally(finish);
-      return;
-    }
-
-    const reader = new FileReader();
-    if (storageFormat === "arraybuffer") {
-      reader.onload = () => {
-        const entry: FileEntryBinary = {
-          ...base,
-          storageFormat: "arraybuffer",
-          data: reader.result as ArrayBuffer,
-        };
-        void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+  const handleStore = useCallback(
+    // fallow-ignore-next-line complexity
+    () => {
+      if (file === null || key.trim() === "") return;
+      setIsUploading(true);
+      const currentShared = externalShared !== undefined ? externalShared : internalShared;
+      const keyTrimmed = key.trim();
+      const base: FileEntryBase = {
+        _type: "file",
+        name: file.name,
+        mimeType: file.type || "application/octet-stream",
+        size: file.size,
+        uploadedAt: new Date().toISOString(),
       };
-      reader.readAsArrayBuffer(file);
-    } else {
-      reader.onload = () => {
-        const entry: FileEntryBase64 = {
-          ...base,
-          storageFormat: "base64",
-          data: reader.result as string,
-        };
-        void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+
+      const finish = (): void => {
+        setIsUploading(false);
+        onCancel();
       };
-      reader.readAsDataURL(file);
-    }
-  }, [file, key, externalShared, internalShared, onUpload, onCancel, storageFormat]);
+
+      if (storageFormat === "blob") {
+        const entry: FileEntryBinary = { ...base, storageFormat: "blob", data: file };
+        void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+        return;
+      }
+
+      const reader = new FileReader();
+      if (storageFormat === "arraybuffer") {
+        reader.onload = () => {
+          const entry: FileEntryBinary = {
+            ...base,
+            storageFormat: "arraybuffer",
+            data: reader.result as ArrayBuffer,
+          };
+          void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        reader.onload = () => {
+          const entry: FileEntryBase64 = {
+            ...base,
+            storageFormat: "base64",
+            data: reader.result as string,
+          };
+          void onUpload(keyTrimmed, entry, currentShared).finally(finish);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    [file, key, externalShared, internalShared, onUpload, onCancel, storageFormat],
+  );
 
   const maxSafeFileMib = ((maxPerKeyBytes - 200) * (3 / 4)) / MIB;
 

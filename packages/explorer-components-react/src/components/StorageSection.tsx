@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { useCallback, useRef, useState } from "react";
-import type { FileEntry, FileEntryBinary } from "./FileUploadForm.js";
+import type { FileEntry } from "./FileUploadForm.js";
 import { FileViewer } from "./FileViewer.js";
 import type { EntryStatus } from "./JsonDocumentViewer.js";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
@@ -51,10 +51,6 @@ function isFileEntry(value: unknown): value is FileEntry {
     "_type" in value &&
     (value as Record<string, unknown>)._type === "file"
   );
-}
-
-function isBinaryFileEntry(e: FileEntry): e is FileEntryBinary {
-  return e.storageFormat === "blob" || e.storageFormat === "arraybuffer";
 }
 
 function isTextDocumentEntry(value: unknown): value is TextDocumentEntry {
