@@ -6,7 +6,6 @@ import type { TabId } from "./Tabs.js";
 interface ArtifactConfig {
   app?: string;
   container?: string;
-  prefix?: string;
   defaultTab?: string;
 }
 
@@ -40,10 +39,7 @@ export function autoMount(): void {
   const root = createRoot(container);
   root.render(
     <StrictMode>
-      <App
-        prefix={config.prefix ?? ""}
-        {...(config.defaultTab ? { defaultTab: config.defaultTab as TabId } : {})}
-      />
+      <App {...(config.defaultTab ? { defaultTab: config.defaultTab as TabId } : {})} />
     </StrictMode>,
   );
 }

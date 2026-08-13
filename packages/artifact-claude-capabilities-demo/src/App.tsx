@@ -23,7 +23,6 @@ import { PostMessageLogTab } from "./tabs/PostMessageLogTab";
 import { StorageTab } from "./tabs/StorageTab";
 
 interface AppProps {
-  prefix: string;
   defaultTab?: TabId;
 }
 
@@ -66,12 +65,11 @@ function DraftBadge({ onClick }: { onClick: () => void }): JSX.Element {
 
 interface ReadyContentProps {
   isDraft: boolean;
-  prefix: string;
   defaultTab: TabId;
 }
 
 // fallow-ignore-next-line complexity
-function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.Element {
+function ReadyContent({ isDraft, defaultTab }: ReadyContentProps): JSX.Element {
   const [infoOpen, setInfoOpen] = useState(false);
   const [draftModalOpen, setDraftModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>(defaultTab);
@@ -125,7 +123,7 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {activeTab === "about" && <AboutTab />}
-        {activeTab === "storage" && <StorageTab isDraft={isDraft} prefix={prefix} />}
+        {activeTab === "storage" && <StorageTab isDraft={isDraft} />}
         {activeTab === "ai" && <AiTab />}
         {activeTab === "file-generation" && <FileGenerationTab />}
         {activeTab === "api-calls" && <ApiCallsTab />}
@@ -138,7 +136,7 @@ function ReadyContent({ isDraft, prefix, defaultTab }: ReadyContentProps): JSX.E
 }
 
 // fallow-ignore-next-line complexity
-export function App({ prefix, defaultTab }: AppProps): JSX.Element {
+export function App({ defaultTab }: AppProps): JSX.Element {
   const lifecycle = useArtifactLifecycle();
   const isDraft = !artifactContext().published;
 
@@ -168,5 +166,5 @@ export function App({ prefix, defaultTab }: AppProps): JSX.Element {
     return <ErrorScreen error={error ?? new Error("Unknown startup error")} />;
   }
 
-  return <ReadyContent isDraft={isDraft} prefix={prefix} defaultTab={defaultTab ?? "about"} />;
+  return <ReadyContent isDraft={isDraft} defaultTab={defaultTab ?? "about"} />;
 }
