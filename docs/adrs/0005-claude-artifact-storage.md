@@ -26,3 +26,21 @@ Key format `alistigo-{listId}` satisfies all `window.storage` key constraints (n
 - Boot-time context detection via `isClaudeArtifactContext()` — checks for `window.storage?.get`
 - `window.storage` throws on missing keys (does not return null); all load calls need try/catch
 - `shared: false` (default) → per-user storage; `shared: true` → all viewers of the artifact share the list
+
+## Observed Storage Limits (empirical, 2026-08-13)
+
+Limits discovered through live testing of the capabilities-demo artifact. These are not officially documented by Anthropic.
+
+| Constraint | Value | Notes |
+|---|---|---|
+| Max value per key | **< 5 MiB** (exclusive) | `set()` throws `Internal server error while processing action` at ≥ 5 MiB |
+| Max total storage per artifact | **17 MiB** | Combined private + shared keys; any `set()` fails when total ≥ 17 MiB |
+| Max number of keys | **No observed limit** | No documented or discovered ceiling on key count |
+| Max key length | < 200 chars | Documented constraint; whitespace and `/`, `\`, `'`, `"` forbidden |
+
+### Clarifications
+
+- **Per-key limit is strictly exclusive**: a value of exactly 5 MiB (5 × 1,048,576 bytes) triggers the error. Values must be < 5 MiB.
+- **Total limit applies to the artifact as a whole**, not per-user. Both private (`shared: false`) and shared (`shared: true`) keys count toward the same 17 MiB budget. Once the aggregate reaches 17 MiB, every further `set()` call fails regardless of individual key size.
+- **Base64 overhead**: binary files uploaded via `data:` URIs are approximately 4/3× their original size when stored as strings. A 3.75 MiB file encodes to ≈ 5 MiB stored — already at the per-key limit. The safe upload ceiling is ≈ 3.74 MiB per file.
+- **The 17 MiB budget is shared across all users** of the same artifact URL (the `shared` flag controls read visibility, not which bucket contributes to the total).

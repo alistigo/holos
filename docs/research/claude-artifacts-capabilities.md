@@ -135,12 +135,17 @@ await window.storage.list(prefix?, shared?)   // → {keys, prefix?, shared} | n
 ### Key constraints
 
 - Keys < 200 chars, no whitespace, no `/`, `\`, `'`, `"`
-- Values < 5 MB per key, text/JSON only (no binary)
+- Values **< 5 MiB per key** (strictly exclusive — `set()` throws `Internal server error` at ≥ 5 MiB)
+- Text/JSON only (no raw binary — use base64 `data:` URIs for files; adds ~33% size overhead)
+- **Total artifact storage: 17 MiB** across all keys (private + shared combined); any `set()` fails when total ≥ 17 MiB
+- No observed limit on number of keys
 - `shared: false` (default) → per-user storage
-- `shared: true` → visible to all users of the artifact
+- `shared: true` → visible to all users of the artifact (still counts toward the 17 MiB total)
 - Rate limited — batch related data into single keys
 - Last-write-wins on concurrent writes
 - Non-existent key access **throws** (does not return null) — always use `try/catch`
+
+> Limits above are empirically observed (2026-08-13) via the capabilities-demo artifact — see [ADR-005](../adrs/0005-claude-artifact-storage.md).
 
 > ⚠️ `localStorage` and `sessionStorage` are **NOT supported** and will fail.
 
