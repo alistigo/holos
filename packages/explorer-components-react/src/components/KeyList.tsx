@@ -4,6 +4,7 @@ export interface KeyListEntry {
   id: string;
   label: string;
   isShared: boolean;
+  fileTypeBadge?: string;
 }
 
 export interface KeyListProps {
@@ -15,6 +16,7 @@ export interface KeyListProps {
   emptyText?: string;
   entryStatuses?: Map<string, "draft" | "saving">;
   onCreateClick?: () => void;
+  onUploadClick?: () => void;
   onDeleteId?: (id: string) => void;
   isDeletingId?: string | null;
 }
@@ -67,6 +69,11 @@ function KeyListRow({
         title={entry.label}
       >
         <span className="truncate flex-1">{entry.label}</span>
+        {entry.fileTypeBadge !== undefined && (
+          <span className="shrink-0 text-[10px] font-semibold text-teal-700 bg-teal-50 rounded px-1 leading-none py-0.5">
+            {entry.fileTypeBadge}
+          </span>
+        )}
         {entry.isShared && (
           <span className="shrink-0 text-[10px] font-semibold text-purple-500 bg-purple-50 rounded px-1 leading-none py-0.5">
             S
@@ -107,6 +114,7 @@ export function KeyList({
   emptyText = "No keys found.",
   entryStatuses,
   onCreateClick,
+  onUploadClick,
   onDeleteId,
   isDeletingId,
 }: KeyListProps): JSX.Element {
@@ -114,6 +122,17 @@ export function KeyList({
     <div className="flex flex-col h-full overflow-hidden border-r border-gray-100">
       <div className="px-3 py-1.5 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wide shrink-0 flex items-center gap-1">
         <span className="flex-1">{label}</span>
+        {onUploadClick !== undefined && (
+          <button
+            type="button"
+            onClick={onUploadClick}
+            className="text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded px-1 py-0.5 transition-colors leading-none text-sm"
+            title="Upload file"
+            aria-label="Upload file"
+          >
+            ↑
+          </button>
+        )}
         {onCreateClick !== undefined && (
           <button
             type="button"
