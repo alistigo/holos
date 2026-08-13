@@ -6,6 +6,7 @@ import { FileViewer } from "./FileViewer.js";
 import type { EntryStatus } from "./JsonDocumentViewer.js";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
 import { KeyList } from "./KeyList.js";
+import { StorageUsageBar } from "./StorageUsageBar.js";
 
 export interface UnifiedEntry {
   key: string;
@@ -218,6 +219,7 @@ export function StorageSection({
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+      <StorageUsageBar entries={entries} />
       <div className="flex flex-1 overflow-hidden min-h-0">
         <div className="w-2/5 shrink-0 flex flex-col overflow-hidden">
           {creationState?.phase === "typing" && (
