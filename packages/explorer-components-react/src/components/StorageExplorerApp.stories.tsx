@@ -66,17 +66,10 @@ type Story = StoryObj<typeof StorageExplorerApp>;
 
 export const Default: Story = {
   decorators: [withStorageStub(MOCK_PRIVATE, MOCK_SHARED)],
-  args: { prefix: "" },
-};
-
-export const WithPrefix: Story = {
-  decorators: [withStorageStub(MOCK_PRIVATE, MOCK_SHARED)],
-  args: { prefix: "alistigo:list:" },
 };
 
 export const EmptyStorage: Story = {
   decorators: [withStorageStub({}, {})],
-  args: { prefix: "" },
 };
 
 export const NoStorageApi: Story = {
@@ -90,5 +83,4 @@ export const NoStorageApi: Story = {
       );
     },
   ],
-  args: { prefix: "" },
 };
