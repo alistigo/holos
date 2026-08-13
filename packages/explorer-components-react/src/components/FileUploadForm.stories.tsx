@@ -1,20 +1,61 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
+import { useState } from "react";
+import type { FileStorageFormat } from "./FileUploadForm.js";
 import { FileUploadForm } from "./FileUploadForm.js";
 
-const meta: Meta<typeof FileUploadForm> = {
+const MIB = 1024 * 1024;
+
+function estimateBase64Bytes(file: File): number {
+  return Math.ceil(file.size / 3) * 4 + 200;
+}
+function estimateBinaryBytes(file: File): number {
+  return file.size + 50;
+}
+
+function FileUploadFormDemo({
+  availableBytes,
+  maxPerKeyMib = 5,
+}: {
+  availableBytes?: number;
+  maxPerKeyMib?: number;
+}) {
+  const [file, setFile] = useState<File | null>(null);
+  const [storageFormat, setStorageFormat] = useState<FileStorageFormat>("base64");
+  const maxPerKeyBytes = maxPerKeyMib * MIB;
+  const estimatedBytes =
+    file !== null
+      ? storageFormat === "base64"
+        ? estimateBase64Bytes(file)
+        : estimateBinaryBytes(file)
+      : 0;
+  const isFull = availableBytes !== undefined && availableBytes <= 0;
+  const isOverPerKey = file !== null && estimatedBytes >= maxPerKeyBytes;
+  const isOverSpace =
+    !isFull && file !== null && availableBytes !== undefined && estimatedBytes > availableBytes;
+  return (
+    <FileUploadForm
+      file={file}
+      onFileChange={setFile}
+      storageFormat={storageFormat}
+      onStorageFormatChange={setStorageFormat}
+      availableBytes={availableBytes}
+      maxPerKeyMib={maxPerKeyMib}
+      estimatedBytes={estimatedBytes}
+      isFull={isFull}
+      isOverPerKey={isOverPerKey}
+      isOverSpace={isOverSpace}
+    />
+  );
+}
+
+const meta: Meta<typeof FileUploadFormDemo> = {
   title: "Components/FileUploadForm",
-  component: FileUploadForm,
+  component: FileUploadFormDemo,
   parameters: { layout: "padded" },
-  args: {
-    onUpload: fn(),
-    onCancel: fn(),
-    maxPerKeyMib: 5,
-  },
 };
 
 export default meta;
-type Story = StoryObj<typeof FileUploadForm>;
+type Story = StoryObj<typeof FileUploadFormDemo>;
 
 export const Default: Story = {};
 

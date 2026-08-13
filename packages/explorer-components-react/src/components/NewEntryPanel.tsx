@@ -1,6 +1,11 @@
 import type { JSX } from "react";
 import { useCallback, useState } from "react";
-import type { FileEntry } from "./FileUploadForm.js";
+import type {
+  FileEntry,
+  FileEntryBase64,
+  FileEntryBinary,
+  FileStorageFormat,
+} from "./FileUploadForm.js";
 import { FileUploadForm } from "./FileUploadForm.js";
 import type { TextDocumentFormat } from "./TextDocumentEditor.js";
 import { TextDocumentEditor } from "./TextDocumentEditor.js";
@@ -61,6 +66,18 @@ function formatText(
   return { result: text, error: null };
 }
 
+function formatMib(bytes: number): string {
+  return `${(bytes / MIB).toFixed(2)} MiB`;
+}
+
+function estimateBase64Bytes(file: File): number {
+  return Math.ceil(file.size / 3) * 4 + 200;
+}
+
+function estimateBinaryBytes(file: File): number {
+  return file.size + 50;
+}
+
 function TabButton({
   label,
   active,
@@ -85,8 +102,70 @@ function TabButton({
   );
 }
 
-function formatMib(bytes: number): string {
-  return `${(bytes / MIB).toFixed(2)} MiB`;
+function KeyNameInput({
+  value,
+  onChange,
+  onSubmit,
+  keyExists,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  onSubmit: () => void;
+  keyExists: boolean;
+}): JSX.Element {
+  return (
+    <div>
+      <label htmlFor="entry-key" className="block text-xs text-gray-500 mb-1">
+        Key name
+      </label>
+      <input
+        id="entry-key"
+        // biome-ignore lint/a11y/noAutofocus: intentional — user just opened the panel
+        autoFocus
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") onSubmit();
+        }}
+        placeholder="e.g. my-document"
+        className="w-full text-xs font-mono border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+      />
+      {keyExists && <p className="mt-0.5 text-[10px] text-red-600">Key already exists</p>}
+    </div>
+  );
+}
+
+function FormActions({
+  primaryLabel,
+  onPrimary,
+  canPrimary,
+  onCancel,
+}: {
+  primaryLabel: string;
+  onPrimary: () => void;
+  canPrimary: boolean;
+  onCancel: () => void;
+}): JSX.Element {
+  return (
+    <div className="flex gap-2 shrink-0 px-3 py-2 border-t border-gray-100">
+      <button
+        type="button"
+        onClick={onPrimary}
+        disabled={!canPrimary}
+        className="flex-1 text-xs py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium"
+      >
+        {primaryLabel}
+      </button>
+      <button
+        type="button"
+        onClick={onCancel}
+        className="text-xs px-3 py-1.5 border border-gray-200 rounded hover:bg-gray-100 transition-colors"
+      >
+        Cancel
+      </button>
+    </div>
+  );
 }
 
 // fallow-ignore-next-line complexity
@@ -100,31 +179,108 @@ export function NewEntryPanel({
 }: NewEntryPanelProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<EntryTab>("file");
   const [shared, setShared] = useState(false);
+  const [key, setKey] = useState("");
 
-  const [textKey, setTextKey] = useState("");
+  // File tab state
+  const [file, setFile] = useState<File | null>(null);
+  const [storageFormat, setStorageFormat] = useState<FileStorageFormat>("base64");
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Text tab state
   const [textFormat, setTextFormat] = useState<TextDocumentFormat>("json");
   const [textContent, setTextContent] = useState("{}");
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  const keyTrimmed = key.trim();
+  const keyExists = existingEntries.some((e) => e.key === keyTrimmed && e.shared === shared);
   const isFull = availableBytes !== undefined && availableBytes <= 0;
 
-  const textKeyTrimmed = textKey.trim();
-  const keyExists = existingEntries.some((e) => e.key === textKeyTrimmed && e.shared === shared);
+  // File tab derived state
+  const estimatedBytes =
+    file !== null
+      ? storageFormat === "base64"
+        ? estimateBase64Bytes(file)
+        : estimateBinaryBytes(file)
+      : 0;
+  const isOverPerKey = file !== null && estimatedBytes >= maxPerKeyBytes;
+  const isOverSpace =
+    !isFull && file !== null && availableBytes !== undefined && estimatedBytes > availableBytes;
+  const canStore =
+    file !== null &&
+    keyTrimmed !== "" &&
+    !keyExists &&
+    !isUploading &&
+    !isFull &&
+    !isOverPerKey &&
+    !isOverSpace;
 
+  // Text tab derived state
   const textStoredBytes = new TextEncoder().encode(textContent).length;
   const isTextOverPerKey = textStoredBytes >= maxPerKeyBytes;
   const isTextOverSpace =
     !isFull && availableBytes !== undefined && textStoredBytes > availableBytes;
-
   const canSave =
-    textKeyTrimmed !== "" &&
+    keyTrimmed !== "" &&
     !keyExists &&
     !isSaving &&
     !isFull &&
     !isTextOverPerKey &&
     !isTextOverSpace &&
     (textFormat !== "json" || jsonError === null);
+
+  const handleFileChange = useCallback((newFile: File | null) => {
+    setFile(newFile);
+    if (newFile !== null) {
+      setKey((prev) => (prev.trim() === "" ? newFile.name : prev));
+    }
+  }, []);
+
+  const handleStore = useCallback(
+    // fallow-ignore-next-line complexity
+    () => {
+      if (file === null || keyTrimmed === "") return;
+      setIsUploading(true);
+      const finish = (): void => {
+        setIsUploading(false);
+      };
+      const base = {
+        _type: "file" as const,
+        name: file.name,
+        mimeType: file.type || "application/octet-stream",
+        size: file.size,
+        uploadedAt: new Date().toISOString(),
+      };
+      if (storageFormat === "blob") {
+        const entry: FileEntryBinary = { ...base, storageFormat: "blob", data: file };
+        void onUpload(keyTrimmed, entry, shared).finally(finish);
+        return;
+      }
+      const reader = new FileReader();
+      if (storageFormat === "arraybuffer") {
+        reader.onload = () => {
+          const entry: FileEntryBinary = {
+            ...base,
+            storageFormat: "arraybuffer",
+            data: reader.result as ArrayBuffer,
+          };
+          void onUpload(keyTrimmed, entry, shared).finally(finish);
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        reader.onload = () => {
+          const entry: FileEntryBase64 = {
+            ...base,
+            storageFormat: "base64",
+            data: reader.result as string,
+          };
+          void onUpload(keyTrimmed, entry, shared).finally(finish);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    [file, keyTrimmed, shared, storageFormat, onUpload],
+  );
 
   const handleTextChange = useCallback(
     (text: string) => {
@@ -151,12 +307,19 @@ export function NewEntryPanel({
     if (!canSave) return;
     setIsSaving(true);
     try {
-      await onCreateText(textKeyTrimmed, textContent, shared, textFormat);
+      await onCreateText(keyTrimmed, textContent, shared, textFormat);
       onCancel();
     } finally {
       setIsSaving(false);
     }
-  }, [canSave, onCreateText, textKeyTrimmed, textContent, shared, onCancel, textFormat]);
+  }, [canSave, onCreateText, keyTrimmed, textContent, shared, onCancel, textFormat]);
+
+  const maxPerKeyMib = maxPerKeyBytes / MIB;
+
+  const primaryLabel =
+    activeTab === "file" ? (isUploading ? "Storing…" : "Store") : isSaving ? "Creating…" : "Create";
+  const canAction = activeTab === "file" ? canStore : canSave;
+  const handleAction = activeTab === "file" ? () => handleStore() : () => void handleSaveText();
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
@@ -175,8 +338,13 @@ export function NewEntryPanel({
         </button>
       </div>
 
+      {/* Key name — shared between tabs, always at top */}
+      <div className="shrink-0 px-3 pt-2">
+        <KeyNameInput value={key} onChange={setKey} onSubmit={handleAction} keyExists={keyExists} />
+      </div>
+
       {/* Shared checkbox + tab selector */}
-      <div className="shrink-0 flex items-center gap-4 px-3 border-b border-gray-200">
+      <div className="shrink-0 flex items-center gap-4 px-3 border-b border-gray-200 mt-2">
         <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer shrink-0 py-2">
           <input
             type="checkbox"
@@ -200,20 +368,27 @@ export function NewEntryPanel({
         </div>
       </div>
 
-      {/* File tab */}
+      {/* File tab — overflow-auto so the form content scrolls if needed */}
       {activeTab === "file" && (
-        <FileUploadForm
-          onUpload={onUpload}
-          onCancel={onCancel}
-          externalShared={shared}
-          hideHeader
-          {...(availableBytes !== undefined ? { availableBytes } : {})}
-        />
+        <div className="flex-1 overflow-auto p-3 flex flex-col gap-3">
+          <FileUploadForm
+            file={file}
+            onFileChange={handleFileChange}
+            storageFormat={storageFormat}
+            onStorageFormatChange={setStorageFormat}
+            {...(availableBytes !== undefined ? { availableBytes } : {})}
+            maxPerKeyMib={maxPerKeyMib}
+            estimatedBytes={estimatedBytes}
+            isFull={isFull}
+            isOverPerKey={isOverPerKey}
+            isOverSpace={isOverSpace}
+          />
+        </div>
       )}
 
-      {/* Text document tab */}
+      {/* Text tab — overflow-hidden so the editor fills the remaining height */}
       {activeTab === "text" && (
-        <div className="flex flex-col flex-1 overflow-hidden p-3 gap-3">
+        <div className="flex-1 overflow-hidden p-3 flex flex-col gap-3">
           {isFull && (
             <div className="shrink-0 rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-800">
               <p className="font-semibold mb-0.5">Storage full</p>
@@ -223,29 +398,6 @@ export function NewEntryPanel({
               </p>
             </div>
           )}
-
-          {/* Key name */}
-          <div className="shrink-0">
-            <label htmlFor="new-entry-key" className="block text-xs text-gray-500 mb-1">
-              Key name
-            </label>
-            <input
-              id="new-entry-key"
-              // biome-ignore lint/a11y/noAutofocus: intentional — user just opened the panel
-              autoFocus
-              type="text"
-              value={textKey}
-              onChange={(e) => setTextKey(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") void handleSaveText();
-              }}
-              placeholder="e.g. my-document"
-              className="w-full text-xs font-mono border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-            />
-            {keyExists && <p className="mt-0.5 text-[10px] text-red-600">Key already exists</p>}
-          </div>
-
-          {/* Shared text editor — format selector lives in its header */}
           <TextDocumentEditor
             text={textContent}
             onTextChange={handleTextChange}
@@ -264,27 +416,16 @@ export function NewEntryPanel({
                 }
               : {})}
           />
-
-          {/* Actions */}
-          <div className="flex gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => void handleSaveText()}
-              disabled={!canSave}
-              className="flex-1 text-xs py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium"
-            >
-              {isSaving ? "Creating…" : "Create"}
-            </button>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="text-xs px-3 py-1.5 border border-gray-200 rounded hover:bg-gray-100 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
         </div>
       )}
+
+      {/* Actions — pinned at the bottom, shared by both tabs */}
+      <FormActions
+        primaryLabel={primaryLabel}
+        onPrimary={handleAction}
+        canPrimary={canAction}
+        onCancel={onCancel}
+      />
     </div>
   );
 }
