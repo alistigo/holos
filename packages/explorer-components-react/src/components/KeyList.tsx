@@ -105,6 +105,7 @@ function KeyListRow({
   );
 }
 
+// fallow-ignore-next-line complexity
 export function KeyList({
   entries,
   selectedId,

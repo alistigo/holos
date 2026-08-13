@@ -1,6 +1,5 @@
 import type { JSX } from "react";
 import type { FileEntry } from "./FileUploadForm.js";
-import type { UnifiedEntry } from "./StorageSection.js";
 
 const IMAGE_MIME_TYPES = new Set([
   "image/png",
@@ -25,7 +24,7 @@ function formatDate(iso: string): string {
 }
 
 export interface FileViewerProps {
-  entry: UnifiedEntry & { value: FileEntry };
+  entry: { key: string; value: FileEntry; shared: boolean };
 }
 
 export function FileViewer({ entry }: FileViewerProps): JSX.Element {

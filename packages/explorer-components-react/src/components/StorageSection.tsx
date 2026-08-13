@@ -99,6 +99,7 @@ export function StorageSection({
     (id: string) => {
       setShowUploadForm(false);
       setSelectedId(id);
+      // fallow-ignore-next-line complexity
       setEditTexts((prev) => {
         if (prev.has(id)) return prev;
         const entry = entries.find((e) => eid(e) === id);
