@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
 
 const meta: Meta<typeof JsonDocumentViewer> = {
@@ -26,59 +27,71 @@ const SAMPLE_OBJECT = {
   metadata: { version: 2, locale: "en" },
 };
 
+const SAMPLE_JSON = JSON.stringify(SAMPLE_OBJECT, null, 2);
+
+// ── Read-only stories ─────────────────────────────────────────────────────────
+
 export const WithObject: Story = {
-  args: {
-    value: SAMPLE_OBJECT,
-    isLoading: false,
-    onDelete: () => alert("delete clicked"),
-    isDeleting: false,
-  },
+  args: { value: SAMPLE_OBJECT, isLoading: false },
 };
 
 export const WithString: Story = {
-  args: {
-    value: "plain string value stored in this key",
-    isLoading: false,
-    onDelete: () => alert("delete clicked"),
-    isDeleting: false,
-  },
+  args: { value: "plain string value stored in this key", isLoading: false },
 };
 
 export const WithNumber: Story = {
-  args: {
-    value: 42,
-    isLoading: false,
-    onDelete: () => alert("delete clicked"),
-    isDeleting: false,
-  },
+  args: { value: 42, isLoading: false },
 };
 
 export const Loading: Story = {
-  args: {
-    value: undefined,
-    isLoading: true,
-  },
+  args: { value: undefined, isLoading: true },
 };
 
 export const Empty: Story = {
-  args: {
-    value: undefined,
-    isLoading: false,
-  },
+  name: "Empty (no key selected)",
+  args: { value: undefined, isLoading: false },
 };
 
-export const Deleting: Story = {
-  args: {
-    value: SAMPLE_OBJECT,
-    isLoading: false,
-    onDelete: () => {},
-    isDeleting: true,
-  },
+// ── Edit mode stories ─────────────────────────────────────────────────────────
+
+function EditableViewer(
+  props: Omit<React.ComponentProps<typeof JsonDocumentViewer>, "editText" | "onEditTextChange">,
+): React.JSX.Element {
+  const [text, setText] = useState(SAMPLE_JSON);
+  return <JsonDocumentViewer {...props} editText={text} onEditTextChange={setText} />;
+}
+
+export const EditingJson: Story = {
+  name: "Editing — JSON (saved)",
+  render: (args) => <EditableViewer {...args} />,
+  args: { value: SAMPLE_OBJECT, isLoading: false, saveStatus: "saved" },
 };
 
-export const WithoutDeleteButton: Story = {
-  args: {
-    value: SAMPLE_OBJECT,
-    isLoading: false,
+export const EditingDraft: Story = {
+  name: "Editing — JSON (unsaved)",
+  render: (args) => <EditableViewer {...args} />,
+  args: { value: SAMPLE_OBJECT, isLoading: false, saveStatus: "draft" },
+};
+
+export const EditingSaving: Story = {
+  name: "Editing — JSON (saving)",
+  render: (args) => <EditableViewer {...args} />,
+  args: { value: SAMPLE_OBJECT, isLoading: false, saveStatus: "saving" },
+};
+
+export const EditingInvalidJson: Story = {
+  name: "Editing — invalid JSON",
+  render: (args) => {
+    const [text, setText] = useState('{ "name": "Alice" oops }');
+    return (
+      <JsonDocumentViewer
+        {...args}
+        editText={text}
+        onEditTextChange={setText}
+        isInvalidJson={true}
+        saveStatus="draft"
+      />
+    );
   },
+  args: { value: SAMPLE_OBJECT, isLoading: false },
 };

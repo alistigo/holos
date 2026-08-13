@@ -17,6 +17,10 @@ const meta: Meta<typeof StorageSection> = {
 export default meta;
 type Story = StoryObj<typeof StorageSection>;
 
+// 1×1 transparent PNG
+const PNG_1X1 =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
 const SAMPLE_ENTRIES: UnifiedEntry[] = [
   {
     key: "alistigo:list:abc123",
@@ -33,11 +37,58 @@ const SAMPLE_ENTRIES: UnifiedEntry[] = [
   { key: "alistigo:prefs:user", value: { locale: "en", theme: "light" }, shared: true },
 ];
 
+const FILE_ENTRY: UnifiedEntry = {
+  key: "avatar.png",
+  value: {
+    _type: "file",
+    name: "avatar.png",
+    mimeType: "image/png",
+    size: 68,
+    uploadedAt: "2026-08-13T10:00:00.000Z",
+    data: PNG_1X1,
+  },
+  shared: false,
+};
+
+const mib = (n: number): string => "x".repeat(Math.floor(n * 1024 * 1024));
+
+// ── States ────────────────────────────────────────────────────────────────────
+
 export const WithEntries: Story = {
   args: {
     entries: SAMPLE_ENTRIES,
     isLoading: false,
     onDelete: (key, shared) => alert(`delete: ${key} (shared=${String(shared)})`),
+    isDeletingEntry: null,
+    onCreate: async () => {},
+    onUpdate: async () => {},
+    onCreateText: async () => {},
+  },
+};
+
+export const WithFileEntry: Story = {
+  name: "With file entry",
+  args: {
+    entries: [...SAMPLE_ENTRIES, FILE_ENTRY],
+    isLoading: false,
+    onDelete: () => {},
+    isDeletingEntry: null,
+    onCreate: async () => {},
+    onUpdate: async () => {},
+    onCreateText: async () => {},
+  },
+};
+
+export const NearStorageLimit: Story = {
+  name: "Near storage limit (~14 MiB used)",
+  args: {
+    entries: [
+      { key: "big-a", value: { data: mib(5) }, shared: false },
+      { key: "big-b", value: { data: mib(4.9) }, shared: false },
+      { key: "big-c", value: { data: mib(4.1) }, shared: true },
+    ],
+    isLoading: false,
+    onDelete: () => {},
     isDeletingEntry: null,
     onCreate: async () => {},
     onUpdate: async () => {},

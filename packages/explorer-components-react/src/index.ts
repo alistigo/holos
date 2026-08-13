@@ -13,3 +13,8 @@ export type { StorageSectionProps, UnifiedEntry } from "./components/StorageSect
 export { StorageSection } from "./components/StorageSection.js";
 export type { StorageUsageBarProps } from "./components/StorageUsageBar.js";
 export { StorageUsageBar } from "./components/StorageUsageBar.js";
+export type {
+  TextDocumentEditorProps,
+  TextDocumentFormat,
+} from "./components/TextDocumentEditor.js";
+export { TextDocumentEditor } from "./components/TextDocumentEditor.js";
