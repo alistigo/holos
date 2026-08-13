@@ -21,7 +21,12 @@ export interface TextDocumentEntry {
 export interface NewEntryPanelProps {
   existingEntries: { key: string; shared: boolean }[];
   onUpload: (key: string, fileEntry: FileEntry, shared: boolean) => Promise<void>;
-  onCreateText: (key: string, text: string, shared: boolean, format: TextDocumentFormat) => Promise<void>;
+  onCreateText: (
+    key: string,
+    text: string,
+    shared: boolean,
+    format: TextDocumentFormat,
+  ) => Promise<void>;
   onCancel: () => void;
   /** Free bytes remaining before hitting the artifact's total storage cap. */
   availableBytes?: number;
@@ -151,7 +156,7 @@ export function NewEntryPanel({
     } finally {
       setIsSaving(false);
     }
-  }, [canSave, onCreateText, textKeyTrimmed, textContent, shared, onCancel]);
+  }, [canSave, onCreateText, textKeyTrimmed, textContent, shared, onCancel, textFormat]);
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
