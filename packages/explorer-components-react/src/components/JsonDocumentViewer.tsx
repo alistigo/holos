@@ -2,6 +2,7 @@ import JsonView from "@uiw/react-json-view";
 import { lightTheme } from "@uiw/react-json-view/light";
 import type React from "react";
 import type { JSX } from "react";
+import { useCallback } from "react";
 import type { TextDocumentFormat } from "./TextDocumentEditor.js";
 import { TextDocumentEditor } from "./TextDocumentEditor.js";
 
@@ -66,6 +67,15 @@ export function JsonDocumentViewer({
 }: JsonDocumentViewerProps): JSX.Element {
   const isEditable = editText !== undefined && onEditTextChange !== undefined;
 
+  const handleFormat = useCallback(() => {
+    if (format !== "json" || editText === undefined || onEditTextChange === undefined) return;
+    try {
+      onEditTextChange(JSON.stringify(JSON.parse(editText), null, 2));
+    } catch {
+      // invalid JSON — leave as-is
+    }
+  }, [format, editText, onEditTextChange]);
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -78,6 +88,7 @@ export function JsonDocumentViewer({
             format={format}
             saveStatus={saveStatus}
             error={isInvalidJson ? "Invalid JSON — fix to auto-save" : null}
+            onFormat={handleFormat}
           />
         ) : (
           <div className="flex-1 overflow-auto p-2">

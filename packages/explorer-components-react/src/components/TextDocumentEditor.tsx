@@ -96,6 +96,17 @@ export function TextDocumentEditor({
         ) : (
           <>
             <span className="text-xs text-gray-400 font-mono flex-1">{formatLabel(format)}</span>
+            {onFormat !== undefined && (
+              <button
+                type="button"
+                onClick={onFormat}
+                disabled={format !== "json"}
+                title={format !== "json" ? "Format only available for JSON" : undefined}
+                className="text-xs px-2 py-0.5 border border-gray-200 rounded text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Format
+              </button>
+            )}
             <SaveStatusChip status={saveStatus} />
           </>
         )}
