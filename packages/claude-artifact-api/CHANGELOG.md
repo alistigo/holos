@@ -1,3 +1,14 @@
+## 0.2.5 (2026-08-14)
+
+### 🩹 Fixes
+
+- **explorer:** key validation, base64-only file storage, save errors ([4d81b7c](https://github.com/alistigo/holos/commit/4d81b7c))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.4 (2026-08-14)
 
 ### 🚀 Features

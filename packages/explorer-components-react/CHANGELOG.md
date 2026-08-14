@@ -1,3 +1,19 @@
+## 0.3.1 (2026-08-14)
+
+### 🩹 Fixes
+
+- **explorer:** add fallow complexity suppression to refactored components ([150bdc2](https://github.com/alistigo/holos/commit/150bdc2))
+- **explorer:** key validation, base64-only file storage, save errors ([4d81b7c](https://github.com/alistigo/holos/commit/4d81b7c))
+
+### 🧱 Updated Dependencies
+
+- Updated claude-artifact-api to 0.2.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.0 (2026-08-14)
 
 ### 🚀 Features

@@ -1,3 +1,10 @@
+## 0.2.29 (2026-08-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.2.3
+- Updated claude-artifact-api to 0.2.5
+
 ## 0.2.28 (2026-08-14)
 
 ### 🚀 Features
