@@ -2,8 +2,6 @@ import type { JSX } from "react";
 
 const MIB = 1024 * 1024;
 
-export type FileStorageFormat = "base64" | "blob" | "arraybuffer";
-
 interface FileEntryBase {
   _type: "file";
   name: string;
@@ -27,8 +25,6 @@ export type FileEntry = FileEntryBase64 | FileEntryBinary;
 export interface FileUploadFormProps {
   file: File | null;
   onFileChange: (file: File | null) => void;
-  storageFormat: FileStorageFormat;
-  onStorageFormatChange: (fmt: FileStorageFormat) => void;
   maxPerKeyMib?: number;
   availableBytes?: number;
   estimatedBytes: number;
@@ -41,12 +37,9 @@ function formatMib(bytes: number): string {
   return `${(bytes / MIB).toFixed(2)} MiB`;
 }
 
-// fallow-ignore-next-line complexity
 export function FileUploadForm({
   file,
   onFileChange,
-  storageFormat,
-  onStorageFormatChange,
   maxPerKeyMib = 5,
   availableBytes,
   estimatedBytes,
@@ -85,37 +78,14 @@ export function FileUploadForm({
               {file.type || "application/octet-stream"} · {(file.size / 1024).toFixed(1)} KiB
             </p>
             <p className="mt-0.5 text-[10px] text-gray-400 font-mono">
-              ~{formatMib(estimatedBytes)} stored
-              {storageFormat === "base64" ? " (base64 encoded)" : " (binary, no overhead)"}
+              ~{formatMib(estimatedBytes)} stored (base64 encoded)
             </p>
           </>
         )}
-        {storageFormat === "base64" ? (
-          <p className="mt-1 text-[10px] text-gray-400">
-            {maxPerKeyMib} MiB/key limit &middot; max safe file ≈ {maxSafeFileMib.toFixed(2)} MiB
-          </p>
-        ) : (
-          <p className="mt-1 text-[10px] text-amber-600">
-            {maxPerKeyMib} MiB/key limit &middot; experimental &mdash; window.storage may not
-            support binary values
-          </p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="file-storage-format" className="block text-xs text-gray-500 mb-1">
-          Storage format
-        </label>
-        <select
-          id="file-storage-format"
-          value={storageFormat}
-          onChange={(e) => onStorageFormatChange(e.target.value as FileStorageFormat)}
-          className="w-full text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
-        >
-          <option value="base64">Base64 (default, +33% size overhead)</option>
-          <option value="blob">Blob (experimental, no overhead)</option>
-          <option value="arraybuffer">ArrayBuffer (experimental, no overhead)</option>
-        </select>
+        <p className="mt-1 text-[10px] text-gray-400">
+          {maxPerKeyMib} MiB/key limit &middot; max safe file ≈ {maxSafeFileMib.toFixed(2)} MiB
+          (base64 adds ~33% overhead)
+        </p>
       </div>
 
       {isOverPerKey && (

@@ -1,6 +1,5 @@
 import type { JSX } from "react";
-import { useEffect, useState } from "react";
-import type { FileEntry, FileEntryBinary } from "./FileUploadForm.js";
+import type { FileEntry } from "./FileUploadForm.js";
 
 const IMAGE_MIME_TYPES = new Set([
   "image/png",
@@ -24,43 +23,17 @@ function formatDate(iso: string): string {
   }
 }
 
-function isBinaryEntry(e: FileEntry): e is FileEntryBinary {
-  return e.storageFormat === "blob" || e.storageFormat === "arraybuffer";
-}
-
 export interface FileViewerProps {
   entry: { key: string; value: FileEntry; shared: boolean };
 }
 
-// fallow-ignore-next-line complexity
 export function FileViewer({ entry }: FileViewerProps): JSX.Element {
   const { name, mimeType, size, uploadedAt } = entry.value;
   const isImage = IMAGE_MIME_TYPES.has(mimeType);
-  const isBinary = isBinaryEntry(entry.value);
 
-  const [blobUrl, setBlobUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!isBinary) {
-      setBlobUrl(null);
-      return;
-    }
-    const rawData = (entry.value as FileEntryBinary).data;
-    const blob = rawData instanceof Blob ? rawData : new Blob([rawData], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    setBlobUrl(url);
-    return () => {
-      URL.revokeObjectURL(url);
-    };
-  }, [isBinary, entry.value, mimeType]);
-
-  // For base64 entries, data is a string; for binary, use the object URL
-  let displaySrc: string | null;
-  if (isBinaryEntry(entry.value)) {
-    displaySrc = blobUrl;
-  } else {
-    displaySrc = entry.value.data;
-  }
+  // Files are always stored as base64 data URIs
+  const displaySrc =
+    "data" in entry.value && typeof entry.value.data === "string" ? entry.value.data : null;
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -87,23 +60,10 @@ export function FileViewer({ entry }: FileViewerProps): JSX.Element {
         <span className="text-[10px] text-gray-400">
           <span className="font-medium text-gray-500">Uploaded</span> {formatDate(uploadedAt)}
         </span>
-        {isBinary && (
-          <span className="text-[10px] text-amber-600">
-            <span className="font-medium">Format</span> {entry.value.storageFormat} (experimental)
-          </span>
-        )}
       </div>
 
       <div className="flex-1 overflow-auto p-3 flex flex-col items-start gap-3">
-        {isBinary && displaySrc === null ? (
-          <div className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-            <p className="font-semibold mb-0.5">Binary data unavailable</p>
-            <p>
-              window.storage may not have preserved the binary value. The entry might have been
-              coerced to a string on storage.
-            </p>
-          </div>
-        ) : isImage && displaySrc !== null ? (
+        {isImage && displaySrc !== null ? (
           <img
             src={displaySrc}
             alt={name}

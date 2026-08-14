@@ -1,11 +1,6 @@
 import type { JSX } from "react";
 import { useCallback, useState } from "react";
-import type {
-  FileEntry,
-  FileEntryBase64,
-  FileEntryBinary,
-  FileStorageFormat,
-} from "./FileUploadForm.js";
+import type { FileEntry, FileEntryBase64 } from "./FileUploadForm.js";
 import { FileUploadForm } from "./FileUploadForm.js";
 import type { TextDocumentFormat } from "./TextDocumentEditor.js";
 import { TextDocumentEditor } from "./TextDocumentEditor.js";
@@ -37,6 +32,11 @@ export interface NewEntryPanelProps {
   availableBytes?: number;
   /** Per-key ceiling in bytes. Default: 5 MiB. */
   maxPerKeyBytes?: number;
+}
+
+/** Strips characters forbidden in window.storage keys: whitespace, /, \, ', " */
+function sanitizeKey(raw: string): string {
+  return raw.replace(/[\s/\\'"`]/g, "");
 }
 
 function validateJson(text: string): string | null {
@@ -72,10 +72,6 @@ function formatMib(bytes: number): string {
 
 function estimateBase64Bytes(file: File): number {
   return Math.ceil(file.size / 3) * 4 + 200;
-}
-
-function estimateBinaryBytes(file: File): number {
-  return file.size + 50;
 }
 
 function TabButton({
@@ -124,13 +120,14 @@ function KeyNameInput({
         autoFocus
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(sanitizeKey(e.target.value))}
         onKeyDown={(e) => {
           if (e.key === "Enter") onSubmit();
         }}
         placeholder="e.g. my-document"
         className="w-full text-xs font-mono border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
       />
+      <p className="mt-0.5 text-[10px] text-gray-400">No spaces, /, \, &apos;, or &quot; allowed</p>
       {keyExists && <p className="mt-0.5 text-[10px] text-red-600">Key already exists</p>}
     </div>
   );
@@ -183,7 +180,6 @@ export function NewEntryPanel({
 
   // File tab state
   const [file, setFile] = useState<File | null>(null);
-  const [storageFormat, setStorageFormat] = useState<FileStorageFormat>("base64");
   const [isUploading, setIsUploading] = useState(false);
 
   // Text tab state
@@ -192,17 +188,15 @@ export function NewEntryPanel({
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Shared error for save/upload failures
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const keyTrimmed = key.trim();
   const keyExists = existingEntries.some((e) => e.key === keyTrimmed && e.shared === shared);
   const isFull = availableBytes !== undefined && availableBytes <= 0;
 
   // File tab derived state
-  const estimatedBytes =
-    file !== null
-      ? storageFormat === "base64"
-        ? estimateBase64Bytes(file)
-        : estimateBinaryBytes(file)
-      : 0;
+  const estimatedBytes = file !== null ? estimateBase64Bytes(file) : 0;
   const isOverPerKey = file !== null && estimatedBytes >= maxPerKeyBytes;
   const isOverSpace =
     !isFull && file !== null && availableBytes !== undefined && estimatedBytes > availableBytes;
@@ -232,55 +226,39 @@ export function NewEntryPanel({
   const handleFileChange = useCallback((newFile: File | null) => {
     setFile(newFile);
     if (newFile !== null) {
-      setKey((prev) => (prev.trim() === "" ? newFile.name : prev));
+      setKey((prev) => (prev.trim() === "" ? sanitizeKey(newFile.name) : prev));
     }
   }, []);
 
-  const handleStore = useCallback(
-    // fallow-ignore-next-line complexity
-    () => {
-      if (file === null || keyTrimmed === "") return;
-      setIsUploading(true);
-      const finish = (): void => {
-        setIsUploading(false);
+  const handleStore = useCallback(() => {
+    if (file === null || keyTrimmed === "") return;
+    setSaveError(null);
+    setIsUploading(true);
+    const finish = (): void => {
+      setIsUploading(false);
+    };
+    const base = {
+      _type: "file" as const,
+      name: file.name,
+      mimeType: file.type || "application/octet-stream",
+      size: file.size,
+      uploadedAt: new Date().toISOString(),
+    };
+    const reader = new FileReader();
+    reader.onload = () => {
+      const entry: FileEntryBase64 = {
+        ...base,
+        storageFormat: "base64",
+        data: reader.result as string,
       };
-      const base = {
-        _type: "file" as const,
-        name: file.name,
-        mimeType: file.type || "application/octet-stream",
-        size: file.size,
-        uploadedAt: new Date().toISOString(),
-      };
-      if (storageFormat === "blob") {
-        const entry: FileEntryBinary = { ...base, storageFormat: "blob", data: file };
-        void onUpload(keyTrimmed, entry, shared).finally(finish);
-        return;
-      }
-      const reader = new FileReader();
-      if (storageFormat === "arraybuffer") {
-        reader.onload = () => {
-          const entry: FileEntryBinary = {
-            ...base,
-            storageFormat: "arraybuffer",
-            data: reader.result as ArrayBuffer,
-          };
-          void onUpload(keyTrimmed, entry, shared).finally(finish);
-        };
-        reader.readAsArrayBuffer(file);
-      } else {
-        reader.onload = () => {
-          const entry: FileEntryBase64 = {
-            ...base,
-            storageFormat: "base64",
-            data: reader.result as string,
-          };
-          void onUpload(keyTrimmed, entry, shared).finally(finish);
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    [file, keyTrimmed, shared, storageFormat, onUpload],
-  );
+      void onUpload(keyTrimmed, entry, shared)
+        .catch((e: unknown) => {
+          setSaveError(e instanceof Error ? e.message : "Upload failed");
+        })
+        .finally(finish);
+    };
+    reader.readAsDataURL(file);
+  }, [file, keyTrimmed, shared, onUpload]);
 
   const handleTextChange = useCallback(
     (text: string) => {
@@ -305,10 +283,13 @@ export function NewEntryPanel({
 
   const handleSaveText = useCallback(async () => {
     if (!canSave) return;
+    setSaveError(null);
     setIsSaving(true);
     try {
       await onCreateText(keyTrimmed, textContent, shared, textFormat);
       onCancel();
+    } catch (e: unknown) {
+      setSaveError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setIsSaving(false);
     }
@@ -374,8 +355,6 @@ export function NewEntryPanel({
           <FileUploadForm
             file={file}
             onFileChange={handleFileChange}
-            storageFormat={storageFormat}
-            onStorageFormatChange={setStorageFormat}
             {...(availableBytes !== undefined ? { availableBytes } : {})}
             maxPerKeyMib={maxPerKeyMib}
             estimatedBytes={estimatedBytes}
@@ -416,6 +395,13 @@ export function NewEntryPanel({
                 }
               : {})}
           />
+        </div>
+      )}
+
+      {/* Save error — shown above actions so it's visible without scrolling */}
+      {saveError !== null && (
+        <div className="shrink-0 px-3 py-2 border-t border-red-100">
+          <p className="text-[10px] text-red-600">{saveError}</p>
         </div>
       )}
 
