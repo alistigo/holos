@@ -40,14 +40,11 @@ function ControlledCreateMode({
     setText(f === "json" ? "{}" : "");
   };
   const handleFormat = () => {
-    if (format === "json") {
-      try {
-        setText(JSON.stringify(JSON.parse(text), null, 2));
-      } catch {
-        /* leave as-is */
-      }
-    } else if (format === "plain") {
-      setText(text.trim());
+    if (format !== "json") return;
+    try {
+      setText(JSON.stringify(JSON.parse(text), null, 2));
+    } catch {
+      // invalid JSON — leave as-is
     }
   };
 
