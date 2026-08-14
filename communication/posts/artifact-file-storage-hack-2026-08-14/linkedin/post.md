@@ -1,10 +1,10 @@
 ---
-status: draft
+status: published
 channel: linkedin
 createdAt: 2026-08-14
-publishedAt:
+publishedAt: 2026-08-14
 url:
-attachment:
+attachment: hackerman.gif
 ---
 
 If you can store text in a Claude artifact, can you store files?
