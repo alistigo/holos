@@ -26,7 +26,7 @@ Keys: no hard cap, but the 17MB ceiling applies across all of them.
 
 Each artifact you publish is a 17MB hard drive. For something built on top of a text storage API, that is not nothing.
 
-Disappointed you cannot store a movie. But sharing a picture with no backend, no hosting, no server? That works.
+I'm disappointed you cannot store a movie ... But sharing a picture with no backend, no hosting, no server? That works.
 
 Updated demo in the first comment. Open to all, give it a try.
 
