@@ -15,16 +15,20 @@ export interface Config {
   published: boolean;
 }
 
+/** Set VITE_DEFAULT_ARTIFACT at build time to pin a specific artifact as the landing default. */
+const DEFAULT_ARTIFACT: string =
+  import.meta.env.VITE_DEFAULT_ARTIFACT || KNOWN_APPS[0] || "@alistigo/artifact-list";
+
 export function useHostConfig() {
   const [config, setConfig] = useState<Config>({
-    app: KNOWN_APPS[0] ?? "@alistigo/artifact-list",
+    app: DEFAULT_ARTIFACT,
     lang: "en",
     aiContext: "claude",
     readonly: false,
     document: "",
     rawDocument: "",
     plugins: {},
-    published: false,
+    published: true,
   });
   return { config, setConfig };
 }
