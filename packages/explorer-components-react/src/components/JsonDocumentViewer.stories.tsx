@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
+import { DocumentViewer } from "./DocumentViewer.js";
 
-const meta: Meta<typeof JsonDocumentViewer> = {
-  title: "Explorer/JsonDocumentViewer",
-  component: JsonDocumentViewer,
+const meta: Meta<typeof DocumentViewer> = {
+  title: "Explorer/DocumentViewer",
+  component: DocumentViewer,
   decorators: [
     (Story) => (
       <div className="h-80 w-96 border border-gray-200 rounded overflow-hidden flex flex-col">
@@ -15,7 +15,7 @@ const meta: Meta<typeof JsonDocumentViewer> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof JsonDocumentViewer>;
+type Story = StoryObj<typeof DocumentViewer>;
 
 const SAMPLE_OBJECT = {
   id: "list:abc123",
@@ -39,6 +39,11 @@ export const WithString: Story = {
   args: { value: "plain string value stored in this key", isLoading: false },
 };
 
+export const WithJsonString: Story = {
+  name: "With JSON string (auto-colorized)",
+  args: { value: SAMPLE_JSON, isLoading: false },
+};
+
 export const WithNumber: Story = {
   args: { value: 42, isLoading: false },
 };
@@ -55,10 +60,10 @@ export const Empty: Story = {
 // ── Edit mode stories ─────────────────────────────────────────────────────────
 
 function EditableViewer(
-  props: Omit<React.ComponentProps<typeof JsonDocumentViewer>, "editText" | "onEditTextChange">,
+  props: Omit<React.ComponentProps<typeof DocumentViewer>, "editText" | "onEditTextChange">,
 ): React.JSX.Element {
   const [text, setText] = useState(SAMPLE_JSON);
-  return <JsonDocumentViewer {...props} editText={text} onEditTextChange={setText} />;
+  return <DocumentViewer {...props} editText={text} onEditTextChange={setText} />;
 }
 
 export const EditingJson: Story = {
@@ -84,7 +89,7 @@ export const EditingInvalidJson: Story = {
   render: (args) => {
     const [text, setText] = useState('{ "name": "Alice" oops }');
     return (
-      <JsonDocumentViewer
+      <DocumentViewer
         {...args}
         editText={text}
         onEditTextChange={setText}

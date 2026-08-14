@@ -1,9 +1,8 @@
 import type { JSX } from "react";
 import { useCallback, useRef, useState } from "react";
+import type { EntryStatus } from "./DocumentViewer.js";
 import type { FileEntry } from "./FileUploadForm.js";
-import { FileViewer } from "./FileViewer.js";
-import type { EntryStatus } from "./JsonDocumentViewer.js";
-import { JsonDocumentViewer } from "./JsonDocumentViewer.js";
+import { KeyContentViewer } from "./KeyContentViewer.js";
 import { KeyList } from "./KeyList.js";
 import type { TextDocumentEntry } from "./NewEntryPanel.js";
 import { NewEntryPanel } from "./NewEntryPanel.js";
@@ -62,11 +61,30 @@ function isTextDocumentEntry(value: unknown): value is TextDocumentEntry {
   );
 }
 
+// fallow-ignore-next-line complexity
 function fileTypeBadge(mimeType: string): string {
+  if (mimeType === "image/jpeg") return "JPG";
+  if (mimeType === "image/png") return "PNG";
+  if (mimeType === "image/gif") return "GIF";
+  if (mimeType === "image/webp") return "WEBP";
+  if (mimeType === "image/svg+xml") return "SVG";
+  if (mimeType === "image/avif") return "AVIF";
   if (mimeType.startsWith("image/")) return "IMG";
   if (mimeType === "application/pdf") return "PDF";
+  if (mimeType === "video/mp4") return "MP4";
+  if (mimeType === "video/webm") return "WEBM";
+  if (mimeType.startsWith("video/")) return "VID";
+  if (mimeType === "audio/mpeg") return "MP3";
+  if (mimeType === "audio/ogg") return "OGG";
+  if (mimeType.startsWith("audio/")) return "AUD";
   if (mimeType.startsWith("text/")) return "TXT";
   return "FILE";
+}
+
+function documentTypeBadge(format: TextDocumentFormat): string {
+  if (format === "json") return "JSON";
+  if (format === "yaml") return "YAML";
+  return "TXT";
 }
 
 // fallow-ignore-next-line complexity
@@ -95,7 +113,11 @@ export function StorageSection({
     id: eid(e),
     label: e.key,
     isShared: e.shared,
-    ...(isFileEntry(e.value) ? { fileTypeBadge: fileTypeBadge(e.value.mimeType) } : {}),
+    ...(isFileEntry(e.value)
+      ? { fileTypeBadge: fileTypeBadge(e.value.mimeType) }
+      : isTextDocumentEntry(e.value)
+        ? { fileTypeBadge: documentTypeBadge(e.value.format) }
+        : {}),
   }));
 
   const isDeletingId = isDeletingEntry !== null ? eid(isDeletingEntry) : null;
@@ -259,11 +281,9 @@ export function StorageSection({
               onCancel={() => setShowNewEntryPanel(false)}
               availableBytes={availableBytes}
             />
-          ) : isSelectedFile && selectedEntry !== undefined ? (
-            <FileViewer entry={selectedEntry as UnifiedEntry & { value: FileEntry }} />
           ) : (
-            <JsonDocumentViewer
-              value={selectedValue}
+            <KeyContentViewer
+              entry={selectedEntry}
               isLoading={isLoading}
               isInvalidJson={isCurrentEntryInvalid}
               saveStatus={currentSaveStatus}
