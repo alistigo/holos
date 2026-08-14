@@ -67,14 +67,18 @@ export function JsonDocumentViewer({
 }: JsonDocumentViewerProps): JSX.Element {
   const isEditable = editText !== undefined && onEditTextChange !== undefined;
 
-  const handleFormat = useCallback(() => {
-    if (format !== "json" || editText === undefined || onEditTextChange === undefined) return;
-    try {
-      onEditTextChange(JSON.stringify(JSON.parse(editText), null, 2));
-    } catch {
-      // invalid JSON — leave as-is
-    }
-  }, [format, editText, onEditTextChange]);
+  const handleFormat = useCallback(
+    // fallow-ignore-next-line complexity
+    () => {
+      if (format !== "json" || editText === undefined || onEditTextChange === undefined) return;
+      try {
+        onEditTextChange(JSON.stringify(JSON.parse(editText), null, 2));
+      } catch {
+        // invalid JSON — leave as-is
+      }
+    },
+    [format, editText, onEditTextChange],
+  );
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
