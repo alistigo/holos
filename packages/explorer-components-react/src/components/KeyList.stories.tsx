@@ -25,10 +25,13 @@ const SAMPLE_ENTRIES: KeyListEntry[] = [
   { id: "p:alistigo:prefs:theme", label: "alistigo:prefs:theme", isShared: false },
 ];
 
-const ENTRIES_WITH_FILES: KeyListEntry[] = [
-  { id: "p:avatar.png", label: "avatar.png", isShared: false, fileTypeBadge: "IMG" },
+const ENTRIES_WITH_BADGES: KeyListEntry[] = [
+  { id: "p:avatar.jpg", label: "avatar.jpg", isShared: false, fileTypeBadge: "JPG" },
+  { id: "p:screenshot.png", label: "screenshot.png", isShared: false, fileTypeBadge: "PNG" },
   { id: "p:report.pdf", label: "report.pdf", isShared: false, fileTypeBadge: "PDF" },
-  { id: "s:banner.png", label: "banner.png", isShared: true, fileTypeBadge: "IMG" },
+  { id: "s:banner.webp", label: "banner.webp", isShared: true, fileTypeBadge: "WEBP" },
+  { id: "p:config", label: "config", isShared: false, fileTypeBadge: "JSON" },
+  { id: "p:manifest", label: "manifest", isShared: false, fileTypeBadge: "YAML" },
   { id: "p:alistigo:list:abc123", label: "alistigo:list:abc123", isShared: false },
 ];
 
@@ -81,12 +84,12 @@ export const WithSelection: Story = {
 
 // ── Feature variants ──────────────────────────────────────────────────────────
 
-export const WithFileBadges: Story = {
-  name: "With file type badges",
+export const WithTypeBadges: Story = {
+  name: "With file and document type badges",
   render: (args) => <InteractiveKeyList {...args} />,
   args: {
-    entries: ENTRIES_WITH_FILES,
-    label: "4 keys",
+    entries: ENTRIES_WITH_BADGES,
+    label: "7 keys",
     isLoading: false,
   },
 };
