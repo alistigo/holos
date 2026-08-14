@@ -1,3 +1,24 @@
+## 0.2.28 (2026-08-14)
+
+### 🚀 Features
+
+- **playground:** published=true by default; VITE_DEFAULT_ARTIFACT env var ([6feb8cf](https://github.com/alistigo/holos/commit/6feb8cf))
+- **storage:** add StorageUsageBar, per-key size validation, and Storybook stories ([#93](https://github.com/alistigo/holos/issues/93), [#94](https://github.com/alistigo/holos/issues/94), [#95](https://github.com/alistigo/holos/issues/95))
+
+### 🩹 Fixes
+
+- **stories:** use @storybook/react-vite import in playground stories ([cab8cbf](https://github.com/alistigo/holos/commit/cab8cbf))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.2.2
+- Updated claude-artifact-api to 0.2.4
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.27 (2026-08-09)
 
 ### 🩹 Fixes

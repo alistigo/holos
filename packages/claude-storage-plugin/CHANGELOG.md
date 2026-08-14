@@ -1,3 +1,18 @@
+## 0.4.2 (2026-08-14)
+
+### 🩹 Fixes
+
+- **storage:** resolve pre-push hook failures from binary format selector ([8c4c8b8](https://github.com/alistigo/holos/commit/8c4c8b8))
+
+### 🧱 Updated Dependencies
+
+- Updated claude-artifact-api to 0.2.4
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.1 (2026-08-07)
 
 ### 🧱 Updated Dependencies

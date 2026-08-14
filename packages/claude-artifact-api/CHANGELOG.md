@@ -1,3 +1,14 @@
+## 0.2.4 (2026-08-14)
+
+### 🚀 Features
+
+- **explorer-components-react:** add experimental binary storage format selector ([7f3a090](https://github.com/alistigo/holos/commit/7f3a090))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.3 (2026-08-07)
 
 ### 🩹 Fixes

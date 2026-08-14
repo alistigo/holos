@@ -1,3 +1,20 @@
+## 0.2.2 (2026-08-14)
+
+### 🩹 Fixes
+
+- **capabilities-demo:** remove prefix prop from StorageTab chain ([ffdafdc](https://github.com/alistigo/holos/commit/ffdafdc))
+
+### 🧱 Updated Dependencies
+
+- Updated explorer-components-react to 0.3.0
+- Updated claude-storage-plugin to 0.4.2
+- Updated claude-artifact-api to 0.2.4
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.1 (2026-08-09)
 
 ### 🚀 Features
