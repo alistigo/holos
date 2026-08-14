@@ -177,7 +177,7 @@ export function NewEntryPanel({
   availableBytes,
   maxPerKeyBytes = DEFAULT_MAX_PER_KEY_BYTES,
 }: NewEntryPanelProps): JSX.Element {
-  const [activeTab, setActiveTab] = useState<EntryTab>("file");
+  const [activeTab, setActiveTab] = useState<EntryTab>("text");
   const [shared, setShared] = useState(false);
   const [key, setKey] = useState("");
 
@@ -356,14 +356,14 @@ export function NewEntryPanel({
         </label>
         <div className="flex items-center gap-0">
           <TabButton
-            label="File"
-            active={activeTab === "file"}
-            onClick={() => setActiveTab("file")}
-          />
-          <TabButton
             label="Text document"
             active={activeTab === "text"}
             onClick={() => setActiveTab("text")}
+          />
+          <TabButton
+            label="File"
+            active={activeTab === "file"}
+            onClick={() => setActiveTab("file")}
           />
         </div>
       </div>
