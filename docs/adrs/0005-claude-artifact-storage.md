@@ -38,6 +38,16 @@ Limits discovered through live testing of the capabilities-demo artifact. These 
 | Max number of keys | **No observed limit** | No documented or discovered ceiling on key count |
 | Max key length | < 200 chars | Documented constraint; whitespace and `/`, `\`, `'`, `"` forbidden |
 
+### Value Types (empirical, 2026-08-14)
+
+`window.storage.set()` only accepts **string** values. Passing a `Blob` or `ArrayBuffer` throws:
+
+    Storage set failed: Invalid payload content
+
+All file uploads must be base64-encoded strings. The Blob and ArrayBuffer storage formats are not
+supported and have been removed from the UI. The `ClaudeStorage.set()` and `ClaudeStorage.get()`
+types in `@alistigo/claude-artifact-api` are restricted to `string` values accordingly.
+
 ### Clarifications
 
 - **Per-key limit is strictly exclusive**: a value of exactly 5 MiB (5 × 1,048,576 bytes) triggers the error. Values must be < 5 MiB.

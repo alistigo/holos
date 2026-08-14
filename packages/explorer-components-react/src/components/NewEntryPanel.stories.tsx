@@ -146,3 +146,20 @@ export const NoExistingKeys: Story = {
     onCancel: () => {},
   },
 };
+
+export const TextTabSaveError: Story = {
+  name: "Text tab — save error",
+  args: {
+    existingEntries: EXISTING,
+    onUpload: async () => {},
+    onCreateText: async () => {
+      throw new Error("Storage set failed: Invalid payload content");
+    },
+    onCancel: () => {},
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = await openTextTab(canvasElement);
+    await userEvent.type(canvas.getByPlaceholderText(/my-document/i), "my-key");
+    await userEvent.click(canvas.getByRole("button", { name: /^create$/i }));
+  },
+};

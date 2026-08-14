@@ -4,7 +4,6 @@ export type {
   FileEntry,
   FileEntryBase64,
   FileEntryBinary,
-  FileStorageFormat,
   FileUploadFormProps,
 } from "./components/FileUploadForm.js";
 export { FileUploadForm } from "./components/FileUploadForm.js";
