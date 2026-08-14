@@ -1,3 +1,5 @@
+export type { DocumentViewerProps, EntryStatus } from "./components/DocumentViewer.js";
+export { DocumentViewer } from "./components/DocumentViewer.js";
 export type {
   FileEntry,
   FileEntryBase64,
@@ -8,8 +10,11 @@ export type {
 export { FileUploadForm } from "./components/FileUploadForm.js";
 export type { FileViewerProps } from "./components/FileViewer.js";
 export { FileViewer } from "./components/FileViewer.js";
-export type { EntryStatus, JsonDocumentViewerProps } from "./components/JsonDocumentViewer.js";
+// Backward-compat aliases — routed through JsonDocumentViewer shim
+export type { JsonDocumentViewerProps } from "./components/JsonDocumentViewer.js";
 export { JsonDocumentViewer } from "./components/JsonDocumentViewer.js";
+export type { KeyContentViewerProps } from "./components/KeyContentViewer.js";
+export { KeyContentViewer } from "./components/KeyContentViewer.js";
 export type { KeyListEntry, KeyListProps } from "./components/KeyList.js";
 export { KeyList } from "./components/KeyList.js";
 export type { NewEntryPanelProps, TextDocumentEntry } from "./components/NewEntryPanel.js";
