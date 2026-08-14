@@ -8,6 +8,7 @@ function estimateBase64Bytes(file: File): number {
   return Math.ceil(file.size / 3) * 4 + 200;
 }
 
+// fallow-ignore-next-line complexity
 function FileUploadFormDemo({
   availableBytes,
   maxPerKeyMib = 5,
