@@ -85,8 +85,8 @@ export function TextDocumentEditor({
               <button
                 type="button"
                 onClick={onFormat}
-                disabled={format === "yaml"}
-                title={format === "yaml" ? "Format not available for YAML" : undefined}
+                disabled={format !== "json"}
+                title={format !== "json" ? "Format only available for JSON" : undefined}
                 className="text-xs px-2 py-0.5 border border-gray-200 rounded text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Format
