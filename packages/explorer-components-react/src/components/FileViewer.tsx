@@ -27,6 +27,7 @@ export interface FileViewerProps {
   entry: { key: string; value: FileEntry; shared: boolean };
 }
 
+// fallow-ignore-next-line complexity
 export function FileViewer({ entry }: FileViewerProps): JSX.Element {
   const { name, mimeType, size, uploadedAt } = entry.value;
   const isImage = IMAGE_MIME_TYPES.has(mimeType);

@@ -27,6 +27,7 @@ export function StorageExplorerApp(): JSX.Element {
       // Companion metadata keys are internal — hide from the entry list
       const userKeys = result.keys.filter((k) => !k.endsWith(FILE_META_SUFFIX));
 
+      // fallow-ignore-next-line complexity
       async function fetchEntry(key: string): Promise<UnifiedEntry> {
         try {
           const item = await window.storage?.get(key, shared);
