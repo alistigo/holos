@@ -1,5 +1,4 @@
 import claudeBridgeHtml from "@alistigo/claude-artifact-api/inject-script.html?raw";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
 import type { Config } from "./hooks/useHostConfig";
 
 export const SRCDOC_CSP = [
@@ -46,11 +45,12 @@ function buildArtifactStatusScript(published: boolean): string {
   return `<script>window.claudeArtifactStatus = "published";</script>`;
 }
 
+function buildAiInputScript(markdown: string): string {
+  return `<script id="ai-input-action" type="text/markdown">${markdown}</script>`;
+}
+
 /** Builds the config object injected into the artifact iframe. */
-export function buildArtifactConfig(
-  config: Config,
-  doc?: AlistigoDocument,
-): Record<string, unknown> {
+export function buildArtifactConfig(config: Config): Record<string, unknown> {
   const cfg: Record<string, unknown> = {
     app: config.app,
     lang: config.lang,
@@ -59,16 +59,13 @@ export function buildArtifactConfig(
   if (Object.keys(config.plugins).length > 0) {
     cfg.plugins = config.plugins;
   }
-  if (doc !== undefined) {
-    cfg.document = doc;
-  }
   return cfg;
 }
 
 export interface BuildIframeSrcdocOptions {
   config: Config;
-  /** Parsed document — injected into alistigo-config.document for playground fixture testing. */
-  doc?: AlistigoDocument;
+  /** Markdown string injected as #ai-input-action for fixture testing. */
+  aiInputMarkdown?: string;
   /** Absolute URL to the artifact-entry module. */
   scriptUrl: string;
   /** CSP directive string for the <meta http-equiv> tag. */
@@ -85,13 +82,13 @@ export interface BuildIframeSrcdocOptions {
 
 export function buildIframeSrcdoc({
   config,
-  doc,
+  aiInputMarkdown,
   scriptUrl,
   csp,
   isDev,
   devPluginUrlOverrides,
 }: BuildIframeSrcdocOptions): string {
-  const cfgJson = JSON.stringify(buildArtifactConfig(config, doc));
+  const cfgJson = JSON.stringify(buildArtifactConfig(config));
 
   const isClaude = config.aiContext === "claude";
 
@@ -108,6 +105,7 @@ export function buildIframeSrcdoc({
     ${isDev ? buildDevRefreshScript() : ""}
   </head>
   <body id="artifacts-component-root-html">
+    ${aiInputMarkdown !== undefined ? buildAiInputScript(aiInputMarkdown) : ""}
     ${buildEntryScript(scriptUrl, isDev ?? false)}
   </body>
 </html>`;

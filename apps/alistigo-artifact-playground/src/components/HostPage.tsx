@@ -1,11 +1,10 @@
 import { ARTIFACT_REGISTRY } from "@alistigo/artifact-manager";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
 import type { JSX } from "react";
 import { useCallback, useMemo, useState } from "react";
 import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
 import { useClaudeCompleteSimulator } from "../hooks/useClaudeCompleteSimulator";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
-import { useDocumentFixtures, useDocumentFixturesMap } from "../hooks/useDocumentFixtures";
+import { useDocumentFixtures, useMarkdownFixturesMap } from "../hooks/useDocumentFixtures";
 import { useDownloadSimulator } from "../hooks/useDownloadSimulator";
 import { type Config, useHostConfig } from "../hooks/useHostConfig";
 import { useIframeControls } from "../hooks/useIframeControls";
@@ -35,44 +34,17 @@ const DEV_PLUGIN_URL_OVERRIDES: Record<string, string> | undefined = import.meta
     )
   : undefined;
 
-const DEFAULT_DOC: AlistigoDocument = {
-  "@context": { "@vocab": "https://schema.org/", alistigo: "https://alistigo.ai/vocab/" },
-  "@type": "ItemList",
-  "alistigo:listId": "lst_00000000000000000000000000",
-  "alistigo:schemaVersion": "1.0.0",
-  name: "My List",
-  itemListElement: [],
-  "alistigo:listEventLog": [
-    {
-      "alistigo:listEventId": "lev_00000000000000000000000001",
-      "alistigo:eventType": "ListCreated",
-      "alistigo:listId": "lst_00000000000000000000000000",
-      "alistigo:actorId": "act_00000000000000000000000000",
-      "alistigo:timestamp": "2026-01-01T00:00:00.000Z",
-    },
-  ],
-};
-
-function tryParseDoc(raw: string): AlistigoDocument | undefined {
-  try {
-    return JSON.parse(raw) as AlistigoDocument;
-  } catch {
-    return undefined;
-  }
-}
-
 function resolveScriptUrl(isDev: boolean, app: string): string {
   return isDev ? DEV_ENTRY_URL : (ARTIFACT_REGISTRY[app]?.cdnUrl ?? "");
 }
 
-function useDoc(config: Config): AlistigoDocument {
-  const fixturesMap = useDocumentFixturesMap();
-  // fallow-ignore-next-line complexity
+function useMarkdown(config: Config): string | undefined {
+  const fixturesMap = useMarkdownFixturesMap();
   return useMemo(() => {
-    if (config.document === "") return DEFAULT_DOC;
-    if (config.document === "__raw__") return tryParseDoc(config.rawDocument) ?? DEFAULT_DOC;
-    return fixturesMap.get(config.document) ?? DEFAULT_DOC;
-  }, [config.document, config.rawDocument, fixturesMap]);
+    if (config.document === "") return undefined;
+    if (config.document === "__raw__") return config.rawMarkdown || undefined;
+    return fixturesMap.get(config.document);
+  }, [config.document, config.rawMarkdown, fixturesMap]);
 }
 
 // fallow-ignore-next-line complexity
@@ -94,8 +66,7 @@ function HostPage(): JSX.Element {
 
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
-  const doc = useDoc(config);
-  const docJson = useMemo(() => JSON.stringify(doc, null, 2), [doc]);
+  const markdown = useMarkdown(config);
 
   const handleClearData = useCallback(async () => {
     clearStorage();
@@ -112,13 +83,13 @@ function HostPage(): JSX.Element {
     () =>
       buildIframeSrcdoc({
         config,
-        doc,
+        ...(markdown !== undefined ? { aiInputMarkdown: markdown } : {}),
         scriptUrl: resolveScriptUrl(import.meta.env.DEV, config.app),
         csp: SRCDOC_CSP,
         isDev: import.meta.env.DEV,
         devPluginUrlOverrides: DEV_PLUGIN_URL_OVERRIDES,
       }),
-    [config, doc],
+    [config, markdown],
   );
 
   const simulator: ClaudeSimulatorProps = {
@@ -168,7 +139,7 @@ function HostPage(): JSX.Element {
           reloadKey={reloadKey}
           iframeAllow={iframeAllow}
           configJson={configJson}
-          docJson={docJson}
+          aiInput={markdown}
         />
       </div>
     </div>

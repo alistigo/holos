@@ -26,7 +26,7 @@ const defaultConfig = {
   aiContext: "claude",
   readonly: false,
   document: "",
-  rawDocument: "",
+  rawMarkdown: "",
   plugins: {},
   published: false,
 };
