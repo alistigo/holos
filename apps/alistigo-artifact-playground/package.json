@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@alistigo/claude-artifact-api": "workspace:*",
-    "@alistigo/ai-chat-async-api": "workspace:*",
     "@alistigo/artifact-list": "workspace:*",
     "@alistigo/artifact-manager": "workspace:*",
     "@alistigo/artifact-claude-capabilities-demo": "workspace:*",
