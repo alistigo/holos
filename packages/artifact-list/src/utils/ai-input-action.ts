@@ -64,8 +64,8 @@ function buildDocumentFromMarkdown(markdown: string): AlistigoDocument {
   return ListDocumentSerializer.serialize(list, undefined);
 }
 
-// fallow-ignore-next-line complexity
 /** Reads #ai-input-action from the DOM, parses it, removes the tag, returns the document. */
+// fallow-ignore-next-line complexity
 export function readAiInputDocument(): AlistigoDocument | undefined {
   const el = document.getElementById(AI_INPUT_ELEMENT_ID);
   if (el === null) return undefined;

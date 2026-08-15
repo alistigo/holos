@@ -12,7 +12,7 @@ import { ListApplicationService } from "@alistigo/list-document-editor";
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { parseListId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
-import { type JSX, useEffect, useMemo, useRef, useState } from "react";
+import { type JSX, useEffect, useMemo, useState } from "react";
 import pkg from "../../package.json" with { type: "json" };
 import ListBody from "./ListBody.js";
 
