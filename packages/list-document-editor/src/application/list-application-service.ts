@@ -1,4 +1,5 @@
 import type { AlistigoDocument } from "@alistigo/list-document-format";
+import { parseListMarkdown } from "@alistigo/list-document-format";
 import type { ActorId, ListElementId, ListId, ListRepository } from "@alistigo/list-domain";
 import {
   createListElementContent,
@@ -121,6 +122,38 @@ export class ListApplicationService {
       if (!list) return err(new ListElementNotFoundError(listId.toString()));
       list.exportListDocument({ actorId, listId });
       return await this.#saveAndReturn(list, listId);
+    } catch (e) {
+      if (e instanceof ListError) return err(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Bootstraps a list from an AiInitialInput markdown block.
+   * Parses title and items, creates the aggregate, persists it, and returns the document.
+   */
+  async applyAiInitialInput(
+    markdown: string,
+    actorId: ActorId,
+    listId?: ListId,
+  ): Promise<Result<AlistigoDocument, ListError>> {
+    try {
+      const { title, items } = parseListMarkdown(markdown);
+      const resolvedListId = listId ?? generateListId();
+      log.debug(
+        { listId: resolvedListId.toString(), itemCount: items.length },
+        "applyAiInitialInput",
+      );
+      const { list } = List.create({
+        actorId,
+        listId: resolvedListId,
+        ...(title !== undefined ? { title } : {}),
+      });
+      for (const item of items) {
+        const content = createListElementContent(item);
+        list.addListElement({ actorId, listId: resolvedListId, content });
+      }
+      return await this.#saveAndReturn(list, resolvedListId);
     } catch (e) {
       if (e instanceof ListError) return err(e);
       throw e;

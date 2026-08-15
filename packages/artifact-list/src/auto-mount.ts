@@ -1,6 +1,6 @@
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { type MountOptions, mount } from "./mount.js";
-import { readAiInputDocument } from "./utils/ai-input-action.js";
+import { readAiInitialInput } from "./utils/ai-input-action.js";
 import { resolveAutoMountTarget } from "./utils/container.js";
 
 interface AutoMountConfig extends MountOptions {
@@ -25,7 +25,7 @@ function parseAutoMountConfig(): AutoMountConfig {
 
 function resolveInitialDocument(config: AutoMountConfig): AlistigoDocument | undefined {
   // Prefer AI markdown input (new format) over legacy config.document (JSON).
-  const aiDoc = readAiInputDocument();
+  const aiDoc = readAiInitialInput();
   if (aiDoc !== undefined) return aiDoc;
   return config.document;
 }

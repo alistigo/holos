@@ -195,4 +195,138 @@ describe("ListApplicationService", () => {
     expect(doc.name).toBe("Shopping");
     expect(doc["alistigo:listEventLog"]).toHaveLength(3); // Created + 2 Added
   });
+
+  // fallow-ignore-next-line complexity
+  test("applyAiInitialInput: groceries list — title and items parsed correctly", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "Groceries:\n- Buy bread\n- Buy milk\n- Buy eggs";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const doc = result.value;
+    expect(doc["@type"]).toBe("ItemList");
+    expect(doc.name).toBe("Groceries");
+    expect(doc.itemListElement).toHaveLength(3);
+    expect(doc.itemListElement[0]?.name).toBe("Buy bread");
+    expect(doc.itemListElement[1]?.name).toBe("Buy milk");
+    expect(doc.itemListElement[2]?.name).toBe("Buy eggs");
+    expect(doc["alistigo:listEventLog"]).toHaveLength(4); // Created + 3 Added
+  });
+
+  test("applyAiInitialInput: items only — no title, no name on doc", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "- Item one\n- Item two\n- Item three";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.name).toBeUndefined();
+    expect(result.value.itemListElement.map((i) => i.name)).toEqual([
+      "Item one",
+      "Item two",
+      "Item three",
+    ]);
+  });
+
+  test("applyAiInitialInput: ordered list markers are supported", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "Steps:\n1. First step\n2. Second step\n3. Third step";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.name).toBe("Steps");
+    expect(result.value.itemListElement.map((i) => i.name)).toEqual([
+      "First step",
+      "Second step",
+      "Third step",
+    ]);
+  });
+
+  test("applyAiInitialInput: asterisk list markers are supported", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "Shopping:\n* Apples\n* Bananas";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.name).toBe("Shopping");
+    expect(result.value.itemListElement.map((i) => i.name)).toEqual(["Apples", "Bananas"]);
+  });
+
+  test("applyAiInitialInput: title-only markdown creates an empty list", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "Empty list:";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.name).toBe("Empty list");
+    expect(result.value.itemListElement).toHaveLength(0);
+  });
+
+  test("applyAiInitialInput: duplicates are preserved", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "Duplicates allowed:\n- Buy bread\n- Buy bread\n- Buy milk";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.itemListElement).toHaveLength(3);
+    expect(result.value.itemListElement[0]?.name).toBe("Buy bread");
+    expect(result.value.itemListElement[1]?.name).toBe("Buy bread");
+  });
+
+  test("applyAiInitialInput: persists so subsequent load sees all elements", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "My List:\n- Alpha\n- Beta";
+    const listId = generateListId();
+
+    await service.applyAiInitialInput(markdown, actorId, listId);
+
+    const loaded = await store.load(listId);
+    if (loaded == null) throw new Error("expected list to be loaded");
+    expect(loaded.elements).toHaveLength(2);
+    expect(String(loaded.elements[0]?.content)).toBe("Alpha");
+    expect(String(loaded.elements[1]?.content)).toBe("Beta");
+  });
+
+  test("applyAiInitialInput: uses provided listId", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const listId = generateListId();
+    const markdown = "List:\n- Item";
+
+    const result = await service.applyAiInitialInput(markdown, actorId, listId);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value["alistigo:listId"]).toBe(listId.toString());
+  });
+
+  test("applyAiInitialInput: bullet with no text is silently ignored (empty list created)", async () => {
+    const store = new InMemoryStore();
+    const service = new ListApplicationService(store);
+    const markdown = "List:\n- ";
+
+    const result = await service.applyAiInitialInput(markdown, actorId);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.name).toBe("List");
+    expect(result.value.itemListElement).toHaveLength(0);
+  });
 });
