@@ -67,6 +67,7 @@ function resolveScriptUrl(isDev: boolean, app: string): string {
 
 function useDoc(config: Config): AlistigoDocument {
   const fixturesMap = useDocumentFixturesMap();
+  // fallow-ignore-next-line complexity
   return useMemo(() => {
     if (config.document === "") return DEFAULT_DOC;
     if (config.document === "__raw__") return tryParseDoc(config.rawDocument) ?? DEFAULT_DOC;

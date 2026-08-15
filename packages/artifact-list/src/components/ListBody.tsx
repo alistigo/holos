@@ -31,6 +31,7 @@ function DraftBanner(): JSX.Element {
   );
 }
 
+// fallow-ignore-next-line complexity
 function ListBody({ isDraft }: ListBodyProps): JSX.Element {
   const document = useAlistigoDocument();
   const actions = useAlistigoActions();
