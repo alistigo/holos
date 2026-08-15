@@ -1,4 +1,3 @@
-import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
 import { ArtifactViewPanel } from "./ArtifactViewPanel";
@@ -12,7 +11,6 @@ const SAMPLE_SRCDOC = [
   '  <script type="application/json" id="alistigo-config">{"app":"@alistigo/artifact-list","lang":"en","readonly":false}</script>',
   "</head>",
   '<body id="artifacts-component-root-html">',
-  '  <script type="application/json" id="alistigo-document">{"@type":"ItemList"}</script>',
   '  <script type="module" src="http://localhost:5173/src/artifact-entry.tsx"></script>',
   "</body>",
   "</html>",
@@ -34,21 +32,6 @@ const SAMPLE_DOC_JSON = JSON.stringify(
   null,
   2,
 );
-
-const SAMPLE_API_DEF: ArtifactApiDefinition = {
-  info: { title: "Alistigo List API", version: "1.0.0" },
-  operations: {
-    addElement: {
-      description: "Add a new item to the list.",
-      params: {
-        type: "object",
-        properties: { text: { type: "string", description: "Item text" } },
-        required: ["text"],
-      },
-    },
-    clearList: { description: "Remove all elements from the list." },
-  },
-};
 
 const meta: Meta<typeof ArtifactViewPanel> = {
   title: "Playground/ArtifactViewPanel",
@@ -77,7 +60,6 @@ export const SourceTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
-        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },
@@ -95,7 +77,6 @@ export const AppTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
-        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },
@@ -113,7 +94,6 @@ export const ConfigTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
-        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },
@@ -131,7 +111,6 @@ export const DocumentTabSelected: Story = {
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
         docJson={SAMPLE_DOC_JSON}
-        apiDefinition={SAMPLE_API_DEF}
       />
     );
   },

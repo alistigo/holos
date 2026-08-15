@@ -6,6 +6,7 @@ import {
 import { ErrorScreen, LoadingScreen } from "@alistigo/artifact-core-components-react";
 import type { AlistigoPlugin, PluginRuntime } from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
+import { artifactContext } from "@alistigo/claude-artifact-api";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
@@ -113,6 +114,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
 
   const { runtime, store, plugins, spec } = ready;
   const doc = options.document ?? makeDefaultDocument();
+  const { published } = artifactContext();
 
   return (
     <div style={{ position: "relative" }}>
@@ -132,6 +134,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
             repository={store}
             plugins={plugins}
             spec={spec}
+            isDraft={!published}
           />
           <DebugRenderErrorTrigger />
         </ArtifactErrorBoundary>

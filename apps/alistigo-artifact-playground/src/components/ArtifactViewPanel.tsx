@@ -1,13 +1,11 @@
-import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import JsonView from "@uiw/react-json-view";
 import { lightTheme } from "@uiw/react-json-view/light";
 import type React from "react";
 import type { JSX, RefObject } from "react";
 import { useMemo, useState } from "react";
-import { AiApiTab } from "./AiApiTab";
 import { SourceView } from "./SourceView";
 
-type Tab = "app" | "source" | "config" | "document" | "ai-api";
+type Tab = "app" | "source" | "config" | "document";
 
 interface ArtifactViewPanelProps {
   srcdoc: string;
@@ -16,7 +14,6 @@ interface ArtifactViewPanelProps {
   iframeAllow: string;
   configJson: string;
   docJson: string;
-  apiDefinition: ArtifactApiDefinition;
 }
 
 function JsonPanel({ json }: { json: string }): JSX.Element {
@@ -43,7 +40,6 @@ function JsonPanel({ json }: { json: string }): JSX.Element {
   );
 }
 
-// fallow-ignore-next-line complexity
 export function ArtifactViewPanel({
   srcdoc,
   iframeRef,
@@ -51,7 +47,6 @@ export function ArtifactViewPanel({
   iframeAllow,
   configJson,
   docJson,
-  apiDefinition,
 }: ArtifactViewPanelProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<Tab>("app");
 
@@ -60,7 +55,6 @@ export function ArtifactViewPanel({
     { id: "source", label: "Source" },
     { id: "config", label: "Config" },
     { id: "document", label: "Document" },
-    { id: "ai-api", label: "AI API" },
   ];
 
   return (
@@ -102,7 +96,6 @@ export function ArtifactViewPanel({
         {activeTab === "source" && <SourceView html={srcdoc} />}
         {activeTab === "config" && <JsonPanel json={configJson} />}
         {activeTab === "document" && <JsonPanel json={docJson} />}
-        {activeTab === "ai-api" && <AiApiTab iframeRef={iframeRef} apiDefinition={apiDefinition} />}
       </div>
 
       {/* Footer */}

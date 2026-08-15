@@ -19,21 +19,88 @@ Renders an interactive, editable list with persistent storage (`window.storage` 
 `localStorage` elsewhere). Use whenever the user asks to track tasks, items, or a checklist
 inside a Claude HTML artifact.
 
+## How to write the artifact
+
+The artifact auto-mounts when the script loads — no JavaScript call needed. Provide the list
+content as markdown inside a `<script id="ai-input-action" type="text/markdown">` tag.
+
+### Minimal example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script type="application/json" id="alistigo-config">
+    { "app": "@alistigo/artifact-list" }
+  </script>
+  <script id="ai-input-action" type="text/markdown">
+Groceries:
+- Milk
+- Bread
+- Eggs
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@alistigo/artifact-list@latest/dist/index.umd.js"></script>
+</head>
+<body></body>
+</html>
+```
+
+## Markdown format for `#ai-input-action`
+
+The first line **must** end with `:` — that becomes the list title.
+Each subsequent line starting with `-` (unordered) or `1.` / `2.` … (ordered) is a list item.
+
+### Unordered list
+
+```markdown
+Shopping list:
+- Apples
+- 2 kg of rice
+- Paper towels
+```
+
+### Ordered list
+
+```markdown
+Top films:
+1. Avengers Doomsday
+2. Back to the Future
+3. Inception
+```
+
+### Items with metadata
+
+Lines between items that match `Key: value` are attached to the preceding item as metadata:
+
+```markdown
+My best songs:
+1. Bohemian Rhapsody
+Why: A masterpiece.
+Length: 6min
+2. Hotel California
+Why: Timeless.
+```
+
 ## Config fields
 
-App-specific fields — add these inside the manager config alongside `app`:
+Add these inside the `#alistigo-config` object:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `readonly` | `boolean` | `false` | Prevents user edits when `true` |
-| `document` | `AlistigoDocument` | empty list | Pre-seeded list content |
+| `app` | `string` | **required** | Must be `"@alistigo/artifact-list"` |
+| `readonly` | `boolean` | `false` | Lock the list against user edits |
+| `plugins` | `object` | `{}` | Plugin config keyed by npm package name |
 
-## AlistigoDocument format
+## Draft vs published behavior
 
-The `document` field pre-seeds the list. It is a JSON-LD object with an `alistigo:listEventLog`
-array: one `ListCreated` event, then one `ListElementAdded` event per item.
+- **Draft** (AI preview panel): list is visible and read-only. A banner tells the user to publish.
+- **Published**: list is fully interactive. User edits are persisted to `window.storage`.
 
-See [references/document-format.md](references/document-format.md) for the full format spec,
-ID prefix conventions, and a complete example. See
-[references/artifact-config-list-format.md](references/artifact-config-list-format.md) for the
-full `readonly`/`document` config schema.
+Do not set `readonly: true` to simulate draft — draft detection is automatic.
+
+## What to avoid
+
+- Do **not** call `Alistigo.mount()` — auto-mount runs when the script loads.
+- Do **not** inject a `<script id="alistigo-document">` JSON tag — use `#ai-input-action` markdown instead.
+- Do **not** write `window.storage` calls yourself — storage is managed by the artifact runtime.

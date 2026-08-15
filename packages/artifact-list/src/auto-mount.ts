@@ -1,5 +1,6 @@
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { type MountOptions, mount } from "./mount.js";
+import { readAiInputDocument } from "./utils/ai-input-action.js";
 import { resolveAutoMountTarget } from "./utils/container.js";
 
 interface AutoMountConfig extends MountOptions {
@@ -10,17 +11,6 @@ interface AutoMountConfig extends MountOptions {
 // Tracked across calls so re-mount (e.g. fixture picker) reuses the same container
 // instead of appending a second element.
 let mountedContainer: HTMLElement | undefined;
-
-function readInlineDocument(): AlistigoDocument | undefined {
-  const el = document.getElementById("alistigo-document");
-  if (!el?.textContent?.trim()) return undefined;
-  try {
-    return JSON.parse(el.textContent) as AlistigoDocument;
-  } catch {
-    console.error("[Alistigo] Failed to parse #alistigo-document");
-    return undefined;
-  }
-}
 
 function parseAutoMountConfig(): AutoMountConfig {
   const configEl = document.getElementById("alistigo-config");
@@ -33,12 +23,19 @@ function parseAutoMountConfig(): AutoMountConfig {
   }
 }
 
+function resolveInitialDocument(config: AutoMountConfig): AlistigoDocument | undefined {
+  // Prefer AI markdown input (new format) over legacy config.document (JSON).
+  const aiDoc = readAiInputDocument();
+  if (aiDoc !== undefined) return aiDoc;
+  return config.document;
+}
+
 function autoMount(): void {
   const config = parseAutoMountConfig();
   if (!mountedContainer) {
     mountedContainer = resolveAutoMountTarget(config.container);
   }
-  const doc = readInlineDocument() ?? config.document;
+  const doc = resolveInitialDocument(config);
   const { container: _c, document: _d, ...baseOptions } = config;
   const options: MountOptions = doc !== undefined ? { ...baseOptions, document: doc } : baseOptions;
   void mount(mountedContainer, options);

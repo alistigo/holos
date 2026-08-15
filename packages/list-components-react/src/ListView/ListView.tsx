@@ -9,12 +9,13 @@ import { Button } from "../ui/button.js";
 
 export interface ListViewProps {
   items: AlistigoListItem[];
-  onDelete: (elementId: string, position: number) => void;
+  /** When omitted the delete button is hidden — use for read-only contexts. */
+  onDelete?: (elementId: string, position: number) => void;
 }
 
 interface ListItemProps {
   listItem: AlistigoListItem;
-  onDelete: (elementId: string, position: number) => void;
+  onDelete?: (elementId: string, position: number) => void;
 }
 
 function ListItem({ listItem, onDelete }: ListItemProps): JSX.Element {
@@ -33,14 +34,16 @@ function ListItem({ listItem, onDelete }: ListItemProps): JSX.Element {
       className="flex items-center justify-between gap-2 rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-fg)]"
     >
       <span className="flex-1 truncate">{text}</span>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={_(msg`Delete "${text}"`)}
-        onClick={() => onDelete(elementId, listItem.position)}
-      >
-        <Trash2 aria-hidden="true" className="size-5" />
-      </Button>
+      {onDelete !== undefined && (
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={_(msg`Delete "${text}"`)}
+          onClick={() => onDelete(elementId, listItem.position)}
+        >
+          <Trash2 aria-hidden="true" className="size-5" />
+        </Button>
+      )}
     </motion.li>
   );
 }
@@ -56,7 +59,7 @@ export function ListView({ items, onDelete }: ListViewProps): JSX.Element {
           <ListItem
             key={listItem["alistigo:listElementId"]}
             listItem={listItem}
-            onDelete={onDelete}
+            {...(onDelete !== undefined ? { onDelete } : {})}
           />
         ))}
       </AnimatePresence>
