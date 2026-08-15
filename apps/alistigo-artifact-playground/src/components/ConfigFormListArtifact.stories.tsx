@@ -15,7 +15,7 @@ export const Default: Story = {
     app: "@alistigo/artifact-list",
     plugins: {},
     document: "",
-    rawDocument: "",
+    rawMarkdown: "",
     documentNames: ["duplicates", "empty", "groceries"],
     onPluginsChange: () => {},
     onDocumentChange: () => {},
@@ -30,19 +30,19 @@ export const WithPluginsEnabled: Story = {
       "@alistigo/artifact-posthog-plugin": { apiKey: "phc_test123" },
     },
     document: "groceries",
-    rawDocument: "",
+    rawMarkdown: "",
     documentNames: ["duplicates", "empty", "groceries"],
     onPluginsChange: () => {},
     onDocumentChange: () => {},
   },
 };
 
-export const RawDocumentMode: Story = {
+export const RawMarkdownMode: Story = {
   args: {
     app: "@alistigo/artifact-list",
     plugins: {},
     document: "__raw__",
-    rawDocument: '{"@type":"ItemList","itemListElement":[]}',
+    rawMarkdown: "My list:\n- Item one\n- Item two",
     documentNames: ["duplicates", "empty", "groceries"],
     onPluginsChange: () => {},
     onDocumentChange: () => {},

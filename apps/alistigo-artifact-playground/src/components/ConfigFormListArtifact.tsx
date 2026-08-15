@@ -5,10 +5,10 @@ export interface ConfigFormListArtifactProps {
   app: string;
   plugins: Record<string, Record<string, unknown>>;
   document: string;
-  rawDocument: string;
+  rawMarkdown: string;
   documentNames: string[];
   onPluginsChange: (plugins: Record<string, Record<string, unknown>>) => void;
-  onDocumentChange: (document: string, rawDocument: string) => void;
+  onDocumentChange: (document: string, rawMarkdown: string) => void;
 }
 
 // fallow-ignore-next-line complexity
@@ -16,7 +16,7 @@ export function ConfigFormListArtifact({
   app,
   plugins,
   document,
-  rawDocument,
+  rawMarkdown,
   documentNames,
   onPluginsChange,
   onDocumentChange,
@@ -80,16 +80,16 @@ export function ConfigFormListArtifact({
 
       {app === "@alistigo/artifact-list" && (
         <label className="flex flex-col gap-1">
-          <span className="font-medium text-gray-600 text-xs">Document</span>
+          <span className="font-medium text-gray-600 text-xs">AI Input</span>
           <select
             className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
             value={document}
             onChange={(e) =>
-              onDocumentChange(e.target.value, e.target.value !== "__raw__" ? "" : rawDocument)
+              onDocumentChange(e.target.value, e.target.value !== "__raw__" ? "" : rawMarkdown)
             }
           >
-            <option value="">— default —</option>
-            <option value="__raw__">— enter JSON —</option>
+            <option value="">— none (empty list) —</option>
+            <option value="__raw__">— enter markdown —</option>
             {documentNames.map((name) => (
               <option key={name} value={name}>
                 {name}
@@ -98,12 +98,12 @@ export function ConfigFormListArtifact({
           </select>
           {document === "__raw__" && (
             <textarea
-              aria-label="Document JSON"
+              aria-label="AI input markdown"
               className="px-2 py-1.5 border border-gray-300 rounded text-xs bg-white font-mono resize-y"
               rows={6}
-              value={rawDocument}
+              value={rawMarkdown}
               onChange={(e) => onDocumentChange("__raw__", e.target.value)}
-              placeholder='{"@context": {"@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/"}, ...}'
+              placeholder={"Groceries:\n- Buy bread\n- Buy milk\n- Buy eggs"}
             />
           )}
         </label>

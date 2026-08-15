@@ -11,6 +11,7 @@ const SAMPLE_SRCDOC = [
   '  <script type="application/json" id="alistigo-config">{"app":"@alistigo/artifact-list","lang":"en","readonly":false}</script>',
   "</head>",
   '<body id="artifacts-component-root-html">',
+  '  <script id="ai-input-action" type="text/markdown">Groceries:\n- Buy bread\n- Buy milk</script>',
   '  <script type="module" src="http://localhost:5173/src/artifact-entry.tsx"></script>',
   "</body>",
   "</html>",
@@ -22,16 +23,7 @@ const SAMPLE_CONFIG_JSON = JSON.stringify(
   2,
 );
 
-const SAMPLE_DOC_JSON = JSON.stringify(
-  {
-    "@context": { "@vocab": "https://schema.org/", alistigo: "https://alistigo.ai/vocab/" },
-    "@type": "ItemList",
-    "alistigo:listId": "lst_00000000000000000000000000",
-    itemListElement: [],
-  },
-  null,
-  2,
-);
+const SAMPLE_AI_INPUT = "Groceries:\n- Buy bread\n- Buy milk";
 
 const meta: Meta<typeof ArtifactViewPanel> = {
   title: "Playground/ArtifactViewPanel",
@@ -59,7 +51,7 @@ export const SourceTabSelected: Story = {
         reloadKey={0}
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
-        docJson={SAMPLE_DOC_JSON}
+        aiInput={SAMPLE_AI_INPUT}
       />
     );
   },
@@ -76,7 +68,7 @@ export const AppTabSelected: Story = {
         reloadKey={0}
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
-        docJson={SAMPLE_DOC_JSON}
+        aiInput={SAMPLE_AI_INPUT}
       />
     );
   },
@@ -93,13 +85,13 @@ export const ConfigTabSelected: Story = {
         reloadKey={0}
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
-        docJson={SAMPLE_DOC_JSON}
+        aiInput={SAMPLE_AI_INPUT}
       />
     );
   },
 };
 
-export const DocumentTabSelected: Story = {
+export const AiInputTabSelected: Story = {
   render: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -110,7 +102,24 @@ export const DocumentTabSelected: Story = {
         reloadKey={0}
         iframeAllow="clipboard-write"
         configJson={SAMPLE_CONFIG_JSON}
-        docJson={SAMPLE_DOC_JSON}
+        aiInput={SAMPLE_AI_INPUT}
+      />
+    );
+  },
+};
+
+export const NoAiInput: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    return (
+      <ArtifactViewPanel
+        srcdoc={SAMPLE_SRCDOC}
+        iframeRef={iframeRef}
+        reloadKey={0}
+        iframeAllow="clipboard-write"
+        configJson={SAMPLE_CONFIG_JSON}
+        aiInput={undefined}
       />
     );
   },

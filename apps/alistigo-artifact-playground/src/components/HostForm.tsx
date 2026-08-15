@@ -105,11 +105,11 @@ function ConfigTab({
             app={config.app}
             plugins={config.plugins}
             document={config.document}
-            rawDocument={config.rawDocument}
+            rawMarkdown={config.rawMarkdown}
             documentNames={documentNames}
             onPluginsChange={(plugins) => onConfigChange((c) => ({ ...c, plugins }))}
-            onDocumentChange={(document, rawDocument) =>
-              onConfigChange((c) => ({ ...c, document, rawDocument }))
+            onDocumentChange={(document, rawMarkdown) =>
+              onConfigChange((c) => ({ ...c, document, rawMarkdown }))
             }
           />
         </section>

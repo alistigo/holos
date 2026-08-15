@@ -1,9 +1,0 @@
-{
-  "@context": { "@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/" },
-  "@type": "ItemList",
-  "alistigo:listId": "lst_01jx0000000000000000000001",
-  "alistigo:schemaVersion": "1.0.0",
-  "name": "Empty list",
-  "itemListElement": [],
-  "alistigo:listEventLog": []
-}

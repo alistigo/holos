@@ -7,8 +7,8 @@ export interface Config {
   aiContext: string;
   readonly: boolean;
   document: string;
-  /** Raw JSON-LD document string, used when document === "__raw__". */
-  rawDocument: string;
+  /** Raw markdown string, used when document === "__raw__". */
+  rawMarkdown: string;
   /** Enabled plugins, keyed by npm package name, each with its own (currently empty) config. */
   plugins: Record<string, Record<string, unknown>>;
   /** Simulates a published artifact — injects window.claudeArtifactStatus into the iframe. Only relevant when aiContext === "claude". */
@@ -26,7 +26,7 @@ export function useHostConfig() {
     aiContext: "claude",
     readonly: false,
     document: "",
-    rawDocument: "",
+    rawMarkdown: "",
     plugins: {},
     published: true,
   });

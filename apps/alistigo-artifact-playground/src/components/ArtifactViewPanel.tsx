@@ -5,7 +5,7 @@ import type { JSX, RefObject } from "react";
 import { useMemo, useState } from "react";
 import { SourceView } from "./SourceView";
 
-type Tab = "app" | "source" | "config" | "document";
+type Tab = "app" | "source" | "config" | "ai-input";
 
 interface ArtifactViewPanelProps {
   srcdoc: string;
@@ -13,7 +13,7 @@ interface ArtifactViewPanelProps {
   reloadKey: number;
   iframeAllow: string;
   configJson: string;
-  docJson: string;
+  aiInput: string | undefined;
 }
 
 function JsonPanel({ json }: { json: string }): JSX.Element {
@@ -40,6 +40,21 @@ function JsonPanel({ json }: { json: string }): JSX.Element {
   );
 }
 
+function AiInputPanel({ markdown }: { markdown: string | undefined }): JSX.Element {
+  if (markdown === undefined || markdown.trim() === "") {
+    return (
+      <p className="p-3 text-xs text-gray-400 italic">
+        No AI input — default empty list will boot.
+      </p>
+    );
+  }
+  return (
+    <pre className="p-3 text-xs font-mono text-gray-700 whitespace-pre-wrap break-all overflow-auto h-full">
+      {markdown}
+    </pre>
+  );
+}
+
 // fallow-ignore-next-line complexity
 export function ArtifactViewPanel({
   srcdoc,
@@ -47,7 +62,7 @@ export function ArtifactViewPanel({
   reloadKey,
   iframeAllow,
   configJson,
-  docJson,
+  aiInput,
 }: ArtifactViewPanelProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<Tab>("app");
 
@@ -55,7 +70,7 @@ export function ArtifactViewPanel({
     { id: "app", label: "App" },
     { id: "source", label: "Source" },
     { id: "config", label: "Config" },
-    { id: "document", label: "Document" },
+    { id: "ai-input", label: "AI Input" },
   ];
 
   return (
@@ -96,7 +111,7 @@ export function ArtifactViewPanel({
         />
         {activeTab === "source" && <SourceView html={srcdoc} />}
         {activeTab === "config" && <JsonPanel json={configJson} />}
-        {activeTab === "document" && <JsonPanel json={docJson} />}
+        {activeTab === "ai-input" && <AiInputPanel markdown={aiInput} />}
       </div>
 
       {/* Footer */}
