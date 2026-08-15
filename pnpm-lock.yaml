@@ -47,9 +47,6 @@ importers:
 
   apps/alistigo-artifact-playground:
     dependencies:
-      '@alistigo/ai-chat-async-api':
-        specifier: workspace:*
-        version: link:../../packages/ai-chat-async-api
       '@alistigo/artifact-claude-capabilities-demo':
         specifier: workspace:*
         version: link:../../packages/artifact-claude-capabilities-demo
