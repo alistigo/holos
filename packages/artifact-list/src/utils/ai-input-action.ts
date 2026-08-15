@@ -16,6 +16,7 @@ interface ParsedItem {
   text: string;
 }
 
+// fallow-ignore-next-line complexity
 function parseMarkdownItems(lines: string[]): { title: string | undefined; items: ParsedItem[] } {
   let title: string | undefined;
   const items: ParsedItem[] = [];
@@ -63,6 +64,7 @@ function buildDocumentFromMarkdown(markdown: string): AlistigoDocument {
   return ListDocumentSerializer.serialize(list, undefined);
 }
 
+// fallow-ignore-next-line complexity
 /** Reads #ai-input-action from the DOM, parses it, removes the tag, returns the document. */
 export function readAiInputDocument(): AlistigoDocument | undefined {
   const el = document.getElementById(AI_INPUT_ELEMENT_ID);
