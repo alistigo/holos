@@ -132,6 +132,7 @@ export class ListApplicationService {
    * Bootstraps a list from an AiInitialInput markdown block.
    * Parses title and items, creates the aggregate, persists it, and returns the document.
    */
+  // fallow-ignore-next-line complexity
   async applyAiInitialInput(
     markdown: string,
     actorId: ActorId,
