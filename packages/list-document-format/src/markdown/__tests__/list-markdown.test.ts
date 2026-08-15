@@ -46,7 +46,7 @@ describe("parseListMarkdown", () => {
 
   it("trims leading/trailing whitespace from items", () => {
     const md = "List:\n-   Padded item   \n-  Another  ";
-    const { title, items } = parseListMarkdown(md);
+    const { items } = parseListMarkdown(md);
     expect(items).toEqual(["Padded item", "Another"]);
   });
 
@@ -94,6 +94,7 @@ describe("isValidListMarkdown", () => {
 });
 
 describe("buildListDocumentFromMarkdown", () => {
+  // fallow-ignore-next-line complexity
   it("builds a document with title and items from a typical grocery list", () => {
     const md = "Groceries:\n- Buy bread\n- Buy milk\n- Buy eggs";
     const doc = buildListDocumentFromMarkdown(md, actorId);
