@@ -80,6 +80,7 @@ export interface BuildIframeSrcdocOptions {
   devPluginUrlOverrides?: Record<string, string> | undefined;
 }
 
+// fallow-ignore-next-line complexity
 export function buildIframeSrcdoc({
   config,
   aiInputMarkdown,
