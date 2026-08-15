@@ -1,8 +1,7 @@
-import type { ArtifactApiDefinition } from "@alistigo/ai-chat-async-api";
 import { ARTIFACT_REGISTRY } from "@alistigo/artifact-manager";
+import type { AlistigoDocument } from "@alistigo/list-document-format";
 import type { JSX } from "react";
 import { useCallback, useMemo, useState } from "react";
-import listApiDef from "../../../../packages/artifact-list/api.json";
 import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
 import { useClaudeCompleteSimulator } from "../hooks/useClaudeCompleteSimulator";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
@@ -36,11 +35,12 @@ const DEV_PLUGIN_URL_OVERRIDES: Record<string, string> | undefined = import.meta
     )
   : undefined;
 
-const DEFAULT_DOC_JSON = JSON.stringify({
+const DEFAULT_DOC: AlistigoDocument = {
   "@context": { "@vocab": "https://schema.org/", alistigo: "https://alistigo.ai/vocab/" },
   "@type": "ItemList",
   "alistigo:listId": "lst_00000000000000000000000000",
   "alistigo:schemaVersion": "1.0.0",
+  name: "My List",
   itemListElement: [],
   "alistigo:listEventLog": [
     {
@@ -51,23 +51,26 @@ const DEFAULT_DOC_JSON = JSON.stringify({
       "alistigo:timestamp": "2026-01-01T00:00:00.000Z",
     },
   ],
-});
+};
 
-function rawOrDefault(raw: string): string {
-  return raw || DEFAULT_DOC_JSON;
+function tryParseDoc(raw: string): AlistigoDocument | undefined {
+  try {
+    return JSON.parse(raw) as AlistigoDocument;
+  } catch {
+    return undefined;
+  }
 }
 
 function resolveScriptUrl(isDev: boolean, app: string): string {
   return isDev ? DEV_ENTRY_URL : (ARTIFACT_REGISTRY[app]?.cdnUrl ?? "");
 }
 
-function useDocJson(config: Config): string {
+function useDoc(config: Config): AlistigoDocument {
   const fixturesMap = useDocumentFixturesMap();
   return useMemo(() => {
-    if (config.document === "") return DEFAULT_DOC_JSON;
-    if (config.document === "__raw__") return rawOrDefault(config.rawDocument);
-    const doc = fixturesMap.get(config.document);
-    return doc !== undefined ? JSON.stringify(doc) : DEFAULT_DOC_JSON;
+    if (config.document === "") return DEFAULT_DOC;
+    if (config.document === "__raw__") return tryParseDoc(config.rawDocument) ?? DEFAULT_DOC;
+    return fixturesMap.get(config.document) ?? DEFAULT_DOC;
   }, [config.document, config.rawDocument, fixturesMap]);
 }
 
@@ -90,7 +93,8 @@ function HostPage(): JSX.Element {
 
   const { entries: localStorageEntries, refresh: refreshLocalStorage } = useLocalStorageEntries();
   const documentNames = useDocumentFixtures();
-  const docJson = useDocJson(config);
+  const doc = useDoc(config);
+  const docJson = useMemo(() => JSON.stringify(doc, null, 2), [doc]);
 
   const handleClearData = useCallback(async () => {
     clearStorage();
@@ -107,13 +111,13 @@ function HostPage(): JSX.Element {
     () =>
       buildIframeSrcdoc({
         config,
-        docJson,
+        doc,
         scriptUrl: resolveScriptUrl(import.meta.env.DEV, config.app),
         csp: SRCDOC_CSP,
         isDev: import.meta.env.DEV,
         devPluginUrlOverrides: DEV_PLUGIN_URL_OVERRIDES,
       }),
-    [config, docJson],
+    [config, doc],
   );
 
   const simulator: ClaudeSimulatorProps = {
@@ -164,7 +168,6 @@ function HostPage(): JSX.Element {
           iframeAllow={iframeAllow}
           configJson={configJson}
           docJson={docJson}
-          apiDefinition={listApiDef as ArtifactApiDefinition}
         />
       </div>
     </div>

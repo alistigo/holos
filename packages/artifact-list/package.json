@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@alistigo/artifact-core": "workspace:*",
+    "@alistigo/claude-artifact-api": "workspace:*",
     "@alistigo/artifact-core-components-react": "workspace:*",
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/list-document-editor": "workspace:*",

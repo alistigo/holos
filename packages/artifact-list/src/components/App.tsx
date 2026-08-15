@@ -12,7 +12,7 @@ import { ListApplicationService } from "@alistigo/list-document-editor";
 import type { AlistigoDocument } from "@alistigo/list-document-format";
 import { parseListId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
-import { type JSX, useEffect, useMemo, useState } from "react";
+import { type JSX, useEffect, useMemo, useRef, useState } from "react";
 import pkg from "../../package.json" with { type: "json" };
 import ListBody from "./ListBody.js";
 
@@ -42,27 +42,69 @@ function buildPluginInfos(
   });
 }
 
+/**
+ * Wraps a ListApplicationService to lazily seed storage on the first write.
+ * Storage is never touched at mount — only when the user performs their first edit.
+ */
+function createLazyInitService(
+  service: ListApplicationService,
+  repository: AlistigoListStore,
+  seedDocument: AlistigoDocument,
+): ListApplicationService {
+  let seeded = false;
+
+  async function ensureSeeded(): Promise<void> {
+    if (seeded) return;
+    const seedable = repository as { seedIfEmpty?(doc: AlistigoDocument): Promise<void> };
+    await seedable.seedIfEmpty?.(seedDocument);
+    seeded = true;
+  }
+
+  return new Proxy(service, {
+    get(target, prop: string) {
+      if (prop === "addListElement" || prop === "deleteListElement") {
+        return async (...args: unknown[]) => {
+          await ensureSeeded();
+          const method = target[prop as keyof typeof target] as (...a: unknown[]) => unknown;
+          return method.apply(target, args);
+        };
+      }
+      const value = target[prop as keyof typeof target];
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+  }) as unknown as ListApplicationService;
+}
+
 interface AppProps {
   initialDocument: AlistigoDocument;
   repository: AlistigoListStore;
   plugins: AlistigoPlugin[];
   spec: Record<string, Record<string, unknown>>;
+  isDraft: boolean;
 }
 
-function App({ initialDocument, repository, plugins, spec }: AppProps): JSX.Element | null {
-  const service = useMemo(() => new ListApplicationService(repository), [repository]);
+function App({
+  initialDocument,
+  repository,
+  plugins,
+  spec,
+  isDraft,
+}: AppProps): JSX.Element | null {
+  const service = useMemo(() => {
+    const base = new ListApplicationService(repository);
+    return createLazyInitService(base, repository, initialDocument);
+  }, [repository, initialDocument]);
+
   const listId = useMemo(() => parseListId(initialDocument["alistigo:listId"]), [initialDocument]);
 
   const [infoOpen, setInfoOpen] = useState(false);
   const [bootDoc, setBootDoc] = useState<AlistigoDocument | undefined>(undefined);
 
   const pluginsInfos = useMemo(() => buildPluginInfos(plugins, spec), [plugins, spec]);
+
   useEffect(() => {
-    // Duck-typed: only storage plugins that implement seedIfEmpty (local-storage) will run it.
-    const seedable = repository as { seedIfEmpty?(doc: AlistigoDocument): Promise<void> };
-    const seed = seedable.seedIfEmpty?.(initialDocument) ?? Promise.resolve();
-    seed
-      .then(() => service.loadDocument(listId))
+    service
+      .loadDocument(listId)
       .then((doc) => {
         log.info({ listId: listId.toString() }, "app mounted");
         setBootDoc(doc ?? initialDocument);
@@ -70,7 +112,7 @@ function App({ initialDocument, repository, plugins, spec }: AppProps): JSX.Elem
       .catch((err: unknown) => {
         log.error({ err }, "failed to load document");
       });
-  }, [repository, initialDocument, service, listId]);
+  }, [service, listId, initialDocument]);
 
   if (!bootDoc) return null;
 
@@ -110,7 +152,7 @@ function App({ initialDocument, repository, plugins, spec }: AppProps): JSX.Elem
       </ArtifactContextMenuContainer>
       <AlistigoProvider service={service} listId={listId} initialDocument={bootDoc}>
         <AlistigoApp>
-          <ListBody />
+          <ListBody isDraft={isDraft} />
         </AlistigoApp>
       </AlistigoProvider>
     </>

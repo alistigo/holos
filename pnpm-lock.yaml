@@ -322,6 +322,9 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
+      '@alistigo/claude-artifact-api':
+        specifier: workspace:*
+        version: link:../claude-artifact-api
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../list-components-react

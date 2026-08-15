@@ -1,4 +1,5 @@
 import claudeBridgeHtml from "@alistigo/claude-artifact-api/inject-script.html?raw";
+import type { AlistigoDocument } from "@alistigo/list-document-format";
 import type { Config } from "./hooks/useHostConfig";
 
 export const SRCDOC_CSP = [
@@ -46,7 +47,10 @@ function buildArtifactStatusScript(published: boolean): string {
 }
 
 /** Builds the config object injected into the artifact iframe. */
-export function buildArtifactConfig(config: Config): Record<string, unknown> {
+export function buildArtifactConfig(
+  config: Config,
+  doc?: AlistigoDocument,
+): Record<string, unknown> {
   const cfg: Record<string, unknown> = {
     app: config.app,
     lang: config.lang,
@@ -55,13 +59,16 @@ export function buildArtifactConfig(config: Config): Record<string, unknown> {
   if (Object.keys(config.plugins).length > 0) {
     cfg.plugins = config.plugins;
   }
+  if (doc !== undefined) {
+    cfg.document = doc;
+  }
   return cfg;
 }
 
 export interface BuildIframeSrcdocOptions {
   config: Config;
-  /** JSON string for the #alistigo-document script tag. */
-  docJson: string;
+  /** Parsed document — injected into alistigo-config.document for playground fixture testing. */
+  doc?: AlistigoDocument;
   /** Absolute URL to the artifact-entry module. */
   scriptUrl: string;
   /** CSP directive string for the <meta http-equiv> tag. */
@@ -78,14 +85,13 @@ export interface BuildIframeSrcdocOptions {
 
 export function buildIframeSrcdoc({
   config,
-  docJson,
+  doc,
   scriptUrl,
   csp,
   isDev,
   devPluginUrlOverrides,
 }: BuildIframeSrcdocOptions): string {
-  // aiContext and document are playground-only — not consumed by @alistigo/artifact-list
-  const cfgJson = JSON.stringify(buildArtifactConfig(config));
+  const cfgJson = JSON.stringify(buildArtifactConfig(config, doc));
 
   const isClaude = config.aiContext === "claude";
 
@@ -102,7 +108,6 @@ export function buildIframeSrcdoc({
     ${isDev ? buildDevRefreshScript() : ""}
   </head>
   <body id="artifacts-component-root-html">
-    <script type="application/json" id="alistigo-document">${docJson}</script>
     ${buildEntryScript(scriptUrl, isDev ?? false)}
   </body>
 </html>`;
