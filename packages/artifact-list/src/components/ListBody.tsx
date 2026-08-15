@@ -13,10 +13,7 @@ interface ListBodyProps {
 
 function DraftBanner(): JSX.Element {
   return (
-    <div
-      role="status"
-      className="flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800"
-    >
+    <output className="flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
       <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0" aria-hidden="true">
         <path
           fillRule="evenodd"
@@ -27,7 +24,7 @@ function DraftBanner(): JSX.Element {
       <span>
         <Trans>Preview — publish this artifact to start editing.</Trans>
       </span>
-    </div>
+    </output>
   );
 }
 
