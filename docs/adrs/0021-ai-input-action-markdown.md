@@ -70,52 +70,68 @@ attached to the preceding element (stored, displayed when supported by the rende
 │                                                              │
 │  1. Bundle script tag executes → auto-mount fires           │
 │                                                              │
-│  2. readAiInputAction()                                      │
-│     ├─ find <script id="ai-input-action">                    │
-│     ├─ detect type attribute                                 │
-│     │   ├─ "text/markdown" → proceed                        │
-│     │   └─ other            → log error, use empty default  │
-│     ├─ parseMarkdownToDocument(markdown)                     │
-│     │   ├─ extract title from first line                     │
-│     │   ├─ extract items (unordered or ordered)             │
-│     │   └─ attach key-value metadata to items               │
-│     ├─ validateAsListDocument(doc)                           │
-│     │   ├─ OK  → AlistigoDocument                           │
-│     │   └─ FAIL → log error, use empty default              │
-│     └─ remove <script id="ai-input-action"> from DOM        │
+│  2. Plugins init → storage plugin availability checked       │
 │                                                              │
-│  3. Mount React tree with resolved document                  │
+│  3. Published mode: rawStore.get("document")                 │
+│     ├─ found  → use stored document (user's edits)          │
+│     │           skip ai-input-action entirely               │
+│     └─ empty  → read ai-input-action markdown               │
+│           └─ readAiInputAction()                            │
+│                ├─ find <script id="ai-input-action">         │
+│                ├─ detect type attribute                      │
+│                │   ├─ "text/markdown" → proceed             │
+│                │   └─ other → log error, use empty default  │
+│                ├─ parseMarkdownToDocument(markdown)          │
+│                │   ├─ extract title from first line         │
+│                │   ├─ extract items (unordered or ordered)  │
+│                │   └─ attach key-value metadata to items    │
+│                ├─ validateAsListDocument(doc)                │
+│                │   ├─ OK  → AlistigoDocument                │
+│                │   └─ FAIL → log error, use empty default   │
+│                └─ remove <script id="ai-input-action">      │
+│                                                              │
+│     Draft mode: always read ai-input-action (no storage     │
+│                 check — storage is version-siloed in draft)  │
+│                                                              │
+│  4. Mount React tree with resolved document                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 The AI input tag is **removed from the DOM after being read** — it was a one-time seed, not a
 persistent data store.
 
-### 3. Storage is lazy — only activated by user edits
+### 3. Storage: fixed key, lazy initialization
 
-Previously, the artifact called `seedIfEmpty(initialDocument)` at mount time, writing the initial
-document to `window.storage` even if the user never interacted with it. This caused:
+An artifact holds at most one list document. Storage is always keyed by `"document"` — a fixed
+constant. The listId (which is regenerated on every markdown parse) is **not used as a storage key**.
 
-- Silent writes in draft mode (storage is version-siloed, so data is immediately lost anyway).
-- Misleading storage-explorer state showing "data" that will never survive a regeneration.
+**On first user edit** (published mode only): `seedIfEmpty` writes the current in-memory document to
+`store["document"]`, then the edit is applied and saved. Subsequent saves overwrite the same key.
 
-**New rule:** Storage is never touched at mount time. The first user action (add/delete element)
-triggers lazy initialization: the document is written to storage at that point, then the action is
-applied. Subsequent actions update storage as before.
+**On reload** (published mode): `rawStore.get("document")` is checked at boot before the React tree
+mounts. If found, that document is used directly — the `#ai-input-action` markdown is ignored.
 
 ```
-Mount
+Published mode boot
   │
-  ├─ Render document from AiInputAction (in-memory only)
+  ├─ rawStore.get("document")
+  │     ├─ found  → use stored document (user's edits preserved)
+  │     └─ empty  → read ai-input markdown → build document
   │
-  └─ User performs first edit
-       │
-       ├─ seedIfEmpty(currentDocument) → initialize storage
-       └─ apply edit → save to storage
+  └─ Mount React tree with resolved document
+
+Draft mode boot
+  └─ read ai-input markdown (storage check skipped)
+
+First user edit (published, storage was empty)
+  │
+  ├─ seedIfEmpty(currentDocument) → store.set("document", doc)
+  └─ apply edit → store.set("document", updatedDoc)
 ```
 
-On subsequent loads of the same published artifact, storage takes priority over the AI input (the
-user's edits are preserved).
+Previously, `seedIfEmpty` was called at mount time unconditionally. This caused silent writes in
+draft mode (where storage is version-siloed and data disappears on regeneration). The fix: storage
+is never touched at mount time — only triggered by user action or the published-mode boot check.
 
 ### 4. Draft mode: visible but read-only
 
