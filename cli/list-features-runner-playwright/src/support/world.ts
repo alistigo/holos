@@ -87,31 +87,18 @@ export class AlistigoWorld extends World {
   async setDocument(document: AlistigoDocument): Promise<void> {
     if (!this.applicationPage) return;
     this.lastDocument = document;
-    await this.page.evaluate(() => localStorage.clear());
-    await this.page.getByLabel("Document").selectOption("__raw__");
-    const frameNavigated = this.page.waitForEvent("framenavigated", {
-      predicate: (frame) => frame.name() === "artifact-preview",
-      timeout: 5000,
-    });
-    await this.page.getByRole("textbox", { name: /document json/i }).fill(JSON.stringify(document));
-    await frameNavigated;
+    await this.page.evaluate((doc) => {
+      localStorage.clear();
+      localStorage.setItem("document", JSON.stringify(doc));
+    }, document);
+    await this.page.reload();
     await this.applicationPage.waitForArtifactReady();
   }
 
   async reloadList(): Promise<void> {
     if (!this.lastDocument) throw new Error("No document set — call setDocument first");
+    // localStorage retains user edits at "document" key — artifact reads them on reload
     await this.page.reload();
-    // Wait for the initial iframe to load after page reload before setting up nav listener
-    await this.applicationPage.waitForArtifactReady();
-    await this.page.getByLabel("Document").selectOption("__raw__");
-    const frameNavigated = this.page.waitForEvent("framenavigated", {
-      predicate: (frame) => frame.name() === "artifact-preview",
-      timeout: 5000,
-    });
-    await this.page
-      .getByRole("textbox", { name: /document json/i })
-      .fill(JSON.stringify(this.lastDocument));
-    await frameNavigated;
     await this.applicationPage.waitForArtifactReady();
   }
 }
