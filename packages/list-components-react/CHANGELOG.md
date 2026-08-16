@@ -1,3 +1,21 @@
+## 0.3.0 (2026-08-16)
+
+### 🚀 Features
+
+- **artifact-list:** replace JSON-LD injection with markdown #ai-input-action ([67035f0](https://github.com/alistigo/holos/commit/67035f0))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-editor to 0.3.0
+- Updated list-document-format to 0.3.0
+- Updated list-domain to 0.3.0
+- Updated logger to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.18 (2026-08-07)
 
 ### 🧱 Updated Dependencies

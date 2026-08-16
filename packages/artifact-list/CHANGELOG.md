@@ -1,3 +1,32 @@
+## 0.5.0 (2026-08-16)
+
+### 🚀 Features
+
+- extract markdown parsing to list-document-format, add AiInitialInput to editor, delete ai-chat-async-api ([53fea52](https://github.com/alistigo/holos/commit/53fea52))
+- **artifact-list:** replace JSON-LD injection with markdown #ai-input-action ([67035f0](https://github.com/alistigo/holos/commit/67035f0))
+
+### 🩹 Fixes
+
+- **playwright:** replace stale UI selectors with localStorage injection + fixed storage key ([b39a583](https://github.com/alistigo/holos/commit/b39a583))
+- **lint:** fix fallow suppress placement and biome errors ([afe0e30](https://github.com/alistigo/holos/commit/afe0e30))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.4.0
+- Updated list-components-react to 0.3.0
+- Updated list-document-editor to 0.3.0
+- Updated list-document-format to 0.3.0
+- Updated artifact-plugin-api to 0.4.0
+- Updated claude-artifact-api to 0.3.0
+- Updated artifact-core to 0.3.0
+- Updated list-domain to 0.3.0
+- Updated logger to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.2 (2026-08-07)
 
 ### 🧱 Updated Dependencies

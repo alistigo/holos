@@ -1,3 +1,20 @@
+## 0.2.0 (2026-08-16)
+
+### 🩹 Fixes
+
+- **playwright:** replace stale UI selectors with localStorage injection + fixed storage key ([b39a583](https://github.com/alistigo/holos/commit/b39a583))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.3.0
+- Updated artifact-plugin-api to 0.4.0
+- Updated list-features to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 ## 0.1.15 (2026-08-07)

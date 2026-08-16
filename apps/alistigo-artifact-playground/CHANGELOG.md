@@ -1,3 +1,30 @@
+## 0.3.0 (2026-08-16)
+
+### 🚀 Features
+
+- **document-validator:** add --type option for list/markdown and list/full-json ([f013818](https://github.com/alistigo/holos/commit/f013818))
+- **playground:** replace JSON fixtures with markdown #ai-input-action ([5abf6e8](https://github.com/alistigo/holos/commit/5abf6e8))
+- **artifact-list:** replace JSON-LD injection with markdown #ai-input-action ([67035f0](https://github.com/alistigo/holos/commit/67035f0))
+
+### 🩹 Fixes
+
+- **fallow:** suppress buildIframeSrcdoc complexity after aiInputMarkdown addition ([8b20fc8](https://github.com/alistigo/holos/commit/8b20fc8))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.3.0
+- Updated list-components-react to 0.3.0
+- Updated list-document-format to 0.3.0
+- Updated local-storage-plugin to 0.4.0
+- Updated claude-artifact-api to 0.3.0
+- Updated artifact-manager to 0.3.0
+- Updated artifact-list to 0.5.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.29 (2026-08-14)
 
 ### 🧱 Updated Dependencies

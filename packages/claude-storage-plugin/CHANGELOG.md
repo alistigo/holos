@@ -1,3 +1,11 @@
+## 0.5.0 (2026-08-16)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.4.0
+- Updated claude-artifact-api to 0.3.0
+- Updated logger to 0.3.0
+
 ## 0.4.3 (2026-08-14)
 
 ### 🧱 Updated Dependencies

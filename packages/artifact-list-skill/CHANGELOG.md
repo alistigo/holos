@@ -1,3 +1,19 @@
+## 0.2.0 (2026-08-16)
+
+### 🚀 Features
+
+- **document-validator:** add --type option for list/markdown and list/full-json ([f013818](https://github.com/alistigo/holos/commit/f013818))
+- **artifact-list:** replace JSON-LD injection with markdown #ai-input-action ([67035f0](https://github.com/alistigo/holos/commit/67035f0))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-list-format to 0.2.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.14 (2026-08-07)
 
 ### 🧱 Updated Dependencies

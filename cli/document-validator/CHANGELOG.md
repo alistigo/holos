@@ -1,3 +1,18 @@
+## 0.3.0 (2026-08-16)
+
+### 🚀 Features
+
+- **document-validator:** add --type option for list/markdown and list/full-json ([f013818](https://github.com/alistigo/holos/commit/f013818))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 ## 0.2.6 (2026-08-07)

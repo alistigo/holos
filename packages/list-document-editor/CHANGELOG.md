@@ -1,3 +1,24 @@
+## 0.3.0 (2026-08-16)
+
+### 🚀 Features
+
+- extract markdown parsing to list-document-format, add AiInitialInput to editor, delete ai-chat-async-api ([53fea52](https://github.com/alistigo/holos/commit/53fea52))
+
+### 🩹 Fixes
+
+- add fallow complexity suppresses and unused var fix to pass pre-push gate ([1d7c6ce](https://github.com/alistigo/holos/commit/1d7c6ce))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document-format to 0.3.0
+- Updated list-domain to 0.3.0
+- Updated logger to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.17 (2026-08-07)
 
 ### 🧱 Updated Dependencies
