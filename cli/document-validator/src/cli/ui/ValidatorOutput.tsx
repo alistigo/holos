@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { validateDocument } from "@alistigo/list-document-format";
+import { isValidListMarkdown, validateDocument } from "@alistigo/list-document-format";
 import Ajv from "ajv";
 import { Box, Text, useApp } from "ink";
 import type React from "react";
@@ -13,6 +13,7 @@ interface FileResult {
 
 export interface ValidatorOutputProps {
   files: string[];
+  type?: string | undefined;
   schema?: string | undefined;
   onComplete: (exitCode: number) => void;
 }
@@ -53,6 +54,7 @@ function SummaryLine({ passed, failed }: { passed: number; failed: number }): Re
 
 export function ValidatorOutput({
   files,
+  type,
   schema,
   onComplete,
 }: ValidatorOutputProps): React.JSX.Element {
@@ -60,6 +62,7 @@ export function ValidatorOutput({
   const [results, setResults] = useState<FileResult[]>([]);
   const [done, setDone] = useState(false);
   const filesRef = useRef(files);
+  const typeRef = useRef(type);
   const schemaRef = useRef(schema);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
@@ -67,6 +70,33 @@ export function ValidatorOutput({
   useEffect(() => {
     // fallow-ignore-next-line complexity
     const run = async () => {
+      if (typeRef.current === "list/markdown") {
+        for (const file of filesRef.current) {
+          let content: string;
+          try {
+            content = readFileSync(file, "utf-8");
+          } catch {
+            setResults((prev) => [...prev, { file, valid: false, errors: ["cannot read file"] }]);
+            continue;
+          }
+          const valid = isValidListMarkdown(content);
+          setResults((prev) => [
+            ...prev,
+            {
+              file,
+              valid,
+              errors: valid
+                ? []
+                : [
+                    "not a valid AIInputMarkdown: must have a title line ending with ':' or at least one list item",
+                  ],
+            },
+          ]);
+        }
+        setDone(true);
+        return;
+      }
+
       let customValidator: ((data: unknown) => { valid: boolean; errors: string[] }) | undefined;
       if (schemaRef.current != null) {
         let jsonSchema: unknown;

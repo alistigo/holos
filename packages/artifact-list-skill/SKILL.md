@@ -31,9 +31,6 @@ content as markdown inside a `<script id="ai-input-action" type="text/markdown">
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script type="application/json" id="alistigo-config">
-    { "app": "@alistigo/artifact-list" }
-  </script>
   <script id="ai-input-action" type="text/markdown">
 Groceries:
 - Milk
@@ -84,11 +81,19 @@ Why: Timeless.
 
 ## Config fields
 
-Add these inside the `#alistigo-config` object:
+The `<script type="application/json" id="alistigo-config">` tag is **optional**. Omit it entirely when the defaults are sufficient. Add it only when you need to override a field:
+
+```html
+<script type="application/json" id="alistigo-config">
+  { "app": "@alistigo/artifact-list", "readonly": true }
+</script>
+```
+
+Available fields:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `app` | `string` | **required** | Must be `"@alistigo/artifact-list"` |
+| `app` | `string` | `"@alistigo/artifact-list"` | Disambiguates multi-app pages; safe to omit in single-app artifacts |
 | `readonly` | `boolean` | `false` | Lock the list against user edits |
 | `plugins` | `object` | `{}` | Plugin config keyed by npm package name |
 
