@@ -27,13 +27,13 @@ async function setup(ctx: PluginContext): Promise<void> {
 
 function wrapRoot(tree: ReactNode, ctx: PluginContext): ReactNode {
   const initialUser = resolvedUser ?? generateDefaultUser();
-  // biome-ignore lint/correctness/noChildrenProp: React.createElement requires children as prop when the component declares it as a required prop and exactOptionalPropertyTypes is on
   return React.createElement(UserProvider, {
     initialUser,
     ...(ctx.store !== undefined ? { store: ctx.store } : {}),
     onUserChanged: (u: User) => {
       ctx.emit("user:changed", { userId: u.id, pseudo: u.pseudo });
     },
+    // biome-ignore lint/correctness/noChildrenProp: exactOptionalPropertyTypes forces children into props when using React.createElement without JSX
     children: tree,
   });
 }
