@@ -7,6 +7,7 @@ export interface ArtifactContextMenuContainerProps {
   statusBadge?: ((onToggle: () => void) => ReactNode) | undefined;
 }
 
+// fallow-ignore-next-line complexity
 export function ArtifactContextMenuContainer({
   icon,
   children,

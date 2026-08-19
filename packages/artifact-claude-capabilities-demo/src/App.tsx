@@ -96,7 +96,9 @@ function ReadyContent({ isDraft, defaultTab }: ReadyContentProps): JSX.Element {
 
       <ArtifactContextMenuContainer
         icon={<img src={alistigoLogoUrl} alt="" className="h-full w-full object-cover" />}
-        statusBadge={isDraft ? () => <DraftBadge onClick={() => setDraftModalOpen(true)} /> : undefined}
+        statusBadge={
+          isDraft ? () => <DraftBadge onClick={() => setDraftModalOpen(true)} /> : undefined
+        }
       >
         <button
           type="button"

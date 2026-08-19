@@ -11,6 +11,7 @@ export function useSetUser(): (user: User) => void {
   return useUserContext().setUser;
 }
 
+// fallow-ignore-next-line unused-export
 export function useRegenerateAvatar(): () => void {
   const { user, setUser } = useUserContext();
   return useCallback(() => {
@@ -19,6 +20,7 @@ export function useRegenerateAvatar(): () => void {
   }, [user, setUser]);
 }
 
+// fallow-ignore-next-line unused-export
 export function useEditOpen(): [boolean, (v: boolean) => void] {
   const { editOpen, setEditOpen } = useUserContext();
   return [editOpen, setEditOpen];
