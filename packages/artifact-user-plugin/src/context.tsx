@@ -5,6 +5,8 @@ import { serializeUser, type User } from "./user.js";
 interface UserContextValue {
   user: User;
   setUser: (user: User) => void;
+  editOpen: boolean;
+  setEditOpen: (v: boolean) => void;
 }
 
 const UserContext = createContext<UserContextValue | null>(null);
@@ -23,6 +25,7 @@ export function UserProvider({
   children,
 }: UserProviderProps): React.JSX.Element {
   const [user, setUserState] = useState<User>(initialUser);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
 
   const setUser = useCallback(
     (next: User): void => {
@@ -33,7 +36,11 @@ export function UserProvider({
     [store, onUserChanged],
   );
 
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, setUser, editOpen, setEditOpen }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export function useUserContext(): UserContextValue {

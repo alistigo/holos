@@ -2,6 +2,8 @@ import type { AlistigoPlugin, PluginContext } from "@alistigo/artifact-plugin-ap
 import { createLogger } from "@alistigo/logger";
 import React, { type ReactNode } from "react";
 import pkg from "../package.json" with { type: "json" };
+import { AvatarBadge } from "./components/AvatarBadge.js";
+import { EditUserMenuButton } from "./components/EditUserMenuButton.js";
 import { UserProvider } from "./context.js";
 import { generateDefaultUser } from "./generate.js";
 import { deserializeUser, serializeUser, type User } from "./user.js";
@@ -25,6 +27,7 @@ async function setup(ctx: PluginContext): Promise<void> {
 
 function wrapRoot(tree: ReactNode, ctx: PluginContext): ReactNode {
   const initialUser = resolvedUser ?? generateDefaultUser();
+  // biome-ignore lint/correctness/noChildrenProp: React.createElement requires children as prop when the component declares it as a required prop and exactOptionalPropertyTypes is on
   return React.createElement(UserProvider, {
     initialUser,
     ...(ctx.store !== undefined ? { store: ctx.store } : {}),
@@ -42,8 +45,8 @@ const userPlugin: AlistigoPlugin = {
   requires: ["@alistigo/claude-storage-plugin", "@alistigo/local-storage-plugin"],
   setup,
   wrapRoot,
-  renderStatusBadge: (_onToggle) => null,
-  renderMenuContent: () => null,
+  renderStatusBadge: (onToggle) => React.createElement(AvatarBadge, { onToggle }),
+  renderMenuContent: () => React.createElement(EditUserMenuButton, null),
 };
 
 export default userPlugin;

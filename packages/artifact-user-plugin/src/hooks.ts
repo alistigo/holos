@@ -18,3 +18,8 @@ export function useRegenerateAvatar(): () => void {
     setUser({ ...user, id: newId, avatar: generateAvatar(newId) });
   }, [user, setUser]);
 }
+
+export function useEditOpen(): [boolean, (v: boolean) => void] {
+  const { editOpen, setEditOpen } = useUserContext();
+  return [editOpen, setEditOpen];
+}
