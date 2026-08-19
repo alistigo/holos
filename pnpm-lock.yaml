@@ -437,6 +437,52 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/artifact-user-plugin:
+    dependencies:
+      '@alistigo/artifact-core-components-react':
+        specifier: workspace:*
+        version: link:../artifact-core-components-react
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
+      '@alistigo/logger':
+        specifier: workspace:*
+        version: link:../logger
+      jdenticon:
+        specifier: latest
+        version: 3.3.0
+    devDependencies:
+      '@storybook/react-vite':
+        specifier: ^10.3.0
+        version: 10.3.6(esbuild@0.27.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.2)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+      '@tailwindcss/vite':
+        specifier: ^4.0.0
+        version: 4.2.4(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      react-dom:
+        specifier: ^19.2.5
+        version: 19.2.5(react@19.2.5)
+      storybook:
+        specifier: ^10.3.0
+        version: 10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.2.4
+      vite:
+        specifier: ^7.0.0
+        version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
+
   packages/claude-artifact-api: {}
 
   packages/claude-storage-plugin:
@@ -2799,6 +2845,9 @@ packages:
   caniuse-lite@1.0.30001778:
     resolution: {integrity: sha512-PN7uxFL+ExFJO61aVmP1aIEG4i9whQd4eoSCebav62UwDyp5OHh06zN4jqKSMePVgxHifCw1QJxdRkA1Pisekg==}
 
+  canvas-renderer@2.2.1:
+    resolution: {integrity: sha512-RrBgVL5qCEDIXpJ6NrzyRNoTnXxYarqm/cS/W6ERhUJts5UQtt/XPEosGN3rqUkZ4fjBArlnCbsISJ+KCFnIAg==}
+
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
 
@@ -3486,6 +3535,11 @@ packages:
   jake@10.9.4:
     resolution: {integrity: sha512-wpHYzhxiVQL+IV05BLE2Xn34zW1S223hvjtqk0+gsPrwd/8JNLXJgZZM/iPFsYc1xyphF+6M6EvdE5E9MBGkDA==}
     engines: {node: '>=10'}
+    hasBin: true
+
+  jdenticon@3.3.0:
+    resolution: {integrity: sha512-DhuBRNRIybGPeAjMjdHbkIfiwZCCmf8ggu7C49jhp6aJ7DYsZfudnvnTY5/1vgUhrGA7JaDAx1WevnpjCPvaGg==}
+    engines: {node: '>=6.4.0'}
     hasBin: true
 
   jest-diff@30.3.0:
@@ -6966,6 +7020,10 @@ snapshots:
 
   caniuse-lite@1.0.30001778: {}
 
+  canvas-renderer@2.2.1:
+    dependencies:
+      '@types/node': 22.19.17
+
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
@@ -7646,6 +7704,10 @@ snapshots:
       async: 3.2.6
       filelist: 1.0.6
       picocolors: 1.1.1
+
+  jdenticon@3.3.0:
+    dependencies:
+      canvas-renderer: 2.2.1
 
   jest-diff@30.3.0:
     dependencies:
