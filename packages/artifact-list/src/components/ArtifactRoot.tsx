@@ -83,7 +83,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
           locale: LOCALE,
           environment: import.meta.env.MODE,
         };
-        const runtime = createPluginRuntime(plugins, host, pluginLogger, spec);
+        const runtime = createPluginRuntime(plugins, host, pluginLogger, spec, rawStore);
         registerLoadedPlugins(runtime.loadedPluginNames);
         await runtime.setup();
         bootI18n();
@@ -130,7 +130,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
   const { runtime, store, plugins, spec, resolvedDoc } = ready;
   const doc = resolvedDoc ?? makeDefaultDocument();
 
-  return (
+  return runtime.wrapRoot(
     <div style={{ position: "relative" }}>
       <I18nProvider i18n={i18n}>
         <ArtifactErrorBoundary
@@ -153,6 +153,6 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
           <DebugRenderErrorTrigger />
         </ArtifactErrorBoundary>
       </I18nProvider>
-    </div>
+    </div>,
   );
 }

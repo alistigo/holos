@@ -9,6 +9,8 @@ export interface AlistigoPluginEventMap {
   "widget:displayed": { locale: string; storageType: string; version: string };
   /** Emitted by the host's own error boundary whenever a React render error occurs. */
   "error:uncaught": { error: unknown; componentStack?: string };
+  /** Emitted when the active user identity changes. */
+  "user:changed": { userId: string; pseudo: string };
 }
 
 export type PluginEventName = keyof AlistigoPluginEventMap;
@@ -44,6 +46,8 @@ export interface PluginContext {
   logger: PluginLogger;
   on: PluginEventBus["on"];
   emit: PluginEventBus["emit"];
+  /** Optional key-value store provided by the active storage plugin. */
+  store?: KeyValueStore;
 }
 
 export type PluginType = "monitoring" | "storage" | (string & {});
@@ -84,6 +88,8 @@ export interface AlistigoPlugin {
   active?: boolean;
   /** Present when type === "storage". Provides the storage backend contract. */
   storage?: AlistigoStorageExtension;
+  /** Plugin names that must be present in the same runtime for this plugin to function. */
+  requires?: string[];
 
   setup?(ctx: PluginContext): void | Promise<void>;
   beforeMount?(ctx: PluginContext): void | Promise<void>;
@@ -92,6 +98,10 @@ export interface AlistigoPlugin {
 
   /** Reserved for a future Provider-style plugin. Unused by any plugin in this round. */
   wrapRoot?(tree: ReactNode, ctx: PluginContext): ReactNode;
+  /** Renders a status badge to the left of the context menu toggle button. */
+  renderStatusBadge?(onToggle: () => void): ReactNode;
+  /** Renders content inside the context menu panel (e.g. an "Edit user" button). */
+  renderMenuContent?(): ReactNode;
 
   // Forward-compat stubs for future domain-contribution plugins — typed, unconsumed.
   dataShape?: unknown;
