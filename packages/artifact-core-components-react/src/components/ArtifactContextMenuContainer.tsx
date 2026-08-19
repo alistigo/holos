@@ -3,8 +3,8 @@ import { type ReactNode, useEffect, useState } from "react";
 export interface ArtifactContextMenuContainerProps {
   icon: ReactNode;
   children: ReactNode;
-  /** Optional badge rendered to the left of the icon button (e.g. a Draft status pill). */
-  statusBadge?: ReactNode;
+  /** Optional badge renderer — receives the toggle handler and renders to the left of the icon button. */
+  statusBadge?: ((onToggle: () => void) => ReactNode) | undefined;
 }
 
 export function ArtifactContextMenuContainer({
@@ -13,6 +13,10 @@ export function ArtifactContextMenuContainer({
   statusBadge,
 }: ArtifactContextMenuContainerProps): ReactNode {
   const [open, setOpen] = useState(false);
+
+  const handleToggle = (): void => {
+    setOpen((v) => !v);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -52,11 +56,11 @@ export function ArtifactContextMenuContainer({
             {children}
           </div>
           <div className="-mt-px absolute top-full right-0 z-20 flex items-start gap-1">
-            {statusBadge}
+            {statusBadge?.(handleToggle)}
             <button
               type="button"
               data-testid="alistigo-badge"
-              onClick={() => setOpen((v) => !v)}
+              onClick={handleToggle}
               aria-label="Alistigo artifact info"
               aria-expanded={open}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-b-lg border-x border-t border-b border-t-white border-gray-200 bg-white shadow-md hover:border-gray-400 focus:outline-none"

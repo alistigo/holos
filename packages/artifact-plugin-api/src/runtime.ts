@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type {
   AlistigoPlugin,
+  KeyValueStore,
   PluginContext,
   PluginEventBus,
   PluginEventName,
@@ -59,8 +60,19 @@ export function createPluginRuntime(
   host: PluginHostInfo,
   logger: PluginLogger,
   configByPlugin: Record<string, Record<string, unknown>>,
+  store?: KeyValueStore,
 ): PluginRuntime {
   const bus = createPluginBus();
+
+  const loadedNames = new Set(plugins.map((p) => p.name));
+  for (const plugin of plugins) {
+    if (plugin.requires === undefined) continue;
+    for (const dep of plugin.requires) {
+      if (!loadedNames.has(dep)) {
+        logger.error({ plugin: plugin.name, missing: dep }, "plugin requires missing dependency");
+      }
+    }
+  }
 
   function contextFor(plugin: AlistigoPlugin): PluginContext {
     return {
@@ -69,6 +81,7 @@ export function createPluginRuntime(
       logger,
       on: bus.on,
       emit: bus.emit,
+      ...(store !== undefined && { store }),
     };
   }
 

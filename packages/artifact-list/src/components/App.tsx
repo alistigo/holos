@@ -116,6 +116,9 @@ function App({
 
   if (!bootDoc) return null;
 
+  const badgeRenderer = plugins.find((p) => p.renderStatusBadge)?.renderStatusBadge;
+  const menuContentRenderer = plugins.find((p) => p.renderMenuContent)?.renderMenuContent;
+
   return (
     <>
       {infoOpen && (
@@ -129,7 +132,9 @@ function App({
       )}
       <ArtifactContextMenuContainer
         icon={<img src={alistigoLogoUrl} alt="" className="h-full w-full object-cover" />}
+        statusBadge={badgeRenderer}
       >
+        {menuContentRenderer?.()}
         <button
           type="button"
           onClick={() => setInfoOpen(true)}
