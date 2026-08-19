@@ -8,6 +8,7 @@ export function serializeUser(user: User): Record<string, string> {
   return { id: user.id, pseudo: user.pseudo, avatar: user.avatar };
 }
 
+// fallow-ignore-next-line complexity
 export function deserializeUser(raw: unknown): User | null {
   if (
     raw === null ||

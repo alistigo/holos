@@ -83,6 +83,7 @@ interface AppProps {
   isDraft: boolean;
 }
 
+// fallow-ignore-next-line complexity
 function App({
   initialDocument,
   repository,

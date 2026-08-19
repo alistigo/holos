@@ -86,6 +86,7 @@ export function generateAvatar(seed: string): string {
   return `data:image/svg+xml;base64,${btoa(svg)}`;
 }
 
+// fallow-ignore-next-line unused-export
 export function generatePseudo(seed: string): string {
   const hash = simpleHash(seed);
   const adj = ADJECTIVES[hash % ADJECTIVES.length] ?? "Bold";
