@@ -2,17 +2,73 @@ import * as jdenticon from "jdenticon";
 import type { User } from "./user.js";
 
 const ADJECTIVES = [
-  "Brave", "Bright", "Calm", "Clever", "Cool", "Daring", "Deft", "Epic",
-  "Fast", "Fierce", "Frosty", "Gentle", "Grand", "Happy", "Keen", "Kind",
-  "Lively", "Lucky", "Mighty", "Noble", "Quick", "Quiet", "Radiant", "Sharp",
-  "Sleek", "Smart", "Solar", "Spry", "Swift", "Vivid", "Wild", "Wise",
+  "Brave",
+  "Bright",
+  "Calm",
+  "Clever",
+  "Cool",
+  "Daring",
+  "Deft",
+  "Epic",
+  "Fast",
+  "Fierce",
+  "Frosty",
+  "Gentle",
+  "Grand",
+  "Happy",
+  "Keen",
+  "Kind",
+  "Lively",
+  "Lucky",
+  "Mighty",
+  "Noble",
+  "Quick",
+  "Quiet",
+  "Radiant",
+  "Sharp",
+  "Sleek",
+  "Smart",
+  "Solar",
+  "Spry",
+  "Swift",
+  "Vivid",
+  "Wild",
+  "Wise",
 ];
 
 const ANIMALS = [
-  "Bear", "Bison", "Boar", "Crane", "Crow", "Deer", "Eagle", "Falcon",
-  "Fox", "Hawk", "Heron", "Ibis", "Jaguar", "Kite", "Kiwi", "Lynx",
-  "Mink", "Moose", "Orca", "Otter", "Panda", "Puma", "Raven", "Robin",
-  "Seal", "Shark", "Skunk", "Swan", "Tiger", "Viper", "Wolf", "Wren",
+  "Bear",
+  "Bison",
+  "Boar",
+  "Crane",
+  "Crow",
+  "Deer",
+  "Eagle",
+  "Falcon",
+  "Fox",
+  "Hawk",
+  "Heron",
+  "Ibis",
+  "Jaguar",
+  "Kite",
+  "Kiwi",
+  "Lynx",
+  "Mink",
+  "Moose",
+  "Orca",
+  "Otter",
+  "Panda",
+  "Puma",
+  "Raven",
+  "Robin",
+  "Seal",
+  "Shark",
+  "Skunk",
+  "Swan",
+  "Tiger",
+  "Viper",
+  "Wolf",
+  "Wren",
 ];
 
 function simpleHash(str: string): number {
@@ -34,7 +90,7 @@ export function generatePseudo(seed: string): string {
   const hash = simpleHash(seed);
   const adj = ADJECTIVES[hash % ADJECTIVES.length] ?? "Bold";
   const animal = ANIMALS[((hash >> 8) & 0x7fffffff) % ANIMALS.length] ?? "Fox";
-  const num = String(((hash >> 16) & 0x7fffffff) % 90 + 10);
+  const num = String((((hash >> 16) & 0x7fffffff) % 90) + 10);
   return `${adj}${animal}${num}`;
 }
 
