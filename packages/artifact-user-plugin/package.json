@@ -1,0 +1,59 @@
+{
+  "name": "@alistigo/artifact-user-plugin",
+  "version": "0.0.0",
+  "description": "User identity plugin for @alistigo artifacts — avatar generation via jdenticon.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/artifact-user-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-user-plugin#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "plugin",
+    "user",
+    "jdenticon",
+    "avatar"
+  ],
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "@alistigo/artifact-core-components-react": "workspace:*",
+    "@alistigo/logger": "workspace:*",
+    "jdenticon": "latest"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.3.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "storybook": "^10.3.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^7.0.0"
+  }
+}
