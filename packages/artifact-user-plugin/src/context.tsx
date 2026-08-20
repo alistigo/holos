@@ -1,3 +1,4 @@
+import { useAsyncProgress } from "@alistigo/artifact-core-components-react";
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
 import React, { createContext, type ReactNode, useCallback, useContext, useState } from "react";
 import { serializeUser, type User } from "./user.js";
@@ -26,14 +27,18 @@ export function UserProvider({
 }: UserProviderProps): React.JSX.Element {
   const [user, setUserState] = useState<User>(initialUser);
   const [editOpen, setEditOpen] = useState<boolean>(false);
+  const { startOp } = useAsyncProgress();
 
   const setUser = useCallback(
     (next: User): void => {
       setUserState(next);
-      void store?.set("user", serializeUser(next));
+      if (store !== undefined) {
+        const done = startOp();
+        void store.set("user", serializeUser(next)).finally(done);
+      }
       onUserChanged?.(next);
     },
-    [store, onUserChanged],
+    [store, onUserChanged, startOp],
   );
 
   return (
