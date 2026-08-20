@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useUserContext } from "./context.js";
-import { generateAvatar } from "./generate.js";
+import { generateAvatar, generateUserId } from "./generate.js";
 import type { User } from "./user.js";
 
 export function useUser(): User {
@@ -15,7 +15,7 @@ export function useSetUser(): (user: User) => void {
 export function useRegenerateAvatar(): () => void {
   const { user, setUser } = useUserContext();
   return useCallback(() => {
-    const newId = crypto.randomUUID();
+    const newId = generateUserId();
     setUser({ ...user, id: newId, avatar: generateAvatar(newId) });
   }, [user, setUser]);
 }

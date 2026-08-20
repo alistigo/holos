@@ -1,102 +1,105 @@
-# ADR 0022 — Artifact User Plugin: Device-Scoped Identity via Plugin System
-
-**Status:** Accepted  
-**Date:** 2026-08-20  
-**Context:** Artifact artifacts have no concept of identity. Every user who opens an artifact is anonymous, making it impossible to attribute actions or personalise the experience. This ADR captures the decisions made while introducing `@alistigo/artifact-user-plugin`.
-
 ---
+status: accepted
+date: 2026-08-20
+deciders: Mikael Labrut
+---
+
+# ADR 0022 — Artifact User Plugin: Device-Scoped Identity
+
+**Status:** Accepted
+**Date:** 2026-08-20
 
 ## Context
 
-Alistigo artifacts are embedded in third-party hosts (primarily Claude). There is no server-side session, no login, and no guarantee of a storage backend. Any identity solution must:
+Alistigo artifacts have no concept of identity. Every user who opens an artifact is anonymous — there is no way to attribute an action (e.g. "added item X") to a specific person, and nothing distinguishes one device from another in multi-user scenarios.
 
-- work in a completely ephemeral environment (no storage plugin active)
-- degrade gracefully when storage is available but the user is a first-time visitor
-- not require a login flow or any PII
-- surface the identity in the anchor menu without coupling `artifact-list` to a specific plugin
+The identity solution must operate within a strict set of constraints:
 
----
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| R1 | Works in the Claude artifact sandbox with no server-side session or redirect flow | P1 |
+| R2 | Degrades gracefully when no storage plugin is active (ephemeral identity, not a crash) | P1 |
+| R3 | Collects no PII — no email, name, or device fingerprint | P1 |
+| R4 | IDs follow the project-wide TypeID format (see ADR 0023) | P1 |
+| R5 | The artifact-list host must not import anything from the user plugin directly | P1 |
+| R6 | Avatar must render as SVG, no Canvas dependency, no external network request | P2 |
+| R7 | User can replace the generated avatar with an uploaded image or a new identicon | P2 |
 
-## Decisions
+## Decision
 
-### 1. Device-scoped identity, not account-based
+Introduce `@alistigo/artifact-user-plugin`. Each device is assigned a persistent identity composed of:
 
-**Decision:** Each device/browser gets a random `crypto.randomUUID()` as its user ID, persisted in the active storage plugin under the key `"user"`.
+- **id** — a TypeID with prefix `usr` (e.g. `usr_01arZ3vDWGXSMBTPCJNMDQSKBR`) stored under key `"user"` in the active storage plugin
+- **pseudo** — a human-readable name derived deterministically from the id (`AdjectiveAnimalNN`, e.g. `FrostyPanda42`)
+- **avatar** — a 50×50 jdenticon SVG identicon, embedded as a base64 data URL
 
-**Rejected alternatives:**
+The identity is created on first load if none is found in storage, and updated in-place when the user edits their pseudo or avatar.
 
-| Alternative | Reason rejected |
-|------------|----------------|
-| OAuth / server login | Requires a backend, redirect flow, and PII handling — incompatible with the embedded Claude context |
-| Fingerprinting | Fragile, privacy-hostile, and banned in many jurisdictions |
-| Host-provided identity | Claude/host API does not expose a stable user token to artifacts |
+Four plugin API additions enable this without coupling `artifact-list` to the user plugin:
 
-**Consequence:** Two browsers on the same physical machine get different identities. This is acceptable for M1 — the goal is "not anonymous", not "single account across devices".
+1. `PluginContext.store?: KeyValueStore` — gives plugins access to the active storage backend
+2. `AlistigoPlugin.requires?: string[]` — declarative dependency declarations (advisory)
+3. `AlistigoPlugin.renderStatusBadge?(onToggle) => ReactNode` — render-prop for the anchor menu badge slot
+4. `AlistigoPlugin.renderMenuContent?() => ReactNode` — render-prop for content inside the anchor menu panel
 
----
+`ArtifactRoot.tsx` activates the previously-wired-but-never-called `runtime.wrapRoot()` so that provider-style plugins (like this one) can inject React context.
 
-### 2. Human-readable pseudo + generated identicon, no PII
+## Rationale
 
-**Decision:** The identity is surfaced as `AdjectiveAnimalNN` (e.g. `FrostyPanda42`) and a 50×50 jdenticon SVG avatar, both derived deterministically from the UUID seed.
+### Identity model — device-scoped over account-based
 
-**Avatar library chosen: jdenticon v3**
+| Criterion | Account login | Device-scoped (chosen) |
+|-----------|--------------|------------------------|
+| Works in Claude iframe sandbox | No — requires redirect or popup | Yes |
+| Requires PII | Yes — email at minimum | No |
+| Backend dependency | Yes — session store | No |
+| Setup friction | High | Zero |
+| Cross-device consistency | Yes | No (by design for M1) |
 
-| Library | Size | Output | License | Why not |
-|---------|------|--------|---------|---------|
-| **jdenticon** | ~15 KB min | SVG | MIT | — chosen |
-| identicon.js | ~8 KB | Canvas/PNG | BSD-2 | Requires Canvas API, no SVG |
-| boring-avatars | ~6 KB | SVG | MIT | React-only, no seed-to-SVG without mounting |
-| DiceBear | ~20–80 KB | SVG | MIT | Large, many styles, more than needed |
+Account-based identity would require an OAuth redirect or a popup — neither of which works inside Claude's artifact iframe. Device-scoped identity satisfies R1–R3 with zero infrastructure cost.
 
-Jdenticon's `toSvg(seed, size)` returns a plain SVG string with no DOM dependency, which is exactly what's needed for a data URL avatar in a plugin context.
+### Avatar generation — jdenticon over alternatives
 
-**Pseudo generation:** No library. Two hardcoded arrays (32 adjectives × 32 animals) plus a djb2 hash give 32 × 32 × 90 = 92,160 distinct pseudos — enough for an MVP, deterministic, zero bundle cost.
+| Library | Size | Output | DOM dep. | License |
+|---------|------|--------|----------|---------|
+| **jdenticon** | ~15 KB | SVG string | None | MIT |
+| identicon.js | ~8 KB | Canvas/PNG | Canvas API | BSD-2 |
+| boring-avatars | ~6 KB | JSX | React required | MIT |
+| DiceBear | 20–80 KB | SVG (via DOM) | Yes | MIT |
 
----
+Jdenticon's `toSvg(seed, size)` returns a plain SVG string with no DOM or React dependency (R6), making it the only option that works reliably in the plugin's `setup()` lifecycle before React mounts.
 
-### 3. Identity persisted via the storage plugin abstraction, not directly to localStorage
+### Pseudo generation — no library
 
-**Decision:** The plugin reads and writes under `ctx.store?.get("user")` / `ctx.store?.set(...)`. If `store` is absent (no storage plugin configured), the identity lives only in module-level state for the session.
+32 adjectives × 32 animals × 90 two-digit suffixes = 92,160 distinct pseudos derived deterministically from the user id seed via a djb2 hash. No additional bundle cost. Future pseudos can be added by extending the arrays.
 
-**Why not write directly to `localStorage`?**
+### Storage abstraction — ctx.store over direct localStorage
 
-The storage plugin abstraction exists precisely so the artifact does not hard-code a storage backend. The Claude host provides Claude storage; other hosts may use localStorage or nothing. Bypassing `ctx.store` would break this contract and prevent storage plugins from managing their own key namespacing.
+Writing directly to `localStorage` would bypass the storage plugin abstraction and break compatibility with the Claude storage backend and any future storage provider. `ctx.store` is the correct channel (R1).
 
-**Consequence:** If no storage plugin is active, the identity resets on every page load. This is surfaced to the user implicitly (the badge shows a fresh pseudo), not explicitly. A future ADR can decide whether to warn the user.
+### Plugin API — render-props over fixed slots
 
----
+`artifact-list` must not hard-import components from `artifact-user-plugin` (R5), otherwise the user plugin becomes a required dependency. Render-props (`renderStatusBadge`, `renderMenuContent`) let `artifact-list` remain agnostic: it iterates plugins and calls whichever one exposes a badge renderer, with no knowledge of what it renders.
 
-### 4. Plugin API extended with `store`, `requires`, and render-props
+### Modal portal — createPortal over inline child
 
-**Decision:** Rather than hardcoding the user plugin's needs into `artifact-list`, three additions were made to the plugin API:
-
-| Addition | Purpose |
-|----------|---------|
-| `PluginContext.store?: KeyValueStore` | Gives plugins access to the active storage without knowing which backend is in use |
-| `AlistigoPlugin.requires?: string[]` | Declarative dependency list; runtime logs a warning if a required plugin is not loaded |
-| `AlistigoPlugin.renderStatusBadge?(onToggle) => ReactNode` | Lets a plugin inject a UI element to the left of the Alistigo anchor button |
-| `AlistigoPlugin.renderMenuContent?() => ReactNode` | Lets a plugin inject content inside the anchor menu panel |
-| `"user:changed"` event in `AlistigoPluginEventMap` | Standard event bus notification when user profile changes |
-
-`wrapRoot()` was already defined on `AlistigoPlugin` and wired in `createPluginRuntime()`, but `ArtifactRoot.tsx` never called it. This PR activates it so provider-style plugins can inject React context.
-
-**Why render-props instead of a fixed slot?**
-
-`artifact-list` must not import anything from `artifact-user-plugin`. If it did, the user plugin would become a required dependency rather than an optional add-on. Render-props keep `artifact-list` clean: it iterates plugins and calls the first `renderStatusBadge` it finds, with no knowledge of what it renders.
-
----
-
-### 5. Modal rendered via React portal, not inside the anchor menu DOM
-
-**Decision:** `UserEditModal` is rendered with `createPortal(…, document.body)` from inside `AvatarBadge`, not as a child of the anchor menu panel.
-
-The anchor menu panel uses `translateY(-100%)` and `overflow: hidden` to animate in from above. A modal rendered as its child would be clipped. The portal escapes the stacking context so the modal can overlay the full viewport correctly.
-
----
+`UserEditModal` is rendered via `createPortal(..., document.body)` from inside `AvatarBadge`. The anchor menu panel uses `translateY(-100%)` animation with `overflow: hidden`, which clips any children positioned outside the panel bounds. The portal escapes the stacking context so the modal overlays the full viewport correctly.
 
 ## Consequences
 
-- Any future plugin that needs to persist data can access `ctx.store` without touching `artifact-list` or `artifact-core-components-react`
+**Positive:**
+- Any future plugin that needs to persist data uses `ctx.store` without touching `artifact-list`
 - Any future plugin that needs an anchor-menu entry point uses `renderStatusBadge` / `renderMenuContent` — no changes to `App.tsx` required
-- Device identity is not portable across browsers or devices by design; a future "link devices" or "log in" feature would supersede this ADR
-- The `requires` field is advisory today (logs a warning, does not abort); it can be promoted to a hard error when the plugin ecosystem matures
+- `wrapRoot()` is now active, enabling all provider-style plugins going forward
+
+**Negative / tradeoffs accepted:**
+- Identity is not portable across browsers or devices — a future login feature would supersede this
+- The `requires` field is advisory (logs a warning, does not abort); it can be promoted to a hard error when the plugin ecosystem matures
+- If no storage plugin is active, identity resets on every page load with no visible warning to the user
+
+## Alternatives considered
+
+- **OAuth / server login** — rejected: requires a backend and a redirect flow incompatible with the Claude iframe sandbox
+- **Browser fingerprinting** — rejected: fragile, privacy-hostile, and regulated in many jurisdictions
+- **Host-provided identity** — rejected: Claude does not expose a stable user token to artifacts
+- **Hardcoded avatar slot in App.tsx** — rejected: couples `artifact-list` to the user plugin; instead use render-props (R5)

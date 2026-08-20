@@ -1,4 +1,5 @@
 import * as jdenticon from "jdenticon";
+import { typeid } from "typeid-js";
 import type { User } from "./user.js";
 
 const ADJECTIVES = [
@@ -95,8 +96,12 @@ export function generatePseudo(seed: string): string {
   return `${adj}${animal}${num}`;
 }
 
+export function generateUserId(): string {
+  return typeid("usr").toString();
+}
+
 export function generateDefaultUser(): User {
-  const id = crypto.randomUUID();
+  const id = generateUserId();
   return {
     id,
     pseudo: generatePseudo(id),

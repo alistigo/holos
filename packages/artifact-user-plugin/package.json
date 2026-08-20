@@ -42,7 +42,8 @@
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/artifact-core-components-react": "workspace:*",
     "@alistigo/logger": "workspace:*",
-    "jdenticon": "latest"
+    "jdenticon": "latest",
+    "typeid-js": "^1.2.0"
   },
   "devDependencies": {
     "@storybook/react-vite": "^10.3.0",
