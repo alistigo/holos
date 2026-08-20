@@ -43,6 +43,10 @@ const devPluginSrcPaths: Record<string, string> = {
     __dirname,
     "../../packages/local-storage-plugin/src/index.ts",
   ),
+  "@alistigo/artifact-user-plugin": path.resolve(
+    __dirname,
+    "../../packages/artifact-user-plugin/src/index.ts",
+  ),
   "@alistigo/artifact-sentry-plugin": path.resolve(
     __dirname,
     "../../packages/artifact-sentry-plugin/src/index.ts",
