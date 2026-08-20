@@ -1,11 +1,11 @@
 export { default as alistigoLogoUrl } from "./assets/logo.png";
-export { AsyncProgressBar } from "./components/AsyncProgressBar.js";
-export type { AsyncProgressContextValue } from "./components/AsyncProgressContext.js";
-export { AsyncProgressProvider, useAsyncProgress } from "./components/AsyncProgressContext.js";
 export type { ArtifactContextMenuContainerProps } from "./components/ArtifactContextMenuContainer.js";
 export { ArtifactContextMenuContainer } from "./components/ArtifactContextMenuContainer.js";
 export type { ArtifactInfoPanelProps } from "./components/ArtifactInfoPanel.js";
 export { ArtifactInfoPanel } from "./components/ArtifactInfoPanel.js";
+export { AsyncProgressBar } from "./components/AsyncProgressBar.js";
+export type { AsyncProgressContextValue } from "./components/AsyncProgressContext.js";
+export { AsyncProgressProvider, useAsyncProgress } from "./components/AsyncProgressContext.js";
 export type { ErrorScreenProps } from "./components/ErrorScreen.js";
 export { ErrorScreen } from "./components/ErrorScreen.js";
 export type { LoadingScreenProps } from "./components/LoadingScreen.js";
