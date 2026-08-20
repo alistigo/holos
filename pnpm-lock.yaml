@@ -451,6 +451,9 @@ importers:
       jdenticon:
         specifier: latest
         version: 3.3.0
+      typeid-js:
+        specifier: ^1.2.0
+        version: 1.2.0
     devDependencies:
       '@storybook/react-vite':
         specifier: ^10.3.0

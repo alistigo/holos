@@ -4,16 +4,21 @@ import { createLogger } from "@alistigo/logger";
 
 const log = createLogger("alistigo:artifact-list:plugins");
 
-// Injected at the front of every spec (claude = preferred, local = fallback).
-// User-supplied plugins that share a key override the default config value.
+// Always loaded first — claude preferred, local as fallback.
 const DEFAULT_STORAGE_PLUGINS: Record<string, Record<string, unknown>> = {
   "@alistigo/claude-storage-plugin": {},
   "@alistigo/local-storage-plugin": {},
 };
 
+// Always loaded after storage so they can access the resolved store.
+const DEFAULT_FEATURE_PLUGINS: Record<string, Record<string, unknown>> = {
+  "@alistigo/artifact-user-plugin": {},
+};
+
 /**
- * Merges default storage plugins into the front of `userSpec` so they always
- * load first. Keys already present in `userSpec` keep the user-supplied config.
+ * Merges defaults into `userSpec`: storage plugins first, then user-supplied
+ * plugins, then feature plugins last (they depend on storage being resolved).
+ * Keys already present in `userSpec` keep the user-supplied config.
  */
 export function buildPluginSpec(
   userSpec?: Record<string, Record<string, unknown>>,
@@ -24,6 +29,9 @@ export function buildPluginSpec(
     if (!(k in user)) result[k] = v;
   }
   Object.assign(result, user);
+  for (const [k, v] of Object.entries(DEFAULT_FEATURE_PLUGINS)) {
+    if (!(k in user) && !(k in result)) result[k] = v;
+  }
   return result;
 }
 

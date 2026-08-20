@@ -24,3 +24,6 @@ This directory contains architectural decisions for the Holos monorepo — both 
 | [0018](0018-alistigo-platform.md) | Alistigo as a Platform for AI Artifacts | Accepted | 2026-07-27 |
 | [0019](0019-claude-artifact-draft-vs-published.md) | Claude Artifact Lifecycle — Draft vs. Published Storage Behavior | Accepted | 2026-08-06 |
 | [0020](0020-artifact-fetch-scope.md) | Claude Artifact `window.fetch` is Anthropic-API-Only | Accepted | 2026-08-09 |
+| [0021](0021-ai-input-action-markdown.md) | AI Input Action — Markdown as Document Source Format | Accepted | 2026-08-15 |
+| [0022](0022-artifact-user-plugin.md) | Artifact User Plugin: Device-Scoped Identity | Accepted | 2026-08-20 |
+| [0023](0023-entity-ids-typeid.md) | Entity IDs: TypeID as the Preferred Format | Accepted | 2026-08-20 |
