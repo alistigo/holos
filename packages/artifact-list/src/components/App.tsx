@@ -1,6 +1,7 @@
 import {
   ArtifactContextMenuContainer,
   ArtifactInfoPanel,
+  AsyncProgressBar,
   alistigoLogoUrl,
   Modal,
   type PluginInfo,
@@ -161,6 +162,7 @@ function App({
           <ListBody isDraft={isDraft} />
         </AlistigoApp>
       </AlistigoProvider>
+      <AsyncProgressBar />
     </>
   );
 }

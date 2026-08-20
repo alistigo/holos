@@ -3,7 +3,11 @@ import {
   useArtifactLifecycle,
   useStartArtifact,
 } from "@alistigo/artifact-core";
-import { ErrorScreen, LoadingScreen } from "@alistigo/artifact-core-components-react";
+import {
+  AsyncProgressProvider,
+  ErrorScreen,
+  LoadingScreen,
+} from "@alistigo/artifact-core-components-react";
 import type { AlistigoPlugin, KeyValueStore, PluginRuntime } from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import { artifactContext } from "@alistigo/claude-artifact-api";
@@ -130,29 +134,33 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
   const { runtime, store, plugins, spec, resolvedDoc } = ready;
   const doc = resolvedDoc ?? makeDefaultDocument();
 
-  return runtime.wrapRoot(
-    <div style={{ position: "relative" }}>
-      <I18nProvider i18n={i18n}>
-        <ArtifactErrorBoundary
-          onError={(err, componentStack) => {
-            lifecycle.setPhase("error", err);
-            runtime.bus.emit("error:uncaught", {
-              error: err,
-              ...(componentStack !== undefined && { componentStack }),
-            });
-          }}
-        >
-          <App
-            key={doc["alistigo:listId"]}
-            initialDocument={doc}
-            repository={store}
-            plugins={plugins}
-            spec={spec}
-            isDraft={!published}
-          />
-          <DebugRenderErrorTrigger />
-        </ArtifactErrorBoundary>
-      </I18nProvider>
-    </div>,
+  return (
+    <AsyncProgressProvider>
+      {runtime.wrapRoot(
+        <div style={{ position: "relative" }}>
+          <I18nProvider i18n={i18n}>
+            <ArtifactErrorBoundary
+              onError={(err, componentStack) => {
+                lifecycle.setPhase("error", err);
+                runtime.bus.emit("error:uncaught", {
+                  error: err,
+                  ...(componentStack !== undefined && { componentStack }),
+                });
+              }}
+            >
+              <App
+                key={doc["alistigo:listId"]}
+                initialDocument={doc}
+                repository={store}
+                plugins={plugins}
+                spec={spec}
+                isDraft={!published}
+              />
+              <DebugRenderErrorTrigger />
+            </ArtifactErrorBoundary>
+          </I18nProvider>
+        </div>,
+      )}
+    </AsyncProgressProvider>
   );
 }
