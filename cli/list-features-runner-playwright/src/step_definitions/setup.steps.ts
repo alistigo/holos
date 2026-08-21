@@ -1,5 +1,6 @@
 import { type DataTable, Given } from "@cucumber/cucumber";
 import { buildEmptyDocument, buildPopulatedDocument } from "../support/document";
+import { installUserPluginRoute } from "../support/storage-routes.js";
 import type { AlistigoWorld } from "../support/world";
 
 Given("an empty list", async function (this: AlistigoWorld) {
@@ -48,3 +49,8 @@ Given(
     await this.applicationPage.waitForPluginInitialized();
   },
 );
+
+Given("an artifact with the user plugin enabled", async function (this: AlistigoWorld) {
+  await installUserPluginRoute(this.page);
+  await this.enablePlugin("@alistigo/artifact-user-plugin");
+});

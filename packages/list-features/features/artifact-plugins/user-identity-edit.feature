@@ -1,7 +1,6 @@
 @platform
 @artifact-plugins
 @capability:user-identity
-@todo
 Feature: Edit user identity
   A User can update their pseudo through the user editor, and the change is
   reflected immediately in the artifact — no explicit save action required.

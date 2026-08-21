@@ -5,9 +5,13 @@ import {
   Before,
   BeforeAll,
   type ITestCaseHookParameter,
+  setDefaultTimeout,
 } from "@cucumber/cucumber";
 import { type Browser, chromium } from "playwright";
 import type { AlistigoWorld } from "./world";
+
+// Browser automation with real plugin bundles needs more than the 5s default.
+setDefaultTimeout(30_000);
 
 let browser: Browser | undefined;
 

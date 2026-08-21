@@ -20,8 +20,20 @@ When("I delete row {int}", async function (this: AlistigoWorld, rowNumber: numbe
   await this.applicationPage.deleteRow(rowNumber);
 });
 
-When("I reload the list", async function (this: AlistigoWorld) {
-  await this.reloadList();
+When("I reload the artifact", async function (this: AlistigoWorld) {
+  await this.reloadArtifact();
+});
+
+When("the artifact is fully loaded", async function (this: AlistigoWorld) {
+  await this.applicationPage.waitForArtifactReady();
+});
+
+When("I open the user editor", async function (this: AlistigoWorld) {
+  await this.applicationPage.openUserEditor();
+});
+
+When("I set my pseudo to {string}", async function (this: AlistigoWorld, pseudo: string) {
+  await this.applicationPage.setPseudo(pseudo);
 });
 
 When("the artifact initialize", async function (this: AlistigoWorld) {

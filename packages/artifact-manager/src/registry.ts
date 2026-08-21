@@ -15,7 +15,11 @@ export const ARTIFACT_REGISTRY: Record<string, ArtifactEntry> = {
   "@alistigo/artifact-list": {
     cdnUrl: "https://cdn.jsdelivr.net/npm/@alistigo/artifact-list@0/dist/index.umd.js",
     skillPackage: "@alistigo/artifact-list-skill",
-    availablePlugins: ["@alistigo/artifact-sentry-plugin", "@alistigo/artifact-posthog-plugin"],
+    availablePlugins: [
+      "@alistigo/artifact-user-plugin",
+      "@alistigo/artifact-sentry-plugin",
+      "@alistigo/artifact-posthog-plugin",
+    ],
   },
   "@alistigo/artifact-claude-capabilities-demo": {
     cdnUrl:

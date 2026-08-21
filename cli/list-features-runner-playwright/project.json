@@ -6,7 +6,7 @@
   "targets": {
     "run-all-features": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", { "projects": ["artifact-user-plugin"], "target": "build" }],
       "options": {
         "command": "bun ./node_modules/@cucumber/cucumber/bin/cucumber.js",
         "args": "--config cucumber.config.ts --profile all",
