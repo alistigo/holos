@@ -25,8 +25,9 @@ describe("ARTIFACT_REGISTRY", () => {
     expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]?.cdnUrl).toContain("artifact-list");
   });
 
-  it("lists the sentry and posthog plugins as available for the list artifact", () => {
+  it("lists the user, sentry, and posthog plugins as available for the list artifact", () => {
     expect(ARTIFACT_REGISTRY["@alistigo/artifact-list"]?.availablePlugins).toEqual([
+      "@alistigo/artifact-user-plugin",
       "@alistigo/artifact-sentry-plugin",
       "@alistigo/artifact-posthog-plugin",
     ]);
