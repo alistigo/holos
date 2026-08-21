@@ -1,3 +1,14 @@
+## 0.4.0 (2026-08-21)
+
+### 🚀 Features
+
+- **list-features:** add Gherkin feature specs for artifact-user-plugin ([f08ed17](https://github.com/alistigo/holos/commit/f08ed17))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

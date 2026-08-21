@@ -1,3 +1,24 @@
+## 0.3.1 (2026-08-21)
+
+### 🚀 Features
+
+- **playground:** add artifact-user-plugin to dev plugin src paths ([96f2c4e](https://github.com/alistigo/holos/commit/96f2c4e))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.3.1
+- Updated list-components-react to 0.3.1
+- Updated list-document-format to 0.3.1
+- Updated local-storage-plugin to 0.4.1
+- Updated claude-artifact-api to 0.3.1
+- Updated artifact-manager to 0.3.1
+- Updated artifact-list to 0.6.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.0 (2026-08-16)
 
 ### 🚀 Features

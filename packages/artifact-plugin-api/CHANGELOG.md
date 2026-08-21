@@ -1,3 +1,14 @@
+## 0.4.1 (2026-08-21)
+
+### 🚀 Features
+
+- **plugin-api:** add store/requires/renderStatusBadge/renderMenuContent + activate wrapRoot ([00fb992](https://github.com/alistigo/holos/commit/00fb992))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

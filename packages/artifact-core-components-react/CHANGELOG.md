@@ -1,3 +1,19 @@
+## 0.4.1 (2026-08-21)
+
+### 🚀 Features
+
+- **user-plugin:** auto-save user edits with debounce + global progress bar ([119f606](https://github.com/alistigo/holos/commit/119f606))
+- **plugin-api:** add store/requires/renderStatusBadge/renderMenuContent + activate wrapRoot ([00fb992](https://github.com/alistigo/holos/commit/00fb992))
+
+### 🩹 Fixes
+
+- add fallow complexity suppresses and unused var fix to pass pre-push gate ([7a1c57b](https://github.com/alistigo/holos/commit/7a1c57b))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

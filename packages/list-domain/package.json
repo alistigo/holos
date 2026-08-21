@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/list-domain",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Shared domain primitives and types for Alistigo — IDs, value objects, and core entities.",
   "license": "MIT",
   "author": {

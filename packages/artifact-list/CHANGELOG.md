@@ -1,3 +1,32 @@
+## 0.6.0 (2026-08-21)
+
+### 🚀 Features
+
+- **user-plugin:** auto-save user edits with debounce + global progress bar ([119f606](https://github.com/alistigo/holos/commit/119f606))
+- **artifact-list:** add artifact-user-plugin as default plugin ([5ba2976](https://github.com/alistigo/holos/commit/5ba2976))
+- **plugin-api:** add store/requires/renderStatusBadge/renderMenuContent + activate wrapRoot ([00fb992](https://github.com/alistigo/holos/commit/00fb992))
+
+### 🩹 Fixes
+
+- add fallow complexity suppresses and unused var fix to pass pre-push gate ([7a1c57b](https://github.com/alistigo/holos/commit/7a1c57b))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.4.1
+- Updated list-components-react to 0.3.1
+- Updated list-document-editor to 0.3.1
+- Updated list-document-format to 0.3.1
+- Updated artifact-plugin-api to 0.4.1
+- Updated claude-artifact-api to 0.3.1
+- Updated artifact-core to 0.3.1
+- Updated list-domain to 0.3.1
+- Updated logger to 0.3.1
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.5.0 (2026-08-16)
 
 ### 🚀 Features
