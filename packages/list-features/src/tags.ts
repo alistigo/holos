@@ -42,6 +42,7 @@ export const CAPABILITY_TAGS = [
   "@capability:export",
   "@capability:host-protocol",
   "@capability:plugins",
+  "@capability:user-identity",
 ] as const;
 export type CapabilityTag = (typeof CAPABILITY_TAGS)[number];
 

@@ -11,6 +11,9 @@ when they land.
 |------|------------|
 | [sentry-error-capture.feature](sentry-error-capture.feature) | Sentry plugin initialization and error reporting |
 | [posthog-analytics-tracking.feature](posthog-analytics-tracking.feature) | PostHog plugin initialization and widget-displayed tracking |
+| [user-identity-display.feature](user-identity-display.feature) | User identity is always visible when the artifact loads |
+| [user-identity-edit.feature](user-identity-edit.feature) | Editing pseudo is reflected immediately in the artifact |
+| [user-identity-persist.feature](user-identity-persist.feature) | User identity survives artifact reloads |
 
 ## Scope
 

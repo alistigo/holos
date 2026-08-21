@@ -54,6 +54,7 @@ At least one per Feature.
 | `@capability:export` | Exporting documents (projection-only or projection+log) |
 | `@capability:host-protocol` | postMessage exchange with the host page |
 | `@capability:plugins` | Plugin lifecycle, validation, and contributions |
+| `@capability:user-identity` | User identity display, editing, and persistence via the user plugin |
 
 ## Test-type tags
 

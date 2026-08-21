@@ -63,6 +63,20 @@ The visual rendering of an Element in the UI. A row corresponds 1:1 with an Elem
 
 (`Row` is the Gherkin-only handle for disambiguating duplicates; the data layer only knows about Elements.)
 
+### User Identity
+
+The persistent device-level identity assigned to each visitor when the user plugin is enabled.
+Consists of a `pseudo` (human-readable generated name) and an `avatar` (SVG identicon by default,
+or an uploaded image). The identity is stored under the `"user"` key in the active storage plugin.
+
+**Rules:**
+- An artifact with the user plugin enabled always has exactly one User Identity.
+- A User Identity has a stable `id` (UUID), a non-empty `pseudo`, and an `avatar` (image data URL).
+- When a storage plugin is active, the User Identity survives artifact reloads.
+- When no storage plugin is active, the User Identity is ephemeral — it exists for the session
+  only and is regenerated on reload.
+- The `pseudo` is editable by the User. The `avatar` is regenerable or replaceable with an upload.
+
 ### Plugin
 
 A composable extension to an artifact, implementing the `AlistigoPlugin` interface
@@ -112,6 +126,8 @@ The verbs allowed in step text. Each row lists the verb, what it means, and poin
 | **provide** a document | Supply an `AlistigoDocument` to the widget. |
 | **enable** a plugin | Name a Plugin under the config document's `plugins` field |
 | **boot** | Run the Host's mount() lifecycle to completion |
+| **open** the user editor | Open the user identity editor modal |
+| **set** my pseudo | Change the User Identity's pseudo in the editor |
 
 ### Implicit open
 
@@ -177,6 +193,22 @@ Then the list should contain N occurrences of "..."
 # Thens — UI feedback
 Then an empty-state message should be visible
 Then no error should be displayed
+```
+
+#### User identity phrasings (copy verbatim)
+
+```gherkin
+# Givens — plugin setup
+Given an artifact with the user plugin enabled
+
+# Whens — user identity actions
+When the artifact is fully loaded
+When I open the user editor
+When I set my pseudo to "..."
+
+# Thens — user identity assertions
+Then a user identity should be visible
+Then the user pseudo should be "..."
 ```
 
 #### Notes on the canonical forms
