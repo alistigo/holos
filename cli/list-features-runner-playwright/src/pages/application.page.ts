@@ -107,6 +107,33 @@ export class ApplicationPage {
     return this.artifactFrame.getByTestId(TEST_IDS.emptyState).isVisible();
   }
 
+  async waitForUserIdentity(): Promise<void> {
+    await this.artifactFrame
+      .getByRole(ROLES.userMenu.role, { name: ROLES.userMenu.name })
+      .waitFor({ state: "visible" });
+  }
+
+  async getUserPseudo(): Promise<string> {
+    const text = await this.artifactFrame.getByTestId(TEST_IDS.userPseudo).textContent();
+    return text?.trim() ?? "";
+  }
+
+  async openUserEditor(): Promise<void> {
+    await this.artifactFrame.getByRole(ROLES.userMenu.role, { name: ROLES.userMenu.name }).click();
+    await this.artifactFrame.getByRole(ROLES.editUser.role, { name: ROLES.editUser.name }).click();
+  }
+
+  async setPseudo(pseudo: string): Promise<void> {
+    await this.artifactFrame
+      .getByRole(ROLES.pseudoInput.role, { name: ROLES.pseudoInput.name })
+      .fill(pseudo);
+    // Wait for the debounced save to update the badge (600ms debounce + render time)
+    await this.artifactFrame
+      .getByTestId(TEST_IDS.userPseudo)
+      .filter({ hasText: pseudo })
+      .waitFor({ state: "attached", timeout: 3000 });
+  }
+
   private async waitForIdle(): Promise<void> {
     await this.artifactFrame
       .locator(`[data-testid="${TEST_IDS.actionPending}"][data-state="pending"]`)

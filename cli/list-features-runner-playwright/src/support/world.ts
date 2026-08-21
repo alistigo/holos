@@ -19,7 +19,6 @@ export class AlistigoWorld extends World {
 
   private pluginPackageName: string | undefined;
   private pluginConfig: Record<string, unknown> | undefined;
-  private lastDocument: AlistigoDocument | undefined;
 
   constructor(opts: IWorldOptions) {
     super(opts);
@@ -86,7 +85,6 @@ export class AlistigoWorld extends World {
 
   async setDocument(document: AlistigoDocument): Promise<void> {
     if (!this.applicationPage) return;
-    this.lastDocument = document;
     await this.page.evaluate((doc) => {
       localStorage.clear();
       localStorage.setItem("document", JSON.stringify(doc));
@@ -95,10 +93,20 @@ export class AlistigoWorld extends World {
     await this.applicationPage.waitForArtifactReady();
   }
 
-  async reloadList(): Promise<void> {
-    if (!this.lastDocument) throw new Error("No document set — call setDocument first");
-    // localStorage retains user edits at "document" key — artifact reads them on reload
+  async reloadArtifact(): Promise<void> {
+    // localStorage retains state (list document, user identity) — artifact reads on reload
     await this.page.reload();
+    await this.applicationPage.waitForArtifactReady();
+  }
+
+  /** Enables a plugin via the playground checkbox and waits for the iframe to reload. */
+  async enablePlugin(packageName: string): Promise<void> {
+    const checkboxNav = this.page.waitForEvent("framenavigated", {
+      predicate: (frame) => frame.name() === "artifact-preview",
+      timeout: 5000,
+    });
+    await this.page.getByRole("checkbox", { name: packageName }).check();
+    await checkboxNav;
     await this.applicationPage.waitForArtifactReady();
   }
 }

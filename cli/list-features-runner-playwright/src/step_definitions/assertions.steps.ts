@@ -49,3 +49,12 @@ Then("no error should be thrown", async function (this: AlistigoWorld) {
     `expected no page errors, got: ${JSON.stringify(this.pageErrors)}`,
   );
 });
+
+Then("a user identity should be visible", async function (this: AlistigoWorld) {
+  await this.applicationPage.waitForUserIdentity();
+});
+
+Then("the user pseudo should be {string}", async function (this: AlistigoWorld, pseudo: string) {
+  const actual = await this.applicationPage.getUserPseudo();
+  assert.equal(actual, pseudo, `expected user pseudo to be "${pseudo}", got "${actual}"`);
+});

@@ -121,7 +121,7 @@ The verbs allowed in step text. Each row lists the verb, what it means, and poin
 | **open** the list | Show the list in the viewer. Implicit before any other action — see "Implicit open" below. |
 | **add** an element | Append a new Element with the given text |
 | **delete** an element | Remove an Element by identity (or by row when duplicates make identity ambiguous) |
-| **reload** the list | Close and reopen the list, forcing the projection to be rebuilt from the event log |
+| **reload** the artifact | Close and reopen the artifact, forcing the projection to be rebuilt from the event log |
 | **open** the page | Load an Alistigo page in the browser. The trigger for auto-mount. |
 | **provide** a document | Supply an `AlistigoDocument` to the widget. |
 | **enable** a plugin | Name a Plugin under the config document's `plugins` field |
@@ -156,7 +156,7 @@ Scenario: An empty list shows an empty state
   And an empty-state message should be visible
 ```
 
-The same rule applies to `reload`: `When I reload the list` is a re-open and is always written explicitly (it's the action under test in any reload scenario).
+The same rule applies to `reload`: `When I reload the artifact` is a re-open and is always written explicitly (it's the action under test in any reload scenario).
 
 ### Canonical phrasings (copy verbatim)
 
@@ -179,7 +179,7 @@ When I open the list
 When I add "..."
 When I delete "..."
 When I delete row N
-When I reload the list
+When I reload the artifact
 
 # Thens — assertions about the list
 Then the list should be empty

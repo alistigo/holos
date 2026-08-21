@@ -42,3 +42,13 @@ export async function installDefaultStorageRoutes(page: Page): Promise<void> {
   await installPluginRoute(page, "@alistigo/local-storage-plugin", LOCAL_STORAGE_BUNDLE);
   await installPluginRoute(page, "@alistigo/claude-storage-plugin", CLAUDE_STORAGE_STUB);
 }
+
+export async function installUserPluginRoute(_page: Page): Promise<void> {
+  // The user plugin uses React hooks and JSX. Intercepting the request with a
+  // pre-built bundle would introduce a second React instance, breaking all hooks.
+  //
+  // In dev mode the playground injects __ALISTIGO_PLUGIN_URL_OVERRIDES__ pointing
+  // the user plugin at the Vite @fs/ dev-server route, which Vite serves with its
+  // shared module graph — giving the plugin and the host the exact same React
+  // module. No route intercept is needed; Vite handles it naturally.
+}

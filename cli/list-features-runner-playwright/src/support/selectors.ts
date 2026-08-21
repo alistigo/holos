@@ -15,6 +15,9 @@ export const ROLES = {
   list: { role: "list" },
   row: { role: "listitem" },
   rowDelete: { role: "button", namePrefix: "Delete" },
+  userMenu: { role: "button", name: "User menu" },
+  editUser: { role: "button", name: "Edit user" },
+  pseudoInput: { role: "textbox", name: "Pseudo" },
 } as const;
 
 export const TEST_IDS = {
@@ -22,6 +25,7 @@ export const TEST_IDS = {
   emptyState: "empty-state",
   actionPending: "action-pending",
   badge: "alistigo-badge",
+  userPseudo: "user-pseudo",
 } as const;
 
 export function deleteButtonName(elementText: string): string {

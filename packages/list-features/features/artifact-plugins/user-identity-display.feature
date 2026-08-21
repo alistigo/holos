@@ -1,7 +1,6 @@
 @platform
 @artifact-plugins
 @capability:user-identity
-@todo
 Feature: Display user identity
   A User always has a visible identity (pseudo and avatar) in the artifact when the
   user plugin is enabled — whether the identity is freshly generated or loaded from

@@ -11,7 +11,7 @@ Feature: Persist a list across reloads
   Scenario: An added element is still there after a reload
     Given an empty list
     When I add "Buy bread"
-    And I reload the list
+    And I reload the artifact
     Then the list should be:
       | Buy bread |
 
@@ -22,6 +22,6 @@ Feature: Persist a list across reloads
       | Buy bread |
       | Call mom  |
     When I delete "Buy bread"
-    And I reload the list
+    And I reload the artifact
     Then the list should be:
       | Call mom |
