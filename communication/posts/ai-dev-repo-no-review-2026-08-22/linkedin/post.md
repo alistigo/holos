@@ -1,9 +1,9 @@
 ---
-status: draft
+status: published
 channel: linkedin
 createdAt: 2026-08-22
 attachment:
-publishedAt:
+publishedAt: 2026-08-23
 url:
 formula: F10 Contrarian + Historical Receipts
 series: ai-dev-repo-setup (1/3)
