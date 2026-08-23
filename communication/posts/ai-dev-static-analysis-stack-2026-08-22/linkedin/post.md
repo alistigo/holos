@@ -25,7 +25,9 @@ Fallow checks cyclomatic complexity, dead code, and code duplication. It also sh
 
 All four run as pre-push hooks via Lefthook. Most issues get caught before CI even sees the diff.
 
-On CI, Nx only runs affected packages. A feature branch touching 2 packages in a 30-package monorepo runs roughly 10% of the checks a full build would.
+On CI, Nx only runs affected packages — linting, typechecking, and tests. A feature branch touching 2 packages in a 30-package monorepo runs roughly 10% of the full suite.
+
+The static analysis layer is half the story. The other half: unit tests in Bun and e2e specs in Gherkin/Playwright. Same Nx scoping applies.
 
 Total CI time: under 3 minutes. GitHub free tier. No cloud services.
 

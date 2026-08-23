@@ -21,6 +21,8 @@ I set up CI guardrails that tell Claude what it can't do. Four static analysis t
 
 Biome catches formatting and lint issues. Dependency-cruiser enforces architecture rules. Fallow catches dead code, duplicated logic, and functions that grew too complex. TypeScript strict mode catches the rest.
 
+Unit tests in Bun and e2e specs in Gherkin/Playwright cover the behavioral side. Nx affected scopes all of it — only the packages the change actually touched run.
+
 If all of that passes, the app ships.
 
 I don't read the diff. I read the CI output.
