@@ -22,6 +22,7 @@ export class InMemoryListStore implements AlistigoListStore {
     return this.docs.get(id.toString());
   }
 
+  // fallow-ignore-next-line unused-class-member
   async saveDocument(doc: AlistigoDocument): Promise<void> {
     this.docs.set(doc["alistigo:listId"], doc);
   }

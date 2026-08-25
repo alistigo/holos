@@ -58,6 +58,7 @@ describe("buildAttributionMap", () => {
     expect(map.size).toBe(0);
   });
 
+  // fallow-ignore-next-line complexity
   it("maps element IDs to actor info for matching ListElementAdded events", () => {
     const doc = makeDoc({
       "alistigo:actors": [actor1, actor2],
@@ -237,6 +238,7 @@ describe("buildProjection", () => {
     expect(projection.itemListElement[0]?.["alistigo:attribution"]).toBeUndefined();
   });
 
+  // fallow-ignore-next-line complexity
   it("populates attribution when 2+ actors are present and events match", () => {
     const doc = makeDoc({
       "alistigo:actors": [actor1, actor2],

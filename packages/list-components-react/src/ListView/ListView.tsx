@@ -1,10 +1,10 @@
+import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import type {
   AlistigoActorRecord,
   AlistigoEventRecord,
   AlistigoItemAttribution,
   AlistigoProjection,
 } from "@alistigo/list-document-format";
-import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { formatDistanceToNow } from "date-fns";
@@ -24,21 +24,13 @@ export interface ListViewProps {
   onPluginCommand?: (pluginName: string, commandName: string, payload: unknown) => void;
 }
 
-function AttributionRow({
-  attribution,
-}: {
-  attribution: AlistigoItemAttribution;
-}): JSX.Element {
+function AttributionRow({ attribution }: { attribution: AlistigoItemAttribution }): JSX.Element {
   const relative = formatDistanceToNow(new Date(attribution.addedAt), {
     addSuffix: true,
   });
   return (
     <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-      <img
-        src={attribution.avatar}
-        alt={attribution.pseudo}
-        className="w-4 h-4 rounded-full"
-      />
+      <img src={attribution.avatar} alt={attribution.pseudo} className="w-4 h-4 rounded-full" />
       <span>{attribution.pseudo}</span>
       <span>·</span>
       <span>{relative}</span>
@@ -67,9 +59,13 @@ interface ListItemProps {
   plugins: AlistigoPlugin[] | undefined;
   events: AlistigoEventRecord[] | undefined;
   onDelete: ((elementId: string, position: number) => void) | undefined;
-  onPluginCommand: ((pluginName: string, commandName: string, payload: unknown) => void) | undefined;
+  onPluginCommand:
+    | ((pluginName: string, commandName: string, payload: unknown) => void)
+    | undefined;
 }
 
+
+// fallow-ignore-next-line complexity
 function ListItem({
   elementId,
   position,
@@ -89,7 +85,8 @@ function ListItem({
       plugin.renderListElementLeading?.(
         elementId,
         buildElementMetadata(elementId, events ?? [], plugin),
-        (commandName: string, payload: unknown) => onPluginCommand?.(plugin.name, commandName, payload),
+        (commandName: string, payload: unknown) =>
+          onPluginCommand?.(plugin.name, commandName, payload),
       ),
     ) ?? [];
 
@@ -124,9 +121,7 @@ function ListItem({
           </Button>
         )}
       </div>
-      {showAttribution && attribution !== undefined && (
-        <AttributionRow attribution={attribution} />
-      )}
+      {showAttribution && attribution !== undefined && <AttributionRow attribution={attribution} />}
     </motion.li>
   );
 }

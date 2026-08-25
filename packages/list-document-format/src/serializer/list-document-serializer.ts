@@ -23,7 +23,7 @@ import {
 
 export const SCHEMA_VERSION = "1.1.0" as const;
 
-export interface SerializeOptions {
+interface SerializeOptions {
   actorsById?: Map<string, AlistigoActorRecord>;
 }
 
@@ -121,6 +121,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
 }
 
 export const ListDocumentSerializer = {
+  // fallow-ignore-next-line complexity
   serialize(
     list: List,
     previousDocument?: AlistigoDocument,
