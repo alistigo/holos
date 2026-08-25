@@ -77,6 +77,20 @@ or an uploaded image). The identity is stored under the `"user"` key in the acti
   only and is regenerated on reload.
 - The `pseudo` is editable by the User. The `avatar` is regenerable or replaceable with an upload.
 
+### Checkbox Plugin
+
+A domain-contribution plugin that adds a checked/unchecked state to each list element, stored under `metadatas.checkbox.selected` in the list document. Contributes a `ListElementChecked` event type and a `reduce()` function to derive per-element state from the event log.
+
+**Rules:**
+- When the checkbox plugin is active, every Element has exactly one checked state (default: unchecked).
+- Checked state is persisted via the event log; replaying events reproduces the correct state for each Element.
+- Checking or unchecking one Element does not affect the state of any other Element.
+- The checked state survives artifact reloads when a storage plugin is active.
+
+### Checked state
+
+The boolean value `selected: true` stored in `alistigo:metadatas["checkbox"]` for a list element, derived by replaying `ListElementChecked` events via the checkbox plugin's reducer. An element is unchecked when `selected` is absent or `false`.
+
 ### Plugin
 
 A composable extension to an artifact, implementing the `AlistigoPlugin` interface
@@ -128,6 +142,8 @@ The verbs allowed in step text. Each row lists the verb, what it means, and poin
 | **boot** | Run the Host's mount() lifecycle to completion |
 | **open** the user editor | Open the user identity editor modal |
 | **set** my pseudo | Change the User Identity's pseudo in the editor |
+| **check** an element | Mark an Element as checked via the checkbox plugin |
+| **uncheck** an element | Mark an Element as unchecked via the checkbox plugin |
 
 ### Implicit open
 
@@ -209,6 +225,26 @@ When I set my pseudo to "..."
 # Thens — user identity assertions
 Then a user identity should be visible
 Then the user pseudo should be "..."
+```
+
+#### Checkbox plugin phrasings (copy verbatim)
+
+```gherkin
+# Givens — plugin setup
+Given the checkbox plugin is active
+
+# Givens — element state
+Given "..." is checked
+Given "..." is unchecked
+
+# Whens — checkbox actions
+When I check "..."
+When I uncheck "..."
+
+# Thens — checkbox assertions
+Then "..." is checked
+Then "..." is unchecked
+Then each element is unchecked
 ```
 
 #### Notes on the canonical forms

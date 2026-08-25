@@ -43,6 +43,7 @@ export const CAPABILITY_TAGS = [
   "@capability:host-protocol",
   "@capability:plugins",
   "@capability:user-identity",
+  "@capability:checkbox",
 ] as const;
 export type CapabilityTag = (typeof CAPABILITY_TAGS)[number];
 
