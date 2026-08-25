@@ -28,6 +28,7 @@ export {
   type AlistigoActions,
   AlistigoProvider,
   type AlistigoProviderProps,
+  getSessionActorId,
   useAlistigoActions,
   useAlistigoDocument,
 } from "./context/index.js";
