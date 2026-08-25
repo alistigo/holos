@@ -55,6 +55,7 @@ At least one per Feature.
 | `@capability:host-protocol` | postMessage exchange with the host page |
 | `@capability:plugins` | Plugin lifecycle, validation, and contributions |
 | `@capability:user-identity` | User identity display, editing, and persistence via the user plugin |
+| `@capability:checkbox` | Check/uncheck state per element, and its persistence across reloads, via the checkbox plugin |
 
 ## Test-type tags
 
