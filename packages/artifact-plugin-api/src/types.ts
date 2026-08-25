@@ -107,11 +107,13 @@ export interface AlistigoPlugin {
   /** JSON schema fragment describing this plugin's per-element metadata shape (documentation/validation). */
   metadataSchema?: unknown;
   /**
-   * Pure reducer: given current per-element metadata and a new event, returns updated metadata.
-   * Called by the host for every event in the log to derive per-element plugin state.
+   * Pure reducer: given the element ID, current per-element metadata, and a new event, returns
+   * updated metadata. Called by the host for every event in the log for every element — the
+   * reducer must check elementId against the event's listElementId to filter irrelevant events.
    * The event param is typed unknown — the plugin implementation narrows it to its own event types.
    */
   reduce?: (
+    elementId: string,
     elementMetadata: Record<string, unknown>,
     event: unknown,
   ) => Record<string, unknown>;
