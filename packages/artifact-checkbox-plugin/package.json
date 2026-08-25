@@ -1,0 +1,53 @@
+{
+  "name": "@alistigo/artifact-checkbox-plugin",
+  "version": "0.1.0",
+  "description": "Checkbox domain-contribution plugin for @alistigo artifacts.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/artifact-checkbox-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-checkbox-plugin#readme",
+  "keywords": [
+    "alistigo",
+    "artifact",
+    "plugin",
+    "checkbox",
+    "todo"
+  ],
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "@alistigo/list-document-format": "workspace:*",
+    "typeid-js": "^1.2.0"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.3.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^19.2.14",
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^19.2.5",
+    "storybook": "^10.3.0",
+    "vite": "^7.0.0"
+  }
+}
