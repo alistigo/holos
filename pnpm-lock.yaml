@@ -580,6 +580,9 @@ importers:
 
   packages/list-components-react:
     dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
       '@alistigo/list-document-editor':
         specifier: workspace:*
         version: link:../list-document-editor
@@ -623,6 +626,9 @@ importers:
         specifier: ^2.6.0
         version: 2.6.1
     devDependencies:
+      '@alistigo/artifact-checkbox-plugin':
+        specifier: workspace:*
+        version: link:../artifact-checkbox-plugin
       '@lingui/babel-plugin-lingui-macro':
         specifier: ^6.0.0
         version: 6.0.1
