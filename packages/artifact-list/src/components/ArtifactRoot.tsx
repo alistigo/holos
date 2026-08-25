@@ -11,8 +11,9 @@ import {
 import type { AlistigoPlugin, KeyValueStore, PluginRuntime } from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import { artifactContext } from "@alistigo/claude-artifact-api";
+import { getSessionActorId } from "@alistigo/list-components-react";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoActorRecord, AlistigoDocument } from "@alistigo/list-document-format";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -89,6 +90,24 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
         };
         const runtime = createPluginRuntime(plugins, host, pluginLogger, spec, rawStore);
         registerLoadedPlugins(runtime.loadedPluginNames);
+
+        // Maintain actors map — keyed by the session actorId used for list commands.
+        const actorsById = new Map<string, AlistigoActorRecord>();
+        const sessionActorId = getSessionActorId();
+
+        runtime.bus.on("user:changed", ({ userId, pseudo, avatar }) => {
+          const actor: AlistigoActorRecord = {
+            "alistigo:actorId": sessionActorId,
+            "alistigo:userId": userId,
+            "alistigo:pseudo": pseudo,
+            "alistigo:avatar": avatar ?? "",
+          };
+          actorsById.set(sessionActorId, actor);
+          if (store instanceof ListKeyValueAdapter) {
+            store.setActorsById(actorsById);
+          }
+        });
+
         await runtime.setup();
         bootI18n();
         await runtime.beforeMount();

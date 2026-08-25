@@ -26,6 +26,11 @@ import {
 const UI_ACTOR_ID = generateActorId();
 const log = createLogger("alistigo:provider");
 
+/** Returns the stable actor ID used for all list commands in this session. */
+export function getSessionActorId(): string {
+  return UI_ACTOR_ID.toString();
+}
+
 interface DocumentContextValue {
   doc: AlistigoDocument;
   setDoc: (doc: AlistigoDocument) => void;

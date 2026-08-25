@@ -1,6 +1,6 @@
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoActorRecord, AlistigoDocument } from "@alistigo/list-document-format";
 import { ListDocumentSerializer } from "@alistigo/list-document-format";
 import type { List, ListId } from "@alistigo/list-domain";
 
@@ -9,7 +9,15 @@ import type { List, ListId } from "@alistigo/list-domain";
 const DOCUMENT_KEY = "document";
 
 export class ListKeyValueAdapter implements AlistigoListStore {
+  /** Mutable reference to the current actors map, updated by the host via setActorsById. */
+  private actorsById: Map<string, AlistigoActorRecord> | undefined;
+
   constructor(private readonly store: KeyValueStore) {}
+
+  /** Called by the host whenever the actor registry changes (e.g. on user:changed). */
+  setActorsById(actorsById: Map<string, AlistigoActorRecord>): void {
+    this.actorsById = actorsById;
+  }
 
   async load(_id: ListId): Promise<List | undefined> {
     const doc = await this.loadDocument(_id);
@@ -19,7 +27,9 @@ export class ListKeyValueAdapter implements AlistigoListStore {
 
   async save(list: List): Promise<void> {
     const prev = await this.loadDocument(list.id);
-    const doc = ListDocumentSerializer.serialize(list, prev);
+    const doc = ListDocumentSerializer.serialize(list, prev, {
+      ...(this.actorsById !== undefined ? { actorsById: this.actorsById } : {}),
+    });
     await this.store.set(DOCUMENT_KEY, doc);
   }
 

@@ -23,6 +23,14 @@ async function setup(ctx: PluginContext): Promise<void> {
     await ctx.store?.set("user", serializeUser(resolvedUser));
     log.info({ userId: resolvedUser.id }, "created new user");
   }
+  // Emit on setup so the host can register the initial actor before any edits.
+  if (resolvedUser !== null) {
+    ctx.emit("user:changed", {
+      userId: resolvedUser.id,
+      pseudo: resolvedUser.pseudo,
+      avatar: resolvedUser.avatar,
+    });
+  }
 }
 
 function wrapRoot(tree: ReactNode, ctx: PluginContext): ReactNode {
@@ -31,7 +39,7 @@ function wrapRoot(tree: ReactNode, ctx: PluginContext): ReactNode {
     initialUser,
     ...(ctx.store !== undefined ? { store: ctx.store } : {}),
     onUserChanged: (u: User) => {
-      ctx.emit("user:changed", { userId: u.id, pseudo: u.pseudo });
+      ctx.emit("user:changed", { userId: u.id, pseudo: u.pseudo, avatar: u.avatar });
     },
     // biome-ignore lint/correctness/noChildrenProp: exactOptionalPropertyTypes forces children into props when using React.createElement without JSX
     children: tree,
