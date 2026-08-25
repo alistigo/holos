@@ -10,7 +10,7 @@ export interface AlistigoPluginEventMap {
   /** Emitted by the host's own error boundary whenever a React render error occurs. */
   "error:uncaught": { error: unknown; componentStack?: string };
   /** Emitted when the active user identity changes. */
-  "user:changed": { userId: string; pseudo: string };
+  "user:changed": { userId: string; pseudo: string; avatar?: string };
 }
 
 export type PluginEventName = keyof AlistigoPluginEventMap;
@@ -70,9 +70,8 @@ export interface AlistigoStorageExtension {
 /**
  * Unified plugin interface. Lifecycle hooks (setup/beforeMount/mounted/destroy) and
  * the event bus (on/emit via PluginContext) serve artifact-lifecycle/infra plugins
- * (Sentry, PostHog). dataShape/render/commands/events are forward-compat stubs for
- * future domain-contribution plugins (e.g. a checkbox-element plugin) — typed here,
- * not consumed by any host yet.
+ * (Sentry, PostHog). Domain-contribution fields (metadataKey/reduce/renderListElementLeading)
+ * serve list-element plugins (e.g. checkbox) that extend document schema and contribute UI slots.
  */
 export interface AlistigoPlugin {
   /** Must match this plugin's own npm package name. */
@@ -103,9 +102,26 @@ export interface AlistigoPlugin {
   /** Renders content inside the context menu panel (e.g. an "Edit user" button). */
   renderMenuContent?(): ReactNode;
 
-  // Forward-compat stubs for future domain-contribution plugins — typed, unconsumed.
-  dataShape?: unknown;
-  render?: unknown;
-  commands?: Record<string, (...args: unknown[]) => unknown>;
-  events?: Record<string, unknown>;
+  /** The key this plugin writes under alistigo:metadatas on each list element (prevents namespace collisions). */
+  metadataKey?: string;
+  /** JSON schema fragment describing this plugin's per-element metadata shape (documentation/validation). */
+  metadataSchema?: unknown;
+  /**
+   * Pure reducer: given current per-element metadata and a new event, returns updated metadata.
+   * Called by the host for every event in the log to derive per-element plugin state.
+   * The event param is typed unknown — the plugin implementation narrows it to its own event types.
+   */
+  reduce?: (
+    elementMetadata: Record<string, unknown>,
+    event: unknown,
+  ) => Record<string, unknown>;
+  /**
+   * Renders UI at the leading edge of a list element (e.g. a checkbox).
+   * The plugin must not import anything from the host package.
+   */
+  renderListElementLeading?: (
+    elementId: string,
+    metadata: Record<string, unknown>,
+    onCommand: (name: string, payload: unknown) => void,
+  ) => ReactNode;
 }
