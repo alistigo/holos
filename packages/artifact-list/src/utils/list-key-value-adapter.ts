@@ -39,6 +39,10 @@ export class ListKeyValueAdapter implements AlistigoListStore {
     return raw as AlistigoDocument;
   }
 
+  async saveDocument(doc: AlistigoDocument): Promise<void> {
+    await this.store.set(DOCUMENT_KEY, doc);
+  }
+
   // fallow-ignore-next-line unused-class-member
   async seedIfEmpty(document: AlistigoDocument): Promise<void> {
     const existing = await this.store.get(DOCUMENT_KEY);

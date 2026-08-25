@@ -21,4 +21,8 @@ export class InMemoryListStore implements AlistigoListStore {
   async loadDocument(id: ListId): Promise<AlistigoDocument | undefined> {
     return this.docs.get(id.toString());
   }
+
+  async saveDocument(doc: AlistigoDocument): Promise<void> {
+    this.docs.set(doc["alistigo:listId"], doc);
+  }
 }

@@ -13,6 +13,7 @@ const DEFAULT_STORAGE_PLUGINS: Record<string, Record<string, unknown>> = {
 // Always loaded after storage so they can access the resolved store.
 const DEFAULT_FEATURE_PLUGINS: Record<string, Record<string, unknown>> = {
   "@alistigo/artifact-user-plugin": {},
+  "@alistigo/artifact-checkbox-plugin": {},
 };
 
 /**

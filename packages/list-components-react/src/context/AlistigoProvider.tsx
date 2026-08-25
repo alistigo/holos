@@ -101,6 +101,15 @@ export function useAlistigoDocument(): AlistigoDocument {
 }
 
 /**
+ * Returns a stable setter that replaces the current document in React state.
+ * Use when a mutation (e.g. plugin command) is applied outside the service
+ * layer and the caller handles persistence directly.
+ */
+export function useSetAlistigoDocument(): (doc: AlistigoDocument) => void {
+  return useDocumentContext().setDoc;
+}
+
+/**
  * Returns true between dispatch and the subsequent document update.
  * Exposed as `data-state="pending"/"idle"` by `AlistigoApp` for test sync.
  */

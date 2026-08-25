@@ -20,6 +20,12 @@ const log = createLogger("alistigo:service");
  */
 export interface AlistigoListStore extends ListRepository {
   loadDocument(id: ListId): Promise<AlistigoDocument | undefined>;
+  /**
+   * Persists a fully-formed document directly, bypassing the domain layer.
+   * Use when a mutation (e.g. a plugin command) is applied at the document
+   * level rather than through the aggregate.
+   */
+  saveDocument(doc: AlistigoDocument): Promise<void>;
 }
 
 /**

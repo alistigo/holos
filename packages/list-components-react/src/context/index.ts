@@ -5,4 +5,5 @@ export {
   getSessionActorId,
   useAlistigoActions,
   useAlistigoDocument,
+  useSetAlistigoDocument,
 } from "./AlistigoProvider.js";
