@@ -18,6 +18,7 @@
     "**/*.generated.ts",
     "**/.lingui/**",
     "**/.fallow/**",
+    "**/.storybook/**",
 
     "apps/alistigo-artifact-playground/index.umd.html",
     "apps/alistigo-artifact-playground/src/components/DevFixturePicker.tsx",

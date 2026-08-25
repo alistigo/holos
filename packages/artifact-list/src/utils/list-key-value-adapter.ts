@@ -15,6 +15,7 @@ export class ListKeyValueAdapter implements AlistigoListStore {
   constructor(private readonly store: KeyValueStore) {}
 
   /** Called by the host whenever the actor registry changes (e.g. on user:changed). */
+  // fallow-ignore-next-line unused-class-member
   setActorsById(actorsById: Map<string, AlistigoActorRecord>): void {
     this.actorsById = actorsById;
   }
@@ -39,6 +40,7 @@ export class ListKeyValueAdapter implements AlistigoListStore {
     return raw as AlistigoDocument;
   }
 
+  // fallow-ignore-next-line unused-class-member
   async saveDocument(doc: AlistigoDocument): Promise<void> {
     await this.store.set(DOCUMENT_KEY, doc);
   }
