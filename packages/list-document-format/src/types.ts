@@ -16,6 +16,8 @@ export interface AlistigoDocument {
   name?: string;
   itemListElement: AlistigoListItem[];
   "alistigo:listEventLog": AlistigoEventRecord[];
+  "alistigo:actors"?: AlistigoActorRecord[];
+  "alistigo:plugins"?: AlistigoPluginRecord[];
 }
 
 export interface AlistigoListItem {
@@ -23,6 +25,7 @@ export interface AlistigoListItem {
   "alistigo:listElementId": TypeIDString;
   position: number;
   name: string;
+  "alistigo:metadatas"?: Record<string, Record<string, unknown>>;
 }
 
 interface AlistigoEventRecordBase {
@@ -53,8 +56,28 @@ export interface AlistigoListExportedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListExported";
 }
 
+export interface AlistigoActorRecord {
+  "alistigo:actorId": TypeIDString;
+  "alistigo:userId": string;
+  "alistigo:pseudo": string;
+  "alistigo:avatar": string; // base64 SVG data URL
+}
+
+export interface AlistigoPluginRecord {
+  name: string;
+  version?: string;
+  config?: Record<string, unknown>;
+}
+
+export interface AlistigoListElementCheckedRecord extends AlistigoEventRecordBase {
+  "alistigo:eventType": "ListElementChecked";
+  "alistigo:listElementId": TypeIDString;
+  checked: boolean;
+}
+
 export type AlistigoEventRecord =
   | AlistigoListCreatedRecord
   | AlistigoListElementAddedRecord
   | AlistigoListElementDeletedRecord
-  | AlistigoListExportedRecord;
+  | AlistigoListExportedRecord
+  | AlistigoListElementCheckedRecord;
