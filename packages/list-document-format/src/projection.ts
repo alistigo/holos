@@ -37,12 +37,8 @@ export interface AlistigoProjection {
  * in the document. Only the first `ListElementAdded` event for each element
  * is used (first-write-wins). Returns an empty map when actors are absent.
  */
-export function buildAttributionMap(
-  doc: AlistigoDocument,
-): Map<string, AlistigoItemAttribution> {
-  const actorsById = new Map(
-    (doc["alistigo:actors"] ?? []).map((a) => [a["alistigo:actorId"], a]),
-  );
+export function buildAttributionMap(doc: AlistigoDocument): Map<string, AlistigoItemAttribution> {
+  const actorsById = new Map((doc["alistigo:actors"] ?? []).map((a) => [a["alistigo:actorId"], a]));
   const result = new Map<string, AlistigoItemAttribution>();
 
   for (const event of doc["alistigo:listEventLog"]) {
@@ -77,28 +73,26 @@ export function buildProjection(doc: AlistigoDocument): AlistigoProjection {
   const attributionMap =
     actors.length >= 2 ? buildAttributionMap(doc) : new Map<string, AlistigoItemAttribution>();
 
-  const itemListElement: AlistigoProjectionItem[] = doc.itemListElement.map(
-    (item, index) => {
-      const elementId = item["alistigo:listElementId"];
-      const attribution = attributionMap.get(elementId);
+  const itemListElement: AlistigoProjectionItem[] = doc.itemListElement.map((item, index) => {
+    const elementId = item["alistigo:listElementId"];
+    const attribution = attributionMap.get(elementId);
 
-      const projectionItem: AlistigoProjectionItem = {
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "Thing",
-          "@id": elementId,
-          name: item.name,
-        },
-      };
+    const projectionItem: AlistigoProjectionItem = {
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Thing",
+        "@id": elementId,
+        name: item.name,
+      },
+    };
 
-      if (attribution !== undefined) {
-        projectionItem["alistigo:attribution"] = attribution;
-      }
+    if (attribution !== undefined) {
+      projectionItem["alistigo:attribution"] = attribution;
+    }
 
-      return projectionItem;
-    },
-  );
+    return projectionItem;
+  });
 
   return {
     "@type": "ItemList",

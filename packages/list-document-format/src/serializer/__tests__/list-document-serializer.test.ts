@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { createListElementContent, generateActorId, List } from "@alistigo/list-domain";
-import { validateDocument } from "../../validate.js";
 import type { AlistigoActorRecord, AlistigoListElementCheckedRecord } from "../../types.js";
+import { validateDocument } from "../../validate.js";
 import { ListDocumentSerializer, SCHEMA_VERSION } from "../list-document-serializer.js";
 
 const actorId = generateActorId();

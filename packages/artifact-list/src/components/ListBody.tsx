@@ -1,19 +1,19 @@
-import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import { createCheckListElementEvent } from "@alistigo/artifact-checkbox-plugin";
-import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
-import { buildProjection } from "@alistigo/list-document-format";
+import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import {
   AddElementInput,
-  ListView,
   getSessionActorId,
+  ListView,
   useAlistigoActions,
   useAlistigoDocument,
   useSetAlistigoDocument,
 } from "@alistigo/list-components-react";
-import { Trans } from "@lingui/react/macro";
-import { useCallback, useMemo, type JSX } from "react";
+import type { AlistigoListStore } from "@alistigo/list-document-editor";
+import type { AlistigoDocument } from "@alistigo/list-document-format";
+import { buildProjection } from "@alistigo/list-document-format";
 import { createLogger } from "@alistigo/logger";
+import { Trans } from "@lingui/react/macro";
+import { type JSX, useCallback, useMemo } from "react";
 
 const log = createLogger("alistigo:artifact-list:list-body");
 
