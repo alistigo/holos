@@ -31,6 +31,7 @@ export {
   getSessionActorId,
   useAlistigoActions,
   useAlistigoDocument,
+  useSetAlistigoDocument,
 } from "./context/index.js";
 export { EmptyState, type EmptyStateProps } from "./EmptyState/index.js";
 export { ListView, type ListViewProps } from "./ListView/index.js";

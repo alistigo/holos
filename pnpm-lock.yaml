@@ -334,6 +334,9 @@ importers:
 
   packages/artifact-list:
     dependencies:
+      '@alistigo/artifact-checkbox-plugin':
+        specifier: workspace:*
+        version: link:../artifact-checkbox-plugin
       '@alistigo/artifact-core':
         specifier: workspace:*
         version: link:../artifact-core

@@ -1,14 +1,26 @@
+import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
+import { createCheckListElementEvent } from "@alistigo/artifact-checkbox-plugin";
+import type { AlistigoListStore } from "@alistigo/list-document-editor";
+import type { AlistigoDocument } from "@alistigo/list-document-format";
+import { buildProjection } from "@alistigo/list-document-format";
 import {
   AddElementInput,
   ListView,
+  getSessionActorId,
   useAlistigoActions,
   useAlistigoDocument,
+  useSetAlistigoDocument,
 } from "@alistigo/list-components-react";
 import { Trans } from "@lingui/react/macro";
-import type { JSX } from "react";
+import { useCallback, useMemo, type JSX } from "react";
+import { createLogger } from "@alistigo/logger";
+
+const log = createLogger("alistigo:artifact-list:list-body");
 
 interface ListBodyProps {
   isDraft: boolean;
+  plugins: AlistigoPlugin[];
+  repository: AlistigoListStore;
 }
 
 function DraftBanner(): JSX.Element {
@@ -29,9 +41,66 @@ function DraftBanner(): JSX.Element {
 }
 
 // fallow-ignore-next-line complexity
-function ListBody({ isDraft }: ListBodyProps): JSX.Element {
+function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element {
   const document = useAlistigoDocument();
   const actions = useAlistigoActions();
+  const setDoc = useSetAlistigoDocument();
+
+  const projection = useMemo(() => buildProjection(document), [document]);
+
+  // Only pass plugins that contribute list-element leading UI to ListView.
+  const domainPlugins = useMemo(
+    () => plugins.filter((p) => p.renderListElementLeading !== undefined),
+    [plugins],
+  );
+
+  // Build the alistigo:plugins section from all loaded plugins.
+  const pluginRecords = useMemo(
+    () =>
+      plugins.map((p) => ({
+        name: p.name,
+        ...(p.version !== undefined ? { version: p.version } : {}),
+      })),
+    [plugins],
+  );
+
+  const handlePluginCommand = useCallback(
+    (pluginName: string, commandName: string, payload: unknown): void => {
+      if (
+        pluginName === "@alistigo/artifact-checkbox-plugin" &&
+        commandName === "checkListElement"
+      ) {
+        const { elementId, checked } = payload as { elementId: string; checked: boolean };
+        const eventRecord = createCheckListElementEvent(
+          elementId,
+          getSessionActorId(),
+          document["alistigo:listId"],
+          checked,
+        );
+        const updatedDoc: AlistigoDocument = {
+          ...document,
+          "alistigo:listEventLog": [...document["alistigo:listEventLog"], eventRecord],
+          "alistigo:plugins": pluginRecords,
+          itemListElement: document.itemListElement.map((item) =>
+            item["alistigo:listElementId"] === elementId
+              ? {
+                  ...item,
+                  "alistigo:metadatas": {
+                    ...item["alistigo:metadatas"],
+                    checkbox: { selected: checked },
+                  },
+                }
+              : item,
+          ),
+        };
+        setDoc(updatedDoc);
+        repository.saveDocument(updatedDoc).catch((err: unknown) => {
+          log.error({ err }, "failed to persist checkbox event");
+        });
+      }
+    },
+    [document, pluginRecords, setDoc, repository],
+  );
 
   return (
     <>
@@ -40,10 +109,28 @@ function ListBody({ isDraft }: ListBodyProps): JSX.Element {
         {document.name ?? <Trans>Untitled</Trans>}
       </h1>
       {!isDraft && <AddElementInput onAdd={actions.addElement} />}
-      <ListView
-        items={document.itemListElement}
-        {...(isDraft ? {} : { onDelete: actions.deleteElement })}
-      />
+      {isDraft ? (
+        <ListView
+          projection={projection}
+          {...(document["alistigo:actors"] !== undefined
+            ? { actors: document["alistigo:actors"] }
+            : {})}
+          plugins={domainPlugins}
+          events={document["alistigo:listEventLog"]}
+          onPluginCommand={handlePluginCommand}
+        />
+      ) : (
+        <ListView
+          projection={projection}
+          {...(document["alistigo:actors"] !== undefined
+            ? { actors: document["alistigo:actors"] }
+            : {})}
+          plugins={domainPlugins}
+          events={document["alistigo:listEventLog"]}
+          onPluginCommand={handlePluginCommand}
+          onDelete={(elementId, _position) => actions.deleteElement(elementId)}
+        />
+      )}
     </>
   );
 }

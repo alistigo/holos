@@ -159,7 +159,7 @@ function App({
       </ArtifactContextMenuContainer>
       <AlistigoProvider service={service} listId={listId} initialDocument={bootDoc}>
         <AlistigoApp>
-          <ListBody isDraft={isDraft} />
+          <ListBody isDraft={isDraft} plugins={plugins} repository={repository} />
         </AlistigoApp>
       </AlistigoProvider>
       <AsyncProgressBar />
