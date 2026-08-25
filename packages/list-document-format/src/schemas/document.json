@@ -32,6 +32,14 @@
     "alistigo:listEventLog": {
       "type": "array",
       "items": { "$ref": "#/$defs/EventRecord" }
+    },
+    "alistigo:actors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ActorRecord" }
+    },
+    "alistigo:plugins": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/PluginRecord" }
     }
   },
   "$defs": {
@@ -42,7 +50,11 @@
         "@type": { "type": "string", "const": "ListItem" },
         "alistigo:listElementId": { "type": "string", "pattern": "^lse_" },
         "position": { "type": "integer", "minimum": 1 },
-        "name": { "type": "string", "minLength": 1 }
+        "name": { "type": "string", "minLength": 1 },
+        "alistigo:metadatas": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        }
       }
     },
     "EventRecord": {
@@ -58,11 +70,43 @@
         "alistigo:listEventId": { "type": "string" },
         "alistigo:eventType": {
           "type": "string",
-          "enum": ["ListCreated", "ListElementAdded", "ListElementDeleted", "ListExported"]
+          "enum": [
+            "ListCreated",
+            "ListElementAdded",
+            "ListElementDeleted",
+            "ListExported",
+            "ListElementChecked"
+          ]
         },
         "alistigo:listId": { "type": "string" },
         "alistigo:actorId": { "type": "string" },
-        "alistigo:timestamp": { "type": "string", "format": "date-time" }
+        "alistigo:timestamp": { "type": "string", "format": "date-time" },
+        "alistigo:listElementId": { "type": "string" },
+        "checked": { "type": "boolean" }
+      }
+    },
+    "ActorRecord": {
+      "type": "object",
+      "required": [
+        "alistigo:actorId",
+        "alistigo:userId",
+        "alistigo:pseudo",
+        "alistigo:avatar"
+      ],
+      "properties": {
+        "alistigo:actorId": { "type": "string" },
+        "alistigo:userId": { "type": "string" },
+        "alistigo:pseudo": { "type": "string" },
+        "alistigo:avatar": { "type": "string" }
+      }
+    },
+    "PluginRecord": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "config": { "type": "object" }
       }
     }
   }

@@ -10,15 +10,22 @@ import {
 } from "@alistigo/list-domain";
 import {
   ALISTIGO_CONTEXT,
+  type AlistigoActorRecord,
   type AlistigoDocument,
   type AlistigoEventRecord,
   type AlistigoListCreatedRecord,
   type AlistigoListElementAddedRecord,
+  type AlistigoListElementCheckedRecord,
   type AlistigoListElementDeletedRecord,
   type AlistigoListExportedRecord,
+  type AlistigoListItem,
 } from "../types.js";
 
-export const SCHEMA_VERSION = "1.0.0" as const;
+export const SCHEMA_VERSION = "1.1.0" as const;
+
+export interface SerializeOptions {
+  actorsById?: Map<string, AlistigoActorRecord>;
+}
 
 function eventToRecord(event: ListEvent): AlistigoEventRecord {
   const base = {
@@ -64,7 +71,7 @@ function eventToRecord(event: ListEvent): AlistigoEventRecord {
   }
 }
 
-function recordToEvent(record: AlistigoEventRecord): ListEvent {
+function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
   const base = {
     listEventId: parseListEventId(record["alistigo:listEventId"]),
     listId: parseListId(record["alistigo:listId"]),
@@ -105,20 +112,45 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent {
         format: "json-ld",
       };
     }
+    case "ListElementChecked": {
+      // Plugin-owned event — not a core list-domain event; pass through as null
+      // so the serializer keeps it in the log but does not replay it on the domain.
+      return null;
+    }
   }
 }
 
 export const ListDocumentSerializer = {
-  serialize(list: List, previousDocument?: AlistigoDocument): AlistigoDocument {
+  serialize(
+    list: List,
+    previousDocument?: AlistigoDocument,
+    options?: SerializeOptions,
+  ): AlistigoDocument {
     const existingLog = previousDocument?.["alistigo:listEventLog"] ?? [];
     const newRecords = list.getUncommittedEvents().map(eventToRecord);
 
-    const itemListElement = list.elements.map((element, index) => ({
-      "@type": "ListItem" as const,
-      "alistigo:listElementId": element.id.toString(),
-      position: index + 1,
-      name: element.content,
-    }));
+    // Build a map of previous metadatas keyed by listElementId for preservation
+    const prevMetadatasById = new Map<string, Record<string, Record<string, unknown>>>();
+    for (const item of previousDocument?.itemListElement ?? []) {
+      if (item["alistigo:metadatas"] !== undefined) {
+        prevMetadatasById.set(item["alistigo:listElementId"], item["alistigo:metadatas"]);
+      }
+    }
+
+    const itemListElement: AlistigoListItem[] = list.elements.map((element, index) => {
+      const elementId = element.id.toString();
+      const item: AlistigoListItem = {
+        "@type": "ListItem" as const,
+        "alistigo:listElementId": elementId,
+        position: index + 1,
+        name: element.content,
+      };
+      const prevMetadatas = prevMetadatasById.get(elementId);
+      if (prevMetadatas !== undefined) {
+        item["alistigo:metadatas"] = prevMetadatas;
+      }
+      return item;
+    });
 
     const doc: AlistigoDocument = {
       "@context": ALISTIGO_CONTEXT,
@@ -133,12 +165,41 @@ export const ListDocumentSerializer = {
       doc.name = list.title;
     }
 
+    // Merge actors if actorsById option is provided
+    if (options?.actorsById !== undefined) {
+      const existingActors: AlistigoActorRecord[] = previousDocument?.["alistigo:actors"] ?? [];
+      const mergedActors = [...existingActors];
+
+      for (const [, actor] of options.actorsById) {
+        const existingIndex = mergedActors.findIndex(
+          (a) => a["alistigo:actorId"] === actor["alistigo:actorId"],
+        );
+        if (existingIndex >= 0) {
+          mergedActors[existingIndex] = actor;
+        } else {
+          mergedActors.push(actor);
+        }
+      }
+
+      doc["alistigo:actors"] = mergedActors;
+    } else if (previousDocument?.["alistigo:actors"] !== undefined) {
+      // Preserve existing actors even when no update is provided
+      doc["alistigo:actors"] = previousDocument["alistigo:actors"];
+    }
+
+    // Preserve plugins from the previous document
+    if (previousDocument?.["alistigo:plugins"] !== undefined) {
+      doc["alistigo:plugins"] = previousDocument["alistigo:plugins"];
+    }
+
     return doc;
   },
 
   deserialize(doc: AlistigoDocument): List {
     const listId = parseListId(doc["alistigo:listId"]);
-    const events = doc["alistigo:listEventLog"].map(recordToEvent);
+    const events = doc["alistigo:listEventLog"]
+      .map(recordToEvent)
+      .filter((e): e is ListEvent => e !== null);
     return List.rehydrate(listId, events);
   },
 };
