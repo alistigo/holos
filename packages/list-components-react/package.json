@@ -54,6 +54,7 @@
     "react-dom": "^19.2.0"
   },
   "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/logger": "workspace:*",
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
@@ -70,6 +71,7 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@alistigo/artifact-checkbox-plugin": "workspace:*",
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",
     "@lingui/cli": "^6.0.0",
     "@lingui/format-po": "^6.0.0",
