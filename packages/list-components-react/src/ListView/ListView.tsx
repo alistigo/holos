@@ -64,7 +64,6 @@ interface ListItemProps {
     | undefined;
 }
 
-
 // fallow-ignore-next-line complexity
 function ListItem({
   elementId,

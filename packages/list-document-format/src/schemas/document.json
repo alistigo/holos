@@ -87,12 +87,7 @@
     },
     "ActorRecord": {
       "type": "object",
-      "required": [
-        "alistigo:actorId",
-        "alistigo:userId",
-        "alistigo:pseudo",
-        "alistigo:avatar"
-      ],
+      "required": ["alistigo:actorId", "alistigo:userId", "alistigo:pseudo", "alistigo:avatar"],
       "properties": {
         "alistigo:actorId": { "type": "string" },
         "alistigo:userId": { "type": "string" },
