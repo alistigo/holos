@@ -11,7 +11,7 @@ function makeDefaultDocument(): AlistigoDocument {
     "alistigo:schemaVersion": "1.0.0",
     name: "My List",
     itemListElement: [],
-    "alistigo:listEventLog": [],
+    "alistigo:eventLog": [],
   };
 }
 

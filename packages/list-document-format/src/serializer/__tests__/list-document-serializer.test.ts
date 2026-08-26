@@ -15,8 +15,8 @@ describe("ListDocumentSerializer.serialize", () => {
     expect(doc["alistigo:listId"]).toBe(list.id.toString());
     expect(doc["alistigo:schemaVersion"]).toBe(SCHEMA_VERSION);
     expect(doc.itemListElement).toHaveLength(0);
-    expect(doc["alistigo:listEventLog"]).toHaveLength(1);
-    expect(doc["alistigo:listEventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
+    expect(doc["alistigo:eventLog"]).toHaveLength(1);
+    expect(doc["alistigo:eventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
   });
 
   // fallow-ignore-next-line complexity
@@ -29,8 +29,8 @@ describe("ListDocumentSerializer.serialize", () => {
     expect(doc.itemListElement[0]?.["@type"]).toBe("ListItem");
     expect(doc.itemListElement[0]?.name).toBe("Milk");
     expect(doc.itemListElement[0]?.position).toBe(1);
-    expect(doc["alistigo:listEventLog"]).toHaveLength(2);
-    expect(doc["alistigo:listEventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
+    expect(doc["alistigo:eventLog"]).toHaveLength(2);
+    expect(doc["alistigo:eventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
   });
 
   it("appends new uncommitted events to an existing log when previousDocument is provided", () => {
@@ -41,9 +41,9 @@ describe("ListDocumentSerializer.serialize", () => {
     list.addListElement({ actorId, listId: list.id, content: createListElementContent("Eggs") });
     const secondDoc = ListDocumentSerializer.serialize(list, firstDoc);
 
-    expect(secondDoc["alistigo:listEventLog"]).toHaveLength(2);
-    expect(secondDoc["alistigo:listEventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
-    expect(secondDoc["alistigo:listEventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
+    expect(secondDoc["alistigo:eventLog"]).toHaveLength(2);
+    expect(secondDoc["alistigo:eventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
+    expect(secondDoc["alistigo:eventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
   });
 
   it("includes title as name when list has a title", () => {
@@ -162,7 +162,7 @@ describe("ListDocumentSerializer.serialize", () => {
 
     // Inject a ListElementChecked record into the previous document's log
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      "alistigo:listEventId": "evt_checked_001",
+      "alistigo:eventId": "evt_checked_001",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
       "alistigo:actorId": actorId.toString(),
@@ -172,12 +172,12 @@ describe("ListDocumentSerializer.serialize", () => {
     };
     const docWithChecked = {
       ...firstDoc,
-      "alistigo:listEventLog": [...firstDoc["alistigo:listEventLog"], checkedRecord],
+      "alistigo:eventLog": [...firstDoc["alistigo:eventLog"], checkedRecord],
     };
 
     const nextDoc = ListDocumentSerializer.serialize(list, docWithChecked);
 
-    const foundChecked = nextDoc["alistigo:listEventLog"].find(
+    const foundChecked = nextDoc["alistigo:eventLog"].find(
       (r) => r["alistigo:eventType"] === "ListElementChecked",
     );
     expect(foundChecked).toBeDefined();
@@ -225,7 +225,7 @@ describe("ListDocumentSerializer.deserialize", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      "alistigo:listEventId": "evt_checked_002",
+      "alistigo:eventId": "evt_checked_002",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
       "alistigo:actorId": actorId.toString(),
@@ -235,7 +235,7 @@ describe("ListDocumentSerializer.deserialize", () => {
     };
     const docWithChecked = {
       ...doc,
-      "alistigo:listEventLog": [...doc["alistigo:listEventLog"], checkedRecord],
+      "alistigo:eventLog": [...doc["alistigo:eventLog"], checkedRecord],
     };
 
     // Should not throw; ListElementChecked is skipped during rehydration
@@ -317,7 +317,7 @@ describe("JSON schema validation", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      "alistigo:listEventId": "evt_checked_003",
+      "alistigo:eventId": "evt_checked_003",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
       "alistigo:actorId": actorId.toString(),
@@ -327,7 +327,7 @@ describe("JSON schema validation", () => {
     };
     const docWithChecked = {
       ...doc,
-      "alistigo:listEventLog": [...doc["alistigo:listEventLog"], checkedRecord],
+      "alistigo:eventLog": [...doc["alistigo:eventLog"], checkedRecord],
     };
 
     const result = await validateDocument(docWithChecked);

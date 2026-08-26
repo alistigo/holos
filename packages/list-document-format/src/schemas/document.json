@@ -1,16 +1,20 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://alistigo.ai/schema/v1/document.json",
-  "title": "Alistigo Document",
-  "description": "A self-contained Alistigo list document in JSON-LD ItemList format.",
+  "$id": "https://schemas.alistigo.com/v1/documents/list.json",
+  "title": "Alistigo List Document",
+  "description": "A list document",
   "type": "object",
+  "allOf": [
+    { "$ref": "schema:ItemList" },
+    { "$ref": "https://schemas.alistigo.com/v1/documents/alistigo-document.json" }
+  ],
   "required": [
     "@context",
     "@type",
     "alistigo:listId",
     "alistigo:schemaVersion",
     "itemListElement",
-    "alistigo:listEventLog"
+    "alistigo:eventLog"
   ],
   "properties": {
     "@context": {
@@ -29,17 +33,9 @@
       "type": "array",
       "items": { "$ref": "#/$defs/ListItem" }
     },
-    "alistigo:listEventLog": {
+    "alistigo:eventLog": {
       "type": "array",
-      "items": { "$ref": "#/$defs/EventRecord" }
-    },
-    "alistigo:actors": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/ActorRecord" }
-    },
-    "alistigo:plugins": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/PluginRecord" }
+      "items": { "$ref": "#/$defs/ListEventRecord" }
     }
   },
   "$defs": {
@@ -57,17 +53,17 @@
         }
       }
     },
-    "EventRecord": {
+    "ListEventRecord": {
       "type": "object",
       "required": [
-        "alistigo:listEventId",
+        "alistigo:eventId",
         "alistigo:eventType",
         "alistigo:listId",
         "alistigo:actorId",
         "alistigo:timestamp"
       ],
       "properties": {
-        "alistigo:listEventId": { "type": "string" },
+        "alistigo:eventId": { "type": "string" },
         "alistigo:eventType": {
           "type": "string",
           "enum": [
@@ -83,25 +79,6 @@
         "alistigo:timestamp": { "type": "string", "format": "date-time" },
         "alistigo:listElementId": { "type": "string" },
         "checked": { "type": "boolean" }
-      }
-    },
-    "ActorRecord": {
-      "type": "object",
-      "required": ["alistigo:actorId", "alistigo:userId", "alistigo:pseudo", "alistigo:avatar"],
-      "properties": {
-        "alistigo:actorId": { "type": "string" },
-        "alistigo:userId": { "type": "string" },
-        "alistigo:pseudo": { "type": "string" },
-        "alistigo:avatar": { "type": "string" }
-      }
-    },
-    "PluginRecord": {
-      "type": "object",
-      "required": ["name"],
-      "properties": {
-        "name": { "type": "string" },
-        "version": { "type": "string" },
-        "config": { "type": "object" }
       }
     }
   }

@@ -4,7 +4,7 @@ import React from "react";
 import { ValidatorOutput } from "../ui/ValidatorOutput.js";
 
 export class ValidateCommand extends Command {
-  static override paths = [Command.Default];
+  static override paths = [Command.Default, ["validate"]];
 
   static override usage = Command.Usage({
     description: "Validate Alistigo document files against the schema",

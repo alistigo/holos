@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schemas.alistigo.com/v1/documents/list.json",
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "alistigo": "https://alistigo.ai/vocab/"
+  },
+  "@type": "ItemList",
+  "alistigo:listId": "lst_example01",
+  "alistigo:schemaVersion": "1.2.0",
+  "name": "Groceries",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_example01",
+      "position": 1,
+      "name": "Milk"
+    },
+    {
+      "@type": "ListItem",
+      "alistigo:listElementId": "lse_example02",
+      "position": 2,
+      "name": "Eggs"
+    }
+  ],
+  "alistigo:eventLog": [
+    {
+      "alistigo:eventId": "evt_example01",
+      "alistigo:eventType": "ListCreated",
+      "alistigo:listId": "lst_example01",
+      "alistigo:actorId": "actor_example01",
+      "alistigo:timestamp": "2026-08-26T10:00:00.000Z"
+    },
+    {
+      "alistigo:eventId": "evt_example02",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_example01",
+      "alistigo:actorId": "actor_example01",
+      "alistigo:timestamp": "2026-08-26T10:01:00.000Z",
+      "alistigo:listElementId": "lse_example01",
+      "name": "Milk"
+    },
+    {
+      "alistigo:eventId": "evt_example03",
+      "alistigo:eventType": "ListElementAdded",
+      "alistigo:listId": "lst_example01",
+      "alistigo:actorId": "actor_example01",
+      "alistigo:timestamp": "2026-08-26T10:02:00.000Z",
+      "alistigo:listElementId": "lse_example02",
+      "name": "Eggs"
+    }
+  ],
+  "alistigo:actors": [
+    {
+      "alistigo:actorId": "actor_example01",
+      "alistigo:userId": "user_example01",
+      "alistigo:pseudo": "Alice",
+      "alistigo:avatar": "https://example.com/avatar.png"
+    }
+  ],
+  "alistigo:plugins": []
+}

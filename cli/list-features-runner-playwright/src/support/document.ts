@@ -20,7 +20,7 @@ function fixtureElementId(index: number): string {
 
 export function buildEmptyDocument(): AlistigoDocument {
   const listCreated: AlistigoEventRecord = {
-    "alistigo:listEventId": fixtureEventId(1),
+    "alistigo:eventId": fixtureEventId(1),
     "alistigo:eventType": "ListCreated",
     "alistigo:listId": FIXTURE_LIST_ID,
     "alistigo:actorId": FIXTURE_ACTOR_ID,
@@ -33,21 +33,21 @@ export function buildEmptyDocument(): AlistigoDocument {
     "alistigo:listId": FIXTURE_LIST_ID,
     "alistigo:schemaVersion": SCHEMA_VERSION,
     itemListElement: [],
-    "alistigo:listEventLog": [listCreated],
+    "alistigo:eventLog": [listCreated],
   };
 }
 
 export function buildPopulatedDocument(elementTexts: readonly string[]): AlistigoDocument {
   const events: AlistigoEventRecord[] = [
     {
-      "alistigo:listEventId": fixtureEventId(1),
+      "alistigo:eventId": fixtureEventId(1),
       "alistigo:eventType": "ListCreated",
       "alistigo:listId": FIXTURE_LIST_ID,
       "alistigo:actorId": FIXTURE_ACTOR_ID,
       "alistigo:timestamp": FIXTURE_TIMESTAMP,
     },
     ...elementTexts.map((text, index) => ({
-      "alistigo:listEventId": fixtureEventId(index + 2),
+      "alistigo:eventId": fixtureEventId(index + 2),
       "alistigo:eventType": "ListElementAdded" as const,
       "alistigo:listId": FIXTURE_LIST_ID,
       "alistigo:listElementId": fixtureElementId(index),
@@ -68,6 +68,6 @@ export function buildPopulatedDocument(elementTexts: readonly string[]): Alistig
       position: index + 1,
       name: text,
     })),
-    "alistigo:listEventLog": events,
+    "alistigo:eventLog": events,
   };
 }

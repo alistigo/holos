@@ -15,7 +15,7 @@ export interface AlistigoDocument {
   "alistigo:schemaVersion": SemVer;
   name?: string;
   itemListElement: AlistigoListItem[];
-  "alistigo:listEventLog": AlistigoEventRecord[];
+  "alistigo:eventLog": AlistigoEventRecord[];
   "alistigo:actors"?: AlistigoActorRecord[];
   "alistigo:plugins"?: AlistigoPluginRecord[];
 }
@@ -29,7 +29,7 @@ export interface AlistigoListItem {
 }
 
 interface AlistigoEventRecordBase {
-  "alistigo:listEventId": TypeIDString;
+  "alistigo:eventId": TypeIDString;
   "alistigo:eventType": string;
   "alistigo:listId": TypeIDString;
   "alistigo:actorId": TypeIDString;

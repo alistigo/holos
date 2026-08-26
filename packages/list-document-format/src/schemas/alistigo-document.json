@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.alistigo.com/v1/documents/alistigo-document.json",
+  "title": "Alistigo Document",
+  "description": "Common properties shared by all Alistigo artifact documents",
+  "type": "object",
+  "required": ["alistigo:eventLog"],
+  "properties": {
+    "alistigo:eventLog": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/EventRecord" }
+    },
+    "alistigo:actors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ActorRecord" }
+    },
+    "alistigo:plugins": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/PluginRecord" }
+    }
+  },
+  "$defs": {
+    "EventRecord": {
+      "type": "object",
+      "required": [
+        "alistigo:eventId",
+        "alistigo:eventType",
+        "alistigo:actorId",
+        "alistigo:timestamp"
+      ],
+      "properties": {
+        "alistigo:eventId": { "type": "string" },
+        "alistigo:eventType": { "type": "string" },
+        "alistigo:actorId": { "type": "string" },
+        "alistigo:timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ActorRecord": {
+      "type": "object",
+      "required": ["alistigo:actorId", "alistigo:userId", "alistigo:pseudo", "alistigo:avatar"],
+      "properties": {
+        "alistigo:actorId": { "type": "string" },
+        "alistigo:userId": { "type": "string" },
+        "alistigo:pseudo": { "type": "string" },
+        "alistigo:avatar": { "type": "string" }
+      }
+    },
+    "PluginRecord": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "config": { "type": "object" }
+      }
+    }
+  }
+}

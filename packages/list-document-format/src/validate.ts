@@ -1,9 +1,20 @@
+import alistigoDocumentSchema from "./schemas/alistigo-document.json" with { type: "json" };
 import documentSchema from "./schemas/document.json" with { type: "json" };
 
 export interface ValidationResult {
   valid: boolean;
   errors: string[];
 }
+
+// schema.org's `Thing` (base of ItemList) defines @context as {type:"string"},
+// which conflicts with our @context object. Register a permissive stub for the
+// schema:ItemList $ref so it resolves without enforcing schema.org constraints.
+// The installed schema-org-json-schemas package is used for schema flattening
+// (via $RefParser.bundle) where AJV is not involved.
+const SCHEMA_ORG_STUB = {
+  $id: "schema:ItemList",
+  type: "object",
+} as const;
 
 /**
  * Validate that an unknown JSON value conforms to the Alistigo document schema.
@@ -19,6 +30,8 @@ export async function validateDocument(input: unknown): Promise<ValidationResult
 
   const ajv = new Ajv({ allErrors: true, strict: false });
   addFormats(ajv);
+  ajv.addSchema(SCHEMA_ORG_STUB);
+  ajv.addSchema(alistigoDocumentSchema);
 
   const validate = ajv.compile(documentSchema);
   const valid = validate(input) as boolean;

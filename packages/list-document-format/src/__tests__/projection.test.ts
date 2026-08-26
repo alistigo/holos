@@ -15,7 +15,7 @@ function makeDoc(overrides: Partial<AlistigoDocument> = {}): AlistigoDocument {
     "alistigo:listId": "list_01abc",
     "alistigo:schemaVersion": SCHEMA_VERSION,
     itemListElement: [],
-    "alistigo:listEventLog": [],
+    "alistigo:eventLog": [],
     ...overrides,
   };
 }
@@ -41,9 +41,9 @@ const actor2 = {
 describe("buildAttributionMap", () => {
   it("returns an empty map when there are no actors", () => {
     const doc = makeDoc({
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -62,9 +62,9 @@ describe("buildAttributionMap", () => {
   it("maps element IDs to actor info for matching ListElementAdded events", () => {
     const doc = makeDoc({
       "alistigo:actors": [actor1, actor2],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -73,7 +73,7 @@ describe("buildAttributionMap", () => {
           name: "Buy bread",
         },
         {
-          "alistigo:listEventId": "evt_02",
+          "alistigo:eventId": "evt_02",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_02bob",
@@ -102,9 +102,9 @@ describe("buildAttributionMap", () => {
   it("uses first-write-wins when multiple ListElementAdded events exist for the same element", () => {
     const doc = makeDoc({
       "alistigo:actors": [actor1, actor2],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -114,7 +114,7 @@ describe("buildAttributionMap", () => {
         },
         {
           // duplicate for the same element — should be ignored
-          "alistigo:listEventId": "evt_03",
+          "alistigo:eventId": "evt_03",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_02bob",
@@ -133,9 +133,9 @@ describe("buildAttributionMap", () => {
   it("skips ListElementAdded events whose actorId is not in the actors section", () => {
     const doc = makeDoc({
       "alistigo:actors": [actor1],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_unknown",
@@ -153,16 +153,16 @@ describe("buildAttributionMap", () => {
   it("ignores non-ListElementAdded events", () => {
     const doc = makeDoc({
       "alistigo:actors": [actor1, actor2],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListCreated",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
           "alistigo:timestamp": "2026-01-01T09:00:00.000Z",
         },
         {
-          "alistigo:listEventId": "evt_02",
+          "alistigo:eventId": "evt_02",
           "alistigo:eventType": "ListElementChecked",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -193,9 +193,9 @@ describe("buildProjection", () => {
           name: "Buy bread",
         },
       ],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -221,9 +221,9 @@ describe("buildProjection", () => {
           name: "Buy bread",
         },
       ],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -256,9 +256,9 @@ describe("buildProjection", () => {
           name: "Call mom",
         },
       ],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_01alice",
@@ -267,7 +267,7 @@ describe("buildProjection", () => {
           name: "Buy bread",
         },
         {
-          "alistigo:listEventId": "evt_02",
+          "alistigo:eventId": "evt_02",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_02bob",
@@ -302,9 +302,9 @@ describe("buildProjection", () => {
           name: "Mystery item",
         },
       ],
-      "alistigo:listEventLog": [
+      "alistigo:eventLog": [
         {
-          "alistigo:listEventId": "evt_01",
+          "alistigo:eventId": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           "alistigo:listId": "list_01abc",
           "alistigo:actorId": "actor_ghost",
@@ -336,7 +336,7 @@ describe("buildProjection", () => {
           name: "Second",
         },
       ],
-      "alistigo:listEventLog": [],
+      "alistigo:eventLog": [],
     });
 
     const projection = buildProjection(doc);
