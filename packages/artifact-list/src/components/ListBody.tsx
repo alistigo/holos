@@ -79,7 +79,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
         );
         const updatedDoc: AlistigoDocument = {
           ...document,
-          "alistigo:listEventLog": [...document["alistigo:listEventLog"], eventRecord],
+          "alistigo:eventLog": [...document["alistigo:eventLog"], eventRecord],
           "alistigo:plugins": pluginRecords,
           itemListElement: document.itemListElement.map((item) =>
             item["alistigo:listElementId"] === elementId
@@ -116,7 +116,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
             ? { actors: document["alistigo:actors"] }
             : {})}
           plugins={domainPlugins}
-          events={document["alistigo:listEventLog"]}
+          events={document["alistigo:eventLog"]}
           onPluginCommand={handlePluginCommand}
         />
       ) : (
@@ -126,7 +126,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
             ? { actors: document["alistigo:actors"] }
             : {})}
           plugins={domainPlugins}
-          events={document["alistigo:listEventLog"]}
+          events={document["alistigo:eventLog"]}
           onPluginCommand={handlePluginCommand}
           onDelete={(elementId, _position) => actions.deleteElement(elementId)}
         />

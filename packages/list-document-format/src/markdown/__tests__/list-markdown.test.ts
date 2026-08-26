@@ -153,8 +153,8 @@ describe("buildListDocumentFromMarkdown", () => {
   it("event log contains ListCreated plus one ListElementAdded per item", () => {
     const md = "List:\n- A\n- B\n- C";
     const doc = buildListDocumentFromMarkdown(md, actorId);
-    expect(doc["alistigo:listEventLog"]).toHaveLength(4); // 1 created + 3 added
-    expect(doc["alistigo:listEventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
-    expect(doc["alistigo:listEventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
+    expect(doc["alistigo:eventLog"]).toHaveLength(4); // 1 created + 3 added
+    expect(doc["alistigo:eventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
+    expect(doc["alistigo:eventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
   });
 });

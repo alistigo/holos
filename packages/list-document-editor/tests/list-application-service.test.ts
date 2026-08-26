@@ -52,8 +52,8 @@ describe("ListApplicationService", () => {
     expect(doc["alistigo:listId"]).toBe(listId.toString());
     expect(doc.name).toBe("My List");
     expect(doc.itemListElement).toHaveLength(0);
-    expect(doc["alistigo:listEventLog"]).toHaveLength(1);
-    expect(doc["alistigo:listEventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
+    expect(doc["alistigo:eventLog"]).toHaveLength(1);
+    expect(doc["alistigo:eventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
   });
 
   test("createList generates a listId when none is provided", async () => {
@@ -82,8 +82,8 @@ describe("ListApplicationService", () => {
     expect(doc.itemListElement).toHaveLength(1);
     expect(doc.itemListElement[0]?.name).toBe("Buy bread");
     expect(doc.itemListElement[0]?.position).toBe(1);
-    expect(doc["alistigo:listEventLog"]).toHaveLength(2); // ListCreated + ListElementAdded
-    expect(doc["alistigo:listEventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
+    expect(doc["alistigo:eventLog"]).toHaveLength(2); // ListCreated + ListElementAdded
+    expect(doc["alistigo:eventLog"][1]?.["alistigo:eventType"]).toBe("ListElementAdded");
   });
 
   test("addListElement persists so a subsequent load sees the element", async () => {
@@ -118,7 +118,7 @@ describe("ListApplicationService", () => {
     expect(deleteResult.ok).toBe(true);
     if (!deleteResult.ok) return;
     expect(deleteResult.value.itemListElement).toHaveLength(0);
-    expect(deleteResult.value["alistigo:listEventLog"]).toHaveLength(3); // Created + Added + Deleted
+    expect(deleteResult.value["alistigo:eventLog"]).toHaveLength(3); // Created + Added + Deleted
   });
 
   test("loadDocument is read-only and adds no events", async () => {
@@ -130,7 +130,7 @@ describe("ListApplicationService", () => {
     const doc = await service.loadDocument(listId);
 
     if (doc == null) throw new Error("expected doc to be defined");
-    expect(doc["alistigo:listEventLog"]).toHaveLength(1); // still just ListCreated
+    expect(doc["alistigo:eventLog"]).toHaveLength(1); // still just ListCreated
   });
 
   test("loadDocument returns undefined for an unknown listId", async () => {
@@ -149,7 +149,7 @@ describe("ListApplicationService", () => {
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    const lastEvent = result.value["alistigo:listEventLog"].at(-1);
+    const lastEvent = result.value["alistigo:eventLog"].at(-1);
     expect(lastEvent?.["alistigo:eventType"]).toBe("ListExported");
     // Export is audit-only — no element changes
     expect(result.value.itemListElement).toHaveLength(0);
@@ -197,7 +197,7 @@ describe("ListApplicationService", () => {
     if (doc == null) throw new Error("expected doc to be defined");
     expect(doc.itemListElement.map((i) => i.name)).toEqual(["Apples", "Bananas"]);
     expect(doc.name).toBe("Shopping");
-    expect(doc["alistigo:listEventLog"]).toHaveLength(3); // Created + 2 Added
+    expect(doc["alistigo:eventLog"]).toHaveLength(3); // Created + 2 Added
   });
 
   // fallow-ignore-next-line complexity
@@ -217,7 +217,7 @@ describe("ListApplicationService", () => {
     expect(doc.itemListElement[0]?.name).toBe("Buy bread");
     expect(doc.itemListElement[1]?.name).toBe("Buy milk");
     expect(doc.itemListElement[2]?.name).toBe("Buy eggs");
-    expect(doc["alistigo:listEventLog"]).toHaveLength(4); // Created + 3 Added
+    expect(doc["alistigo:eventLog"]).toHaveLength(4); // Created + 3 Added
   });
 
   test("applyAiInitialInput: items only — no title, no name on doc", async () => {

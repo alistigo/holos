@@ -29,7 +29,7 @@ interface SerializeOptions {
 
 function eventToRecord(event: ListEvent): AlistigoEventRecord {
   const base = {
-    "alistigo:listEventId": event.listEventId.toString(),
+    "alistigo:eventId": event.listEventId.toString(),
     "alistigo:listId": event.listId.toString(),
     "alistigo:actorId": event.actorId.toString(),
     "alistigo:timestamp": event.timestamp,
@@ -72,8 +72,13 @@ function eventToRecord(event: ListEvent): AlistigoEventRecord {
 }
 
 function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
+  // Plugin-owned events have no domain representation — skip before parsing TypeIDs.
+  if (record["alistigo:eventType"] === "ListElementChecked") {
+    return null;
+  }
+
   const base = {
-    listEventId: parseListEventId(record["alistigo:listEventId"]),
+    listEventId: parseListEventId(record["alistigo:eventId"]),
     listId: parseListId(record["alistigo:listId"]),
     actorId: parseActorId(record["alistigo:actorId"]),
     timestamp: createTimestamp(record["alistigo:timestamp"]),
@@ -112,11 +117,6 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
         format: "json-ld",
       };
     }
-    case "ListElementChecked": {
-      // Plugin-owned event — not a core list-domain event; pass through as null
-      // so the serializer keeps it in the log but does not replay it on the domain.
-      return null;
-    }
   }
 }
 
@@ -127,7 +127,7 @@ export const ListDocumentSerializer = {
     previousDocument?: AlistigoDocument,
     options?: SerializeOptions,
   ): AlistigoDocument {
-    const existingLog = previousDocument?.["alistigo:listEventLog"] ?? [];
+    const existingLog = previousDocument?.["alistigo:eventLog"] ?? [];
     const newRecords = list.getUncommittedEvents().map(eventToRecord);
 
     // Build a map of previous metadatas keyed by listElementId for preservation
@@ -159,7 +159,7 @@ export const ListDocumentSerializer = {
       "alistigo:listId": list.id.toString(),
       "alistigo:schemaVersion": SCHEMA_VERSION,
       itemListElement: itemListElement,
-      "alistigo:listEventLog": [...existingLog, ...newRecords],
+      "alistigo:eventLog": [...existingLog, ...newRecords],
     };
 
     if (list.title !== undefined) {
@@ -198,7 +198,7 @@ export const ListDocumentSerializer = {
 
   deserialize(doc: AlistigoDocument): List {
     const listId = parseListId(doc["alistigo:listId"]);
-    const events = doc["alistigo:listEventLog"]
+    const events = doc["alistigo:eventLog"]
       .map(recordToEvent)
       .filter((e): e is ListEvent => e !== null);
     return List.rehydrate(listId, events);

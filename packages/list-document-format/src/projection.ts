@@ -41,7 +41,7 @@ export function buildAttributionMap(doc: AlistigoDocument): Map<string, Alistigo
   const actorsById = new Map((doc["alistigo:actors"] ?? []).map((a) => [a["alistigo:actorId"], a]));
   const result = new Map<string, AlistigoItemAttribution>();
 
-  for (const event of doc["alistigo:listEventLog"]) {
+  for (const event of doc["alistigo:eventLog"]) {
     if (event["alistigo:eventType"] === "ListElementAdded") {
       const elementId = event["alistigo:listElementId"];
       if (!result.has(elementId)) {

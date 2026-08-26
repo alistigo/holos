@@ -141,6 +141,9 @@ export function ValidatorOutput({
           const result = customValidator(parsed);
           setResults((prev) => [...prev, { file, valid: result.valid, errors: result.errors }]);
         } else {
+          // Auto-detect schema from the $schema field in the document.
+          // If the document declares an unrecognized $schema, fall back to the
+          // default list document validator so the CLI remains usable without flags.
           const result = await validateDocument(parsed);
           setResults((prev) => [...prev, { file, valid: result.valid, errors: result.errors }]);
         }

@@ -8,7 +8,7 @@ export function createCheckListElementEvent(
   checked: boolean,
 ): AlistigoListElementCheckedRecord {
   return {
-    "alistigo:listEventId": typeid("lev").toString(),
+    "alistigo:eventId": typeid("lev").toString(),
     "alistigo:eventType": "ListElementChecked",
     "alistigo:listId": listId,
     "alistigo:listElementId": elementId,
