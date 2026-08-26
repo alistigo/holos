@@ -1,5 +1,5 @@
 {
-  "name": "@alistigo/artifact-checkbox-plugin",
+  "name": "@alistigo/artifact-list-checkbox-plugin",
   "version": "0.1.0",
   "description": "Checkbox domain-contribution plugin for @alistigo artifacts.",
   "license": "MIT",
@@ -10,12 +10,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/artifact-checkbox-plugin"
+    "directory": "packages/artifact-list-checkbox-plugin"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-checkbox-plugin#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-list-checkbox-plugin#readme",
   "keywords": [
     "alistigo",
     "artifact",

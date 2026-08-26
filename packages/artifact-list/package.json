@@ -36,7 +36,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/artifact-checkbox-plugin": "workspace:*",
+    "@alistigo/artifact-list-checkbox-plugin": "workspace:*",
     "@alistigo/artifact-core": "workspace:*",
     "@alistigo/claude-artifact-api": "workspace:*",
     "@alistigo/artifact-core-components-react": "workspace:*",

@@ -1,4 +1,4 @@
-import checkboxPlugin from "@alistigo/artifact-checkbox-plugin";
+import checkboxPlugin from "@alistigo/artifact-list-checkbox-plugin";
 import type {
   AlistigoActorRecord,
   AlistigoEventRecord,
