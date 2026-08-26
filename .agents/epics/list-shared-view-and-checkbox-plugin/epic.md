@@ -1,9 +1,9 @@
 ---
 name: list-shared-view-and-checkbox-plugin
-status: in-progress
+status: completed
 created: 2026-08-25T16:00:33Z
-updated: 2026-08-25T16:06:42Z
-progress: 0%
+updated: 2026-08-26T00:00:00Z
+progress: 100%
 prd: .claude/prds/list-shared-view-and-checkbox-plugin.md
 github: https://github.com/alistigo/holos/issues/102
 ---
@@ -57,15 +57,15 @@ Sequential foundation (task 002), then parallel domain work (003, 004, 005), the
 
 ## Task Breakdown Preview
 
-- [ ] 001 - Write ADR 0024 + ADR 0025
-- [ ] 002 - list-document-format: schema + serializer (foundation)
-- [ ] 003 - Shared-list view: projection layer (parallel after 002)
-- [ ] 004 - User plugin → actors section bridge (parallel after 002)
-- [ ] 005 - artifact-plugin-api: domain-contribution extension (parallel after 002)
-- [ ] 006 - artifact-checkbox-plugin: new package (after 005)
-- [ ] 007 - list-components-react: ListView UI — attribution + plugin zones (after 003+006)
-- [ ] 008 - Artifact-list host wiring: register checkbox + command dispatch (after 006+007)
-- [ ] 009 - Gherkin feature files: checkbox scenarios (after 008)
+- [x] 001 - Write ADR 0024 + ADR 0025
+- [x] 002 - list-document-format: schema + serializer (foundation)
+- [x] 003 - Shared-list view: projection layer (parallel after 002)
+- [x] 004 - User plugin → actors section bridge (parallel after 002)
+- [x] 005 - artifact-plugin-api: domain-contribution extension (parallel after 002)
+- [x] 006 - artifact-checkbox-plugin: new package (after 005)
+- [x] 007 - list-components-react: ListView UI — attribution + plugin zones (after 003+006)
+- [x] 008 - Artifact-list host wiring: register checkbox + command dispatch (after 006+007)
+- [x] 009 - Gherkin feature files: checkbox scenarios (after 008)
 
 ## Dependencies
 - `@alistigo/artifact-user-plugin` — already emits `user:changed` ✅
@@ -85,15 +85,15 @@ Sequential foundation (task 002), then parallel domain work (003, 004, 005), the
 - Estimated: 3–4 days parallel execution
 
 ## Tasks Created
-- [ ] 001.md - Write ADR 0024 + ADR 0025 (parallel: true)
-- [ ] 002.md - list-document-format schema + serializer (parallel: false)
-- [ ] 003.md - Shared-list view: projection layer (parallel: true)
-- [ ] 004.md - User plugin → actors section bridge (parallel: true)
-- [ ] 005.md - artifact-plugin-api: domain-contribution extension (parallel: true)
-- [ ] 006.md - artifact-checkbox-plugin: new package (parallel: false)
-- [ ] 007.md - ListView UI: attribution + plugin zones (parallel: false)
-- [ ] 008.md - Artifact-list host wiring (parallel: true)
-- [ ] 009.md - Gherkin feature files: checkbox scenarios (parallel: true)
+- [x] 001.md - Write ADR 0024 + ADR 0025 (parallel: true)
+- [x] 002.md - list-document-format schema + serializer (parallel: false)
+- [x] 003.md - Shared-list view: projection layer (parallel: true)
+- [x] 004.md - User plugin → actors section bridge (parallel: true)
+- [x] 005.md - artifact-plugin-api: domain-contribution extension (parallel: true)
+- [x] 006.md - artifact-checkbox-plugin: new package (parallel: false)
+- [x] 007.md - ListView UI: attribution + plugin zones (parallel: false)
+- [x] 008.md - Artifact-list host wiring (parallel: true)
+- [x] 009.md - Gherkin feature files: checkbox scenarios (parallel: true)
 
 Total tasks: 9
 Parallel tasks: 6
