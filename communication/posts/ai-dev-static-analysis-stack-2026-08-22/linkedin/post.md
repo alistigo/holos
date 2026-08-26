@@ -5,34 +5,22 @@ createdAt: 2026-08-22
 attachment:
 publishedAt:
 url:
-formula: F9 Curiosity-Gap Teaser
+formula: F10 Contrarian
 series: ai-dev-repo-setup (2/3)
 ---
 
-I run four static analysis tools that tell Claude what it can't do. One of them is called Fallow. I hadn't heard of it six months ago. I use it every day now.
+AI forgets. AI makes mistakes. AI ignores some of the instructions you gave it. It's non-deterministic, every single time.
 
-The four tools in my TypeScript monorepo pre-push stack:
+So I stopped trying to fix that with better prompts.
 
-Biome handles linting and formatting together. One config, one command. Faster than running ESLint and Prettier separately.
+A prompt is a request. AI can drop it, half-follow it, or forget it three sessions later. Static analysis tool does not have that option. It reads the diff, checks it against rules I defined, and either the rule pass or the push does not go through. Simple.
 
-Dependency-cruiser enforces architecture rules. My actual rule: route handlers cannot import repositories directly. They go through a service layer. The tool checks this on every push. If Claude writes a shortcut, the push is blocked.
+That is what "Fallow" does for me. It checks cyclomatic complexity, dead code, and duplicated logic. When AI reintroduces a helper it already wrote somewhere else, or a function creeps past a complexity threshold, the push fails before I ever open the diff.
 
-TypeScript strict mode with exactOptionalPropertyTypes and noUncheckedIndexedAccess. Harder settings than most projects ship with. Catches a class of bugs that "strict: true" alone doesn't.
+The tool does not make AI a better coder. It makes the loop faster: write, fail, fix, push. All of it before a human reviews anything.
 
-And then there's Fallow.
+That is the real answer to "how much do you review AI code." Not less review, a faster loop that catches what review was for in the first place.
 
-Fallow checks cyclomatic complexity, dead code, and code duplication. It also ships with an MCP server, so I can query codebase analysis from inside Claude directly. I'm still working out everything it can catch. But it's already flagged things I wouldn't have noticed in a quick review.
+What is the rule you want to enforce before AI can push?
 
-All four run as pre-push hooks via Lefthook. Most issues get caught before CI even sees the diff.
-
-On CI, Nx only runs affected packages — linting, typechecking, and tests. A feature branch touching 2 packages in a 30-package monorepo runs roughly 10% of the full suite.
-
-The static analysis layer is half the story. The other half: unit tests in Bun and e2e specs in Gherkin/Playwright. Same Nx scoping applies.
-
-Total CI time: under 3 minutes. GitHub free tier. No cloud services.
-
-The question I keep asking: what else can Fallow enforce? Maximum exported functions per file? Scope creep between modules? I haven't found the ceiling yet.
-
-Anyone using Fallow? What architecture rules do you actually enforce?
-
-#TypeScript #AIdev
+#AIdev #Claude #ClaudeCode #Fallow #TypeScript
