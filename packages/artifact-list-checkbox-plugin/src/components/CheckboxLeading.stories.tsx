@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CheckboxLeading } from "./CheckboxLeading.js";
 
 const meta: Meta<typeof CheckboxLeading> = {
-  title: "artifact-checkbox-plugin/CheckboxLeading",
+  title: "artifact-list-checkbox-plugin/CheckboxLeading",
   component: CheckboxLeading,
   parameters: { layout: "centered" },
 };

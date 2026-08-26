@@ -8,7 +8,7 @@ export { createCheckListElementEvent } from "./command.js";
 export { checkboxReducer };
 
 const checkboxPlugin: AlistigoPlugin = {
-  name: "@alistigo/artifact-checkbox-plugin",
+  name: "@alistigo/artifact-list-checkbox-plugin",
   version: pkg.version,
   type: "list-element",
   metadataKey: "checkbox",

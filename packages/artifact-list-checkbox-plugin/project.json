@@ -1,7 +1,7 @@
 {
-  "name": "artifact-checkbox-plugin",
+  "name": "artifact-list-checkbox-plugin",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/artifact-checkbox-plugin/src",
+  "sourceRoot": "packages/artifact-list-checkbox-plugin/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -9,35 +9,35 @@
       "outputs": ["{projectRoot}/dist"],
       "options": {
         "command": "vite build",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc -p tsconfig.json --noEmit",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "bun test",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "biome check .",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
     "storybook": {
       "executor": "nx:run-commands",
       "options": {
         "command": "storybook dev -p 6008",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
     "build-storybook": {
@@ -45,14 +45,14 @@
       "outputs": ["{projectRoot}/storybook-static"],
       "options": {
         "command": "storybook build",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
         "command": "rm -rf dist storybook-static",
-        "cwd": "packages/artifact-checkbox-plugin"
+        "cwd": "packages/artifact-list-checkbox-plugin"
       }
     }
   }

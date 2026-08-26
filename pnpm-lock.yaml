@@ -193,40 +193,6 @@ importers:
         specifier: ^4.19.0
         version: 4.21.0
 
-  packages/artifact-checkbox-plugin:
-    dependencies:
-      '@alistigo/artifact-plugin-api':
-        specifier: workspace:*
-        version: link:../artifact-plugin-api
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../list-document-format
-      typeid-js:
-        specifier: ^1.2.0
-        version: 1.2.0
-    devDependencies:
-      '@storybook/react-vite':
-        specifier: ^10.3.0
-        version: 10.3.6(esbuild@0.27.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.2)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
-      '@tailwindcss/vite':
-        specifier: ^4.0.0
-        version: 4.2.4(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
-      '@types/react':
-        specifier: ^19.2.14
-        version: 19.2.14
-      '@vitejs/plugin-react':
-        specifier: ^4.3.4
-        version: 4.7.0(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
-      react:
-        specifier: ^19.2.5
-        version: 19.2.5
-      storybook:
-        specifier: ^10.3.0
-        version: 10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      vite:
-        specifier: ^7.0.0
-        version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
-
   packages/artifact-claude-capabilities-demo:
     dependencies:
       '@alistigo/artifact-core':
@@ -334,15 +300,15 @@ importers:
 
   packages/artifact-list:
     dependencies:
-      '@alistigo/artifact-checkbox-plugin':
-        specifier: workspace:*
-        version: link:../artifact-checkbox-plugin
       '@alistigo/artifact-core':
         specifier: workspace:*
         version: link:../artifact-core
       '@alistigo/artifact-core-components-react':
         specifier: workspace:*
         version: link:../artifact-core-components-react
+      '@alistigo/artifact-list-checkbox-plugin':
+        specifier: workspace:*
+        version: link:../artifact-list-checkbox-plugin
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
@@ -407,6 +373,40 @@ importers:
       vite-plugin-css-injected-by-js:
         specifier: ^4.0.1
         version: 4.0.1(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+
+  packages/artifact-list-checkbox-plugin:
+    dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
+      '@alistigo/list-document-format':
+        specifier: workspace:*
+        version: link:../list-document-format
+      typeid-js:
+        specifier: ^1.2.0
+        version: 1.2.0
+    devDependencies:
+      '@storybook/react-vite':
+        specifier: ^10.3.0
+        version: 10.3.6(esbuild@0.27.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.2)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+      '@tailwindcss/vite':
+        specifier: ^4.0.0
+        version: 4.2.4(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2))
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      storybook:
+        specifier: ^10.3.0
+        version: 10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      vite:
+        specifier: ^7.0.0
+        version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/artifact-list-skill:
     dependencies:
@@ -629,9 +629,9 @@ importers:
         specifier: ^2.6.0
         version: 2.6.1
     devDependencies:
-      '@alistigo/artifact-checkbox-plugin':
+      '@alistigo/artifact-list-checkbox-plugin':
         specifier: workspace:*
-        version: link:../artifact-checkbox-plugin
+        version: link:../artifact-list-checkbox-plugin
       '@lingui/babel-plugin-lingui-macro':
         specifier: ^6.0.0
         version: 6.0.1

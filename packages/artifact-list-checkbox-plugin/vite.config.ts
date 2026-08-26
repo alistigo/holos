@@ -1,5 +1,5 @@
 /**
- * Self-contained ES module build for @alistigo/artifact-checkbox-plugin.
+ * Self-contained ES module build for @alistigo/artifact-list-checkbox-plugin.
  *
  * Bundles @alistigo/list-document-format types and React components into one
  * dependency-free file so @alistigo/artifact-plugin-api's loader can

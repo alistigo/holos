@@ -1,4 +1,4 @@
-import { createCheckListElementEvent } from "@alistigo/artifact-checkbox-plugin";
+import { createCheckListElementEvent } from "@alistigo/artifact-list-checkbox-plugin";
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import {
   AddElementInput,
@@ -67,7 +67,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
   const handlePluginCommand = useCallback(
     (pluginName: string, commandName: string, payload: unknown): void => {
       if (
-        pluginName === "@alistigo/artifact-checkbox-plugin" &&
+        pluginName === "@alistigo/artifact-list-checkbox-plugin" &&
         commandName === "checkListElement"
       ) {
         const { elementId, checked } = payload as { elementId: string; checked: boolean };
