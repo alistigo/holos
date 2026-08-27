@@ -85,10 +85,11 @@ export class AlistigoWorld extends World {
 
   async setDocument(document: AlistigoDocument): Promise<void> {
     if (!this.applicationPage) return;
-    await this.page.evaluate((doc) => {
+    const serialized = JSON.stringify(document);
+    await this.page.evaluate((docJson) => {
       localStorage.clear();
-      localStorage.setItem("document", JSON.stringify(doc));
-    }, document);
+      localStorage.setItem("document", docJson);
+    }, serialized);
     await this.page.reload();
     await this.applicationPage.waitForArtifactReady();
   }
