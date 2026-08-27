@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@alistigo/logger": "workspace:*",
-    "@alistigo/list-document-format": "workspace:*",
+    "@alistigo/list": "workspace:*",
     "@alistigo/list-domain": "workspace:*"
   }
 }

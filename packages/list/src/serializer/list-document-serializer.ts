@@ -15,7 +15,6 @@ import {
   type AlistigoEventRecord,
   type AlistigoListCreatedRecord,
   type AlistigoListElementAddedRecord,
-  type AlistigoListElementCheckedRecord,
   type AlistigoListElementDeletedRecord,
   type AlistigoListExportedRecord,
   type AlistigoListItem,

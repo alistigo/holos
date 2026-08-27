@@ -15,7 +15,7 @@
     "@alistigo/artifact-list": "workspace:*",
     "@alistigo/artifact-manager": "workspace:*",
     "@alistigo/artifact-claude-capabilities-demo": "workspace:*",
-    "@alistigo/list-document-format": "workspace:*",
+    "@alistigo/list": "workspace:*",
     "@alistigo/list-components-react": "workspace:*",
     "@alistigo/local-storage-plugin": "workspace:*",
     "prism-react-renderer": "^2.4.1",

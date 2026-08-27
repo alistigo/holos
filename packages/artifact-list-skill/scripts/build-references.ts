@@ -16,7 +16,7 @@ const REFERENCES_DIR = path.join(PKG_DIR, "references");
 
 const SOURCES = [
   {
-    from: path.join(PACKAGES_DIR, "list-document-format", "docs", "spec.md"),
+    from: path.join(PACKAGES_DIR, "list", "docs", "spec.md"),
     to: path.join(REFERENCES_DIR, "document-format.md"),
   },
   {

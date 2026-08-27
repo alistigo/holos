@@ -59,12 +59,12 @@ importers:
       '@alistigo/claude-artifact-api':
         specifier: workspace:*
         version: link:../../packages/claude-artifact-api
+      '@alistigo/list':
+        specifier: workspace:*
+        version: link:../../packages/list
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../../packages/list-components-react
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../../packages/list-document-format
       '@alistigo/local-storage-plugin':
         specifier: workspace:*
         version: link:../../packages/local-storage-plugin
@@ -139,9 +139,9 @@ importers:
 
   cli/document-validator:
     dependencies:
-      '@alistigo/list-document-format':
+      '@alistigo/list':
         specifier: workspace:*
-        version: link:../../packages/list-document-format
+        version: link:../../packages/list
       '@apidevtools/json-schema-ref-parser':
         specifier: ^16.0.1
         version: 16.0.1(@types/json-schema@7.0.15)
@@ -170,9 +170,9 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../../packages/artifact-plugin-api
-      '@alistigo/list-document-format':
+      '@alistigo/list':
         specifier: workspace:*
-        version: link:../../packages/list-document-format
+        version: link:../../packages/list
       '@alistigo/list-features':
         specifier: workspace:*
         version: link:../../packages/list-features
@@ -318,15 +318,15 @@ importers:
       '@alistigo/claude-artifact-api':
         specifier: workspace:*
         version: link:../claude-artifact-api
+      '@alistigo/list':
+        specifier: workspace:*
+        version: link:../list
       '@alistigo/list-components-react':
         specifier: workspace:*
         version: link:../list-components-react
       '@alistigo/list-document-editor':
         specifier: workspace:*
         version: link:../list-document-editor
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../list-document-format
       '@alistigo/list-domain':
         specifier: workspace:*
         version: link:../list-domain
@@ -382,9 +382,9 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
-      '@alistigo/list-document-format':
+      '@alistigo/list':
         specifier: workspace:*
-        version: link:../list-document-format
+        version: link:../list
       typeid-js:
         specifier: ^1.2.0
         version: 1.2.0
@@ -544,6 +544,8 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/document: {}
+
   packages/explorer-components-react:
     dependencies:
       '@alistigo/claude-artifact-api':
@@ -584,17 +586,35 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/list:
+    dependencies:
+      '@alistigo/document':
+        specifier: workspace:*
+        version: link:../document
+      '@alistigo/list-domain':
+        specifier: workspace:*
+        version: link:../list-domain
+      ajv:
+        specifier: ^8.17.0
+        version: 8.20.0
+      ajv-formats:
+        specifier: ^3.0.1
+        version: 3.0.1(ajv@8.20.0)
+      schema-dts:
+        specifier: ^2.0.0
+        version: 2.0.0(typescript@5.9.3)
+
   packages/list-components-react:
     dependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
+      '@alistigo/list':
+        specifier: workspace:*
+        version: link:../list
       '@alistigo/list-document-editor':
         specifier: workspace:*
         version: link:../list-document-editor
-      '@alistigo/list-document-format':
-        specifier: workspace:*
-        version: link:../list-document-format
       '@alistigo/list-domain':
         specifier: workspace:*
         version: link:../list-domain
@@ -680,30 +700,15 @@ importers:
 
   packages/list-document-editor:
     dependencies:
-      '@alistigo/list-document-format':
+      '@alistigo/list':
         specifier: workspace:*
-        version: link:../list-document-format
+        version: link:../list
       '@alistigo/list-domain':
         specifier: workspace:*
         version: link:../list-domain
       '@alistigo/logger':
         specifier: workspace:*
         version: link:../logger
-
-  packages/list-document-format:
-    dependencies:
-      '@alistigo/list-domain':
-        specifier: workspace:*
-        version: link:../list-domain
-      ajv:
-        specifier: ^8.17.0
-        version: 8.20.0
-      ajv-formats:
-        specifier: ^3.0.1
-        version: 3.0.1(ajv@8.20.0)
-      schema-dts:
-        specifier: ^2.0.0
-        version: 2.0.0(typescript@5.9.3)
 
   packages/list-domain:
     dependencies:

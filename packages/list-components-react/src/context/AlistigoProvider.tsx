@@ -10,7 +10,7 @@
  */
 
 import type { ListApplicationService } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoDocument } from "@alistigo/list";
 import { generateActorId, type ListId, parseListElementId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
 import {

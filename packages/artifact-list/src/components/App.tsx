@@ -10,7 +10,7 @@ import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { ListApplicationService } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoDocument } from "@alistigo/list";
 import { parseListId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
 import { type JSX, useEffect, useMemo, useState } from "react";

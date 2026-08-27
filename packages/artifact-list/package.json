@@ -42,7 +42,7 @@
     "@alistigo/artifact-core-components-react": "workspace:*",
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/list-document-editor": "workspace:*",
-    "@alistigo/list-document-format": "workspace:*",
+    "@alistigo/list": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
     "@alistigo/list-components-react": "workspace:*",
     "@alistigo/logger": "workspace:*",

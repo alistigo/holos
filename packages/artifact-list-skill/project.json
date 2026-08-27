@@ -7,7 +7,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/references"],
       "inputs": [
-        "{workspaceRoot}/packages/list-document-format/docs/spec.md",
+        "{workspaceRoot}/packages/list/docs/spec.md",
         "{workspaceRoot}/packages/artifact-config-list-format/README.md"
       ],
       "options": {

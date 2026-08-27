@@ -1,11 +1,10 @@
-import type { ItemListLeaf, ListItemLeaf } from "schema-dts";
-
 import type {
   AlistigoActorRecord,
   AlistigoContext,
   AlistigoPluginRecord,
   TypeIDString,
-} from "./alistigo-document.js";
+} from "@alistigo/document";
+import type { ItemListLeaf, ListItemLeaf } from "schema-dts";
 
 export interface AlistigoDocument extends ItemListLeaf {
   "@context": AlistigoContext;
