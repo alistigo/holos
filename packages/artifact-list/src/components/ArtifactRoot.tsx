@@ -13,7 +13,7 @@ import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import { artifactContext } from "@alistigo/claude-artifact-api";
 import { getSessionActorId } from "@alistigo/list-components-react";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoActorRecord, AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoActorRecord, AlistigoDocument } from "@alistigo/list";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";

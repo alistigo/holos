@@ -3,7 +3,7 @@ import type {
   AlistigoActorRecord,
   AlistigoEventRecord,
   AlistigoProjection,
-} from "@alistigo/list-document-format";
+} from "@alistigo/list";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { ListView } from "./ListView.js";

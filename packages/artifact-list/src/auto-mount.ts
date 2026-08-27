@@ -1,4 +1,4 @@
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoDocument } from "@alistigo/list";
 import { type MountOptions, mount } from "./mount.js";
 import { readAiInitialInput } from "./utils/ai-input-action.js";
 import { resolveAutoMountTarget } from "./utils/container.js";

@@ -1,4 +1,6 @@
-import alistigoDocumentSchema from "./schemas/alistigo-document.json" with { type: "json" };
+import alistigoDocumentSchema from "@alistigo/document/schemas/alistigo-document.json" with {
+  type: "json",
+};
 import documentSchema from "./schemas/document.json" with { type: "json" };
 
 export interface ValidationResult {

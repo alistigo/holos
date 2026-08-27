@@ -56,7 +56,7 @@
     "@alistigo/artifact-list",
     "@alistigo/artifact-storage-explorer",
     "@alistigo/artifact-claude-capabilities-demo",
-    "@alistigo/list-document-format",
+    "@alistigo/list",
     "@alistigo/artifact-config-list-format",
     "@alistigo/artifact-manager",
     "@alistigo/list-components-react",

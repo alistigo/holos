@@ -1,4 +1,4 @@
-import type { AlistigoProjection } from "@alistigo/list-document-format";
+import type { AlistigoProjection } from "@alistigo/list";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { AddElementInput } from "../AddElementInput/AddElementInput.js";

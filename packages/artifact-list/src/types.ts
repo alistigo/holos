@@ -1,4 +1,4 @@
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoDocument } from "@alistigo/list";
 
 export interface MountOptions {
   /** Pre-populated document to seed the list. Defaults to an empty list. */

@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { isValidListMarkdown, validateDocument } from "@alistigo/list-document-format";
+import { isValidListMarkdown, validateDocument } from "@alistigo/list";
 import Ajv from "ajv";
 import { Box, Text, useApp } from "ink";
 import type React from "react";

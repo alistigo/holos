@@ -1,4 +1,4 @@
-import type { AlistigoDocument } from "@alistigo/list-document-format";
+import type { AlistigoDocument } from "@alistigo/list";
 
 function makeDefaultDocument(): AlistigoDocument {
   return {

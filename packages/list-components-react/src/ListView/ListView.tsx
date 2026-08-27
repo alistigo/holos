@@ -4,7 +4,7 @@ import type {
   AlistigoEventRecord,
   AlistigoItemAttribution,
   AlistigoProjection,
-} from "@alistigo/list-document-format";
+} from "@alistigo/list";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { formatDistanceToNow } from "date-fns";

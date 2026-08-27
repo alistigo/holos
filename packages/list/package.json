@@ -1,5 +1,5 @@
 {
-  "name": "@alistigo/list-document-format",
+  "name": "@alistigo/list",
   "version": "0.3.1",
   "license": "MIT",
   "author": {
@@ -9,12 +9,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/list-document-format"
+    "directory": "packages/list"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/list-document-format#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/list#readme",
   "keywords": [
     "alistigo",
     "list",
@@ -25,7 +25,7 @@
   ],
   "private": false,
   "type": "module",
-  "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format. The source of truth for what an Alistigo document looks like.",
+  "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format.",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -44,6 +44,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@alistigo/document": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
     "ajv": "^8.17.0",
     "ajv-formats": "^3.0.1",
