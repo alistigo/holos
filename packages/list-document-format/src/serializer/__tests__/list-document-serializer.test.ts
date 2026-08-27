@@ -2,7 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { createListElementContent, generateActorId, List } from "@alistigo/list-domain";
 import type { AlistigoActorRecord, AlistigoListElementCheckedRecord } from "../../types.js";
 import { validateDocument } from "../../validate.js";
-import { ListDocumentSerializer, SCHEMA_VERSION } from "../list-document-serializer.js";
+import { ListDocumentSerializer } from "../list-document-serializer.js";
 
 const actorId = generateActorId();
 
@@ -12,8 +12,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     expect(doc["@type"]).toBe("ItemList");
-    expect(doc["alistigo:listId"]).toBe(list.id.toString());
-    expect(doc["alistigo:schemaVersion"]).toBe(SCHEMA_VERSION);
+    expect(doc.identifier).toBe(list.id.toString());
     expect(doc.itemListElement).toHaveLength(0);
     expect(doc["alistigo:eventLog"]).toHaveLength(1);
     expect(doc["alistigo:eventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");

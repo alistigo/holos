@@ -74,7 +74,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
         const eventRecord = createCheckListElementEvent(
           elementId,
           getSessionActorId(),
-          document["alistigo:listId"],
+          document.identifier,
           checked,
         );
         const updatedDoc: AlistigoDocument = {

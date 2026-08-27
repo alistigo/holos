@@ -49,6 +49,7 @@ export function ValidateSchemaOutput({
       // schema.org's Thing defines @context as string — conflicts with alistigo's @context object.
       // Register a permissive stub so alistigo schemas compile without enforcing schema.org constraints.
       ajv.addSchema({ $id: "schema:ItemList", type: "object" });
+      ajv.addSchema({ $id: "schema:ListItem", type: "object" });
       // Register sibling JSON schemas from the same directory so cross-file $refs resolve.
       const absSchemaPath = resolve(schemaPath);
       for (const sibling of readdirSync(dirname(absSchemaPath)).filter((f) =>

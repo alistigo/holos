@@ -1,5 +1,5 @@
 import type { AlistigoDocument, AlistigoEventRecord } from "@alistigo/list-document-format";
-import { ALISTIGO_CONTEXT, SCHEMA_VERSION } from "@alistigo/list-document-format";
+import { ALISTIGO_CONTEXT } from "@alistigo/list-document-format";
 
 // Fixed TypeID-style strings for deterministic test fixtures.
 // TypeID format: <prefix>_<26-char Crockford base32>
@@ -30,8 +30,7 @@ export function buildEmptyDocument(): AlistigoDocument {
   return {
     "@context": ALISTIGO_CONTEXT,
     "@type": "ItemList",
-    "alistigo:listId": FIXTURE_LIST_ID,
-    "alistigo:schemaVersion": SCHEMA_VERSION,
+    identifier: FIXTURE_LIST_ID,
     itemListElement: [],
     "alistigo:eventLog": [listCreated],
   };
@@ -60,8 +59,7 @@ export function buildPopulatedDocument(elementTexts: readonly string[]): Alistig
   return {
     "@context": ALISTIGO_CONTEXT,
     "@type": "ItemList",
-    "alistigo:listId": FIXTURE_LIST_ID,
-    "alistigo:schemaVersion": SCHEMA_VERSION,
+    identifier: FIXTURE_LIST_ID,
     itemListElement: elementTexts.map((text, index) => ({
       "@type": "ListItem" as const,
       "alistigo:listElementId": fixtureElementId(index),

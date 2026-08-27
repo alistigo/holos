@@ -21,8 +21,6 @@ import {
   type AlistigoListItem,
 } from "../types.js";
 
-export const SCHEMA_VERSION = "1.1.0" as const;
-
 interface SerializeOptions {
   actorsById?: Map<string, AlistigoActorRecord>;
 }
@@ -156,8 +154,7 @@ export const ListDocumentSerializer = {
     const doc: AlistigoDocument = {
       "@context": ALISTIGO_CONTEXT,
       "@type": "ItemList",
-      "alistigo:listId": list.id.toString(),
-      "alistigo:schemaVersion": SCHEMA_VERSION,
+      identifier: list.id.toString(),
       itemListElement: itemListElement,
       "alistigo:eventLog": [...existingLog, ...newRecords],
     };
@@ -197,7 +194,7 @@ export const ListDocumentSerializer = {
   },
 
   deserialize(doc: AlistigoDocument): List {
-    const listId = parseListId(doc["alistigo:listId"]);
+    const listId = parseListId(doc.identifier);
     const events = doc["alistigo:eventLog"]
       .map(recordToEvent)
       .filter((e): e is ListEvent => e !== null);

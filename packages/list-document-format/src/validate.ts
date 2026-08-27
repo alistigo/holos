@@ -11,10 +11,10 @@ export interface ValidationResult {
 // schema:ItemList $ref so it resolves without enforcing schema.org constraints.
 // The installed schema-org-json-schemas package is used for schema flattening
 // (via $RefParser.bundle) where AJV is not involved.
-const SCHEMA_ORG_STUB = {
-  $id: "schema:ItemList",
-  type: "object",
-} as const;
+const SCHEMA_ORG_STUBS = [
+  { $id: "schema:ItemList", type: "object" },
+  { $id: "schema:ListItem", type: "object" },
+] as const;
 
 /**
  * Validate that an unknown JSON value conforms to the Alistigo document schema.
@@ -30,7 +30,7 @@ export async function validateDocument(input: unknown): Promise<ValidationResult
 
   const ajv = new Ajv({ allErrors: true, strict: false });
   addFormats(ajv);
-  ajv.addSchema(SCHEMA_ORG_STUB);
+  for (const stub of SCHEMA_ORG_STUBS) ajv.addSchema(stub);
   ajv.addSchema(alistigoDocumentSchema);
 
   const validate = ajv.compile(documentSchema);

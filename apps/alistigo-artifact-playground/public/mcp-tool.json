@@ -55,20 +55,12 @@
     "properties": {
       "@context": { "type": "object" },
       "@type": { "type": "string", "const": "ItemList" },
-      "alistigo:listId": { "type": "string" },
-      "alistigo:schemaVersion": { "type": "string" },
+      "identifier": { "type": "string" },
       "name": { "type": "string" },
       "itemListElement": { "type": "array" },
-      "alistigo:listEventLog": { "type": "array" }
+      "alistigo:eventLog": { "type": "array" }
     },
-    "required": [
-      "@context",
-      "@type",
-      "alistigo:listId",
-      "alistigo:schemaVersion",
-      "itemListElement",
-      "alistigo:listEventLog"
-    ]
+    "required": ["@context", "@type", "identifier", "itemListElement", "alistigo:eventLog"]
   },
   "examples": [
     {
@@ -79,8 +71,7 @@
       "output": {
         "@context": { "@vocab": "https://schema.org/", "alistigo": "https://alistigo.ai/vocab/" },
         "@type": "ItemList",
-        "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
-        "alistigo:schemaVersion": "1.0.0",
+        "identifier": "lst_01h2xcejqtf2nbrexx3vqjhp41",
         "name": "Shopping List",
         "itemListElement": [
           {
@@ -96,9 +87,9 @@
             "name": "Bananas"
           }
         ],
-        "alistigo:listEventLog": [
+        "alistigo:eventLog": [
           {
-            "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp44",
+            "alistigo:eventId": "lev_01h2xcejqtf2nbrexx3vqjhp44",
             "alistigo:eventType": "ListCreated",
             "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
             "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
@@ -106,7 +97,7 @@
             "name": "Shopping List"
           },
           {
-            "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp46",
+            "alistigo:eventId": "lev_01h2xcejqtf2nbrexx3vqjhp46",
             "alistigo:eventType": "ListElementAdded",
             "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
             "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp42",
@@ -115,7 +106,7 @@
             "name": "Apples"
           },
           {
-            "alistigo:listEventId": "lev_01h2xcejqtf2nbrexx3vqjhp47",
+            "alistigo:eventId": "lev_01h2xcejqtf2nbrexx3vqjhp47",
             "alistigo:eventType": "ListElementAdded",
             "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
             "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp43",

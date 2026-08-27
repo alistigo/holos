@@ -1,4 +1,3 @@
-export type SemVer = `${number}.${number}.${number}`;
 export type TypeIDString = string;
 
 export const ALISTIGO_CONTEXT = {
@@ -11,8 +10,7 @@ export type AlistigoContext = typeof ALISTIGO_CONTEXT;
 export interface AlistigoDocument {
   "@context": AlistigoContext;
   "@type": "ItemList";
-  "alistigo:listId": TypeIDString;
-  "alistigo:schemaVersion": SemVer;
+  identifier: TypeIDString;
   name?: string;
   itemListElement: AlistigoListItem[];
   "alistigo:eventLog": AlistigoEventRecord[];

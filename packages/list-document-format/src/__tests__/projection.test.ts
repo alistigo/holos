@@ -6,14 +6,11 @@ import { ALISTIGO_CONTEXT, type AlistigoDocument } from "../types.js";
 // Helpers
 // ---------------------------------------------------------------------------
 
-const SCHEMA_VERSION = "1.1.0" as const;
-
 function makeDoc(overrides: Partial<AlistigoDocument> = {}): AlistigoDocument {
   return {
     "@context": ALISTIGO_CONTEXT,
     "@type": "ItemList",
-    "alistigo:listId": "list_01abc",
-    "alistigo:schemaVersion": SCHEMA_VERSION,
+    identifier: "list_01abc",
     itemListElement: [],
     "alistigo:eventLog": [],
     ...overrides,
