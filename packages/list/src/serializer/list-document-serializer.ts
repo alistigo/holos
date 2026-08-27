@@ -10,7 +10,7 @@ import {
 } from "@alistigo/list-domain";
 import {
   ALISTIGO_CONTEXT,
-  type AlistigoActorRecord,
+  type AlistigoAgentRecord,
   type AlistigoDocument,
   type AlistigoEventRecord,
   type AlistigoListCreatedRecord,
@@ -21,14 +21,14 @@ import {
 } from "../types.js";
 
 interface SerializeOptions {
-  actorsById?: Map<string, AlistigoActorRecord>;
+  actorsById?: Map<string, AlistigoAgentRecord>;
 }
 
 function eventToRecord(event: ListEvent): AlistigoEventRecord {
   const base = {
     "alistigo:eventId": event.listEventId.toString(),
     "alistigo:listId": event.listId.toString(),
-    "alistigo:actorId": event.actorId.toString(),
+    "alistigo:agentId": event.actorId.toString(),
     "alistigo:timestamp": event.timestamp,
   };
 
@@ -77,7 +77,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
   const base = {
     listEventId: parseListEventId(record["alistigo:eventId"]),
     listId: parseListId(record["alistigo:listId"]),
-    actorId: parseActorId(record["alistigo:actorId"]),
+    actorId: parseActorId(record["alistigo:agentId"]),
     timestamp: createTimestamp(record["alistigo:timestamp"]),
   };
 
@@ -162,26 +162,26 @@ export const ListDocumentSerializer = {
       doc.name = list.title;
     }
 
-    // Merge actors if actorsById option is provided
+    // Merge agents if actorsById option is provided
     if (options?.actorsById !== undefined) {
-      const existingActors: AlistigoActorRecord[] = previousDocument?.["alistigo:actors"] ?? [];
-      const mergedActors = [...existingActors];
+      const existingAgents: AlistigoAgentRecord[] = previousDocument?.["alistigo:agents"] ?? [];
+      const mergedAgents = [...existingAgents];
 
-      for (const [, actor] of options.actorsById) {
-        const existingIndex = mergedActors.findIndex(
-          (a) => a["alistigo:actorId"] === actor["alistigo:actorId"],
+      for (const [, agent] of options.actorsById) {
+        const existingIndex = mergedAgents.findIndex(
+          (a) => a["alistigo:agentId"] === agent["alistigo:agentId"],
         );
         if (existingIndex >= 0) {
-          mergedActors[existingIndex] = actor;
+          mergedAgents[existingIndex] = agent;
         } else {
-          mergedActors.push(actor);
+          mergedAgents.push(agent);
         }
       }
 
-      doc["alistigo:actors"] = mergedActors;
-    } else if (previousDocument?.["alistigo:actors"] !== undefined) {
-      // Preserve existing actors even when no update is provided
-      doc["alistigo:actors"] = previousDocument["alistigo:actors"];
+      doc["alistigo:agents"] = mergedAgents;
+    } else if (previousDocument?.["alistigo:agents"] !== undefined) {
+      // Preserve existing agents even when no update is provided
+      doc["alistigo:agents"] = previousDocument["alistigo:agents"];
     }
 
     // Preserve plugins from the previous document

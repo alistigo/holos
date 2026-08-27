@@ -92,7 +92,7 @@
             "alistigo:eventId": "lev_01h2xcejqtf2nbrexx3vqjhp44",
             "alistigo:eventType": "ListCreated",
             "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
-            "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
+            "alistigo:agentId": "act_01h2xcejqtf2nbrexx3vqjhp45",
             "alistigo:timestamp": "2026-01-01T00:00:00Z",
             "name": "Shopping List"
           },
@@ -101,7 +101,7 @@
             "alistigo:eventType": "ListElementAdded",
             "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
             "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp42",
-            "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
+            "alistigo:agentId": "act_01h2xcejqtf2nbrexx3vqjhp45",
             "alistigo:timestamp": "2026-01-01T00:00:00Z",
             "name": "Apples"
           },
@@ -110,7 +110,7 @@
             "alistigo:eventType": "ListElementAdded",
             "alistigo:listId": "lst_01h2xcejqtf2nbrexx3vqjhp41",
             "alistigo:listElementId": "lse_01h2xcejqtf2nbrexx3vqjhp43",
-            "alistigo:actorId": "act_01h2xcejqtf2nbrexx3vqjhp45",
+            "alistigo:agentId": "act_01h2xcejqtf2nbrexx3vqjhp45",
             "alistigo:timestamp": "2026-01-01T00:00:00Z",
             "name": "Bananas"
           }

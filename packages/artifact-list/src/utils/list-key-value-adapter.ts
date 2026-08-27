@@ -1,7 +1,7 @@
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
-import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoActorRecord, AlistigoDocument } from "@alistigo/list";
+import type { AlistigoAgentRecord, AlistigoDocument } from "@alistigo/list";
 import { ListDocumentSerializer } from "@alistigo/list";
+import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import type { List, ListId } from "@alistigo/list-domain";
 
 // An artifact holds at most one list document. Using a fixed key decouples
@@ -10,13 +10,13 @@ const DOCUMENT_KEY = "document";
 
 export class ListKeyValueAdapter implements AlistigoListStore {
   /** Mutable reference to the current actors map, updated by the host via setActorsById. */
-  private actorsById: Map<string, AlistigoActorRecord> | undefined;
+  private actorsById: Map<string, AlistigoAgentRecord> | undefined;
 
   constructor(private readonly store: KeyValueStore) {}
 
   /** Called by the host whenever the actor registry changes (e.g. on user:changed). */
   // fallow-ignore-next-line unused-class-member
-  setActorsById(actorsById: Map<string, AlistigoActorRecord>): void {
+  setActorsById(actorsById: Map<string, AlistigoAgentRecord>): void {
     this.actorsById = actorsById;
   }
 

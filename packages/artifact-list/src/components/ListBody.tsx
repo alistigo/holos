@@ -1,5 +1,7 @@
 import { createCheckListElementEvent } from "@alistigo/artifact-list-checkbox-plugin";
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
+import type { AlistigoDocument } from "@alistigo/list";
+import { buildProjection } from "@alistigo/list";
 import {
   AddElementInput,
   getSessionActorId,
@@ -9,8 +11,6 @@ import {
   useSetAlistigoDocument,
 } from "@alistigo/list-components-react";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
-import type { AlistigoDocument } from "@alistigo/list";
-import { buildProjection } from "@alistigo/list";
 import { createLogger } from "@alistigo/logger";
 import { Trans } from "@lingui/react/macro";
 import { type JSX, useCallback, useMemo } from "react";
@@ -112,8 +112,8 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
       {isDraft ? (
         <ListView
           projection={projection}
-          {...(document["alistigo:actors"] !== undefined
-            ? { actors: document["alistigo:actors"] }
+          {...(document["alistigo:agents"] !== undefined
+            ? { actors: document["alistigo:agents"] }
             : {})}
           plugins={domainPlugins}
           events={document["alistigo:eventLog"]}
@@ -122,8 +122,8 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
       ) : (
         <ListView
           projection={projection}
-          {...(document["alistigo:actors"] !== undefined
-            ? { actors: document["alistigo:actors"] }
+          {...(document["alistigo:agents"] !== undefined
+            ? { actors: document["alistigo:agents"] }
             : {})}
           plugins={domainPlugins}
           events={document["alistigo:eventLog"]}

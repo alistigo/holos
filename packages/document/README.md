@@ -8,24 +8,20 @@ Base types and JSON schema shared by all Alistigo artifact documents. This is th
 
 ## What's in this package
 
-| Export | Purpose |
-|--------|---------|
-| `TypeIDString` | Branded string type for TypeID-formatted identifiers |
-| `ALISTIGO_CONTEXT` | The JSON-LD `@context` object used in all Alistigo documents |
-| `AlistigoContext` | TypeScript type of `ALISTIGO_CONTEXT` |
-| `AlistigoActorRecord` | An actor (user identity) entry stored in a document |
-| `AlistigoPluginRecord` | A plugin registration entry stored in a document |
-| `./schemas/alistigo-document.json` | JSON Schema (Draft 2020-12) for the base document shape |
-
-## Install
-
-```sh
-pnpm add @alistigo/document
-```
-
-No runtime dependencies.
+- JSON schema of `alistigo:document`
+- Typescript types of `AlistigoDocument`
 
 ## Usage
+
+### JSON Schema
+
+The base JSON schema is available as a subpath export for tooling (AJV, `$RefParser`, etc.):
+
+```ts
+import alistigoDocumentSchema from "@alistigo/document/schemas/alistigo-document.json" with { type: "json" };
+```
+
+### Typescript types
 
 ```ts
 import {
@@ -34,12 +30,6 @@ import {
   type AlistigoPluginRecord,
   type TypeIDString,
 } from "@alistigo/document";
-```
-
-The base JSON schema is available as a subpath export for tooling (AJV, `$RefParser`, etc.):
-
-```ts
-import alistigoDocumentSchema from "@alistigo/document/schemas/alistigo-document.json" with { type: "json" };
 ```
 
 ## Related

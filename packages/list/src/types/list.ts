@@ -1,5 +1,5 @@
 import type {
-  AlistigoActorRecord,
+  AlistigoAgentRecord,
   AlistigoContext,
   AlistigoPluginRecord,
   TypeIDString,
@@ -12,7 +12,7 @@ export interface AlistigoDocument extends ItemListLeaf {
   name?: string;
   itemListElement: AlistigoListItem[];
   "alistigo:eventLog": AlistigoEventRecord[];
-  "alistigo:actors"?: AlistigoActorRecord[];
+  "alistigo:agents"?: AlistigoAgentRecord[];
   "alistigo:plugins"?: AlistigoPluginRecord[];
 }
 
@@ -27,7 +27,7 @@ interface AlistigoEventRecordBase {
   "alistigo:eventId": TypeIDString;
   "alistigo:eventType": string;
   "alistigo:listId": TypeIDString;
-  "alistigo:actorId": TypeIDString;
+  "alistigo:agentId": TypeIDString;
   "alistigo:timestamp": string;
 }
 

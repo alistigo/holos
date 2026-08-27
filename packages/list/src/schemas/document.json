@@ -56,7 +56,7 @@
         "alistigo:eventId",
         "alistigo:eventType",
         "alistigo:listId",
-        "alistigo:actorId",
+        "alistigo:agentId",
         "alistigo:timestamp"
       ],
       "properties": {
@@ -72,7 +72,7 @@
           ]
         },
         "alistigo:listId": { "type": "string" },
-        "alistigo:actorId": { "type": "string" },
+        "alistigo:agentId": { "type": "string" },
         "alistigo:timestamp": { "type": "string", "format": "date-time" },
         "alistigo:listElementId": { "type": "string" },
         "checked": { "type": "boolean" }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { createListElementContent, generateActorId, List } from "@alistigo/list-domain";
-import type { AlistigoActorRecord, AlistigoListElementCheckedRecord } from "../../types.js";
+import type { AlistigoAgentRecord, AlistigoListElementCheckedRecord } from "../../types.js";
 import { validateDocument } from "../../validate.js";
 import { ListDocumentSerializer } from "../list-document-serializer.js";
 
@@ -57,67 +57,73 @@ describe("ListDocumentSerializer.serialize", () => {
     expect(doc.name).toBeUndefined();
   });
 
-  it("writes alistigo:actors to the document when actorsById option is provided", () => {
+  it("writes alistigo:agents to the document when actorsById option is provided", () => {
     const { list } = List.create({ actorId });
-    const actor: AlistigoActorRecord = {
-      "alistigo:actorId": actorId.toString(),
+    const agent: AlistigoAgentRecord = {
+      "@type": "Person",
+      "alistigo:agentId": actorId.toString(),
       "alistigo:userId": "user-123",
-      "alistigo:pseudo": "alice",
-      "alistigo:avatar": "data:image/svg+xml;base64,PHN2Zy8+",
+      name: "alice",
+      image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
-    const actorsById = new Map([[actorId.toString(), actor]]);
+    const actorsById = new Map([[actorId.toString(), agent]]);
 
     const doc = ListDocumentSerializer.serialize(list, undefined, { actorsById });
 
-    expect(doc["alistigo:actors"]).toHaveLength(1);
-    expect(doc["alistigo:actors"]?.[0]?.["alistigo:pseudo"]).toBe("alice");
+    expect(doc["alistigo:agents"]).toHaveLength(1);
+    expect(doc["alistigo:agents"]?.[0]?.name).toBe("alice");
   });
 
-  it("upserts an existing actor by actorId when previousDocument already has actors", () => {
+  it("upserts an existing agent by agentId when previousDocument already has agents", () => {
     const { list } = List.create({ actorId });
-    const originalActor: AlistigoActorRecord = {
-      "alistigo:actorId": actorId.toString(),
+    const originalAgent: AlistigoAgentRecord = {
+      "@type": "Person",
+      "alistigo:agentId": actorId.toString(),
       "alistigo:userId": "user-123",
-      "alistigo:pseudo": "alice",
-      "alistigo:avatar": "data:image/svg+xml;base64,PHN2Zy8+",
+      name: "alice",
+      image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
     const firstDoc = ListDocumentSerializer.serialize(list, undefined, {
-      actorsById: new Map([[actorId.toString(), originalActor]]),
+      actorsById: new Map([[actorId.toString(), originalAgent]]),
     });
     list.markEventsAsCommitted();
 
-    const updatedActor: AlistigoActorRecord = {
-      ...originalActor,
-      "alistigo:pseudo": "alice-updated",
+    const updatedAgent: AlistigoAgentRecord = {
+      "@type": "Person",
+      "alistigo:agentId": actorId.toString(),
+      "alistigo:userId": "user-123",
+      name: "alice-updated",
+      image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
     const secondDoc = ListDocumentSerializer.serialize(list, firstDoc, {
-      actorsById: new Map([[actorId.toString(), updatedActor]]),
+      actorsById: new Map([[actorId.toString(), updatedAgent]]),
     });
 
-    // There should still be exactly one actor (upsert, not append)
-    expect(secondDoc["alistigo:actors"]).toHaveLength(1);
-    expect(secondDoc["alistigo:actors"]?.[0]?.["alistigo:pseudo"]).toBe("alice-updated");
+    // There should still be exactly one agent (upsert, not append)
+    expect(secondDoc["alistigo:agents"]).toHaveLength(1);
+    expect(secondDoc["alistigo:agents"]?.[0]?.name).toBe("alice-updated");
   });
 
-  it("preserves actors from previousDocument when no actorsById option is provided", () => {
+  it("preserves agents from previousDocument when no actorsById option is provided", () => {
     const { list } = List.create({ actorId });
-    const actor: AlistigoActorRecord = {
-      "alistigo:actorId": actorId.toString(),
+    const agent: AlistigoAgentRecord = {
+      "@type": "Person",
+      "alistigo:agentId": actorId.toString(),
       "alistigo:userId": "user-123",
-      "alistigo:pseudo": "alice",
-      "alistigo:avatar": "data:image/svg+xml;base64,PHN2Zy8+",
+      name: "alice",
+      image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
     const firstDoc = ListDocumentSerializer.serialize(list, undefined, {
-      actorsById: new Map([[actorId.toString(), actor]]),
+      actorsById: new Map([[actorId.toString(), agent]]),
     });
     list.markEventsAsCommitted();
 
     list.addListElement({ actorId, listId: list.id, content: createListElementContent("Item") });
     const secondDoc = ListDocumentSerializer.serialize(list, firstDoc);
 
-    // Actors should be preserved even without actorsById option
-    expect(secondDoc["alistigo:actors"]).toHaveLength(1);
-    expect(secondDoc["alistigo:actors"]?.[0]?.["alistigo:pseudo"]).toBe("alice");
+    // Agents should be preserved even without actorsById option
+    expect(secondDoc["alistigo:agents"]).toHaveLength(1);
+    expect(secondDoc["alistigo:agents"]?.[0]?.name).toBe("alice");
   });
 
   it("preserves alistigo:metadatas from previousDocument items through serialize", () => {
@@ -164,7 +170,7 @@ describe("ListDocumentSerializer.serialize", () => {
       "alistigo:eventId": "evt_checked_001",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
-      "alistigo:actorId": actorId.toString(),
+      "alistigo:agentId": actorId.toString(),
       "alistigo:timestamp": new Date().toISOString(),
       "alistigo:listElementId": addEvent.listElementId.toString(),
       checked: true,
@@ -227,7 +233,7 @@ describe("ListDocumentSerializer.deserialize", () => {
       "alistigo:eventId": "evt_checked_002",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
-      "alistigo:actorId": actorId.toString(),
+      "alistigo:agentId": actorId.toString(),
       "alistigo:timestamp": new Date().toISOString(),
       "alistigo:listElementId": addEvent.listElementId.toString(),
       checked: false,
@@ -289,16 +295,17 @@ describe("JSON schema validation", () => {
     expect(result.errors).toHaveLength(0);
   });
 
-  it("a document with alistigo:actors passes schema validation", async () => {
+  it("a document with alistigo:agents passes schema validation", async () => {
     const { list } = List.create({ actorId });
-    const actor: AlistigoActorRecord = {
-      "alistigo:actorId": actorId.toString(),
+    const agent: AlistigoAgentRecord = {
+      "@type": "Person",
+      "alistigo:agentId": actorId.toString(),
       "alistigo:userId": "user-123",
-      "alistigo:pseudo": "alice",
-      "alistigo:avatar": "data:image/svg+xml;base64,PHN2Zy8+",
+      name: "alice",
+      image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
     const doc = ListDocumentSerializer.serialize(list, undefined, {
-      actorsById: new Map([[actorId.toString(), actor]]),
+      actorsById: new Map([[actorId.toString(), agent]]),
     });
 
     const result = await validateDocument(doc);
@@ -319,7 +326,7 @@ describe("JSON schema validation", () => {
       "alistigo:eventId": "evt_checked_003",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
-      "alistigo:actorId": actorId.toString(),
+      "alistigo:agentId": actorId.toString(),
       "alistigo:timestamp": new Date().toISOString(),
       "alistigo:listElementId": addEvent.listElementId.toString(),
       checked: true,

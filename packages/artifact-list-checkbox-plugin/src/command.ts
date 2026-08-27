@@ -12,7 +12,7 @@ export function createCheckListElementEvent(
     "alistigo:eventType": "ListElementChecked",
     "alistigo:listId": listId,
     "alistigo:listElementId": elementId,
-    "alistigo:actorId": actorId,
+    "alistigo:agentId": actorId,
     "alistigo:timestamp": new Date().toISOString(),
     checked,
   };
