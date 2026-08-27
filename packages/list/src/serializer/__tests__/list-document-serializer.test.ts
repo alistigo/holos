@@ -61,7 +61,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const { list } = List.create({ actorId });
     const agent: AlistigoAgentRecord = {
       "@type": "Person",
-      "alistigo:agentId": actorId.toString(),
+      identifier: actorId.toString(),
       "alistigo:userId": "user-123",
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
@@ -78,7 +78,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const { list } = List.create({ actorId });
     const originalAgent: AlistigoAgentRecord = {
       "@type": "Person",
-      "alistigo:agentId": actorId.toString(),
+      identifier: actorId.toString(),
       "alistigo:userId": "user-123",
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
@@ -90,7 +90,7 @@ describe("ListDocumentSerializer.serialize", () => {
 
     const updatedAgent: AlistigoAgentRecord = {
       "@type": "Person",
-      "alistigo:agentId": actorId.toString(),
+      identifier: actorId.toString(),
       "alistigo:userId": "user-123",
       name: "alice-updated",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
@@ -108,7 +108,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const { list } = List.create({ actorId });
     const agent: AlistigoAgentRecord = {
       "@type": "Person",
-      "alistigo:agentId": actorId.toString(),
+      identifier: actorId.toString(),
       "alistigo:userId": "user-123",
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
@@ -299,7 +299,7 @@ describe("JSON schema validation", () => {
     const { list } = List.create({ actorId });
     const agent: AlistigoAgentRecord = {
       "@type": "Person",
-      "alistigo:agentId": actorId.toString(),
+      identifier: actorId.toString(),
       "alistigo:userId": "user-123",
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",

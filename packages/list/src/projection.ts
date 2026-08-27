@@ -38,7 +38,7 @@ export interface AlistigoProjection {
  * is used (first-write-wins). Returns an empty map when agents are absent.
  */
 export function buildAttributionMap(doc: AlistigoDocument): Map<string, AlistigoItemAttribution> {
-  const agentsById = new Map((doc["alistigo:agents"] ?? []).map((a) => [a["alistigo:agentId"], a]));
+  const agentsById = new Map((doc["alistigo:agents"] ?? []).map((a) => [a.identifier, a]));
   const result = new Map<string, AlistigoItemAttribution>();
 
   for (const event of doc["alistigo:eventLog"]) {
@@ -48,7 +48,7 @@ export function buildAttributionMap(doc: AlistigoDocument): Map<string, Alistigo
         const agent = agentsById.get(event["alistigo:agentId"]);
         if (agent) {
           result.set(elementId, {
-            actorId: agent["alistigo:agentId"],
+            actorId: agent.identifier,
             pseudo: agent.name,
             avatar: agent.image ?? "",
             addedAt: event["alistigo:timestamp"],
