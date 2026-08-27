@@ -45,9 +45,10 @@
     },
     "PersonAgent": {
       "type": "object",
-      "required": ["alistigo:agentId", "alistigo:userId", "name"],
+      "required": ["@type", "identifier", "alistigo:userId", "name"],
       "properties": {
-        "alistigo:agentId": { "type": "string" },
+        "@type": { "type": "string", "const": "Person" },
+        "identifier": { "type": "string" },
         "alistigo:userId": { "type": "string" },
         "name": { "type": "string" },
         "image": { "type": "string" }
@@ -55,9 +56,10 @@
     },
     "AIAgent": {
       "type": "object",
-      "required": ["alistigo:agentId", "name"],
+      "required": ["@type", "identifier", "name"],
       "properties": {
-        "alistigo:agentId": { "type": "string" },
+        "@type": { "type": "string", "const": "SoftwareApplication" },
+        "identifier": { "type": "string" },
         "name": { "type": "string" },
         "image": { "type": "string" }
       }

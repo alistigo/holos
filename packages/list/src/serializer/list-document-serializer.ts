@@ -168,9 +168,7 @@ export const ListDocumentSerializer = {
       const mergedAgents = [...existingAgents];
 
       for (const [, agent] of options.actorsById) {
-        const existingIndex = mergedAgents.findIndex(
-          (a) => a["alistigo:agentId"] === agent["alistigo:agentId"],
-        );
+        const existingIndex = mergedAgents.findIndex((a) => a.identifier === agent.identifier);
         if (existingIndex >= 0) {
           mergedAgents[existingIndex] = agent;
         } else {

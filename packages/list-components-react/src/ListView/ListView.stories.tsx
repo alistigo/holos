@@ -74,7 +74,7 @@ export const Populated: Story = {
 
 const agentAlice: AlistigoAgentRecord = {
   "@type": "Person",
-  "alistigo:agentId": "act_01alice000000000000000000",
+  identifier: "act_01alice000000000000000000",
   "alistigo:userId": "user_alice",
   name: "Alice",
   image:
@@ -83,7 +83,7 @@ const agentAlice: AlistigoAgentRecord = {
 
 const agentBob: AlistigoAgentRecord = {
   "@type": "Person",
-  "alistigo:agentId": "act_01bob0000000000000000000",
+  identifier: "act_01bob0000000000000000000",
   "alistigo:userId": "user_bob",
   name: "Bob",
   image:
@@ -102,7 +102,7 @@ const multiActorProjection: AlistigoProjection = {
       position: 1,
       item: { "@type": "Thing", "@id": "elem_01", name: "Buy bread" },
       "alistigo:attribution": {
-        actorId: agentAlice["alistigo:agentId"],
+        actorId: agentAlice.identifier,
         pseudo: agentAlice.name,
         avatar: agentAlice.image ?? "",
         addedAt: twoHoursAgo,
@@ -113,7 +113,7 @@ const multiActorProjection: AlistigoProjection = {
       position: 2,
       item: { "@type": "Thing", "@id": "elem_02", name: "Call mom" },
       "alistigo:attribution": {
-        actorId: agentBob["alistigo:agentId"],
+        actorId: agentBob.identifier,
         pseudo: agentBob.name,
         avatar: agentBob.image ?? "",
         addedAt: yesterdayDate,
@@ -124,7 +124,7 @@ const multiActorProjection: AlistigoProjection = {
       position: 3,
       item: { "@type": "Thing", "@id": "elem_03", name: "Email Alice" },
       "alistigo:attribution": {
-        actorId: agentAlice["alistigo:agentId"],
+        actorId: agentAlice.identifier,
         pseudo: agentAlice.name,
         avatar: agentAlice.image ?? "",
         addedAt: twoHoursAgo,

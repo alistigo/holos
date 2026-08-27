@@ -19,7 +19,7 @@ function makeDoc(overrides: Partial<AlistigoDocument> = {}): AlistigoDocument {
 
 const agent1 = {
   "@type": "Person" as const,
-  "alistigo:agentId": "actor_01alice",
+  identifier: "actor_01alice",
   "alistigo:userId": "user-alice",
   name: "Alice",
   image: "data:image/svg+xml;base64,ALICE",
@@ -27,7 +27,7 @@ const agent1 = {
 
 const agent2 = {
   "@type": "Person" as const,
-  "alistigo:agentId": "actor_02bob",
+  identifier: "actor_02bob",
   "alistigo:userId": "user-bob",
   name: "Bob",
   image: "data:image/svg+xml;base64,BOB",

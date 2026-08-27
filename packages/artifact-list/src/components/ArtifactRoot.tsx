@@ -98,7 +98,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
         runtime.bus.on("user:changed", ({ userId, pseudo, avatar }) => {
           const agent: AlistigoAgentRecord = {
             "@type": "Person",
-            "alistigo:agentId": sessionActorId,
+            identifier: sessionActorId,
             "alistigo:userId": userId,
             name: pseudo,
             ...(avatar !== undefined ? { image: avatar } : {}),

@@ -11,7 +11,7 @@ export type AlistigoContext = typeof ALISTIGO_CONTEXT;
 
 // Human agent — aligns with schema.org Person
 export interface AlistigoPersonAgent extends PersonLeaf {
-  "alistigo:agentId": TypeIDString;
+  identifier: TypeIDString;
   "alistigo:userId": string;
   name: string;
   image?: string;
@@ -19,7 +19,7 @@ export interface AlistigoPersonAgent extends PersonLeaf {
 
 // AI agent — aligns with schema.org SoftwareApplication
 export interface AlistigoAIAgent extends SoftwareApplicationLeaf {
-  "alistigo:agentId": TypeIDString;
+  identifier: TypeIDString;
   name: string;
   image?: string;
 }
