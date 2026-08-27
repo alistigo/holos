@@ -16,6 +16,7 @@ export interface ValidationResult {
 const SCHEMA_ORG_STUBS = [
   { $id: "schema:ItemList", type: "object" },
   { $id: "schema:ListItem", type: "object" },
+  { $id: "schema:Action", type: "object" },
 ] as const;
 
 /**

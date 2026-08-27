@@ -1,6 +1,6 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import type {
-  AlistigoActorRecord,
+  AlistigoAgentRecord,
   AlistigoEventRecord,
   AlistigoItemAttribution,
   AlistigoProjection,
@@ -18,7 +18,7 @@ export interface ListViewProps {
   projection: AlistigoProjection;
   /** When omitted the delete button is hidden — use for read-only contexts. */
   onDelete?: (elementId: string, position: number) => void;
-  actors?: AlistigoActorRecord[];
+  actors?: AlistigoAgentRecord[];
   plugins?: AlistigoPlugin[];
   events?: AlistigoEventRecord[];
   onPluginCommand?: (pluginName: string, commandName: string, payload: unknown) => void;

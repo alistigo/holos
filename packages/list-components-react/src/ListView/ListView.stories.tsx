@@ -1,9 +1,5 @@
 import checkboxPlugin from "@alistigo/artifact-list-checkbox-plugin";
-import type {
-  AlistigoActorRecord,
-  AlistigoEventRecord,
-  AlistigoProjection,
-} from "@alistigo/list";
+import type { AlistigoAgentRecord, AlistigoEventRecord, AlistigoProjection } from "@alistigo/list";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { ListView } from "./ListView.js";
@@ -73,22 +69,24 @@ export const Populated: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// Actor fixtures (new stories)
+// Agent fixtures (new stories)
 // ---------------------------------------------------------------------------
 
-const actorAlice: AlistigoActorRecord = {
-  "alistigo:actorId": "act_01alice000000000000000000",
+const agentAlice: AlistigoAgentRecord = {
+  "@type": "Person",
+  "alistigo:agentId": "act_01alice000000000000000000",
   "alistigo:userId": "user_alice",
-  "alistigo:pseudo": "Alice",
-  "alistigo:avatar":
+  name: "Alice",
+  image:
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiM0MzY0ZjciLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTQiPkE8L3RleHQ+PC9zdmc+",
 };
 
-const actorBob: AlistigoActorRecord = {
-  "alistigo:actorId": "act_01bob0000000000000000000",
+const agentBob: AlistigoAgentRecord = {
+  "@type": "Person",
+  "alistigo:agentId": "act_01bob0000000000000000000",
   "alistigo:userId": "user_bob",
-  "alistigo:pseudo": "Bob",
-  "alistigo:avatar":
+  name: "Bob",
+  image:
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiNlNzRjM2MiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTQiPkI8L3RleHQ+PC9zdmc+",
 };
 
@@ -104,9 +102,9 @@ const multiActorProjection: AlistigoProjection = {
       position: 1,
       item: { "@type": "Thing", "@id": "elem_01", name: "Buy bread" },
       "alistigo:attribution": {
-        actorId: actorAlice["alistigo:actorId"],
-        pseudo: actorAlice["alistigo:pseudo"],
-        avatar: actorAlice["alistigo:avatar"],
+        actorId: agentAlice["alistigo:agentId"],
+        pseudo: agentAlice.name,
+        avatar: agentAlice.image ?? "",
         addedAt: twoHoursAgo,
       },
     },
@@ -115,9 +113,9 @@ const multiActorProjection: AlistigoProjection = {
       position: 2,
       item: { "@type": "Thing", "@id": "elem_02", name: "Call mom" },
       "alistigo:attribution": {
-        actorId: actorBob["alistigo:actorId"],
-        pseudo: actorBob["alistigo:pseudo"],
-        avatar: actorBob["alistigo:avatar"],
+        actorId: agentBob["alistigo:agentId"],
+        pseudo: agentBob.name,
+        avatar: agentBob.image ?? "",
         addedAt: yesterdayDate,
       },
     },
@@ -126,9 +124,9 @@ const multiActorProjection: AlistigoProjection = {
       position: 3,
       item: { "@type": "Thing", "@id": "elem_03", name: "Email Alice" },
       "alistigo:attribution": {
-        actorId: actorAlice["alistigo:actorId"],
-        pseudo: actorAlice["alistigo:pseudo"],
-        avatar: actorAlice["alistigo:avatar"],
+        actorId: agentAlice["alistigo:agentId"],
+        pseudo: agentAlice.name,
+        avatar: agentAlice.image ?? "",
         addedAt: twoHoursAgo,
       },
     },
@@ -146,7 +144,7 @@ const elem02CheckedEvent: AlistigoEventRecord = {
   "alistigo:eventType": "ListElementChecked",
   "alistigo:listId": "lst_01testlist000000000000000",
   "alistigo:listElementId": "elem_02",
-  "alistigo:actorId": "act_01alice000000000000000000",
+  "alistigo:agentId": "act_01alice000000000000000000",
   "alistigo:timestamp": twoHoursAgo,
   checked: true,
 } as AlistigoEventRecord;
@@ -158,7 +156,7 @@ const elem02CheckedEvent: AlistigoEventRecord = {
 export const MultiActorSharedView: Story = {
   args: {
     projection: multiActorProjection,
-    actors: [actorAlice, actorBob],
+    actors: [agentAlice, agentBob],
     onDelete: fn(),
   },
 };
@@ -166,7 +164,7 @@ export const MultiActorSharedView: Story = {
 export const SingleActorNoAttribution: Story = {
   args: {
     projection: multiActorProjection, // has attribution data on elements
-    actors: [actorAlice], // only 1 actor → attribution is suppressed
+    actors: [agentAlice], // only 1 agent → attribution is suppressed
     onDelete: fn(),
   },
 };
@@ -194,7 +192,7 @@ export const WithCheckboxPluginChecked: Story = {
 export const MultiActorWithCheckbox: Story = {
   args: {
     projection: multiActorProjection,
-    actors: [actorAlice, actorBob],
+    actors: [agentAlice, agentBob],
     plugins: [checkboxPlugin],
     events: [elem02CheckedEvent],
     onDelete: fn(),

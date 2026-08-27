@@ -40,5 +40,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "schema-dts": "^2.0.0"
   }
 }

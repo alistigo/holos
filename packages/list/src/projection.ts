@@ -33,24 +33,24 @@ export interface AlistigoProjection {
 // ---------------------------------------------------------------------------
 
 /**
- * Builds a per-element attribution map from the actor records and event log
+ * Builds a per-element attribution map from the agent records and event log
  * in the document. Only the first `ListElementAdded` event for each element
- * is used (first-write-wins). Returns an empty map when actors are absent.
+ * is used (first-write-wins). Returns an empty map when agents are absent.
  */
 export function buildAttributionMap(doc: AlistigoDocument): Map<string, AlistigoItemAttribution> {
-  const actorsById = new Map((doc["alistigo:actors"] ?? []).map((a) => [a["alistigo:actorId"], a]));
+  const agentsById = new Map((doc["alistigo:agents"] ?? []).map((a) => [a["alistigo:agentId"], a]));
   const result = new Map<string, AlistigoItemAttribution>();
 
   for (const event of doc["alistigo:eventLog"]) {
     if (event["alistigo:eventType"] === "ListElementAdded") {
       const elementId = event["alistigo:listElementId"];
       if (!result.has(elementId)) {
-        const actor = actorsById.get(event["alistigo:actorId"]);
-        if (actor) {
+        const agent = agentsById.get(event["alistigo:agentId"]);
+        if (agent) {
           result.set(elementId, {
-            actorId: actor["alistigo:actorId"],
-            pseudo: actor["alistigo:pseudo"],
-            avatar: actor["alistigo:avatar"],
+            actorId: agent["alistigo:agentId"],
+            pseudo: agent.name,
+            avatar: agent.image ?? "",
             addedAt: event["alistigo:timestamp"],
           });
         }
@@ -65,13 +65,13 @@ export function buildAttributionMap(doc: AlistigoDocument): Map<string, Alistigo
  * Derives a view-model projection from an `AlistigoDocument`.
  *
  * Attribution (`"alistigo:attribution"`) is populated on each item only when
- * the document contains **2 or more** actor records — a list with a single
- * actor has no meaningful attribution context to display.
+ * the document contains **2 or more** agent records — a list with a single
+ * agent has no meaningful attribution context to display.
  */
 export function buildProjection(doc: AlistigoDocument): AlistigoProjection {
-  const actors = doc["alistigo:actors"] ?? [];
+  const agents = doc["alistigo:agents"] ?? [];
   const attributionMap =
-    actors.length >= 2 ? buildAttributionMap(doc) : new Map<string, AlistigoItemAttribution>();
+    agents.length >= 2 ? buildAttributionMap(doc) : new Map<string, AlistigoItemAttribution>();
 
   const itemListElement: AlistigoProjectionItem[] = doc.itemListElement.map((item, index) => {
     const elementId = item["alistigo:listElementId"];

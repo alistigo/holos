@@ -23,7 +23,7 @@ export function buildEmptyDocument(): AlistigoDocument {
     "alistigo:eventId": fixtureEventId(1),
     "alistigo:eventType": "ListCreated",
     "alistigo:listId": FIXTURE_LIST_ID,
-    "alistigo:actorId": FIXTURE_ACTOR_ID,
+    "alistigo:agentId": FIXTURE_ACTOR_ID,
     "alistigo:timestamp": FIXTURE_TIMESTAMP,
   };
 
@@ -42,7 +42,7 @@ export function buildPopulatedDocument(elementTexts: readonly string[]): Alistig
       "alistigo:eventId": fixtureEventId(1),
       "alistigo:eventType": "ListCreated",
       "alistigo:listId": FIXTURE_LIST_ID,
-      "alistigo:actorId": FIXTURE_ACTOR_ID,
+      "alistigo:agentId": FIXTURE_ACTOR_ID,
       "alistigo:timestamp": FIXTURE_TIMESTAMP,
     },
     ...elementTexts.map((text, index) => ({
@@ -50,7 +50,7 @@ export function buildPopulatedDocument(elementTexts: readonly string[]): Alistig
       "alistigo:eventType": "ListElementAdded" as const,
       "alistigo:listId": FIXTURE_LIST_ID,
       "alistigo:listElementId": fixtureElementId(index),
-      "alistigo:actorId": FIXTURE_ACTOR_ID,
+      "alistigo:agentId": FIXTURE_ACTOR_ID,
       "alistigo:timestamp": FIXTURE_TIMESTAMP,
       name: text,
     })),

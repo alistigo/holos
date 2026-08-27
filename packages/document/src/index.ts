@@ -1,3 +1,5 @@
+import type { PersonLeaf, SoftwareApplicationLeaf } from "schema-dts";
+
 export type TypeIDString = string;
 
 export const ALISTIGO_CONTEXT = {
@@ -7,12 +9,22 @@ export const ALISTIGO_CONTEXT = {
 
 export type AlistigoContext = typeof ALISTIGO_CONTEXT;
 
-export interface AlistigoActorRecord {
-  "alistigo:actorId": TypeIDString;
+// Human agent — aligns with schema.org Person
+export interface AlistigoPersonAgent extends PersonLeaf {
+  "alistigo:agentId": TypeIDString;
   "alistigo:userId": string;
-  "alistigo:pseudo": string;
-  "alistigo:avatar": string; // base64 SVG data URL
+  name: string;
+  image?: string;
 }
+
+// AI agent — aligns with schema.org SoftwareApplication
+export interface AlistigoAIAgent extends SoftwareApplicationLeaf {
+  "alistigo:agentId": TypeIDString;
+  name: string;
+  image?: string;
+}
+
+export type AlistigoAgentRecord = AlistigoPersonAgent | AlistigoAIAgent;
 
 export interface AlistigoPluginRecord {
   name: string;
