@@ -45,11 +45,10 @@
     },
     "PersonAgent": {
       "type": "object",
-      "required": ["@type", "identifier", "alistigo:userId", "name"],
+      "required": ["@type", "identifier", "name"],
       "properties": {
         "@type": { "type": "string", "const": "Person" },
         "identifier": { "type": "string" },
-        "alistigo:userId": { "type": "string" },
         "name": { "type": "string" },
         "image": { "type": "string" }
       }
