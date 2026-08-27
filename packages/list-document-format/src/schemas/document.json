@@ -8,14 +8,7 @@
     { "$ref": "schema:ItemList" },
     { "$ref": "https://schemas.alistigo.com/v1/documents/alistigo-document.json" }
   ],
-  "required": [
-    "@context",
-    "@type",
-    "alistigo:listId",
-    "alistigo:schemaVersion",
-    "itemListElement",
-    "alistigo:eventLog"
-  ],
+  "required": ["@context", "@type", "identifier", "itemListElement"],
   "properties": {
     "@context": {
       "type": "object",
@@ -26,8 +19,7 @@
       }
     },
     "@type": { "type": "string", "const": "ItemList" },
-    "alistigo:listId": { "type": "string", "pattern": "^lst_" },
-    "alistigo:schemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "identifier": { "type": "string", "pattern": "^lst_" },
     "name": { "type": "string" },
     "itemListElement": {
       "type": "array",
@@ -40,18 +32,23 @@
   },
   "$defs": {
     "ListItem": {
-      "type": "object",
-      "required": ["@type", "alistigo:listElementId", "position", "name"],
-      "properties": {
-        "@type": { "type": "string", "const": "ListItem" },
-        "alistigo:listElementId": { "type": "string", "pattern": "^lse_" },
-        "position": { "type": "integer", "minimum": 1 },
-        "name": { "type": "string", "minLength": 1 },
-        "alistigo:metadatas": {
+      "allOf": [
+        { "$ref": "schema:ListItem" },
+        {
           "type": "object",
-          "additionalProperties": { "type": "object" }
+          "required": ["@type", "alistigo:listElementId", "position", "name"],
+          "properties": {
+            "@type": { "type": "string", "const": "ListItem" },
+            "alistigo:listElementId": { "type": "string", "pattern": "^lse_" },
+            "position": { "type": "integer", "minimum": 1 },
+            "name": { "type": "string", "minLength": 1 },
+            "alistigo:metadatas": {
+              "type": "object",
+              "additionalProperties": { "type": "object" }
+            }
+          }
         }
-      }
+      ]
     },
     "ListEventRecord": {
       "type": "object",

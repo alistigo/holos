@@ -11,7 +11,7 @@ export {
   buildAttributionMap,
   buildProjection,
 } from "./projection.js";
-export { ListDocumentSerializer, SCHEMA_VERSION } from "./serializer/list-document-serializer.js";
+export { ListDocumentSerializer } from "./serializer/list-document-serializer.js";
 export * from "./types.js";
 export { validateDocument } from "./validate.js";
 

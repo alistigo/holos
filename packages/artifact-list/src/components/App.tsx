@@ -97,7 +97,7 @@ function App({
     return createLazyInitService(base, repository, initialDocument);
   }, [repository, initialDocument]);
 
-  const listId = useMemo(() => parseListId(initialDocument["alistigo:listId"]), [initialDocument]);
+  const listId = useMemo(() => parseListId(initialDocument.identifier), [initialDocument]);
 
   const [infoOpen, setInfoOpen] = useState(false);
   const [bootDoc, setBootDoc] = useState<AlistigoDocument | undefined>(undefined);

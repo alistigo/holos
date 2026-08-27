@@ -168,7 +168,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
               }}
             >
               <App
-                key={doc["alistigo:listId"]}
+                key={doc.identifier}
                 initialDocument={doc}
                 repository={store}
                 plugins={plugins}

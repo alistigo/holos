@@ -5,8 +5,7 @@
     "alistigo": "https://alistigo.ai/vocab/"
   },
   "@type": "ItemList",
-  "alistigo:listId": "lst_example01",
-  "alistigo:schemaVersion": "1.2.0",
+  "identifier": "lst_example01",
   "name": "Groceries",
   "itemListElement": [
     {
