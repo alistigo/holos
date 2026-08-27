@@ -46,6 +46,7 @@
   "dependencies": {
     "@alistigo/list-domain": "workspace:*",
     "ajv": "^8.17.0",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "schema-dts": "^2.0.0"
   }
 }

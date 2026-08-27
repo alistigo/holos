@@ -1,3 +1,5 @@
+import type { ItemListLeaf, ListItemLeaf } from "schema-dts";
+
 export type TypeIDString = string;
 
 export const ALISTIGO_CONTEXT = {
@@ -7,9 +9,8 @@ export const ALISTIGO_CONTEXT = {
 
 export type AlistigoContext = typeof ALISTIGO_CONTEXT;
 
-export interface AlistigoDocument {
+export interface AlistigoDocument extends ItemListLeaf {
   "@context": AlistigoContext;
-  "@type": "ItemList";
   identifier: TypeIDString;
   name?: string;
   itemListElement: AlistigoListItem[];
@@ -18,8 +19,7 @@ export interface AlistigoDocument {
   "alistigo:plugins"?: AlistigoPluginRecord[];
 }
 
-export interface AlistigoListItem {
-  "@type": "ListItem";
+export interface AlistigoListItem extends ListItemLeaf {
   "alistigo:listElementId": TypeIDString;
   position: number;
   name: string;
