@@ -50,7 +50,7 @@ export function buildAttributionMap(doc: AlistigoDocument): Map<string, Alistigo
           result.set(elementId, {
             actorId: agent.identifier,
             pseudo: agent.name,
-            avatar: agent.image ?? "",
+            avatar: typeof agent.image === "string" ? agent.image : "",
             addedAt: event.startTime,
           });
         }
