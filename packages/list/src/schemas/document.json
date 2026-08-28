@@ -52,13 +52,7 @@
     },
     "ListEventRecord": {
       "type": "object",
-      "required": [
-        "identifier",
-        "alistigo:eventType",
-        "alistigo:listId",
-        "agent",
-        "startTime"
-      ],
+      "required": ["identifier", "alistigo:eventType", "alistigo:listId", "agent", "startTime"],
       "properties": {
         "identifier": { "type": "string" },
         "alistigo:eventType": {

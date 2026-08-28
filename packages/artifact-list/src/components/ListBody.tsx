@@ -58,6 +58,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
   const pluginRecords = useMemo(
     () =>
       plugins.map((p) => ({
+        identifier: p.name,
         name: p.name,
         ...(p.version !== undefined ? { version: p.version } : {}),
       })),
