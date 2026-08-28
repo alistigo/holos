@@ -1,7 +1,5 @@
 import type { PersonLeaf, SoftwareApplicationLeaf } from "schema-dts";
 
-export type TypeIDString = string;
-
 export const ALISTIGO_CONTEXT = {
   "@vocab": "https://schema.org/",
   alistigo: "https://alistigo.ai/vocab/",
@@ -9,24 +7,16 @@ export const ALISTIGO_CONTEXT = {
 
 export type AlistigoContext = typeof ALISTIGO_CONTEXT;
 
-// Human agent — aligns with schema.org Person
-export interface AlistigoPersonAgent extends PersonLeaf {
+export type IdentityThing = {
   identifier: string;
   name: string;
-  image?: string;
-}
+};
 
-// AI agent — aligns with schema.org SoftwareApplication
-export interface AlistigoAIAgent extends SoftwareApplicationLeaf {
-  identifier: TypeIDString;
-  name: string;
-  image?: string;
-}
+export type Person = PersonLeaf & IdentityThing;
+export type SoftwareApplication = SoftwareApplicationLeaf & IdentityThing;
+export type Agent = Person | SoftwareApplication;
 
-export type AlistigoAgentRecord = AlistigoPersonAgent | AlistigoAIAgent;
-
-export interface AlistigoPluginRecord {
-  name: string;
+export interface Plugin extends IdentityThing {
   version?: string;
   config?: Record<string, unknown>;
 }
