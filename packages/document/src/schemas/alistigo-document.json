@@ -9,53 +9,55 @@
       "$ref": "schema:Thing"
     }
   ],
-  "required": [
-    "alistigo:eventLog"
-  ],
+  "required": ["alistigo:eventLog"],
   "properties": {
     "alistigo:eventLog": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/EventRecord"
+        "$ref": "#/$defs/Event"
       }
     },
     "alistigo:agents": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/AgentRecord"
+        "$ref": "#/$defs/Agent"
       }
     },
     "alistigo:plugins": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/PluginRecord"
+        "$ref": "#/$defs/Plugin"
       }
     }
   },
   "$defs": {
-    "EventRecord": {
+    "Event": {
       "allOf": [
         {
           "$ref": "schema:Action"
         },
         {
           "type": "object",
-          "required": [
-            "identifier",
-            "alistigo:eventType",
-            "agent",
-            "startTime"
-          ],
+          "required": ["identifier", "alistigo:eventType", "agent", "startTime"],
           "properties": {
-            "identifier": { "type": "string" },
-            "alistigo:eventType": { "type": "string" },
-            "agent": { "type": "string" },
-            "startTime": { "type": "string", "format": "date-time" }
+            "identifier": {
+              "type": "string"
+            },
+            "alistigo:eventType": {
+              "type": "string"
+            },
+            "agent": {
+              "type": "string"
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
         }
       ]
     },
-    "AgentRecord": {
+    "Agent": {
       "oneOf": [
         {
           "$ref": "#/$defs/Person"
@@ -67,11 +69,7 @@
     },
     "Person": {
       "type": "object",
-      "required": [
-        "@type",
-        "identifier",
-        "name"
-      ],
+      "required": ["@type", "identifier", "name"],
       "allOf": [
         {
           "$ref": "schema:Person"
@@ -80,22 +78,16 @@
     },
     "SoftwareApplication": {
       "type": "object",
-      "required": [
-        "@type",
-        "identifier",
-        "name"
-      ],
+      "required": ["@type", "identifier", "name"],
       "allOf": [
         {
           "$ref": "schema:SoftwareApplication"
         }
       ]
     },
-    "PluginRecord": {
+    "Plugin": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "properties": {
         "name": {
           "type": "string"
