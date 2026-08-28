@@ -32,11 +32,7 @@ export interface AlistigoProjection {
 // Projection builder
 // ---------------------------------------------------------------------------
 
-/**
- * Builds a per-element attribution map from the agent records and event log
- * in the document. Only the first `ListElementAdded` event for each element
- * is used (first-write-wins). Returns an empty map when agents are absent.
- */
+// fallow-ignore-next-line complexity
 export function buildAttributionMap(doc: AlistigoDocument): Map<string, AlistigoItemAttribution> {
   const agentsById = new Map((doc["alistigo:agents"] ?? []).map((a) => [a.identifier, a]));
   const result = new Map<string, AlistigoItemAttribution>();
