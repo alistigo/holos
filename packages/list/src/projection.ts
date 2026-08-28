@@ -45,13 +45,13 @@ export function buildAttributionMap(doc: AlistigoDocument): Map<string, Alistigo
     if (event["alistigo:eventType"] === "ListElementAdded") {
       const elementId = event["alistigo:listElementId"];
       if (!result.has(elementId)) {
-        const agent = agentsById.get(event["alistigo:agentId"]);
+        const agent = agentsById.get(event.agent);
         if (agent) {
           result.set(elementId, {
             actorId: agent.identifier,
             pseudo: agent.name,
             avatar: agent.image ?? "",
-            addedAt: event["alistigo:timestamp"],
+            addedAt: event.startTime,
           });
         }
       }

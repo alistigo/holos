@@ -4,72 +4,108 @@
   "title": "Alistigo Document",
   "description": "Common properties shared by all Alistigo artifact documents",
   "type": "object",
-  "required": ["alistigo:eventLog"],
+  "allOf": [
+    {
+      "$ref": "schema:Thing"
+    }
+  ],
+  "required": [
+    "alistigo:eventLog"
+  ],
   "properties": {
     "alistigo:eventLog": {
       "type": "array",
-      "items": { "$ref": "#/$defs/EventRecord" }
+      "items": {
+        "$ref": "#/$defs/EventRecord"
+      }
     },
     "alistigo:agents": {
       "type": "array",
-      "items": { "$ref": "#/$defs/AgentRecord" }
+      "items": {
+        "$ref": "#/$defs/AgentRecord"
+      }
     },
     "alistigo:plugins": {
       "type": "array",
-      "items": { "$ref": "#/$defs/PluginRecord" }
+      "items": {
+        "$ref": "#/$defs/PluginRecord"
+      }
     }
   },
   "$defs": {
     "EventRecord": {
       "allOf": [
-        { "$ref": "schema:Action" },
+        {
+          "$ref": "schema:Action"
+        },
         {
           "type": "object",
           "required": [
-            "alistigo:eventId",
+            "identifier",
             "alistigo:eventType",
-            "alistigo:agentId",
-            "alistigo:timestamp"
+            "agent",
+            "startTime"
           ],
           "properties": {
-            "alistigo:eventId": { "type": "string" },
+            "identifier": { "type": "string" },
             "alistigo:eventType": { "type": "string" },
-            "alistigo:agentId": { "type": "string" },
-            "alistigo:timestamp": { "type": "string", "format": "date-time" }
+            "agent": { "type": "string" },
+            "startTime": { "type": "string", "format": "date-time" }
           }
         }
       ]
     },
     "AgentRecord": {
-      "oneOf": [{ "$ref": "#/$defs/PersonAgent" }, { "$ref": "#/$defs/AIAgent" }]
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Person"
+        },
+        {
+          "$ref": "#/$defs/SoftwareApplication"
+        }
+      ]
     },
-    "PersonAgent": {
+    "Person": {
       "type": "object",
-      "required": ["@type", "identifier", "name"],
-      "properties": {
-        "@type": { "type": "string", "const": "Person" },
-        "identifier": { "type": "string" },
-        "name": { "type": "string" },
-        "image": { "type": "string" }
-      }
+      "required": [
+        "@type",
+        "identifier",
+        "name"
+      ],
+      "allOf": [
+        {
+          "$ref": "schema:Person"
+        }
+      ]
     },
-    "AIAgent": {
+    "SoftwareApplication": {
       "type": "object",
-      "required": ["@type", "identifier", "name"],
-      "properties": {
-        "@type": { "type": "string", "const": "SoftwareApplication" },
-        "identifier": { "type": "string" },
-        "name": { "type": "string" },
-        "image": { "type": "string" }
-      }
+      "required": [
+        "@type",
+        "identifier",
+        "name"
+      ],
+      "allOf": [
+        {
+          "$ref": "schema:SoftwareApplication"
+        }
+      ]
     },
     "PluginRecord": {
       "type": "object",
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "properties": {
-        "name": { "type": "string" },
-        "version": { "type": "string" },
-        "config": { "type": "object" }
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        }
       }
     }
   }

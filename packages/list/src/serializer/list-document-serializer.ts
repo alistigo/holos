@@ -26,10 +26,10 @@ interface SerializeOptions {
 
 function eventToRecord(event: ListEvent): AlistigoEventRecord {
   const base = {
-    "alistigo:eventId": event.listEventId.toString(),
+    identifier: event.listEventId.toString(),
     "alistigo:listId": event.listId.toString(),
-    "alistigo:agentId": event.actorId.toString(),
-    "alistigo:timestamp": event.timestamp,
+    agent: event.actorId.toString(),
+    startTime: event.timestamp,
   };
 
   switch (event.type) {
@@ -75,10 +75,10 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
   }
 
   const base = {
-    listEventId: parseListEventId(record["alistigo:eventId"]),
+    listEventId: parseListEventId(record.identifier),
     listId: parseListId(record["alistigo:listId"]),
-    actorId: parseActorId(record["alistigo:agentId"]),
-    timestamp: createTimestamp(record["alistigo:timestamp"]),
+    actorId: parseActorId(record.agent),
+    timestamp: createTimestamp(record.startTime),
   };
 
   switch (record["alistigo:eventType"]) {

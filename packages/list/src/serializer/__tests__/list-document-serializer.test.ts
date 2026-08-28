@@ -163,11 +163,11 @@ describe("ListDocumentSerializer.serialize", () => {
 
     // Inject a ListElementChecked record into the previous document's log
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      "alistigo:eventId": "evt_checked_001",
+      identifier: "evt_checked_001",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
-      "alistigo:agentId": actorId.toString(),
-      "alistigo:timestamp": new Date().toISOString(),
+      agent: actorId.toString(),
+      startTime: new Date().toISOString(),
       "alistigo:listElementId": addEvent.listElementId.toString(),
       checked: true,
     };
@@ -226,11 +226,11 @@ describe("ListDocumentSerializer.deserialize", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      "alistigo:eventId": "evt_checked_002",
+      identifier: "evt_checked_002",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
-      "alistigo:agentId": actorId.toString(),
-      "alistigo:timestamp": new Date().toISOString(),
+      agent: actorId.toString(),
+      startTime: new Date().toISOString(),
       "alistigo:listElementId": addEvent.listElementId.toString(),
       checked: false,
     };
@@ -318,11 +318,11 @@ describe("JSON schema validation", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      "alistigo:eventId": "evt_checked_003",
+      identifier: "evt_checked_003",
       "alistigo:eventType": "ListElementChecked",
       "alistigo:listId": list.id.toString(),
-      "alistigo:agentId": actorId.toString(),
-      "alistigo:timestamp": new Date().toISOString(),
+      agent: actorId.toString(),
+      startTime: new Date().toISOString(),
       "alistigo:listElementId": addEvent.listElementId.toString(),
       checked: true,
     };
