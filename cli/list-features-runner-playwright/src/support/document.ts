@@ -20,11 +20,11 @@ function fixtureElementId(index: number): string {
 
 export function buildEmptyDocument(): AlistigoDocument {
   const listCreated: AlistigoEventRecord = {
-    "alistigo:eventId": fixtureEventId(1),
+    identifier: fixtureEventId(1),
     "alistigo:eventType": "ListCreated",
     "alistigo:listId": FIXTURE_LIST_ID,
-    "alistigo:agentId": FIXTURE_ACTOR_ID,
-    "alistigo:timestamp": FIXTURE_TIMESTAMP,
+    agent: FIXTURE_ACTOR_ID,
+    startTime: FIXTURE_TIMESTAMP,
   };
 
   return {
@@ -39,19 +39,19 @@ export function buildEmptyDocument(): AlistigoDocument {
 export function buildPopulatedDocument(elementTexts: readonly string[]): AlistigoDocument {
   const events: AlistigoEventRecord[] = [
     {
-      "alistigo:eventId": fixtureEventId(1),
+      identifier: fixtureEventId(1),
       "alistigo:eventType": "ListCreated",
       "alistigo:listId": FIXTURE_LIST_ID,
-      "alistigo:agentId": FIXTURE_ACTOR_ID,
-      "alistigo:timestamp": FIXTURE_TIMESTAMP,
+      agent: FIXTURE_ACTOR_ID,
+      startTime: FIXTURE_TIMESTAMP,
     },
     ...elementTexts.map((text, index) => ({
-      "alistigo:eventId": fixtureEventId(index + 2),
+      identifier: fixtureEventId(index + 2),
       "alistigo:eventType": "ListElementAdded" as const,
       "alistigo:listId": FIXTURE_LIST_ID,
       "alistigo:listElementId": fixtureElementId(index),
-      "alistigo:agentId": FIXTURE_ACTOR_ID,
-      "alistigo:timestamp": FIXTURE_TIMESTAMP,
+      agent: FIXTURE_ACTOR_ID,
+      startTime: FIXTURE_TIMESTAMP,
       name: text,
     })),
   ];
