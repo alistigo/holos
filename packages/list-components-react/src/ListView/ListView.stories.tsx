@@ -138,12 +138,12 @@ const multiActorProjection: AlistigoProjection = {
 const noEvents: AlistigoEventRecord[] = [];
 
 const elem02CheckedEvent: AlistigoEventRecord = {
-  "alistigo:eventId": "lev_01checked000000000000000",
+  identifier: "lev_01checked000000000000000",
   "alistigo:eventType": "ListElementChecked",
   "alistigo:listId": "lst_01testlist000000000000000",
   "alistigo:listElementId": "elem_02",
-  "alistigo:agentId": "act_01alice000000000000000000",
-  "alistigo:timestamp": twoHoursAgo,
+  agent: "act_01alice000000000000000000",
+  startTime: twoHoursAgo,
   checked: true,
 } as AlistigoEventRecord;
 

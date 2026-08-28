@@ -24,11 +24,11 @@ export interface AlistigoListItem extends ListItemLeaf {
 }
 
 interface AlistigoEventRecordBase {
-  "alistigo:eventId": TypeIDString;
+  identifier: TypeIDString;
   "alistigo:eventType": string;
   "alistigo:listId": TypeIDString;
-  "alistigo:agentId": TypeIDString;
-  "alistigo:timestamp": string;
+  agent: TypeIDString;
+  startTime: string;
 }
 
 export interface AlistigoListCreatedRecord extends AlistigoEventRecordBase {

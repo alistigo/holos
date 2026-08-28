@@ -53,14 +53,14 @@
     "ListEventRecord": {
       "type": "object",
       "required": [
-        "alistigo:eventId",
+        "identifier",
         "alistigo:eventType",
         "alistigo:listId",
-        "alistigo:agentId",
-        "alistigo:timestamp"
+        "agent",
+        "startTime"
       ],
       "properties": {
-        "alistigo:eventId": { "type": "string" },
+        "identifier": { "type": "string" },
         "alistigo:eventType": {
           "type": "string",
           "enum": [
@@ -72,8 +72,8 @@
           ]
         },
         "alistigo:listId": { "type": "string" },
-        "alistigo:agentId": { "type": "string" },
-        "alistigo:timestamp": { "type": "string", "format": "date-time" },
+        "agent": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
         "alistigo:listElementId": { "type": "string" },
         "checked": { "type": "boolean" }
       }
