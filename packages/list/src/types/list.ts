@@ -1,14 +1,12 @@
-import type {
-  AlistigoAgentRecord,
-  AlistigoContext,
-  AlistigoPluginRecord,
-  TypeIDString,
-} from "@alistigo/document";
+import type { Agent, AlistigoContext, Plugin } from "@alistigo/document";
 import type { ItemListLeaf, ListItemLeaf } from "schema-dts";
+
+export type AlistigoAgentRecord = Agent;
+export type AlistigoPluginRecord = Plugin;
 
 export interface AlistigoDocument extends ItemListLeaf {
   "@context": AlistigoContext;
-  identifier: TypeIDString;
+  identifier: string;
   name?: string;
   itemListElement: AlistigoListItem[];
   "alistigo:eventLog": AlistigoEventRecord[];
@@ -17,17 +15,17 @@ export interface AlistigoDocument extends ItemListLeaf {
 }
 
 export interface AlistigoListItem extends ListItemLeaf {
-  "alistigo:listElementId": TypeIDString;
+  "alistigo:listElementId": string;
   position: number;
   name: string;
   "alistigo:metadatas"?: Record<string, Record<string, unknown>>;
 }
 
 interface AlistigoEventRecordBase {
-  identifier: TypeIDString;
+  identifier: string;
   "alistigo:eventType": string;
-  "alistigo:listId": TypeIDString;
-  agent: TypeIDString;
+  "alistigo:listId": string;
+  agent: string;
   startTime: string;
 }
 
@@ -38,13 +36,13 @@ export interface AlistigoListCreatedRecord extends AlistigoEventRecordBase {
 
 export interface AlistigoListElementAddedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListElementAdded";
-  "alistigo:listElementId": TypeIDString;
+  "alistigo:listElementId": string;
   name: string;
 }
 
 export interface AlistigoListElementDeletedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListElementDeleted";
-  "alistigo:listElementId": TypeIDString;
+  "alistigo:listElementId": string;
 }
 
 export interface AlistigoListExportedRecord extends AlistigoEventRecordBase {
@@ -53,7 +51,7 @@ export interface AlistigoListExportedRecord extends AlistigoEventRecordBase {
 
 export interface AlistigoListElementCheckedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListElementChecked";
-  "alistigo:listElementId": TypeIDString;
+  "alistigo:listElementId": string;
   checked: boolean;
 }
 
