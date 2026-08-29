@@ -11,8 +11,11 @@ import {
 import type { AlistigoPlugin, KeyValueStore, PluginRuntime } from "@alistigo/artifact-plugin-api";
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import { artifactContext } from "@alistigo/claude-artifact-api";
-import type { AlistigoAgentRecord, AlistigoDocument } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document";
+import type {
+  AlistigoAgentRecord,
+  AlistigoDocument,
+  AlistigoListStore,
+} from "@alistigo/list-document";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -95,7 +98,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
         runtime.bus.on("user:changed", ({ userId, pseudo, avatar }) => {
           const agent: AlistigoAgentRecord = {
             "@type": "Person",
-            identifier: userId,
+            "@id": userId,
             name: pseudo,
             ...(avatar !== undefined ? { image: avatar } : {}),
           };
@@ -165,7 +168,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
               }}
             >
               <App
-                key={doc.identifier}
+                key={doc["@id"]}
                 initialDocument={doc}
                 repository={store}
                 plugins={plugins}

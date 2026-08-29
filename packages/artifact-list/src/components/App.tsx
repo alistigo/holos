@@ -8,8 +8,7 @@ import {
 } from "@alistigo/artifact-core-components-react";
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
-import type { AlistigoDocument } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document";
+import type { AlistigoDocument, AlistigoListStore } from "@alistigo/list-document";
 import { ListApplicationService } from "@alistigo/list-document";
 import { parseListId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
@@ -97,7 +96,7 @@ function App({
     return createLazyInitService(base, repository, initialDocument);
   }, [repository, initialDocument]);
 
-  const listId = useMemo(() => parseListId(initialDocument.identifier), [initialDocument]);
+  const listId = useMemo(() => parseListId(initialDocument["@id"]), [initialDocument]);
 
   const [infoOpen, setInfoOpen] = useState(false);
   const [bootDoc, setBootDoc] = useState<AlistigoDocument | undefined>(undefined);

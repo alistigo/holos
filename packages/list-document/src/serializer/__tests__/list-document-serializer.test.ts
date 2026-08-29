@@ -12,7 +12,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     expect(doc["@type"]).toBe("ItemList");
-    expect(doc.identifier).toBe(list.id.toString());
+    expect(doc["@id"]).toBe(list.id.toString());
     expect(doc.itemListElement).toHaveLength(0);
     expect(doc["alistigo:eventLog"]).toHaveLength(1);
     expect(doc["alistigo:eventLog"][0]?.["alistigo:eventType"]).toBe("ListCreated");
@@ -61,7 +61,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const { list } = List.create({ actorId });
     const agent: AlistigoAgentRecord = {
       "@type": "Person",
-      identifier: actorId.toString(),
+      "@id": actorId.toString(),
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
@@ -77,7 +77,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const { list } = List.create({ actorId });
     const originalAgent: AlistigoAgentRecord = {
       "@type": "Person",
-      identifier: actorId.toString(),
+      "@id": actorId.toString(),
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
@@ -88,7 +88,7 @@ describe("ListDocumentSerializer.serialize", () => {
 
     const updatedAgent: AlistigoAgentRecord = {
       "@type": "Person",
-      identifier: actorId.toString(),
+      "@id": actorId.toString(),
       name: "alice-updated",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
@@ -105,7 +105,7 @@ describe("ListDocumentSerializer.serialize", () => {
     const { list } = List.create({ actorId });
     const agent: AlistigoAgentRecord = {
       "@type": "Person",
-      identifier: actorId.toString(),
+      "@id": actorId.toString(),
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
@@ -163,10 +163,10 @@ describe("ListDocumentSerializer.serialize", () => {
 
     // Inject a ListElementChecked record into the previous document's log
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      identifier: "evt_checked_001",
+      "@id": "evt_checked_001",
       "alistigo:eventType": "ListElementChecked",
       list: { "@id": list.id.toString() },
-      agent: actorId.toString(),
+      agent: { "@id": actorId.toString() },
       startTime: new Date().toISOString(),
       listItem: { "@id": addEvent.listElementId.toString() },
       checked: true,
@@ -226,10 +226,10 @@ describe("ListDocumentSerializer.deserialize", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      identifier: "evt_checked_002",
+      "@id": "evt_checked_002",
       "alistigo:eventType": "ListElementChecked",
       list: { "@id": list.id.toString() },
-      agent: actorId.toString(),
+      agent: { "@id": actorId.toString() },
       startTime: new Date().toISOString(),
       listItem: { "@id": addEvent.listElementId.toString() },
       checked: false,
@@ -295,7 +295,7 @@ describe("JSON schema validation", () => {
     const { list } = List.create({ actorId });
     const agent: AlistigoAgentRecord = {
       "@type": "Person",
-      identifier: actorId.toString(),
+      "@id": actorId.toString(),
       name: "alice",
       image: "data:image/svg+xml;base64,PHN2Zy8+",
     };
@@ -318,10 +318,10 @@ describe("JSON schema validation", () => {
     const doc = ListDocumentSerializer.serialize(list);
 
     const checkedRecord: AlistigoListElementCheckedRecord = {
-      identifier: "evt_checked_003",
+      "@id": "evt_checked_003",
       "alistigo:eventType": "ListElementChecked",
       list: { "@id": list.id.toString() },
-      agent: actorId.toString(),
+      agent: { "@id": actorId.toString() },
       startTime: new Date().toISOString(),
       listItem: { "@id": addEvent.listElementId.toString() },
       checked: true,

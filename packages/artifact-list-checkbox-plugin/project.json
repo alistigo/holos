@@ -19,13 +19,6 @@
         "cwd": "packages/artifact-list-checkbox-plugin"
       }
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "bun test",
-        "cwd": "packages/artifact-list-checkbox-plugin"
-      }
-    },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {

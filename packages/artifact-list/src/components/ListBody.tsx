@@ -8,9 +8,8 @@ import {
   useAlistigoDocument,
   useSetAlistigoDocument,
 } from "@alistigo/list-components-react";
-import type { AlistigoDocument } from "@alistigo/list-document";
+import type { AlistigoDocument, AlistigoListStore } from "@alistigo/list-document";
 import { buildProjection } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document";
 import { createLogger } from "@alistigo/logger";
 import { Trans } from "@lingui/react/macro";
 import { type JSX, useCallback, useMemo } from "react";
@@ -58,7 +57,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
   const pluginRecords = useMemo(
     () =>
       plugins.map((p) => ({
-        identifier: p.name,
+        "@id": p.name,
         name: p.name,
         ...(p.version !== undefined ? { version: p.version } : {}),
       })),
@@ -75,7 +74,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
         const eventRecord = createCheckListElementEvent(
           elementId,
           getSessionActorId(),
-          document.identifier,
+          document["@id"],
           checked,
         );
         const updatedDoc: AlistigoDocument = {

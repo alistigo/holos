@@ -8,11 +8,11 @@ export function createCheckListElementEvent(
   checked: boolean,
 ): AlistigoListElementCheckedRecord {
   return {
-    identifier: typeid("lev").toString(),
+    "@id": typeid("lev").toString(),
     "alistigo:eventType": "ListElementChecked",
     list: { "@id": listId },
     listItem: { "@id": elementId },
-    agent: actorId,
+    agent: { "@id": actorId },
     startTime: new Date().toISOString(),
     checked,
   };

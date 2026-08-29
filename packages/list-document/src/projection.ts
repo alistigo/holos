@@ -34,17 +34,17 @@ export interface AlistigoProjection {
 
 // fallow-ignore-next-line complexity
 export function buildAttributionMap(doc: AlistigoDocument): Map<string, AlistigoItemAttribution> {
-  const agentsById = new Map((doc["alistigo:agents"] ?? []).map((a) => [a.identifier, a]));
+  const agentsById = new Map((doc["alistigo:agents"] ?? []).map((a) => [a["@id"], a]));
   const result = new Map<string, AlistigoItemAttribution>();
 
   for (const event of doc["alistigo:eventLog"]) {
     if (event["alistigo:eventType"] === "ListElementAdded") {
       const elementId = event["listItem"]["@id"];
       if (!result.has(elementId)) {
-        const agent = agentsById.get(event.agent);
+        const agent = agentsById.get(event.agent["@id"]);
         if (agent) {
           result.set(elementId, {
-            actorId: agent.identifier,
+            actorId: agent["@id"],
             pseudo: agent.name,
             avatar: typeof agent.image === "string" ? agent.image : "",
             addedAt: event.startTime,

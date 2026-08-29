@@ -1,13 +1,11 @@
 import type { AlistigoDocument } from "@alistigo/list-document";
+import { ALISTIGO_CONTEXT } from "@alistigo/list-document";
 
 function makeDefaultDocument(): AlistigoDocument {
   return {
-    "@context": {
-      "@vocab": "https://schema.org/",
-      alistigo: "https://alistigo.ai/vocab/",
-    },
+    "@context": ALISTIGO_CONTEXT,
     "@type": "ItemList",
-    identifier: "lst_01jx0000000000000000000000",
+    "@id": "lst_01jx0000000000000000000000",
     name: "My List",
     itemListElement: [],
     "alistigo:eventLog": [],

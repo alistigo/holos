@@ -10,7 +10,7 @@ export type AlistigoPluginRecord = Plugin;
 
 export interface AlistigoDocument extends ItemListLeaf {
   "@context": AlistigoContext;
-  identifier: string;
+  "@id": string;
   name?: string;
   itemListElement: AlistigoListItem[];
   "alistigo:eventLog": AlistigoEventRecord[];
@@ -26,10 +26,10 @@ export interface AlistigoListItem extends ListItemLeaf {
 }
 
 interface AlistigoEventRecordBase {
-  identifier: string;
+  "@id": string;
   "alistigo:eventType": string;
   list: Reference;
-  agent: string;
+  agent: Reference;
   startTime: string;
 }
 

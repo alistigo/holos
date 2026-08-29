@@ -10,7 +10,7 @@ function makeDoc(overrides: Partial<AlistigoDocument> = {}): AlistigoDocument {
   return {
     "@context": ALISTIGO_CONTEXT,
     "@type": "ItemList",
-    identifier: "list_01abc",
+    "@id": "lst_01abc",
     itemListElement: [],
     "alistigo:eventLog": [],
     ...overrides,
@@ -19,14 +19,14 @@ function makeDoc(overrides: Partial<AlistigoDocument> = {}): AlistigoDocument {
 
 const agent1 = {
   "@type": "Person" as const,
-  identifier: "actor_01alice",
+  "@id": "actor_01alice",
   name: "Alice",
   image: "data:image/svg+xml;base64,ALICE",
 };
 
 const agent2 = {
   "@type": "Person" as const,
-  identifier: "actor_02bob",
+  "@id": "actor_02bob",
   name: "Bob",
   image: "data:image/svg+xml;base64,BOB",
 };
@@ -40,10 +40,10 @@ describe("buildAttributionMap", () => {
     const doc = makeDoc({
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T00:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
@@ -61,19 +61,19 @@ describe("buildAttributionMap", () => {
       "alistigo:agents": [agent1, agent2],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
         },
         {
-          identifier: "evt_02",
+          "@id": "evt_02",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_02bob",
+          agent: { "@id": "actor_02bob" },
           startTime: "2026-01-01T11:00:00.000Z",
           listItem: { "@id": "elem_02" },
           name: "Call mom",
@@ -101,20 +101,20 @@ describe("buildAttributionMap", () => {
       "alistigo:agents": [agent1, agent2],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
         },
         {
           // duplicate for the same element — should be ignored
-          identifier: "evt_03",
+          "@id": "evt_03",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_02bob",
+          agent: { "@id": "actor_02bob" },
           startTime: "2026-01-01T12:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
@@ -132,10 +132,10 @@ describe("buildAttributionMap", () => {
       "alistigo:agents": [agent1],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_unknown",
+          agent: { "@id": "actor_unknown" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
@@ -152,17 +152,17 @@ describe("buildAttributionMap", () => {
       "alistigo:agents": [agent1, agent2],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListCreated",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T09:00:00.000Z",
         },
         {
-          identifier: "evt_02",
+          "@id": "evt_02",
           "alistigo:eventType": "ListElementChecked",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           checked: true,
@@ -192,10 +192,10 @@ describe("buildProjection", () => {
       ],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
@@ -220,10 +220,10 @@ describe("buildProjection", () => {
       ],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
@@ -255,19 +255,19 @@ describe("buildProjection", () => {
       ],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_01alice",
+          agent: { "@id": "actor_01alice" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_01" },
           name: "Buy bread",
         },
         {
-          identifier: "evt_02",
+          "@id": "evt_02",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_02bob",
+          agent: { "@id": "actor_02bob" },
           startTime: "2026-01-01T11:00:00.000Z",
           listItem: { "@id": "elem_02" },
           name: "Call mom",
@@ -301,10 +301,10 @@ describe("buildProjection", () => {
       ],
       "alistigo:eventLog": [
         {
-          identifier: "evt_01",
+          "@id": "evt_01",
           "alistigo:eventType": "ListElementAdded",
           list: { "@id": "list_01abc" },
-          agent: "actor_ghost",
+          agent: { "@id": "actor_ghost" },
           startTime: "2026-01-01T10:00:00.000Z",
           listItem: { "@id": "elem_unknown" },
           name: "Mystery item",

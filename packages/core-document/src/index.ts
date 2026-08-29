@@ -2,13 +2,13 @@ import type { PersonLeaf, SoftwareApplicationLeaf } from "schema-dts";
 
 export const ALISTIGO_CONTEXT = {
   "@vocab": "https://schema.org/",
-  alistigo: "https://alistigo.ai/vocab/",
+  alistigo: "https://json-ld.alistigo.com/vocab/",
 } as const;
 
 export type AlistigoContext = typeof ALISTIGO_CONTEXT;
 
 export type IdentityThing = {
-  identifier: string;
+  "@id": string;
   name: string;
 };
 

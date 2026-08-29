@@ -78,7 +78,7 @@ export const Populated: Story = {
 
 const agentAlice: AlistigoAgentRecord = {
   "@type": "Person",
-  identifier: "act_01alice000000000000000000",
+  "@id": "act_01alice000000000000000000",
   name: "Alice",
   image:
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiM0MzY0ZjciLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTQiPkE8L3RleHQ+PC9zdmc+",
@@ -86,7 +86,7 @@ const agentAlice: AlistigoAgentRecord = {
 
 const agentBob: AlistigoAgentRecord = {
   "@type": "Person",
-  identifier: "act_01bob0000000000000000000",
+  "@id": "act_01bob0000000000000000000",
   name: "Bob",
   image:
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiNlNzRjM2MiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTQiPkI8L3RleHQ+PC9zdmc+",
@@ -104,7 +104,7 @@ const multiActorProjection: AlistigoProjection = {
       position: 1,
       item: { "@type": "Thing", "@id": "elem_01", name: "Buy bread" },
       "alistigo:attribution": {
-        actorId: agentAlice.identifier,
+        actorId: agentAlice["@id"],
         pseudo: agentAlice.name,
         avatar: agentAlice.image ?? "",
         addedAt: twoHoursAgo,
@@ -115,7 +115,7 @@ const multiActorProjection: AlistigoProjection = {
       position: 2,
       item: { "@type": "Thing", "@id": "elem_02", name: "Call mom" },
       "alistigo:attribution": {
-        actorId: agentBob.identifier,
+        actorId: agentBob["@id"],
         pseudo: agentBob.name,
         avatar: agentBob.image ?? "",
         addedAt: yesterdayDate,
@@ -126,7 +126,7 @@ const multiActorProjection: AlistigoProjection = {
       position: 3,
       item: { "@type": "Thing", "@id": "elem_03", name: "Email Alice" },
       "alistigo:attribution": {
-        actorId: agentAlice.identifier,
+        actorId: agentAlice["@id"],
         pseudo: agentAlice.name,
         avatar: agentAlice.image ?? "",
         addedAt: twoHoursAgo,
@@ -142,11 +142,11 @@ const multiActorProjection: AlistigoProjection = {
 const noEvents: AlistigoEventRecord[] = [];
 
 const elem02CheckedEvent: AlistigoEventRecord = {
-  identifier: "lev_01checked000000000000000",
+  "@id": "lev_01checked000000000000000",
   "alistigo:eventType": "ListElementChecked",
-  "alistigo:listId": "lst_01testlist000000000000000",
-  "alistigo:listElementId": "elem_02",
-  agent: "act_01alice000000000000000000",
+  list: { "@id": "lst_01testlist000000000000000" },
+  listItem: { "@id": "elem_02" },
+  agent: { "@id": "act_01alice000000000000000000" },
   startTime: twoHoursAgo,
   checked: true,
 } as AlistigoEventRecord;
