@@ -1,7 +1,5 @@
 import { createCheckListElementEvent } from "@alistigo/artifact-list-checkbox-plugin";
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
-import type { AlistigoDocument } from "@alistigo/list-document";
-import { buildProjection } from "@alistigo/list-document";
 import {
   AddElementInput,
   getSessionActorId,
@@ -10,6 +8,8 @@ import {
   useAlistigoDocument,
   useSetAlistigoDocument,
 } from "@alistigo/list-components-react";
+import type { AlistigoDocument } from "@alistigo/list-document";
+import { buildProjection } from "@alistigo/list-document";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { createLogger } from "@alistigo/logger";
 import { Trans } from "@lingui/react/macro";
