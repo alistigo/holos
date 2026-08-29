@@ -8,18 +8,18 @@
     { "$ref": "schema:ItemList" },
     { "$ref": "https://schemas.alistigo.com/v1/documents/alistigo-document.json" }
   ],
-  "required": ["@context", "@type", "identifier", "itemListElement"],
+  "required": ["@context", "@type", "@id", "itemListElement"],
   "properties": {
     "@context": {
       "type": "object",
       "required": ["@vocab", "alistigo"],
       "properties": {
         "@vocab": { "type": "string", "const": "https://schema.org/" },
-        "alistigo": { "type": "string", "const": "https://alistigo.ai/vocab/" }
+        "alistigo": { "type": "string", "const": "https://json-ld.alistigo.com/vocab/" }
       }
     },
     "@type": { "type": "string", "const": "ItemList" },
-    "identifier": { "type": "string", "pattern": "^lst_" },
+    "@id": { "type": "string", "pattern": "^lst_" },
     "name": { "type": "string" },
     "itemListElement": {
       "type": "array",
@@ -52,9 +52,9 @@
     },
     "ListEventRecord": {
       "type": "object",
-      "required": ["identifier", "alistigo:eventType", "alistigo:listId", "agent", "startTime"],
+      "required": ["@id", "alistigo:eventType", "alistigo:listId", "agent", "startTime"],
       "properties": {
-        "identifier": { "type": "string" },
+        "@id": { "type": "string" },
         "alistigo:eventType": {
           "type": "string",
           "enum": [
@@ -66,7 +66,13 @@
           ]
         },
         "alistigo:listId": { "type": "string" },
-        "agent": { "type": "string" },
+        "agent": {
+          "type": "object",
+          "required": ["@id"],
+          "properties": {
+            "@id": { "type": "string" }
+          }
+        },
         "startTime": { "type": "string", "format": "date-time" },
         "alistigo:listElementId": { "type": "string" },
         "checked": { "type": "boolean" }
