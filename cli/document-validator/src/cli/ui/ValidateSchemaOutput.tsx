@@ -46,10 +46,18 @@ export function ValidateSchemaOutput({
 
       // biome-ignore lint/suspicious/noExplicitAny: AJV types
       const ajv = new (Ajv as any)({ allErrors: true, strict: false });
-      // schema.org's Thing defines @context as string — conflicts with alistigo's @context object.
-      // Register a permissive stub so alistigo schemas compile without enforcing schema.org constraints.
-      ajv.addSchema({ $id: "schema:ItemList", type: "object" });
-      ajv.addSchema({ $id: "schema:ListItem", type: "object" });
+      // Register permissive stubs for schema.org $refs used in alistigo schemas.
+      // These are resolved at compile time; stubs prevent AJV from rejecting unknown URIs.
+      for (const stub of [
+        "schema:Thing",
+        "schema:Action",
+        "schema:Person",
+        "schema:SoftwareApplication",
+        "schema:ItemList",
+        "schema:ListItem",
+      ]) {
+        ajv.addSchema({ $id: stub, type: "object" });
+      }
       // Register sibling JSON schemas from the same directory so cross-file $refs resolve.
       const absSchemaPath = resolve(schemaPath);
       for (const sibling of readdirSync(dirname(absSchemaPath)).filter((f) =>
