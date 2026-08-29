@@ -1,5 +1,3 @@
-import type { AlistigoDocument } from "@alistigo/list-document";
-import { parseListMarkdown } from "@alistigo/list-document";
 import type { ActorId, ListElementId, ListId, ListRepository } from "@alistigo/list-domain";
 import {
   createListElementContent,
@@ -9,7 +7,9 @@ import {
   ListError,
 } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
+import { parseListMarkdown } from "../markdown/list-markdown.js";
 import { err, ok, type Result } from "../result.js";
+import type { AlistigoDocument } from "../types.js";
 
 const log = createLogger("alistigo:service");
 

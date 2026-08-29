@@ -92,13 +92,20 @@ Every `@alistigo/*-document` package must provide:
 
 Biome formats and lints JSON files in this repo — no separate formatter needed.
 
-### 6. Event projectors live in the document package
+### 6. Event projectors and application service live in the document package
 
 All Alistigo documents are event-sourced: the `alistigo:eventLog` array is the source of truth, and replaying it deterministically recreates the current document state. The projector function (the pure reducer that does this replay) belongs in the document package, not in a separate editor package.
 
-- `@alistigo/list-document-editor`'s `list-projector.ts` (`projectList`) moves into `@alistigo/list-document`, exported at the package root
-- `@alistigo/list-document-editor` retains the **application / command layer** only (accepts user commands → produces events → calls the projector from `@alistigo/list-document`)
-- All future document packages ship their projector from day one
+The full `@alistigo/list-document-editor` package is absorbed into `@alistigo/list-document`. This includes:
+
+- `projectList` / `ListProjector` — the pure event-replay projector
+- `ListApplicationService` — orchestrates domain commands through the `List` aggregate and persists via `AlistigoListStore`
+- `AlistigoListStore` — the repository interface (extends `ListRepository` with `loadDocument` / `saveDocument`)
+- `Result<T, E>` / `ok` / `err` — the lightweight result type used by the service
+
+`@alistigo/list-document-editor` is deleted. All consumers import the above symbols from `@alistigo/list-document` instead.
+
+All future document packages ship their projector (and application service, if applicable) from day one.
 
 ### 7. Markdown input: canonical parser in the document package
 
@@ -170,7 +177,7 @@ The projector is a pure function of the document schema: it knows event types, t
 
 **Negative / tradeoffs accepted:**
 - Renaming `@alistigo/core-document` → `@alistigo/core-document` and `@alistigo/list` → `@alistigo/list-document` is a breaking change affecting ~8 packages; migration is tracked as follow-up work
-- Moving `projectList` out of `@alistigo/list-document-editor` is a breaking change for that package's public API; consumers must update their import path
+- Absorbing `@alistigo/list-document-editor` entirely into `@alistigo/list-document` is a breaking change; consumers (`artifact-list`, `list-components-react`) update their import source from `@alistigo/list-document-editor` to `@alistigo/list-document` — symbol names are unchanged
 - Moving `parseMarkdownToDocument` and `validateAsListDocument` out of `@alistigo/artifact-list` is a breaking change for that package; migration is tracked alongside the rename
 - The `alistigo:listId` flat-string reference in the current list schema is deprecated but not yet removed — it will persist until the schema migration is applied
 

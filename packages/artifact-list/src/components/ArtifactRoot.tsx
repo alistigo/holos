@@ -12,7 +12,7 @@ import type { AlistigoPlugin, KeyValueStore, PluginRuntime } from "@alistigo/art
 import { createPluginRuntime } from "@alistigo/artifact-plugin-api";
 import { artifactContext } from "@alistigo/claude-artifact-api";
 import type { AlistigoAgentRecord, AlistigoDocument } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document-editor";
+import type { AlistigoListStore } from "@alistigo/list-document";
 import { createLogger } from "@alistigo/logger";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
