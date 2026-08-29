@@ -1,4 +1,4 @@
-import type { AlistigoListElementCheckedRecord } from "@alistigo/list";
+import type { AlistigoListElementCheckedRecord } from "@alistigo/list-document";
 import { typeid } from "typeid-js";
 
 export function createCheckListElementEvent(

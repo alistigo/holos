@@ -1,7 +1,7 @@
 import { createCheckListElementEvent } from "@alistigo/artifact-list-checkbox-plugin";
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
-import type { AlistigoDocument } from "@alistigo/list";
-import { buildProjection } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
+import { buildProjection } from "@alistigo/list-document";
 import {
   AddElementInput,
   getSessionActorId,

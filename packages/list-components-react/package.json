@@ -59,7 +59,7 @@
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
     "@alistigo/list-document-editor": "workspace:*",
-    "@alistigo/list": "workspace:*",
+    "@alistigo/list-document": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/react-slot": "^1.2.4",

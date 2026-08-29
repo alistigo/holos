@@ -1,4 +1,4 @@
-import type { AlistigoDocument } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
 import { type IWorldOptions, setWorldConstructor, World } from "@cucumber/cucumber";
 import type { Browser, BrowserContext, Page } from "playwright";
 import { ApplicationPage } from "../pages/application.page";

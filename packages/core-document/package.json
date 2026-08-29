@@ -1,6 +1,6 @@
 {
-  "name": "@alistigo/list",
-  "version": "0.3.1",
+  "name": "@alistigo/core-document",
+  "version": "0.1.0",
   "license": "MIT",
   "author": {
     "name": "Mikael Labrut",
@@ -9,15 +9,17 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/list"
+    "directory": "packages/core-document"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/list#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/core-document#readme",
+  "alistigo": {
+    "type": "document"
+  },
   "keywords": [
     "alistigo",
-    "list",
     "document",
     "json-schema",
     "json-ld",
@@ -25,29 +27,24 @@
   ],
   "private": false,
   "type": "module",
-  "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format.",
+  "description": "Base types and JSON schema for all Alistigo artifact documents.",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./schemas/document.json": "./src/schemas/document.json"
+    "./schemas/alistigo-document.json": "./src/schemas/alistigo-document.json"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "src/schemas",
-    "docs"
+    "src/schemas"
   ],
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/document": "workspace:*",
-    "@alistigo/list-domain": "workspace:*",
-    "ajv": "^8.17.0",
-    "ajv-formats": "^3.0.1",
     "schema-dts": "^2.0.0"
   }
 }

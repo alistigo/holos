@@ -38,7 +38,7 @@ The JSON-LD projection of a List — what gets rendered, exported, and shown to 
 
 **Rules:**
 - The Document can be recomputed from the Event log; The source of truth is the event log if event log is present.
-- The Document conforms to [`@alistigo/document-format`](../../alistigo-document-format/docs/spec.md).
+- The Document conforms to [`@alistigo/core-document-format`](../../alistigo-document-format/docs/spec.md).
 - A Document carries a `formatVersion`; mutations are disabled when the version is newer than the library knows.
 
 ### Event

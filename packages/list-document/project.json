@@ -1,45 +1,45 @@
 {
-  "name": "list",
+  "name": "list-document",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/list/src",
+  "sourceRoot": "packages/list-document/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "packages/list/dist",
-        "tsConfig": "packages/list/tsconfig.json",
-        "main": "packages/list/src/index.ts",
-        "rootDir": "packages/list/src"
+        "outputPath": "packages/list-document/dist",
+        "tsConfig": "packages/list-document/tsconfig.json",
+        "main": "packages/list-document/src/index.ts",
+        "rootDir": "packages/list-document/src"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "bun test",
-        "cwd": "packages/list"
+        "cwd": "packages/list-document"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc -p tsconfig.json --noEmit",
-        "cwd": "packages/list"
+        "cwd": "packages/list-document"
       }
     },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "biome check .",
-        "cwd": "packages/list"
+        "cwd": "packages/list-document"
       }
     },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
         "command": "rm -rf dist",
-        "cwd": "packages/list"
+        "cwd": "packages/list-document"
       }
     }
   }

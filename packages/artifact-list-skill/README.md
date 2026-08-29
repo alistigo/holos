@@ -23,7 +23,7 @@ render an interactive, editable list inside an HTML artifact.
 The `references/` folder is generated at build time from the source-of-truth format packages
 and is **not committed to git**:
 
-- `references/document-format.md` ← `@alistigo/document-format` (`docs/spec.md`)
+- `references/document-format.md` ← `@alistigo/core-document-format` (`docs/spec.md`)
 - `references/artifact-config-list-format.md` ← `@alistigo/artifact-config-list-format` (`README.md`)
 
 Regenerate it with:

@@ -49,9 +49,9 @@ pnpm add ajv ajv-formats
 | `AlistigoListElementDeletedRecord` | `ListElementDeleted` event |
 | `AlistigoListElementCheckedRecord` | `ListElementChecked` event |
 | `AlistigoListExportedRecord` | `ListExported` event |
-| `AlistigoActorRecord` | Actor identity record (re-exported from `@alistigo/document`) |
-| `AlistigoPluginRecord` | Plugin registration record (re-exported from `@alistigo/document`) |
-| `ALISTIGO_CONTEXT` | The JSON-LD `@context` constant (re-exported from `@alistigo/document`) |
+| `AlistigoActorRecord` | Actor identity record (re-exported from `@alistigo/core-document`) |
+| `AlistigoPluginRecord` | Plugin registration record (re-exported from `@alistigo/core-document`) |
+| `ALISTIGO_CONTEXT` | The JSON-LD `@context` constant (re-exported from `@alistigo/core-document`) |
 | `buildProjection` | Build a projection map from a document |
 | `buildAttributionMap` | Build an actor attribution map |
 | `ListDocumentSerializer` | Serialize/deserialize a list domain model to/from a document |
@@ -97,6 +97,6 @@ const projection = buildProjection(document);
 
 ## Related
 
-- [`@alistigo/document`](../document/) — base types this package extends
+- [`@alistigo/core-document`](../document/) — base types this package extends
 - [`@alistigo/list-domain`](../list-domain/) — domain model (pure business logic, no I/O)
 - [`@alistigo/list-document-editor`](../list-document-editor/) — application service layer

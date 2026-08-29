@@ -510,7 +510,7 @@
 
 ### 🩹 Fixes
 
-- restore @mlabrut/agent-dailylife dep; add missing @alistigo/document-format dep; fix fallow ignoreDependencies ([98f0087](https://github.com/MLKiiwy/europa/commit/98f0087))
+- restore @mlabrut/agent-dailylife dep; add missing @alistigo/core-document-format dep; fix fallow ignoreDependencies ([98f0087](https://github.com/MLKiiwy/europa/commit/98f0087))
 - **alistigo-list-embedded-app:** ignore DevFixturePicker in fallow (not yet wired up) ([82490a7](https://github.com/MLKiiwy/europa/commit/82490a7))
 - **alistigo-list-embedded-app:** correct DevFixturePicker import; remove spurious main.tsx import ([8fc4fe3](https://github.com/MLKiiwy/europa/commit/8fc4fe3))
 - **alistigo-list-embedded-app:** add lingui as devDeps needed by artifact source alias ([247c7bb](https://github.com/MLKiiwy/europa/commit/247c7bb))

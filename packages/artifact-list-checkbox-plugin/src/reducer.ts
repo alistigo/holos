@@ -1,4 +1,4 @@
-import type { AlistigoListElementCheckedRecord } from "@alistigo/list";
+import type { AlistigoListElementCheckedRecord } from "@alistigo/list-document";
 
 export function checkboxReducer(
   elementId: string,
