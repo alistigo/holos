@@ -33,7 +33,7 @@ Refactor the two storage backends (`alistigo-local-storage-repository`, `alistig
 ## Technical Approach
 
 ### Plugin API Package
-Add `PluginType`, `AlistigoStorageExtension` to `packages/alistigo-artifact-plugin-api/src/types.ts`. Export from index. Add peer deps for `@alistigo/document-editor` and `@alistigo/document-format` (type-only usage).
+Add `PluginType`, `AlistigoStorageExtension` to `packages/alistigo-artifact-plugin-api/src/types.ts`. Export from index. Add peer deps for `@alistigo/core-document-editor` and `@alistigo/core-document-format` (type-only usage).
 
 ### Storage Plugin Packages
 Rename directories and npm names. Add `src/local-storage-plugin.ts` and `src/claude-storage-plugin.ts` implementing `AlistigoPlugin`. Add same self-contained ESM vite build pattern (`vite.config.ts` with `formats: ["es"]`, all deps inlined). Export plugin as default, keep repository class as named export for backwards compat.

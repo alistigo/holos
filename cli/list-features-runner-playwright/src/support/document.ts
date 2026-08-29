@@ -1,5 +1,5 @@
-import type { AlistigoDocument, AlistigoEventRecord } from "@alistigo/list";
-import { ALISTIGO_CONTEXT } from "@alistigo/list";
+import type { AlistigoDocument, AlistigoEventRecord } from "@alistigo/list-document";
+import { ALISTIGO_CONTEXT } from "@alistigo/list-document";
 
 // Fixed TypeID-style strings for deterministic test fixtures.
 // TypeID format: <prefix>_<26-char Crockford base32>

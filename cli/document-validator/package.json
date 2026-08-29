@@ -1,5 +1,5 @@
 {
-  "name": "@alistigo/document-validator",
+  "name": "@alistigo/core-document-validator",
   "version": "0.3.1",
   "license": "MIT",
   "author": {
@@ -35,7 +35,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@alistigo/list": "workspace:*",
+    "@alistigo/list-document": "workspace:*",
     "@apidevtools/json-schema-ref-parser": "^16.0.1",
     "ajv": "^8.17.0",
     "clipanion": "4.0.0-rc.4",

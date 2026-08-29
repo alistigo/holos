@@ -169,7 +169,7 @@ The projector is a pure function of the document schema: it knows event types, t
 - Markdown examples and parsers are co-located with the JSON-LD schema in a single package
 
 **Negative / tradeoffs accepted:**
-- Renaming `@alistigo/document` → `@alistigo/core-document` and `@alistigo/list` → `@alistigo/list-document` is a breaking change affecting ~8 packages; migration is tracked as follow-up work
+- Renaming `@alistigo/core-document` → `@alistigo/core-document` and `@alistigo/list` → `@alistigo/list-document` is a breaking change affecting ~8 packages; migration is tracked as follow-up work
 - Moving `projectList` out of `@alistigo/list-document-editor` is a breaking change for that package's public API; consumers must update their import path
 - Moving `parseMarkdownToDocument` and `validateAsListDocument` out of `@alistigo/artifact-list` is a breaking change for that package; migration is tracked alongside the rename
 - The `alistigo:listId` flat-string reference in the current list schema is deprecated but not yet removed — it will persist until the schema migration is applied

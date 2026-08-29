@@ -1,5 +1,5 @@
-import type { AlistigoDocument } from "@alistigo/list";
-import { parseListMarkdown } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
+import { parseListMarkdown } from "@alistigo/list-document";
 import type { ActorId, ListElementId, ListId, ListRepository } from "@alistigo/list-domain";
 import {
   createListElementContent,

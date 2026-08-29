@@ -1,5 +1,5 @@
-import type { AlistigoDocument } from "@alistigo/list";
-import { buildListDocumentFromMarkdown } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
+import { buildListDocumentFromMarkdown } from "@alistigo/list-document";
 import { generateActorId } from "@alistigo/list-domain";
 
 const AI_ACTOR_ID = generateActorId();

@@ -1,4 +1,4 @@
-import alistigoDocumentSchema from "@alistigo/document/schemas/alistigo-document.json" with {
+import alistigoDocumentSchema from "@alistigo/core-document/schemas/alistigo-document.json" with {
   type: "json",
 };
 import documentSchema from "./schemas/document.json" with { type: "json" };

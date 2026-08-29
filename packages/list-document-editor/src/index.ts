@@ -1,5 +1,5 @@
 /**
- * @alistigo/document-editor
+ * @alistigo/core-document-editor
  *
  * The Application layer of the Alistigo system.
  *
@@ -14,7 +14,7 @@
  * What this package does NOT own:
  *   - UI / React (lives in @alistigo/list-components-react).
  *   - Persistence implementation (LocalStorageListRepository, etc.).
- *   - Schema validation (lives in @alistigo/document-format).
+ *   - Schema validation (lives in @alistigo/core-document-format).
  */
 
 // Application service

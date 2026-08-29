@@ -7,7 +7,7 @@ import {
   type PluginInfo,
 } from "@alistigo/artifact-core-components-react";
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
-import type { AlistigoDocument } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
 import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
 import type { AlistigoListStore } from "@alistigo/list-document-editor";
 import { ListApplicationService } from "@alistigo/list-document-editor";

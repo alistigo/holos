@@ -1,5 +1,5 @@
 /**
- * React glue around `@alistigo/document-editor`.
+ * React glue around `@alistigo/core-document-editor`.
  *
  * Wraps a `ListApplicationService` so that child components can read the
  * current `AlistigoDocument` via `useAlistigoDocument()` and dispatch
@@ -9,7 +9,7 @@
  * used by the Playwright runner's `waitForIdle` synchronisation.
  */
 
-import type { AlistigoDocument } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
 import type { ListApplicationService } from "@alistigo/list-document-editor";
 import { generateActorId, type ListId, parseListElementId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";

@@ -1,6 +1,6 @@
-# @alistigo/document
+# @alistigo/core-document
 
-[![npm version](https://img.shields.io/npm/v/@alistigo/document.svg?style=flat)](https://www.npmjs.com/package/@alistigo/document)
+[![npm version](https://img.shields.io/npm/v/@alistigo/core-document.svg?style=flat)](https://www.npmjs.com/package/@alistigo/core-document)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
 
@@ -18,7 +18,7 @@ Base types and JSON schema shared by all Alistigo artifact documents. This is th
 The base JSON schema is available as a subpath export for tooling (AJV, `$RefParser`, etc.):
 
 ```ts
-import alistigoDocumentSchema from "@alistigo/document/schemas/alistigo-document.json" with { type: "json" };
+import alistigoDocumentSchema from "@alistigo/core-document/schemas/alistigo-document.json" with { type: "json" };
 ```
 
 ### Typescript types
@@ -29,7 +29,7 @@ import {
   type AlistigoActorRecord,
   type AlistigoPluginRecord,
   type TypeIDString,
-} from "@alistigo/document";
+} from "@alistigo/core-document";
 ```
 
 ## Related

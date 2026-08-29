@@ -1,7 +1,7 @@
 /**
  * Self-contained ES module build for @alistigo/artifact-list-checkbox-plugin.
  *
- * Bundles @alistigo/list types and React components into one
+ * Bundles @alistigo/list-document types and React components into one
  * dependency-free file so @alistigo/artifact-plugin-api's loader can
  * `await import()` it directly from a jsDelivr URL with zero import map.
  */

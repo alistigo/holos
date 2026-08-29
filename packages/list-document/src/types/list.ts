@@ -1,4 +1,4 @@
-import type { Agent, AlistigoContext, Plugin } from "@alistigo/document";
+import type { Agent, AlistigoContext, Plugin } from "@alistigo/core-document";
 import type { ItemListLeaf, ListItemLeaf } from "schema-dts";
 
 export type AlistigoAgentRecord = Agent;

@@ -8,7 +8,7 @@
   "dependencies": {
     "@cucumber/cucumber": "^12.9.0",
     "@alistigo/artifact-plugin-api": "workspace:*",
-    "@alistigo/list": "workspace:*",
+    "@alistigo/list-document": "workspace:*",
     "@alistigo/list-features": "workspace:*",
     "playwright": "^1.61.0"
   },

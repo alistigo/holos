@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@alistigo/artifact-plugin-api": "workspace:*",
-    "@alistigo/list": "workspace:*",
+    "@alistigo/list-document": "workspace:*",
     "typeid-js": "^1.2.0"
   },
   "devDependencies": {

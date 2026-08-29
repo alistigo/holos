@@ -1,6 +1,6 @@
-# @alistigo/document-editor
+# @alistigo/core-document-editor
 
-[![npm version](https://img.shields.io/npm/v/@alistigo/document-editor.svg?style=flat)](https://www.npmjs.com/package/@alistigo/document-editor)
+[![npm version](https://img.shields.io/npm/v/@alistigo/core-document-editor.svg?style=flat)](https://www.npmjs.com/package/@alistigo/core-document-editor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![CI](https://github.com/alistigo/holos/actions/workflows/ci.yml/badge.svg)](https://github.com/alistigo/holos/actions/workflows/ci.yml)
@@ -15,7 +15,7 @@ This is what `architecture.md` calls the *Application Layer (CQRS)*: commands �
 |---------|-----|
 | Command catalog (intent) | `AlistigoCommand` discriminated union (`CreateList`, `AddElement`, `DeleteElement`, `RenameList`) |
 | Command → events | `commandToEvents(doc, command)` |
-| Events → document | `applyEvents(doc, events)` (delegates projection to `@alistigo/document-format`'s `replayEvents`) |
+| Events → document | `applyEvents(doc, events)` (delegates projection to `@alistigo/core-document-format`'s `replayEvents`) |
 | Bootstrap a doc with no log | `bootstrap(doc)` |
 | Stateful wrapper for UI | `createEditor(doc) → { document, dispatch, subscribe }` |
 | Empty starting document | `emptyDocument({ name?, listType?, plugins? })` |
@@ -24,14 +24,14 @@ This is what `architecture.md` calls the *Application Layer (CQRS)*: commands �
 
 - React, the DOM, any UI primitive — see `@alistigo/list-components-react`.
 - Persistence — the EventStore adapters live with the embedded app.
-- Schema validation — see `@alistigo/document-format`'s `validateDocument`.
+- Schema validation — see `@alistigo/core-document-format`'s `validateDocument`.
 
 ## Core API
 
 ### `createEditor(initial, options?) → Editor`
 
 ```ts
-import { createEditor, emptyDocument } from "@alistigo/document-editor";
+import { createEditor, emptyDocument } from "@alistigo/core-document-editor";
 
 const editor = createEditor(emptyDocument({ name: "Today" }));
 
@@ -58,7 +58,7 @@ unsub();
 For tests / non-React consumers:
 
 ```ts
-import { commandToEvents, applyEvents, emptyDocument } from "@alistigo/document-editor";
+import { commandToEvents, applyEvents, emptyDocument } from "@alistigo/core-document-editor";
 
 const doc0 = emptyDocument({ name: "Today" });
 const events = commandToEvents(doc0, { type: "AddElement", text: "Buy bread" });
@@ -73,11 +73,11 @@ If the document already has a non-empty `eventLog`, bootstrap trusts it as-is �
 
 ## Testing
 
-`pnpm -F @alistigo/document-editor test` runs the bun test suite. Determinism in tests is achieved by injecting a custom `IdGenerator` via `createEditor(initial, { ids })` — see `src/editor.test.ts`.
+`pnpm -F @alistigo/core-document-editor test` runs the bun test suite. Determinism in tests is achieved by injecting a custom `IdGenerator` via `createEditor(initial, { ids })` — see `src/editor.test.ts`.
 
 ## Design constraints
 
 - **Pure.** No DOM, no `localStorage`, no random outside `IdGenerator`. This is what makes the runner fast and the projection cacheable.
 - **Synchronous.** Commands that need IO (persisting events, talking to a host) belong one layer above — the editor never `await`s.
 - **Append-only.** Events are facts; the package never edits or deletes a previously emitted event. Undo is a future compensating event, not a log mutation.
-- **Format is the source of truth.** The projector lives in `@alistigo/document-format`; the editor never re-implements projection. New event types land in the format package first, then the editor adds a command that emits them.
+- **Format is the source of truth.** The projector lives in `@alistigo/core-document-format`; the editor never re-implements projection. New event types land in the format package first, then the editor adds a command that emits them.

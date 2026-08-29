@@ -59,8 +59,8 @@ PLATFORM INFRA artifact-manager, artifact-config-format, sentry-plugin, posthog-
 | alistigo-claude-artifact-list-storage | claude-artifact-list-storage | — |
 | alistigo-local-storage-repository | local-storage-repository | — |
 | alistigo-domain | list-domain | @alistigo/domain → @alistigo/list-domain |
-| alistigo-document-format | list-document-format | @alistigo/document-format → @alistigo/list-document-format |
-| alistigo-document-editor | list-document-editor | @alistigo/document-editor → @alistigo/list-document-editor |
+| alistigo-document-format | list-document-format | @alistigo/core-document-format → @alistigo/list-document-format |
+| alistigo-document-editor | list-document-editor | @alistigo/core-document-editor → @alistigo/list-document-editor |
 | alistigo-features | list-features | @alistigo/features → @alistigo/list-features |
 | cli: alistigo-document-validator | document-validator | — |
 | cli: alistigo-features-runner-playwright | list-features-runner-playwright | @alistigo/features-runner-playwright → @alistigo/list-features-runner-playwright |

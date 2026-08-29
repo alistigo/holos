@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { AlistigoDocument } from "@alistigo/list";
-import { ListDocumentSerializer } from "@alistigo/list";
+import type { AlistigoDocument } from "@alistigo/list-document";
+import { ListDocumentSerializer } from "@alistigo/list-document";
 import type { ListId } from "@alistigo/list-domain";
 import {
   generateActorId,

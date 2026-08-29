@@ -7,7 +7,7 @@ The Alistigo iframe-embeddable base list app. Reads its document from an inline 
 The app is a static bundle. On page load it:
 
 1. Reads the JSON document from `<script type="application/json" id="alistigo-document">` in `index.html`.
-2. Calls `createEditor(document)` from `@alistigo/document-editor` — the editor synthesizes a fresh event log if one isn't present (per `architecture.md` §5.1).
+2. Calls `createEditor(document)` from `@alistigo/core-document-editor` — the editor synthesizes a fresh event log if one isn't present (per `architecture.md` §5.1).
 3. Wraps everything in `<AlistigoProvider editor={editor}>` and renders the components.
 
 In tests, `driver-playwright` rewrites the `<script>` tag's content via `page.route()` to seed the scenario's fixture. The same code path serves both prod and tests — there is no test-only injection surface.
@@ -46,7 +46,7 @@ src/main.tsx  → createRoot → <App initialDocument={…} />
        │
        ▼
 src/App.tsx
-  ├─ createEditor(initialDocument)        ← @alistigo/document-editor
+  ├─ createEditor(initialDocument)        ← @alistigo/core-document-editor
   ├─ <AlistigoProvider editor>            ← @alistigo/list-components-react
   ├─ <AlistigoApp>
   │     <h1>{name}</h1>
