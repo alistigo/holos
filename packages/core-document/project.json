@@ -14,6 +14,14 @@
         "rootDir": "packages/core-document/src"
       }
     },
+    "test": {
+      "dependsOn": [{"target": "build", "projects": ["document-validator"]}],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun ../../cli/document-validator/dist/cli.js --schema src/schemas/alistigo-document.json examples/*.json",
+        "cwd": "packages/core-document"
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
