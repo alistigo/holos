@@ -1,5 +1,9 @@
 import checkboxPlugin from "@alistigo/artifact-list-checkbox-plugin";
-import type { AlistigoAgentRecord, AlistigoEventRecord, AlistigoProjection } from "@alistigo/list-document";
+import type {
+  AlistigoAgentRecord,
+  AlistigoEventRecord,
+  AlistigoProjection,
+} from "@alistigo/list-document";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { ListView } from "./ListView.js";
