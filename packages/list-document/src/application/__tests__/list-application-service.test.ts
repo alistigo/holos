@@ -1,6 +1,4 @@
 import { describe, expect, test } from "bun:test";
-import type { AlistigoDocument } from "@alistigo/list-document";
-import { ListDocumentSerializer } from "@alistigo/list-document";
 import type { ListId } from "@alistigo/list-domain";
 import {
   generateActorId,
@@ -8,10 +6,9 @@ import {
   type List,
   parseListElementId,
 } from "@alistigo/list-domain";
-import {
-  type AlistigoListStore,
-  ListApplicationService,
-} from "../src/application/list-application-service.js";
+import { ListDocumentSerializer } from "../../serializer/list-document-serializer.js";
+import type { AlistigoDocument } from "../../types.js";
+import { type AlistigoListStore, ListApplicationService } from "../list-application-service.js";
 
 class InMemoryStore implements AlistigoListStore {
   private docs = new Map<string, AlistigoDocument>();

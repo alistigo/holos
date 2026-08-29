@@ -1,6 +1,6 @@
 import type { AlistigoDocument } from "@alistigo/list-document";
 import { ListDocumentSerializer } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document-editor";
+import type { AlistigoListStore } from "@alistigo/list-document";
 import type { List, ListId } from "@alistigo/list-domain";
 
 export class InMemoryListStore implements AlistigoListStore {

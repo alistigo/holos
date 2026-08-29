@@ -49,6 +49,7 @@
   "dependencies": {
     "@alistigo/core-document": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
+    "@alistigo/logger": "workspace:*",
     "ajv": "^8.17.0",
     "ajv-formats": "^3.0.1",
     "schema-dts": "^2.0.0"

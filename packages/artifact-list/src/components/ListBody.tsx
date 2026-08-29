@@ -10,7 +10,7 @@ import {
 } from "@alistigo/list-components-react";
 import type { AlistigoDocument } from "@alistigo/list-document";
 import { buildProjection } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document-editor";
+import type { AlistigoListStore } from "@alistigo/list-document";
 import { createLogger } from "@alistigo/logger";
 import { Trans } from "@lingui/react/macro";
 import { type JSX, useCallback, useMemo } from "react";

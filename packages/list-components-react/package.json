@@ -58,7 +58,6 @@
     "@alistigo/logger": "workspace:*",
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
-    "@alistigo/list-document-editor": "workspace:*",
     "@alistigo/list-document": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
     "@radix-ui/colors": "^3.0.0",
