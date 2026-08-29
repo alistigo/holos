@@ -31,6 +31,13 @@
     }
   },
   "$defs": {
+    "Reference": {
+      "type": "object",
+      "required": ["@id"],
+      "properties": {
+        "@id": { "type": "string" }
+      }
+    },
     "ListItem": {
       "allOf": [
         { "$ref": "schema:ListItem" },
@@ -52,7 +59,7 @@
     },
     "ListEventRecord": {
       "type": "object",
-      "required": ["@id", "alistigo:eventType", "alistigo:listId", "agent", "startTime"],
+      "required": ["@id", "alistigo:eventType", "list", "agent", "startTime"],
       "properties": {
         "@id": { "type": "string" },
         "alistigo:eventType": {
@@ -65,16 +72,10 @@
             "ListElementChecked"
           ]
         },
-        "alistigo:listId": { "type": "string" },
-        "agent": {
-          "type": "object",
-          "required": ["@id"],
-          "properties": {
-            "@id": { "type": "string" }
-          }
-        },
+        "list": { "$ref": "#/$defs/Reference" },
+        "agent": { "$ref": "#/$defs/Reference" },
         "startTime": { "type": "string", "format": "date-time" },
-        "alistigo:listElementId": { "type": "string" },
+        "listItem": { "$ref": "#/$defs/Reference" },
         "checked": { "type": "boolean" }
       }
     }

@@ -165,10 +165,10 @@ describe("ListDocumentSerializer.serialize", () => {
     const checkedRecord: AlistigoListElementCheckedRecord = {
       identifier: "evt_checked_001",
       "alistigo:eventType": "ListElementChecked",
-      "alistigo:listId": list.id.toString(),
+      list: { "@id": list.id.toString() },
       agent: actorId.toString(),
       startTime: new Date().toISOString(),
-      "alistigo:listElementId": addEvent.listElementId.toString(),
+      listItem: { "@id": addEvent.listElementId.toString() },
       checked: true,
     };
     const docWithChecked = {
@@ -228,10 +228,10 @@ describe("ListDocumentSerializer.deserialize", () => {
     const checkedRecord: AlistigoListElementCheckedRecord = {
       identifier: "evt_checked_002",
       "alistigo:eventType": "ListElementChecked",
-      "alistigo:listId": list.id.toString(),
+      list: { "@id": list.id.toString() },
       agent: actorId.toString(),
       startTime: new Date().toISOString(),
-      "alistigo:listElementId": addEvent.listElementId.toString(),
+      listItem: { "@id": addEvent.listElementId.toString() },
       checked: false,
     };
     const docWithChecked = {
@@ -320,10 +320,10 @@ describe("JSON schema validation", () => {
     const checkedRecord: AlistigoListElementCheckedRecord = {
       identifier: "evt_checked_003",
       "alistigo:eventType": "ListElementChecked",
-      "alistigo:listId": list.id.toString(),
+      list: { "@id": list.id.toString() },
       agent: actorId.toString(),
       startTime: new Date().toISOString(),
-      "alistigo:listElementId": addEvent.listElementId.toString(),
+      listItem: { "@id": addEvent.listElementId.toString() },
       checked: true,
     };
     const docWithChecked = {

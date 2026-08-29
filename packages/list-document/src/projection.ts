@@ -39,7 +39,7 @@ export function buildAttributionMap(doc: AlistigoDocument): Map<string, Alistigo
 
   for (const event of doc["alistigo:eventLog"]) {
     if (event["alistigo:eventType"] === "ListElementAdded") {
-      const elementId = event["alistigo:listElementId"];
+      const elementId = event["listItem"]["@id"];
       if (!result.has(elementId)) {
         const agent = agentsById.get(event.agent);
         if (agent) {

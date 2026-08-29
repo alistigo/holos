@@ -10,8 +10,8 @@ export function createCheckListElementEvent(
   return {
     identifier: typeid("lev").toString(),
     "alistigo:eventType": "ListElementChecked",
-    "alistigo:listId": listId,
-    "alistigo:listElementId": elementId,
+    list: { "@id": listId },
+    listItem: { "@id": elementId },
     agent: actorId,
     startTime: new Date().toISOString(),
     checked,

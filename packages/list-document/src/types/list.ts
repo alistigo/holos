@@ -1,6 +1,10 @@
 import type { Agent, AlistigoContext, Plugin } from "@alistigo/core-document";
 import type { ItemListLeaf, ListItemLeaf } from "schema-dts";
 
+export interface Reference {
+  "@id": string;
+}
+
 export type AlistigoAgentRecord = Agent;
 export type AlistigoPluginRecord = Plugin;
 
@@ -24,7 +28,7 @@ export interface AlistigoListItem extends ListItemLeaf {
 interface AlistigoEventRecordBase {
   identifier: string;
   "alistigo:eventType": string;
-  "alistigo:listId": string;
+  list: Reference;
   agent: string;
   startTime: string;
 }
@@ -36,13 +40,13 @@ export interface AlistigoListCreatedRecord extends AlistigoEventRecordBase {
 
 export interface AlistigoListElementAddedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListElementAdded";
-  "alistigo:listElementId": string;
+  listItem: Reference;
   name: string;
 }
 
 export interface AlistigoListElementDeletedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListElementDeleted";
-  "alistigo:listElementId": string;
+  listItem: Reference;
 }
 
 export interface AlistigoListExportedRecord extends AlistigoEventRecordBase {
@@ -51,7 +55,7 @@ export interface AlistigoListExportedRecord extends AlistigoEventRecordBase {
 
 export interface AlistigoListElementCheckedRecord extends AlistigoEventRecordBase {
   "alistigo:eventType": "ListElementChecked";
-  "alistigo:listElementId": string;
+  listItem: Reference;
   checked: boolean;
 }
 
