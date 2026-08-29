@@ -14,12 +14,31 @@
         "rootDir": "packages/list-document/src"
       }
     },
-    "test": {
+    "test:schema": {
+      "dependsOn": [{ "target": "build", "projects": ["document-validator"] }],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun ../../cli/document-validator/dist/cli.js validate-schema src/schemas/document.json",
+        "cwd": "packages/list-document"
+      }
+    },
+    "test:examples": {
+      "dependsOn": [{ "target": "build", "projects": ["document-validator"] }],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun ../../cli/document-validator/dist/cli.js --schema src/schemas/document.json examples/*.json",
+        "cwd": "packages/list-document"
+      }
+    },
+    "test:unit": {
       "executor": "nx:run-commands",
       "options": {
         "command": "bun test",
         "cwd": "packages/list-document"
       }
+    },
+    "test": {
+      "dependsOn": ["test:schema", "test:examples", "test:unit"]
     },
     "typecheck": {
       "executor": "nx:run-commands",

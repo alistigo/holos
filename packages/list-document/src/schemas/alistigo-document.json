@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.alistigo.com/v1/documents/alistigo-document.json",
+  "title": "Alistigo Document",
+  "description": "Common properties shared by all Alistigo artifact documents",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "schema:Thing"
+    }
+  ],
+  "required": ["alistigo:eventLog", "@type", "@id"],
+  "properties": {
+    "alistigo:eventLog": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Event"
+      }
+    },
+    "alistigo:agents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Agent"
+      }
+    },
+    "alistigo:plugins": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Plugin"
+      }
+    }
+  },
+  "$defs": {
+    "Reference": {
+      "type": "object",
+      "required": ["@id"],
+      "properties": {
+        "@id": { "type": "string" }
+      }
+    },
+    "Event": {
+      "allOf": [
+        {
+          "$ref": "schema:Action"
+        },
+        {
+          "type": "object",
+          "required": ["@id", "alistigo:eventType", "agent", "startTime"],
+          "properties": {
+            "@id": {
+              "type": "string"
+            },
+            "alistigo:eventType": {
+              "type": "string"
+            },
+            "agent": {
+              "$ref": "#/$defs/Reference"
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "Agent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Person"
+        },
+        {
+          "$ref": "#/$defs/SoftwareApplication"
+        }
+      ]
+    },
+    "Person": {
+      "type": "object",
+      "required": ["@type", "@id", "name"],
+      "properties": {
+        "@type": { "const": "Person" }
+      },
+      "allOf": [
+        {
+          "$ref": "schema:Person"
+        }
+      ]
+    },
+    "SoftwareApplication": {
+      "type": "object",
+      "required": ["@type", "@id", "name"],
+      "properties": {
+        "@type": { "const": "SoftwareApplication" }
+      },
+      "allOf": [
+        {
+          "$ref": "schema:SoftwareApplication"
+        }
+      ]
+    },
+    "Plugin": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

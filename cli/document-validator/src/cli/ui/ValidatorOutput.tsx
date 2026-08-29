@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { isValidListMarkdown, validateDocument } from "@alistigo/list-document";
 import { Box, Text, useApp } from "ink";
 import type React from "react";
@@ -128,6 +129,26 @@ export function ValidatorOutput({
         const ajv = new Ajv2020({ allErrors: true, strict: false });
         addFormats(ajv);
         for (const stub of SCHEMA_ORG_STUBS) ajv.addSchema(stub);
+        // Register sibling JSON schemas from the same directory so cross-file $refs resolve.
+        const absSchemaPath = resolve(schemaRef.current);
+        for (const sibling of readdirSync(dirname(absSchemaPath)).filter((f) =>
+          f.endsWith(".json"),
+        )) {
+          const siblingPath = `${dirname(absSchemaPath)}/${sibling}`;
+          if (siblingPath === absSchemaPath) continue;
+          try {
+            const siblingContent = JSON.parse(readFileSync(siblingPath, "utf-8"));
+            if (
+              typeof siblingContent === "object" &&
+              siblingContent !== null &&
+              "$id" in siblingContent
+            ) {
+              ajv.addSchema(siblingContent);
+            }
+          } catch {
+            // Skip files that can't be parsed or are already registered
+          }
+        }
         const validate = ajv.compile(jsonSchema as object);
         customValidator = (data: unknown) => {
           const valid = validate(data) as boolean;
