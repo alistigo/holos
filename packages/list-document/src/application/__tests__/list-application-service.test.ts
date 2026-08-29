@@ -28,7 +28,7 @@ class InMemoryStore implements AlistigoListStore {
   }
 
   async saveDocument(doc: AlistigoDocument): Promise<void> {
-    this.docs.set(doc.identifier, doc);
+    this.docs.set(doc["@id"], doc);
   }
 }
 
@@ -46,7 +46,7 @@ describe("ListApplicationService", () => {
     if (!result.ok) return;
     const doc = result.value;
     expect(doc["@type"]).toBe("ItemList");
-    expect(doc.identifier).toBe(listId.toString());
+    expect(doc["@id"]).toBe(listId.toString());
     expect(doc.name).toBe("My List");
     expect(doc.itemListElement).toHaveLength(0);
     expect(doc["alistigo:eventLog"]).toHaveLength(1);
@@ -61,7 +61,7 @@ describe("ListApplicationService", () => {
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.identifier).toMatch(/^lst_/);
+    expect(result.value["@id"]).toMatch(/^lst_/);
   });
 
   // fallow-ignore-next-line complexity
@@ -316,7 +316,7 @@ describe("ListApplicationService", () => {
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.identifier).toBe(listId.toString());
+    expect(result.value["@id"]).toBe(listId.toString());
   });
 
   test("applyAiInitialInput: bullet with no text is silently ignored (empty list created)", async () => {

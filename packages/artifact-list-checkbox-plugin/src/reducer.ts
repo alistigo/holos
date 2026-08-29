@@ -7,13 +7,10 @@ export function checkboxReducer(
 ): Record<string, unknown> {
   const ev = event as {
     "alistigo:eventType"?: string;
-    "alistigo:listElementId"?: string;
+    listItem?: { "@id"?: string };
     checked?: boolean;
   };
-  if (
-    ev["alistigo:eventType"] === "ListElementChecked" &&
-    ev["alistigo:listElementId"] === elementId
-  ) {
+  if (ev["alistigo:eventType"] === "ListElementChecked" && ev["listItem"]?.["@id"] === elementId) {
     return { selected: (event as AlistigoListElementCheckedRecord).checked };
   }
   return meta;

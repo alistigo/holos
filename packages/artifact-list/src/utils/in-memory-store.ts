@@ -1,6 +1,5 @@
-import type { AlistigoDocument } from "@alistigo/list-document";
+import type { AlistigoDocument, AlistigoListStore } from "@alistigo/list-document";
 import { ListDocumentSerializer } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document";
 import type { List, ListId } from "@alistigo/list-domain";
 
 export class InMemoryListStore implements AlistigoListStore {
@@ -24,6 +23,6 @@ export class InMemoryListStore implements AlistigoListStore {
 
   // fallow-ignore-next-line unused-class-member
   async saveDocument(doc: AlistigoDocument): Promise<void> {
-    this.docs.set(doc.identifier, doc);
+    this.docs.set(doc["@id"], doc);
   }
 }

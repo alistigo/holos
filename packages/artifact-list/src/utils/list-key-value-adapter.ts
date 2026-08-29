@@ -1,7 +1,10 @@
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
-import type { AlistigoAgentRecord, AlistigoDocument } from "@alistigo/list-document";
+import type {
+  AlistigoAgentRecord,
+  AlistigoDocument,
+  AlistigoListStore,
+} from "@alistigo/list-document";
 import { ListDocumentSerializer } from "@alistigo/list-document";
-import type { AlistigoListStore } from "@alistigo/list-document";
 import type { List, ListId } from "@alistigo/list-domain";
 
 // An artifact holds at most one list document. Using a fixed key decouples

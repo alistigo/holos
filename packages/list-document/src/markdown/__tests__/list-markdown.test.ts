@@ -142,12 +142,12 @@ describe("buildListDocumentFromMarkdown", () => {
   it("uses the provided listId", () => {
     const listId = generateListId();
     const doc = buildListDocumentFromMarkdown("List:\n- Item", actorId, listId);
-    expect(doc.identifier).toBe(listId.toString());
+    expect(doc["@id"]).toBe(listId.toString());
   });
 
   it("generates a listId starting with lst_ when none is given", () => {
     const doc = buildListDocumentFromMarkdown("List:\n- Item", actorId);
-    expect(doc.identifier).toMatch(/^lst_/);
+    expect(doc["@id"]).toMatch(/^lst_/);
   });
 
   it("event log contains ListCreated plus one ListElementAdded per item", () => {

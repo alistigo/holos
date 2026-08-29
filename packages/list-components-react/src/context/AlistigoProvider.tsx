@@ -9,8 +9,7 @@
  * used by the Playwright runner's `waitForIdle` synchronisation.
  */
 
-import type { AlistigoDocument } from "@alistigo/list-document";
-import type { ListApplicationService } from "@alistigo/list-document";
+import type { AlistigoDocument, ListApplicationService } from "@alistigo/list-document";
 import { generateActorId, type ListId, parseListElementId } from "@alistigo/list-domain";
 import { createLogger } from "@alistigo/logger";
 import {

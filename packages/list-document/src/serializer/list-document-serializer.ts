@@ -26,9 +26,9 @@ interface SerializeOptions {
 
 function eventToRecord(event: ListEvent): AlistigoEventRecord {
   const base = {
-    identifier: event.listEventId.toString(),
+    "@id": event.listEventId.toString(),
     list: { "@id": event.listId.toString() },
-    agent: event.actorId.toString(),
+    agent: { "@id": event.actorId.toString() },
     startTime: event.timestamp,
   };
 
@@ -75,9 +75,9 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
   }
 
   const base = {
-    listEventId: parseListEventId(record.identifier),
+    listEventId: parseListEventId(record["@id"]),
     listId: parseListId(record.list["@id"]),
-    actorId: parseActorId(record.agent),
+    actorId: parseActorId(record.agent["@id"]),
     timestamp: createTimestamp(record.startTime),
   };
 
@@ -153,7 +153,7 @@ export const ListDocumentSerializer = {
     const doc: AlistigoDocument = {
       "@context": ALISTIGO_CONTEXT,
       "@type": "ItemList",
-      identifier: list.id.toString(),
+      "@id": list.id.toString(),
       itemListElement: itemListElement,
       "alistigo:eventLog": [...existingLog, ...newRecords],
     };
@@ -168,7 +168,7 @@ export const ListDocumentSerializer = {
       const mergedAgents = [...existingAgents];
 
       for (const [, agent] of options.actorsById) {
-        const existingIndex = mergedAgents.findIndex((a) => a.identifier === agent.identifier);
+        const existingIndex = mergedAgents.findIndex((a) => a["@id"] === agent["@id"]);
         if (existingIndex >= 0) {
           mergedAgents[existingIndex] = agent;
         } else {
@@ -191,7 +191,7 @@ export const ListDocumentSerializer = {
   },
 
   deserialize(doc: AlistigoDocument): List {
-    const listId = parseListId(doc.identifier);
+    const listId = parseListId(doc["@id"]);
     const events = doc["alistigo:eventLog"]
       .map(recordToEvent)
       .filter((e): e is ListEvent => e !== null);
