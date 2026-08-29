@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.alistigo.com/v1/documents/alistigo-document.json",
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "alistigo": "https://json-ld.alistigo.com/vocab/"
+  },
+  "@type": "Thing",
+  "@id": "doc_00000000000000000000000001",
+  "name": "Example Alistigo Document",
+  "alistigo:agents": [
+    {
+      "@type": "Person",
+      "@id": "act_00000000000000000000000001",
+      "name": "Alice"
+    }
+  ],
+  "alistigo:eventLog": [
+    {
+      "@id": "evt_00000000000000000000000001",
+      "alistigo:eventType": "DocumentCreated",
+      "agent": {
+        "@id": "act_00000000000000000000000001"
+      },
+      "startTime": "2026-08-28T10:00:00.000Z"
+    }
+  ],
+  "alistigo:plugins": []
+}
