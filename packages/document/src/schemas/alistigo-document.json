@@ -9,11 +9,7 @@
       "$ref": "schema:Thing"
     }
   ],
-  "required": [
-    "alistigo:eventLog",
-    "@type",
-    "@id"
-  ],
+  "required": ["alistigo:eventLog", "@type", "@id"],
   "properties": {
     "alistigo:eventLog": {
       "type": "array",
@@ -41,7 +37,7 @@
       "properties": {
         "@id": { "type": "string" }
       }
-    }
+    },
     "Event": {
       "allOf": [
         {
