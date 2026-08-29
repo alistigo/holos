@@ -77,6 +77,9 @@
     "Person": {
       "type": "object",
       "required": ["@type", "@id", "name"],
+      "properties": {
+        "@type": { "const": "Person" }
+      },
       "allOf": [
         {
           "$ref": "schema:Person"
@@ -86,6 +89,9 @@
     "SoftwareApplication": {
       "type": "object",
       "required": ["@type", "@id", "name"],
+      "properties": {
+        "@type": { "const": "SoftwareApplication" }
+      },
       "allOf": [
         {
           "$ref": "schema:SoftwareApplication"

@@ -1,6 +1,5 @@
 import { readFileSync } from "node:fs";
 import { isValidListMarkdown, validateDocument } from "@alistigo/list-document";
-import Ajv from "ajv";
 import { Box, Text, useApp } from "ink";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -51,6 +50,15 @@ function SummaryLine({ passed, failed }: { passed: number; failed: number }): Re
     </Box>
   );
 }
+
+const SCHEMA_ORG_STUBS = [
+  { $id: "schema:Thing", type: "object" },
+  { $id: "schema:Action", type: "object" },
+  { $id: "schema:Person", type: "object" },
+  { $id: "schema:SoftwareApplication", type: "object" },
+  { $id: "schema:ItemList", type: "object" },
+  { $id: "schema:ListItem", type: "object" },
+] as const;
 
 export function ValidatorOutput({
   files,
@@ -113,13 +121,19 @@ export function ValidatorOutput({
           setDone(true);
           return;
         }
-        const ajv = new Ajv({ allErrors: true });
+        // biome-ignore lint/suspicious/noExplicitAny: dynamic import avoids pulling in ajv for non-validating consumers
+        const Ajv2020 = (await import("ajv/dist/2020.js")).default as any;
+        // biome-ignore lint/suspicious/noExplicitAny: same reason
+        const addFormats = (await import("ajv-formats")).default as any;
+        const ajv = new Ajv2020({ allErrors: true, strict: false });
+        addFormats(ajv);
+        for (const stub of SCHEMA_ORG_STUBS) ajv.addSchema(stub);
         const validate = ajv.compile(jsonSchema as object);
         customValidator = (data: unknown) => {
           const valid = validate(data) as boolean;
           const errors = valid
             ? []
-            : (validate.errors ?? []).map((e) =>
+            : (validate.errors ?? []).map((e: { instancePath: string; message?: string }) =>
                 `${e.instancePath} ${e.message ?? "invalid"}`.trim(),
               );
           return { valid, errors };
