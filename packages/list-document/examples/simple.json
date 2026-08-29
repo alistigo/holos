@@ -25,15 +25,15 @@
     {
       "@id": "lev_00000000000000000000000001",
       "alistigo:eventType": "ListCreated",
-      "alistigo:listId": "lst_00000000000000000000000001",
+      "list": { "@id": "lst_00000000000000000000000001" },
       "agent": { "@id": "act_00000000000000000000000001" },
       "startTime": "2026-08-28T10:00:00.000Z"
     },
     {
       "@id": "lev_00000000000000000000000002",
       "alistigo:eventType": "ListElementAdded",
-      "alistigo:listId": "lst_00000000000000000000000001",
-      "alistigo:listElementId": "lse_00000000000000000000000001",
+      "list": { "@id": "lst_00000000000000000000000001" },
+      "listItem": { "@id": "lse_00000000000000000000000001" },
       "agent": { "@id": "act_00000000000000000000000001" },
       "startTime": "2026-08-28T10:01:00.000Z",
       "name": "Milk"
@@ -41,8 +41,8 @@
     {
       "@id": "lev_00000000000000000000000003",
       "alistigo:eventType": "ListElementAdded",
-      "alistigo:listId": "lst_00000000000000000000000001",
-      "alistigo:listElementId": "lse_00000000000000000000000002",
+      "list": { "@id": "lst_00000000000000000000000001" },
+      "listItem": { "@id": "lse_00000000000000000000000002" },
       "agent": { "@id": "act_00000000000000000000000001" },
       "startTime": "2026-08-28T10:02:00.000Z",
       "name": "Eggs"

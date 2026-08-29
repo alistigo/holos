@@ -27,7 +27,7 @@ interface SerializeOptions {
 function eventToRecord(event: ListEvent): AlistigoEventRecord {
   const base = {
     identifier: event.listEventId.toString(),
-    "alistigo:listId": event.listId.toString(),
+    list: { "@id": event.listId.toString() },
     agent: event.actorId.toString(),
     startTime: event.timestamp,
   };
@@ -45,7 +45,7 @@ function eventToRecord(event: ListEvent): AlistigoEventRecord {
       const record: AlistigoListElementAddedRecord = {
         ...base,
         "alistigo:eventType": "ListElementAdded",
-        "alistigo:listElementId": event.listElementId.toString(),
+        listItem: { "@id": event.listElementId.toString() },
         name: event.content,
       };
       return record;
@@ -54,7 +54,7 @@ function eventToRecord(event: ListEvent): AlistigoEventRecord {
       const record: AlistigoListElementDeletedRecord = {
         ...base,
         "alistigo:eventType": "ListElementDeleted",
-        "alistigo:listElementId": event.listElementId.toString(),
+        listItem: { "@id": event.listElementId.toString() },
       };
       return record;
     }
@@ -76,7 +76,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
 
   const base = {
     listEventId: parseListEventId(record.identifier),
-    listId: parseListId(record["alistigo:listId"]),
+    listId: parseListId(record.list["@id"]),
     actorId: parseActorId(record.agent),
     timestamp: createTimestamp(record.startTime),
   };
@@ -95,7 +95,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
       return {
         ...base,
         type: "ListElementAdded",
-        listElementId: parseListElementId(added["alistigo:listElementId"]),
+        listElementId: parseListElementId(added["listItem"]["@id"]),
         content: createListElementContent(added.name),
       };
     }
@@ -104,7 +104,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
       return {
         ...base,
         type: "ListElementDeleted",
-        listElementId: parseListElementId(deleted["alistigo:listElementId"]),
+        listElementId: parseListElementId(deleted["listItem"]["@id"]),
       };
     }
     case "ListExported": {

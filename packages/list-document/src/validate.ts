@@ -14,9 +14,12 @@ export interface ValidationResult {
 // The installed schema-org-json-schemas package is used for schema flattening
 // (via $RefParser.bundle) where AJV is not involved.
 const SCHEMA_ORG_STUBS = [
+  { $id: "schema:Thing", type: "object" },
+  { $id: "schema:Action", type: "object" },
+  { $id: "schema:Person", type: "object" },
+  { $id: "schema:SoftwareApplication", type: "object" },
   { $id: "schema:ItemList", type: "object" },
   { $id: "schema:ListItem", type: "object" },
-  { $id: "schema:Action", type: "object" },
 ] as const;
 
 /**
