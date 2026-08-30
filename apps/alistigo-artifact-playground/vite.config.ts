@@ -47,6 +47,10 @@ const devPluginSrcPaths: Record<string, string> = {
     __dirname,
     "../../packages/artifact-user-plugin/src/index.ts",
   ),
+  "@alistigo/artifact-list-checkbox-plugin": path.resolve(
+    __dirname,
+    "../../packages/artifact-list-checkbox-plugin/src/index.ts",
+  ),
   "@alistigo/artifact-sentry-plugin": path.resolve(
     __dirname,
     "../../packages/artifact-sentry-plugin/src/index.ts",

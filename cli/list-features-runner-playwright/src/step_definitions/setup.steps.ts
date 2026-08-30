@@ -54,3 +54,9 @@ Given("an artifact with the user plugin enabled", async function (this: Alistigo
   await installUserPluginRoute(this.page);
   await this.enablePlugin("@alistigo/artifact-user-plugin");
 });
+
+// The checkbox plugin is always active as a DEFAULT_FEATURE_PLUGIN in artifact-list.
+// This step documents the precondition without needing additional setup.
+Given("the checkbox plugin is active", async function (this: AlistigoWorld) {
+  // no-op: @alistigo/artifact-list-checkbox-plugin loads by default
+});
