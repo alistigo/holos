@@ -59,14 +59,12 @@ Then("the user pseudo should be {string}", async function (this: AlistigoWorld, 
   assert.equal(actual, pseudo, `expected user pseudo to be "${pseudo}", got "${actual}"`);
 });
 
-// Used as Given (setup): check() is idempotent — safe to call on an already-checked element.
+// Cucumber's Given/Then/When are all keyword-agnostic — registering the same pattern
+// with two of them creates two matching definitions and triggers an ambiguity error.
+// One registration covers both Given (setup) and Then (assertion) contexts.
+// check() is idempotent, so calling it in the Then context is a safe no-op when already checked.
 Given("{string} is checked", async function (this: AlistigoWorld, text: string) {
   await this.applicationPage.checkElement(text);
-  const checked = await this.applicationPage.isElementChecked(text);
-  assert.equal(checked, true, `expected "${text}" to be checked`);
-});
-
-Then("{string} is checked", async function (this: AlistigoWorld, text: string) {
   const checked = await this.applicationPage.isElementChecked(text);
   assert.equal(checked, true, `expected "${text}" to be checked`);
 });
