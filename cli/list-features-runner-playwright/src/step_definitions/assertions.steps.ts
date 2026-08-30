@@ -1,5 +1,5 @@
 import { strict as assert } from "node:assert";
-import { type DataTable, Then } from "@cucumber/cucumber";
+import { type DataTable, Given, Then } from "@cucumber/cucumber";
 import type { AlistigoWorld } from "../support/world";
 
 Then("the list should be:", async function (this: AlistigoWorld, table: DataTable) {
@@ -57,4 +57,26 @@ Then("a user identity should be visible", async function (this: AlistigoWorld) {
 Then("the user pseudo should be {string}", async function (this: AlistigoWorld, pseudo: string) {
   const actual = await this.applicationPage.getUserPseudo();
   assert.equal(actual, pseudo, `expected user pseudo to be "${pseudo}", got "${actual}"`);
+});
+
+// Used as Given (setup): check() is idempotent — safe to call on an already-checked element.
+Given("{string} is checked", async function (this: AlistigoWorld, text: string) {
+  await this.applicationPage.checkElement(text);
+  const checked = await this.applicationPage.isElementChecked(text);
+  assert.equal(checked, true, `expected "${text}" to be checked`);
+});
+
+Then("{string} is checked", async function (this: AlistigoWorld, text: string) {
+  const checked = await this.applicationPage.isElementChecked(text);
+  assert.equal(checked, true, `expected "${text}" to be checked`);
+});
+
+Then("{string} is unchecked", async function (this: AlistigoWorld, text: string) {
+  const checked = await this.applicationPage.isElementChecked(text);
+  assert.equal(checked, false, `expected "${text}" to be unchecked`);
+});
+
+Then("each element is unchecked", async function (this: AlistigoWorld) {
+  const allUnchecked = await this.applicationPage.areAllElementsUnchecked();
+  assert.equal(allUnchecked, true, "expected all elements to be unchecked");
 });

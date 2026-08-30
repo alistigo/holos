@@ -28,6 +28,14 @@ When("the artifact is fully loaded", async function (this: AlistigoWorld) {
   await this.applicationPage.waitForArtifactReady();
 });
 
+When("I check {string}", async function (this: AlistigoWorld, text: string) {
+  await this.applicationPage.checkElement(text);
+});
+
+When("I uncheck {string}", async function (this: AlistigoWorld, text: string) {
+  await this.applicationPage.uncheckElement(text);
+});
+
 When("I open the user editor", async function (this: AlistigoWorld) {
   await this.applicationPage.openUserEditor();
 });

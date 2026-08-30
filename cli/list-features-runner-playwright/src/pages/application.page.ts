@@ -1,4 +1,4 @@
-import type { FrameLocator, Page } from "playwright";
+import type { FrameLocator, Locator, Page } from "playwright";
 import { deleteButtonName, ROLES, TEST_IDS } from "../support/selectors";
 
 declare global {
@@ -121,6 +121,49 @@ export class ApplicationPage {
   async openUserEditor(): Promise<void> {
     await this.artifactFrame.getByRole(ROLES.userMenu.role, { name: ROLES.userMenu.name }).click();
     await this.artifactFrame.getByRole(ROLES.editUser.role, { name: ROLES.editUser.name }).click();
+  }
+
+  private rowCheckbox(rowLocator: Locator): Locator {
+    return rowLocator.getByRole(ROLES.rowCheckbox.role, { name: ROLES.rowCheckbox.name });
+  }
+
+  private async waitForCheckboxPluginReady(): Promise<void> {
+    // Plugins are loaded asynchronously after the app root is visible.
+    // Wait for at least one checkbox to appear before interacting.
+    // Assumes the list is non-empty; callers that run on an empty list must guard separately.
+    await this.artifactFrame
+      .getByRole(ROLES.list.role)
+      .getByRole(ROLES.rowCheckbox.role, { name: ROLES.rowCheckbox.name })
+      .first()
+      .waitFor({ state: "attached" });
+  }
+
+  async checkElement(text: string): Promise<void> {
+    await this.waitForCheckboxPluginReady();
+    const row = this.artifactFrame.getByRole(ROLES.row.role).filter({ hasText: text });
+    await this.rowCheckbox(row).check();
+  }
+
+  async uncheckElement(text: string): Promise<void> {
+    await this.waitForCheckboxPluginReady();
+    const row = this.artifactFrame.getByRole(ROLES.row.role).filter({ hasText: text });
+    await this.rowCheckbox(row).uncheck();
+  }
+
+  async isElementChecked(text: string): Promise<boolean> {
+    await this.waitForCheckboxPluginReady();
+    const row = this.artifactFrame.getByRole(ROLES.row.role).filter({ hasText: text });
+    return this.rowCheckbox(row).isChecked();
+  }
+
+  async areAllElementsUnchecked(): Promise<boolean> {
+    await this.waitForCheckboxPluginReady();
+    const rows = this.artifactFrame.getByRole(ROLES.list.role).getByRole(ROLES.row.role);
+    const count = await rows.count();
+    for (let i = 0; i < count; i++) {
+      if (await this.rowCheckbox(rows.nth(i)).isChecked()) return false;
+    }
+    return true;
   }
 
   async setPseudo(pseudo: string): Promise<void> {
