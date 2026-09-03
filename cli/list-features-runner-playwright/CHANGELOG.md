@@ -1,3 +1,28 @@
+## 0.3.0 (2026-09-03)
+
+### 🚀 Features
+
+- **list-features-runner-playwright:** implement checkbox plugin step definitions ([5c0b3bb](https://github.com/alistigo/holos/commit/5c0b3bb))
+- **list-document-format:** inherit from schema-dts ItemListLeaf and ListItemLeaf ([9c80281](https://github.com/alistigo/holos/commit/9c80281))
+- **list-document-format:** extract alistigo-document base schema and add validate-schema CLI command ([a3f725a](https://github.com/alistigo/holos/commit/a3f725a))
+
+### 🩹 Fixes
+
+- **list-features-runner-playwright:** remove duplicate Given/Then registration for is-checked step ([47ed968](https://github.com/alistigo/holos/commit/47ed968))
+- **list-features-runner-playwright:** align test fixtures with JSON-LD schema ([fe9fb8f](https://github.com/alistigo/holos/commit/fe9fb8f))
+- **list-features-runner:** update event fixtures to schema.org field names ([686cf01](https://github.com/alistigo/holos/commit/686cf01))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.5.0
+- Updated list-document to 0.4.0
+- Updated list-features to 0.4.1
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.1 (2026-08-21)
 
 ### 🧱 Updated Dependencies

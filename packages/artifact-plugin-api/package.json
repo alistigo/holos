@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-plugin-api",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Composable plugin interface, event bus, and CDN dynamic-import loader for @alistigo artifacts.",
   "license": "MIT",
   "author": {

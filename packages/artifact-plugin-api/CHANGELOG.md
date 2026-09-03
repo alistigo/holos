@@ -1,3 +1,18 @@
+## 0.5.0 (2026-09-03)
+
+### 🚀 Features
+
+- **artifact-plugin-api:** add domain-contribution contract + avatar to user:changed ([#107](https://github.com/alistigo/holos/issues/107))
+
+### 🩹 Fixes
+
+- **artifact-plugin-api:** add elementId as first param to reduce() signature ([#107](https://github.com/alistigo/holos/issues/107))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.1 (2026-08-21)
 
 ### 🚀 Features

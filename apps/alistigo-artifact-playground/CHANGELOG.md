@@ -1,3 +1,24 @@
+## 0.3.2 (2026-09-03)
+
+### 🚀 Features
+
+- **list-features-runner-playwright:** implement checkbox plugin step definitions ([5c0b3bb](https://github.com/alistigo/holos/commit/5c0b3bb))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.3.2
+- Updated list-components-react to 0.4.0
+- Updated local-storage-plugin to 0.4.2
+- Updated claude-artifact-api to 0.3.2
+- Updated artifact-manager to 0.3.2
+- Updated artifact-list to 0.7.0
+- Updated list-document to 0.4.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.1 (2026-08-21)
 
 ### 🚀 Features

@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/claude-artifact-api",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "TypeScript types and inject script for the Claude artifact iframe API. Reverse-engineered from live Claude sessions.",
   "license": "MIT",
   "author": {

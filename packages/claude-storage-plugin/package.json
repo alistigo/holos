@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/claude-storage-plugin",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Window.storage-backed AlistigoPlugin (type: storage) implementation for the Claude artifact runtime.",
   "license": "MIT",
   "author": {

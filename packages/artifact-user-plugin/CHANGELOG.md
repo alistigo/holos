@@ -1,3 +1,21 @@
+## 0.1.1 (2026-09-03)
+
+### 🚀 Features
+
+- **list-document-format:** extract alistigo-document base schema and add validate-schema CLI command ([a3f725a](https://github.com/alistigo/holos/commit/a3f725a))
+- **artifact-list:** wire user:changed to actors section bridge ([#106](https://github.com/alistigo/holos/issues/106))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.4.2
+- Updated artifact-plugin-api to 0.5.0
+- Updated logger to 0.3.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.1.0 (2026-08-21)
 
 ### 🚀 Features

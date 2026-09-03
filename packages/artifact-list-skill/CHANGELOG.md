@@ -1,3 +1,18 @@
+## 0.2.2 (2026-09-03)
+
+### 🩹 Fixes
+
+- **artifact-list-skill:** update build-references path after list package rename ([aa28a4e](https://github.com/alistigo/holos/commit/aa28a4e))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-list-format to 0.2.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.1 (2026-08-21)
 
 ### 🧱 Updated Dependencies

@@ -1,3 +1,21 @@
+## 0.4.0 (2026-09-03)
+
+### 🚀 Features
+
+- **list-document,document-validator:** add test:schema, test:examples, test:unit targets ([de5a0c7](https://github.com/alistigo/holos/commit/de5a0c7))
+- **core-document,document-validator:** split test into test:schema and test:examples ([f040dfa](https://github.com/alistigo/holos/commit/f040dfa))
+- **core-document,document-validator:** add test target using CLI for schema validation ([560ef67](https://github.com/alistigo/holos/commit/560ef67))
+- **list-document-format:** extract alistigo-document base schema and add validate-schema CLI command ([a3f725a](https://github.com/alistigo/holos/commit/a3f725a))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document to 0.4.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.1 (2026-08-21)
 
 ### 🧱 Updated Dependencies

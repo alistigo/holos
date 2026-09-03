@@ -1,3 +1,33 @@
+## 0.7.0 (2026-09-03)
+
+### 🚀 Features
+
+- **list-document-format:** extract alistigo-document base schema and add validate-schema CLI command ([a3f725a](https://github.com/alistigo/holos/commit/a3f725a))
+- **artifact-list:** register checkbox plugin and wire projection + plugin props to ListView ([#110](https://github.com/alistigo/holos/issues/110))
+- **artifact-list:** wire user:changed to actors section bridge ([#106](https://github.com/alistigo/holos/issues/106))
+
+### 🩹 Fixes
+
+- **list-document:** align types and runtime with JSON-LD schema requirements ([42af4fe](https://github.com/alistigo/holos/commit/42af4fe))
+- **qa:** resolve pre-push typecheck, fallow dead-code, and complexity failures ([dfa19c7](https://github.com/alistigo/holos/commit/dfa19c7))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.4.2
+- Updated artifact-list-checkbox-plugin to 0.2.0
+- Updated list-components-react to 0.4.0
+- Updated artifact-plugin-api to 0.5.0
+- Updated claude-artifact-api to 0.3.2
+- Updated artifact-core to 0.3.2
+- Updated list-document to 0.4.0
+- Updated list-domain to 0.3.2
+- Updated logger to 0.3.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.6.0 (2026-08-21)
 
 ### 🚀 Features

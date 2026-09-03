@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-list-checkbox-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Checkbox domain-contribution plugin for @alistigo artifacts.",
   "license": "MIT",
   "author": {
