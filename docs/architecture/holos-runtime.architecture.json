@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Alistigo — Runtime Architecture",
+    "output": "holos-runtime.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "artifact-load-path",
+        "label": "Artifact load path",
+        "focus": ["external-user", "host-page", "artifact-manager", "cdn", "artifact-bundle"],
+        "note": "Trace how a user interaction triggers artifact resolution, CDN delivery, and iframe bootstrap."
+      },
+      {
+        "id": "plugin-layer",
+        "label": "Plugin layer",
+        "focus": ["artifact-bundle", "plugin-runtime", "plugin-bus", "storage-plugin"],
+        "note": "See how plugins sequence inside the iframe sandbox and share a typed event bus."
+      },
+      {
+        "id": "external-boundaries",
+        "label": "External dependencies",
+        "focus": ["cdn", "claude-api", "analytics"],
+        "note": "Highlight the three external trust points: CDN delivery, Claude storage, and observability."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "external-user",
+      "type": "external",
+      "label": "User",
+      "sublabel": "Browser / Mobile",
+      "pos": [40, 300],
+      "size": [120, 60]
+    },
+    {
+      "id": "host-page",
+      "type": "frontend",
+      "label": "Host Page",
+      "sublabel": "React · Vite",
+      "pos": [190, 300],
+      "size": [140, 60],
+      "tag": "artifact-playground"
+    },
+    {
+      "id": "artifact-manager",
+      "type": "backend",
+      "label": "Artifact Manager",
+      "sublabel": "artifact-manager",
+      "pos": [360, 300],
+      "size": [150, 60]
+    },
+    {
+      "id": "artifact-registry",
+      "type": "database",
+      "label": "Artifact Registry",
+      "sublabel": "in-process Map",
+      "pos": [360, 120],
+      "size": [150, 60]
+    },
+    {
+      "id": "cdn",
+      "type": "cloud",
+      "label": "jsDelivr CDN",
+      "sublabel": "cdn.jsdelivr.net",
+      "pos": [540, 300],
+      "size": [130, 60]
+    },
+    {
+      "id": "artifact-bundle",
+      "type": "frontend",
+      "label": "Artifact Bundle",
+      "sublabel": "UMD · iframe srcdoc",
+      "pos": [700, 300],
+      "size": [145, 60]
+    },
+    {
+      "id": "analytics",
+      "type": "cloud",
+      "label": "Analytics",
+      "sublabel": "PostHog · Sentry",
+      "pos": [700, 480],
+      "size": [145, 60]
+    },
+    {
+      "id": "plugin-runtime",
+      "type": "backend",
+      "label": "Plugin Runtime",
+      "sublabel": "plugin-api",
+      "pos": [875, 300],
+      "size": [145, 60]
+    },
+    {
+      "id": "plugin-bus",
+      "type": "messagebus",
+      "label": "Plugin Event Bus",
+      "sublabel": "in-process · typed",
+      "pos": [875, 480],
+      "size": [145, 60]
+    },
+    {
+      "id": "storage-plugin",
+      "type": "database",
+      "label": "Storage Plugin",
+      "sublabel": "local-storage | claude",
+      "pos": [1050, 300],
+      "size": [145, 60]
+    },
+    {
+      "id": "claude-api",
+      "type": "cloud",
+      "label": "Claude API",
+      "sublabel": "Anthropic",
+      "pos": [1050, 120],
+      "size": [140, 60]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Browser",
+      "wraps": [
+        "host-page",
+        "artifact-manager",
+        "artifact-registry",
+        "artifact-bundle",
+        "analytics",
+        "plugin-runtime",
+        "plugin-bus",
+        "storage-plugin"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Iframe Sandbox",
+      "wraps": ["artifact-bundle", "analytics", "plugin-runtime", "plugin-bus", "storage-plugin"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user-to-host",
+      "from": "external-user",
+      "to": "host-page",
+      "label": "opens app",
+      "variant": "emphasis",
+      "labelAt": [175, 374]
+    },
+    {
+      "id": "host-to-manager",
+      "from": "host-page",
+      "to": "artifact-manager",
+      "label": "init(selector, config)",
+      "labelAt": [340, 280]
+    },
+    {
+      "id": "manager-to-registry",
+      "from": "artifact-manager",
+      "to": "artifact-registry",
+      "label": "resolve CDN URL",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "manager-to-cdn",
+      "from": "artifact-manager",
+      "to": "cdn",
+      "label": "inject <script>",
+      "variant": "emphasis",
+      "labelAt": [525, 374]
+    },
+    {
+      "id": "cdn-to-bundle",
+      "from": "cdn",
+      "to": "artifact-bundle",
+      "label": "serve UMD bundle",
+      "variant": "emphasis",
+      "labelAt": [695, 374]
+    },
+    {
+      "id": "bundle-to-runtime",
+      "from": "artifact-bundle",
+      "to": "plugin-runtime",
+      "label": "createPluginRuntime()",
+      "labelAt": [870, 280]
+    },
+    {
+      "id": "runtime-to-bus",
+      "from": "plugin-runtime",
+      "to": "plugin-bus",
+      "label": "emit / subscribe",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [948, 374]
+    },
+    {
+      "id": "bundle-to-analytics",
+      "from": "artifact-bundle",
+      "to": "analytics",
+      "label": "track events",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [773, 374]
+    },
+    {
+      "id": "runtime-to-storage",
+      "from": "plugin-runtime",
+      "to": "storage-plugin",
+      "label": "KV read/write",
+      "labelAt": [1035, 374]
+    },
+    {
+      "id": "storage-to-claude",
+      "from": "storage-plugin",
+      "to": "claude-api",
+      "label": "Claude Storage API",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "violet",
+      "title": "Artifact Types",
+      "items": [
+        "@alistigo/artifact-list — base list with checkbox and user plugin support",
+        "@alistigo/artifact-claude-capabilities-demo — Claude API demo artifact"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Plugin Ecosystem",
+      "items": [
+        "artifact-user-plugin — user identity context",
+        "artifact-list-checkbox-plugin — checkbox list items",
+        "local-storage-plugin — browser localStorage KeyValueStore",
+        "claude-storage-plugin — Claude API-backed KeyValueStore"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Trust Boundaries",
+      "items": [
+        "Artifact bundles load from jsDelivr CDN, not same origin",
+        "Plugin code executes inside a sandboxed iframe srcdoc",
+        "Plugin Bus is in-process — plugins share no direct object references"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Plugin Lifecycle",
+      "items": [
+        "Hooks sequence in key-insertion order: setup → beforeMount → mounted → destroy",
+        "Every hook is individually try/caught — one failing plugin cannot break the host mount"
+      ]
+    }
+  ]
+}
