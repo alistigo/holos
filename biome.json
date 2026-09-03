@@ -38,7 +38,8 @@
       "!.claude",
       "!ai",
       "!vendor",
-      "!.worktrees"
+      "!.worktrees",
+      "!docs/**/*.html"
     ]
   },
   "overrides": [
