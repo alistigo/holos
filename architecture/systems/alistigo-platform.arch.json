@@ -1,0 +1,270 @@
+{
+  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/core.json",
+  "unique-id": "alistigo-platform",
+  "name": "Alistigo Platform — Four-Tier Architecture",
+  "description": "Alistigo is a platform for AI artifacts. Architecture is organised in four independently-versioned tiers. Artifacts run fully client-side inside iframes — no backend required.",
+  "nodes": [
+    {
+      "unique-id": "actor-user",
+      "node-type": "actor",
+      "name": "End User",
+      "description": "Human user interacting with an artifact in a browser"
+    },
+    {
+      "unique-id": "actor-llm-host",
+      "node-type": "actor",
+      "name": "Claude / LLM Host",
+      "description": "Claude.ai or any host that embeds artifacts in iframes and communicates via postMessage. Produces documents from prose and issues commands. Source: ADR 0020."
+    },
+    {
+      "unique-id": "actor-developer",
+      "node-type": "actor",
+      "name": "Artifact Developer",
+      "description": "Developer building or extending an artifact using the platform libraries, playground, and dev tools"
+    },
+    {
+      "unique-id": "tier-dev-tools",
+      "node-type": "system",
+      "name": "Dev Tools Tier",
+      "description": "Tooling for artifact developers and QA. Not shipped in production artifacts. Packages: alistigo-artifact-playground (Vite+React dev harness), list-features (Gherkin specs), list-features-runner-playwright (Gherkin runner), agent-skill-tester.",
+      "interfaces": [
+        {
+          "unique-id": "playground-ui",
+          "type": "http-api",
+          "name": "Playground UI",
+          "description": "Browser-based dev harness at localhost:5173 during development"
+        }
+      ]
+    },
+    {
+      "unique-id": "tier-artifacts",
+      "node-type": "system",
+      "name": "Artifacts Tier",
+      "description": "Artifact bundles shipped via npm and served via jsDelivr CDN. Each artifact is a self-contained UMD bundle that can be embedded in any iframe. Reference: @alistigo/artifact-list. Packages: artifact-list, list-domain, list-document-format, list-document-editor, list-components-react, artifact-list-skill.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-umd-bundle",
+          "type": "cdn",
+          "name": "UMD Bundle",
+          "description": "Self-contained bundle served via jsDelivr, loaded by artifact-manager at runtime"
+        },
+        {
+          "unique-id": "artifact-postmessage",
+          "type": "event-driven",
+          "name": "postMessage API (M5+)",
+          "description": "Two-way communication with host: alistigo:config, alistigo:event, alistigo:replay, alistigo:snapshot, alistigo:emitted"
+        }
+      ]
+    },
+    {
+      "unique-id": "tier-artifact-core",
+      "node-type": "system",
+      "name": "Artifact Core Tier",
+      "description": "Shared libraries bundled into every artifact. Provides lifecycle, plugin API, AI chat bridge, logging. Packages: artifact-core, artifact-core-components-react, artifact-plugin-api, ai-chat-async-api, logger.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-core-api",
+          "type": "library",
+          "name": "TypeScript API",
+          "description": "startArtifact(), ArtifactErrorBoundary, plugin registration, ArtifactPlugin interface"
+        }
+      ]
+    },
+    {
+      "unique-id": "tier-platform-infra",
+      "node-type": "system",
+      "name": "Platform Infra Tier",
+      "description": "CDN-loaded infrastructure shared across all artifacts. Versioned independently. Packages: artifact-manager, artifact-config-format, artifact-sentry-plugin, artifact-posthog-plugin, claude-storage-plugin, local-storage-plugin.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-manager-api",
+          "type": "http-api",
+          "name": "CDN Script Injection",
+          "description": "artifact-manager resolves CDN URL and injects <script> for artifact UMD bundle"
+        }
+      ]
+    },
+    {
+      "unique-id": "ext-jsdelivr",
+      "node-type": "service",
+      "name": "jsDelivr CDN",
+      "description": "Content Delivery Network serving npm packages at pkg.jsdelivr.net. Artifacts and platform-infra packages are loaded from here at runtime. Versioning strategy: ADR 0011.",
+      "interfaces": [
+        {
+          "unique-id": "jsdelivr-cdn-url",
+          "type": "http-api",
+          "name": "CDN URL",
+          "description": "https://cdn.jsdelivr.net/npm/@alistigo/<package>@<version>/<file>"
+        }
+      ]
+    },
+    {
+      "unique-id": "ext-sentry",
+      "node-type": "service",
+      "name": "Sentry",
+      "description": "Error monitoring SaaS. artifact-sentry-plugin reports runtime errors. ADR 0008.",
+      "interfaces": [
+        {
+          "unique-id": "sentry-dsn",
+          "type": "http-api",
+          "name": "Sentry DSN endpoint",
+          "description": "Error ingestion endpoint"
+        }
+      ]
+    },
+    {
+      "unique-id": "ext-posthog",
+      "node-type": "service",
+      "name": "PostHog",
+      "description": "Product analytics SaaS. artifact-posthog-plugin captures usage events. ADR 0010.",
+      "interfaces": [
+        {
+          "unique-id": "posthog-api",
+          "type": "http-api",
+          "name": "PostHog API",
+          "description": "Analytics event ingestion"
+        }
+      ]
+    },
+    {
+      "unique-id": "ext-npm",
+      "node-type": "service",
+      "name": "npm Registry (GitHub Packages)",
+      "description": "npm-compatible registry hosting @alistigo/* packages. Published via CI using OIDC. ADR 0014.",
+      "interfaces": [
+        {
+          "unique-id": "npm-registry-url",
+          "type": "http-api",
+          "name": "npm registry endpoint",
+          "description": "https://npm.pkg.github.com"
+        }
+      ]
+    },
+    {
+      "unique-id": "browser-storage",
+      "node-type": "database",
+      "name": "Browser Storage",
+      "description": "localStorage (M1/M2) or window.storage (Claude artifact context, ADR 0005). Stores event log keyed by list @id. Future: IndexedDB for larger logs.",
+      "interfaces": [
+        {
+          "unique-id": "local-storage-api",
+          "type": "storage",
+          "name": "Web Storage API",
+          "description": "localStorage / window.storage under alistigo:evt:<list-id>:<seq> keys"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "user-uses-artifact",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "actor-user" },
+          "destination": { "node": "tier-artifacts" }
+        }
+      },
+      "description": "User interacts with an artifact embedded in a browser iframe"
+    },
+    {
+      "unique-id": "llm-host-embeds-artifact",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "actor-llm-host" },
+          "destination": { "node": "tier-artifacts" }
+        }
+      },
+      "description": "LLM host (Claude.ai) creates and embeds artifacts; communicates config and documents via postMessage"
+    },
+    {
+      "unique-id": "developer-uses-devtools",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "actor-developer" },
+          "destination": { "node": "tier-dev-tools" }
+        }
+      },
+      "description": "Developer uses the playground and CLI tools to build and test artifacts"
+    },
+    {
+      "unique-id": "devtools-uses-artifacts",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-dev-tools" },
+          "destination": { "node": "tier-artifacts" }
+        }
+      },
+      "description": "Dev tools import and exercise artifact packages (Gherkin runner drives list-domain directly)"
+    },
+    {
+      "unique-id": "artifacts-use-core",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-artifacts" },
+          "destination": { "node": "tier-artifact-core" }
+        }
+      },
+      "description": "Artifacts import artifact-core lifecycle, artifact-plugin-api, logger — bundled into each artifact UMD"
+    },
+    {
+      "unique-id": "artifacts-use-infra",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-artifacts" },
+          "destination": { "node": "tier-platform-infra" }
+        }
+      },
+      "description": "Artifacts rely on platform-infra for CDN loading, plugin resolution, and storage"
+    },
+    {
+      "unique-id": "infra-loads-from-cdn",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-platform-infra" },
+          "destination": { "node": "ext-jsdelivr" }
+        }
+      },
+      "description": "artifact-manager fetches artifact UMD bundle from jsDelivr at runtime"
+    },
+    {
+      "unique-id": "infra-reports-to-sentry",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-platform-infra" },
+          "destination": { "node": "ext-sentry" }
+        }
+      },
+      "description": "artifact-sentry-plugin captures and ships runtime errors to Sentry"
+    },
+    {
+      "unique-id": "infra-reports-to-posthog",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-platform-infra" },
+          "destination": { "node": "ext-posthog" }
+        }
+      },
+      "description": "artifact-posthog-plugin sends usage events to PostHog"
+    },
+    {
+      "unique-id": "artifacts-persist-to-storage",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-artifacts" },
+          "destination": { "node": "browser-storage" }
+        }
+      },
+      "description": "Artifacts persist the event log to browser storage via the storage plugin (LocalStorageEventStore or ClaudeStorageEventStore)"
+    },
+    {
+      "unique-id": "ci-publishes-to-npm",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "tier-artifacts" },
+          "destination": { "node": "ext-npm" }
+        }
+      },
+      "description": "CI pipeline publishes @alistigo/* packages to npm registry on release"
+    }
+  ]
+}
