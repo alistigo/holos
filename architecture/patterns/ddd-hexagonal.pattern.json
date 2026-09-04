@@ -1,0 +1,85 @@
+{
+  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/pattern.json",
+  "unique-id": "ddd-hexagonal-pattern",
+  "name": "DDD Hexagonal Architecture Pattern",
+  "description": "Domain-Driven Design with hexagonal (ports-and-adapters) layering. Domain is pure; Application owns ports; Adapters implement ports; Presentation depends on Application.",
+  "nodes": [
+    {
+      "unique-id": "domain-layer",
+      "node-type": "service",
+      "name": "Domain Layer",
+      "description": "Pure domain logic: entities, value objects, domain events, command types. Zero external imports. No IO, no DOM, no global state.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "application-layer",
+      "node-type": "service",
+      "name": "Application Layer",
+      "description": "CQRS command handlers (write side) and queries (read side). Declares ports as interfaces. Imports Domain only. Never imports adapters.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "ports-layer",
+      "node-type": "service",
+      "name": "Ports (Interfaces)",
+      "description": "Declared in Application layer. Abstractions over persistence, serialisation, external communication. Adapters implement these; Application depends on them.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "adapters-layer",
+      "node-type": "service",
+      "name": "Adapters Layer",
+      "description": "Concrete implementations of Ports: storage adapters, serialisers, validators, host bridges. Depend on Application + Ports. Injected at boot (dependency inversion).",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "presentation-layer",
+      "node-type": "service",
+      "name": "Presentation Layer",
+      "description": "UI components, runners, harnesses. Renders Application state, dispatches commands. Imports Application only. No domain logic.",
+      "well-known-endpoint": null
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "presentation-uses-application",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "presentation-layer" },
+          "destination": { "node": "application-layer" }
+        }
+      },
+      "description": "Presentation dispatches commands to Application and subscribes to Application state"
+    },
+    {
+      "unique-id": "application-uses-domain",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "application-layer" },
+          "destination": { "node": "domain-layer" }
+        }
+      },
+      "description": "Application command handlers validate against Domain types and emit Domain events"
+    },
+    {
+      "unique-id": "application-declares-ports",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "application-layer" },
+          "destination": { "node": "ports-layer" }
+        }
+      },
+      "description": "Application owns port interfaces; it depends on abstractions it declares"
+    },
+    {
+      "unique-id": "adapters-implement-ports",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapters-layer" },
+          "destination": { "node": "ports-layer" }
+        }
+      },
+      "description": "Adapters implement port interfaces and are injected at boot time"
+    }
+  ]
+}
