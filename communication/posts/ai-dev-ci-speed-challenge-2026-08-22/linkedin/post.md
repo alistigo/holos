@@ -1,9 +1,9 @@
 ---
-status: draft
+status: published
 channel: linkedin
 createdAt: 2026-08-22
 attachment:
-publishedAt:
+publishedAt: 2026-09-04
 url:
 formula: F4 Time-Anchor Confession
 series: ai-dev-repo-setup (3/3)
