@@ -10,3 +10,6 @@
 [submodule "vendor/linkedin-skills"]
 	path = vendor/linkedin-skills
 	url = https://github.com/sergebulaev/linkedin-skills.git
+[submodule "vendor/archify"]
+	path = vendor/archify
+	url = https://github.com/tt-a1i/archify.git
