@@ -1,0 +1,119 @@
+{
+  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/pattern.json",
+  "unique-id": "event-sourcing-cqrs-pattern",
+  "name": "Event Sourcing + CQRS Pattern",
+  "description": "Mutations are captured as immutable, append-only domain events. Current state is derived by folding the event log through a pure projector function (CQRS read side). Commands (write side) validate intent and emit events; they never mutate state directly.",
+  "nodes": [
+    {
+      "unique-id": "command",
+      "node-type": "service",
+      "name": "Command (intent)",
+      "description": "A request to change state. Validated by a command handler against current projection. Rejected or translated into one or more events. Never mutates state directly.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "command-handler",
+      "node-type": "service",
+      "name": "Command Handler (write side)",
+      "description": "Validates a command against current state, emits domain events. Part of Application layer. One handler per command type.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "event",
+      "node-type": "service",
+      "name": "Domain Event (fact)",
+      "description": "An immutable record of something that happened. Has a stable unique ID (UUIDv7 URN), a monotonic sequence number, an occurredAt timestamp, and a typed payload. Events are never edited or deleted.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "event-store",
+      "node-type": "database",
+      "name": "Event Store",
+      "description": "Append-only log of domain events, keyed by aggregate ID. The single source of truth at runtime. Implemented as a Port; concrete adapters: LocalStorageEventStore, InMemoryEventStore (tests), HttpSyncEventStore (future).",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "projector",
+      "node-type": "service",
+      "name": "Projector (read side)",
+      "description": "Pure function: reduce(events, initialState) → Document. Deterministic: same events always produce the same document. Part of Application layer. Cacheable (snapshot) without loss of correctness.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "snapshot-cache",
+      "node-type": "database",
+      "name": "Snapshot Cache (optional)",
+      "description": "Cached projection to avoid full-log replay on boot. Always invalidatable: the event log is authoritative. Implemented as SnapshotStore port.",
+      "well-known-endpoint": null
+    },
+    {
+      "unique-id": "query",
+      "node-type": "service",
+      "name": "Query (read side)",
+      "description": "Reads from the current projection (the document). Never touches the event store directly. Examples: LoadCurrentDocument, ExportDocument.",
+      "well-known-endpoint": null
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "command-to-handler",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "command" },
+          "destination": { "node": "command-handler" }
+        }
+      },
+      "description": "Commands are dispatched to their handler"
+    },
+    {
+      "unique-id": "handler-emits-event",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "command-handler" },
+          "destination": { "node": "event" }
+        }
+      },
+      "description": "Handler validates and emits one or more domain events"
+    },
+    {
+      "unique-id": "event-appended-to-store",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "event" },
+          "destination": { "node": "event-store" }
+        }
+      },
+      "description": "Events are appended to the event store (append-only, never overwrite)"
+    },
+    {
+      "unique-id": "projector-reads-store",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "projector" },
+          "destination": { "node": "event-store" }
+        }
+      },
+      "description": "Projector folds the full event log into the current document"
+    },
+    {
+      "unique-id": "projector-reads-snapshot",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "projector" },
+          "destination": { "node": "snapshot-cache" }
+        }
+      },
+      "description": "Projector may bootstrap from a snapshot to avoid full replay"
+    },
+    {
+      "unique-id": "query-reads-projection",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "query" },
+          "destination": { "node": "projector" }
+        }
+      },
+      "description": "Queries read from the projection; they never touch the event store directly"
+    }
+  ]
+}

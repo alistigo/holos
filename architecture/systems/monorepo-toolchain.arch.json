@@ -1,0 +1,333 @@
+{
+  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/core.json",
+  "unique-id": "monorepo-toolchain",
+  "name": "Holos Monorepo Toolchain",
+  "description": "Development toolchain for the Holos monorepo. Tools, runtimes, and CI pipeline that support building, testing, linting, and releasing Alistigo packages.",
+  "nodes": [
+    {
+      "unique-id": "actor-developer",
+      "node-type": "actor",
+      "name": "Developer / AI Agent",
+      "description": "Human developer or Claude Code AI agent writing and reviewing code in the monorepo"
+    },
+    {
+      "unique-id": "pnpm-workspace",
+      "node-type": "service",
+      "name": "pnpm Workspace",
+      "description": "Package manager and workspace orchestrator. Manages node_modules with content-addressable store. workspace:* protocol for local package cross-references.",
+      "interfaces": [
+        {
+          "unique-id": "pnpm-cli",
+          "type": "cli",
+          "name": "pnpm CLI",
+          "description": "pnpm install, pnpm build, pnpm test, pnpm qa"
+        }
+      ]
+    },
+    {
+      "unique-id": "nx",
+      "node-type": "service",
+      "name": "Nx Build Orchestration",
+      "description": "Build pipeline with task caching, affected analysis, and dependency graph. project.json is the single source of truth for all Nx tasks (build, typecheck, test, lint, clean, dev). Delegates to underlying tools.",
+      "interfaces": [
+        {
+          "unique-id": "nx-cli",
+          "type": "cli",
+          "name": "Nx CLI",
+          "description": "nx run <project>:<target>, nx affected -t build, nx run-many -t test"
+        }
+      ]
+    },
+    {
+      "unique-id": "bun-runtime",
+      "node-type": "service",
+      "name": "Bun Runtime",
+      "description": "TypeScript runtime inside individual apps/packages. Used for dev servers, test execution, and build scripts. Not used at browser runtime.",
+      "interfaces": [
+        {
+          "unique-id": "bun-cli",
+          "type": "cli",
+          "name": "Bun CLI",
+          "description": "bun run, bun test, bun build"
+        }
+      ]
+    },
+    {
+      "unique-id": "biome",
+      "node-type": "service",
+      "name": "Biome (Lint + Format)",
+      "description": "Unified linting and formatting replacing ESLint + Prettier. biome.json at repo root. All code must pass `pnpm biome check --write .` before commit.",
+      "interfaces": [
+        {
+          "unique-id": "biome-cli",
+          "type": "cli",
+          "name": "Biome CLI",
+          "description": "biome check, biome format"
+        }
+      ]
+    },
+    {
+      "unique-id": "typescript",
+      "node-type": "service",
+      "name": "TypeScript (strict)",
+      "description": "Type checker. Strict mode: strict, exactOptionalPropertyTypes, noUncheckedIndexedAccess. All packages extend tsconfig.base.json. No `any` without justification comment.",
+      "interfaces": [
+        {
+          "unique-id": "tsc-cli",
+          "type": "cli",
+          "name": "tsc",
+          "description": "tsc --noEmit (typecheck target in project.json)"
+        }
+      ]
+    },
+    {
+      "unique-id": "dependency-cruiser",
+      "node-type": "service",
+      "name": "dependency-cruiser (arch-check)",
+      "description": "Architectural linting at the code level. Validates package imports against declared rules (.dependency-cruiser.cjs). Enforces layer isolation. See docs/arch-check.md.",
+      "interfaces": [
+        {
+          "unique-id": "depcruiser-cli",
+          "type": "cli",
+          "name": "dependency-cruiser CLI",
+          "description": "pnpm qa:arch-check"
+        }
+      ]
+    },
+    {
+      "unique-id": "fallow",
+      "node-type": "service",
+      "name": "Fallow (dead-code + complexity)",
+      "description": "Dead-code detection and code complexity analysis. pnpm qa:dead-code for full scan; pnpm qa:audit for changed-file fast gate. MCP server available for AI-assisted analysis.",
+      "interfaces": [
+        {
+          "unique-id": "fallow-cli",
+          "type": "cli",
+          "name": "Fallow CLI",
+          "description": "pnpm qa:dead-code, pnpm qa:audit"
+        }
+      ]
+    },
+    {
+      "unique-id": "mise",
+      "node-type": "service",
+      "name": "mise (tool versions)",
+      "description": "Tool version manager. Pins node, bun, python, rust. .mise.toml at repo root.",
+      "interfaces": [
+        {
+          "unique-id": "mise-cli",
+          "type": "cli",
+          "name": "mise CLI",
+          "description": "mise install, mise run setup"
+        }
+      ]
+    },
+    {
+      "unique-id": "vitest",
+      "node-type": "service",
+      "name": "Vitest (unit tests)",
+      "description": "Unit test runner for packages. Run via Nx task: nx run <project>:test.",
+      "interfaces": [
+        {
+          "unique-id": "vitest-cli",
+          "type": "cli",
+          "name": "Vitest CLI",
+          "description": "vitest run"
+        }
+      ]
+    },
+    {
+      "unique-id": "playwright",
+      "node-type": "service",
+      "name": "Playwright (E2E)",
+      "description": "End-to-end browser automation. Used by list-features-runner-playwright for iframe-level Gherkin tests.",
+      "interfaces": [
+        {
+          "unique-id": "playwright-cli",
+          "type": "cli",
+          "name": "Playwright CLI",
+          "description": "playwright test"
+        }
+      ]
+    },
+    {
+      "unique-id": "github-actions",
+      "node-type": "service",
+      "name": "GitHub Actions (CI/CD)",
+      "description": "CI pipeline running on push/PR. Runs QA checks, builds, tests, and releases. Publishes packages to npm on release tags. See .github/workflows/.",
+      "interfaces": [
+        {
+          "unique-id": "github-actions-api",
+          "type": "http-api",
+          "name": "GitHub Actions API",
+          "description": "Webhook-driven CI/CD"
+        }
+      ]
+    },
+    {
+      "unique-id": "lefthook",
+      "node-type": "service",
+      "name": "Lefthook (git hooks)",
+      "description": "Git hook manager. Runs biome format and other checks on pre-commit/pre-push. lefthook.yml at root.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "calm-toolchain",
+      "node-type": "service",
+      "name": "CALM Toolchain",
+      "description": "Architecture as Code tooling. @finos/calm (CLI validate/generate), @finos/calm-studio (browser editor), @finos/calm-mcp (MCP server for Claude Code and VS Code). See ADR 0027.",
+      "interfaces": [
+        {
+          "unique-id": "calm-cli",
+          "type": "cli",
+          "name": "CALM CLI",
+          "description": "pnpm calm validate, pnpm calm generate"
+        },
+        {
+          "unique-id": "calm-mcp",
+          "type": "mcp",
+          "name": "CALM MCP Server",
+          "description": "Provides architecture context to Claude Code and VS Code AI tools"
+        },
+        {
+          "unique-id": "calm-studio-ui",
+          "type": "http-api",
+          "name": "calm-studio",
+          "description": "Browser-based interactive CALM editor at localhost during development"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "developer-uses-pnpm",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "actor-developer" },
+          "destination": { "node": "pnpm-workspace" }
+        }
+      },
+      "description": "Developer uses pnpm to install deps, run tasks, and manage the workspace"
+    },
+    {
+      "unique-id": "pnpm-delegates-to-nx",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "pnpm-workspace" },
+          "destination": { "node": "nx" }
+        }
+      },
+      "description": "Root package.json scripts delegate to nx run-many for orchestration"
+    },
+    {
+      "unique-id": "nx-uses-bun",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "bun-runtime" }
+        }
+      },
+      "description": "Nx invokes bun for individual package build, test, and dev targets"
+    },
+    {
+      "unique-id": "nx-uses-biome",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "biome" }
+        }
+      },
+      "description": "Nx qa:lint target delegates to Biome"
+    },
+    {
+      "unique-id": "nx-uses-typescript",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "typescript" }
+        }
+      },
+      "description": "Nx typecheck target delegates to tsc --noEmit"
+    },
+    {
+      "unique-id": "nx-uses-depcruiser",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "dependency-cruiser" }
+        }
+      },
+      "description": "Nx qa:arch-check target delegates to dependency-cruiser"
+    },
+    {
+      "unique-id": "nx-uses-fallow",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "fallow" }
+        }
+      },
+      "description": "Nx qa:dead-code and qa:audit targets delegate to Fallow CLI"
+    },
+    {
+      "unique-id": "nx-uses-vitest",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "vitest" }
+        }
+      },
+      "description": "Nx test target delegates to Vitest"
+    },
+    {
+      "unique-id": "nx-uses-playwright",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "nx" },
+          "destination": { "node": "playwright" }
+        }
+      },
+      "description": "Nx e2e target in list-features-runner-playwright delegates to Playwright"
+    },
+    {
+      "unique-id": "ci-runs-nx",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-actions" },
+          "destination": { "node": "nx" }
+        }
+      },
+      "description": "CI pipeline runs Nx tasks (nx affected -t build,test,lint,typecheck)"
+    },
+    {
+      "unique-id": "lefthook-runs-biome",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "lefthook" },
+          "destination": { "node": "biome" }
+        }
+      },
+      "description": "Pre-commit hook runs biome format and check"
+    },
+    {
+      "unique-id": "developer-uses-calm",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "actor-developer" },
+          "destination": { "node": "calm-toolchain" }
+        }
+      },
+      "description": "Developer and Claude Code use CALM CLI to validate architecture files; calm-studio to browse/edit them"
+    },
+    {
+      "unique-id": "ci-validates-calm",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-actions" },
+          "destination": { "node": "calm-toolchain" }
+        }
+      },
+      "description": "CI runs pnpm qa:arch-calm to validate CALM files on every PR"
+    }
+  ]
+}
