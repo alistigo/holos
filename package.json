@@ -17,7 +17,7 @@
   "scripts": {
     "build": "nx run-many -t build",
     "build:typecheck": "nx run-many -t typecheck",
-    "qa": "nx run-many -t qa:lint qa:arch-check qa:dead-code qa:audit && pnpm qa:stories-check && pnpm qa:artifact-sandbox-check && pnpm qa:arch-calm",
+    "qa": "nx run-many -t qa:lint qa:arch-check qa:dead-code qa:audit qa:stories-check qa:artifact-sandbox-check qa:arch-calm",
     "qa:lint": "nx run-many -t qa:lint",
     "qa:arch-check": "depcruise apps packages cli --config .dependency-cruiser.cjs",
     "qa:arch-calm": "calm validate architecture/",
