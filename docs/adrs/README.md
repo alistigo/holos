@@ -30,3 +30,4 @@ This directory contains architectural decisions for the Holos monorepo — both 
 | [0024](0024-shared-list-view-actor-registry.md) | Shared-List View: Actor Registry in Document | Accepted | 2026-08-25 |
 | [0025](0025-checkbox-plugin-domain-contribution.md) | Checkbox Plugin: First Domain-Contribution Plugin | Accepted | 2026-08-25 |
 | [0026](0026-alistigo-document-format-jsonld-schemaorg.md) | Alistigo Document Format: JSON-LD + schema.org Foundation and Package Standard | Accepted | 2026-08-29 |
+| [0027](0027-architecture-as-code-calm.md) | Architecture as Code: Adopting CALM (Common Architecture Language Model) | Accepted | 2026-09-04 |

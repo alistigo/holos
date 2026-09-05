@@ -1,0 +1,310 @@
+{
+  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/core.json",
+  "unique-id": "list-artifact-ddd",
+  "name": "List Artifact — DDD + Event-Sourcing + CQRS Internal Architecture",
+  "description": "Internal architecture of the @alistigo/artifact-list reference implementation. Uses DDD hexagonal layering (pattern: ddd-hexagonal) + Event Sourcing + CQRS (pattern: event-sourcing-cqrs). The domain is pure; state changes are captured as immutable events; the current document is a projection.",
+  "nodes": [
+    {
+      "unique-id": "list-domain-pkg",
+      "node-type": "service",
+      "name": "list-domain (@alistigo/list-domain)",
+      "description": "PURE domain layer. Entities: List, ListItem. Value objects: ListId, ItemId, ActionStatus. Domain event types (ListCreated, ItemAdded, ItemToggled, ItemRemoved, ListRenamed) and command types. Zero project-internal imports. No IO, no DOM.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "list-document-format-pkg",
+      "node-type": "service",
+      "name": "list-document-format (@alistigo/list-document-format)",
+      "description": "PURE document format layer. JSON Schema for the document and events, TypeScript types (Document, Event, Command), parse(), validate(), serialize() functions. JSON-LD + schema.org foundation (ADR 0026). The single source of truth for the wire format.",
+      "interfaces": [
+        {
+          "unique-id": "json-schema-endpoint",
+          "type": "schema",
+          "name": "JSON Schema",
+          "description": "JSON Schema Draft 2020-12 for AlistigoDocument and AlistigoEvent"
+        }
+      ]
+    },
+    {
+      "unique-id": "list-document-editor-pkg",
+      "node-type": "service",
+      "name": "list-document-editor (@alistigo/list-document-editor)",
+      "description": "Application layer. Command handlers (AddItem, ToggleItem, RemoveItem, RenameList) validate commands and emit events. Projector: reduce(events, initial) → Document. Queries: LoadCurrentDocument, ExportDocument. Declares ports as TypeScript interfaces. Imports list-domain and list-document-format only.",
+      "interfaces": [
+        {
+          "unique-id": "command-dispatcher",
+          "type": "library",
+          "name": "Command Dispatcher",
+          "description": "dispatch(command: Command) → Promise<void>"
+        },
+        {
+          "unique-id": "query-api",
+          "type": "library",
+          "name": "Query API",
+          "description": "loadDocument() → AlistigoDocument, exportDocument() → AlistigoDocument"
+        }
+      ]
+    },
+    {
+      "unique-id": "ports",
+      "node-type": "service",
+      "name": "Ports (declared in list-document-editor)",
+      "description": "Port interfaces owned by the Application layer. EventStore: append(events)/readAll()/readSince(seq). SnapshotStore: load()/save() (optional, M2+). DocumentSerializer: parse()/stringify(). DocumentValidator: validate(). EventValidator: validate(). HostBridge: send()/on() (M5+).",
+      "interfaces": []
+    },
+    {
+      "unique-id": "adapter-localstorage-eventstore",
+      "node-type": "service",
+      "name": "LocalStorageEventStore (Adapter)",
+      "description": "Implements EventStore port using browser localStorage. Keys: alistigo:evt:<list-id>:<seq>. Used in the browser iframe at runtime (M1/M2).",
+      "interfaces": []
+    },
+    {
+      "unique-id": "adapter-claude-storage-eventstore",
+      "node-type": "service",
+      "name": "ClaudeStorageEventStore (Adapter)",
+      "description": "Implements EventStore port using window.storage (Claude artifact context, ADR 0005). Wraps claude-storage-plugin. Used when running inside Claude.ai.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "adapter-inmemory-eventstore",
+      "node-type": "service",
+      "name": "InMemoryEventStore (Adapter)",
+      "description": "Implements EventStore port in-memory. Used by the Gherkin runner and unit tests. No IO.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "adapter-jsonld-serializer",
+      "node-type": "service",
+      "name": "JsonLdSerializer (Adapter)",
+      "description": "Implements DocumentSerializer port. Delegates to list-document-format package for JSON-LD parsing and stringification.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "adapter-ajv-validator",
+      "node-type": "service",
+      "name": "AjvValidator (Adapter)",
+      "description": "Implements DocumentValidator and EventValidator ports using Ajv 2020. Validates against JSON Schemas from list-document-format package.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "adapter-postmessage-bridge",
+      "node-type": "service",
+      "name": "PostMessageHostBridge (Adapter, M5+)",
+      "description": "Implements HostBridge port. Handles postMessage communication with the embedding host. Origin validation, schema validation on every payload. Message types: alistigo:config, alistigo:event, alistigo:replay, alistigo:snapshot, alistigo:emitted.",
+      "interfaces": [
+        {
+          "unique-id": "postmessage-api",
+          "type": "event-driven",
+          "name": "postMessage protocol",
+          "description": "Versioned postMessage envelope. Defined in packages/alistigo-host-protocol/"
+        }
+      ]
+    },
+    {
+      "unique-id": "list-components-react-pkg",
+      "node-type": "service",
+      "name": "list-components-react (@alistigo/list-components-react)",
+      "description": "Presentation layer. React components for the list UI (Storybook). No domain logic. Dispatches commands to Application. Subscribes to Application state via Preact Signals.",
+      "interfaces": [
+        {
+          "unique-id": "react-component-api",
+          "type": "library",
+          "name": "React Components",
+          "description": "ListApp, ListItem, CheckboxItem, etc. — presentational only"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact-list-pkg",
+      "node-type": "service",
+      "name": "artifact-list (@alistigo/artifact-list)",
+      "description": "The assembled artifact UMD bundle. Wires all layers together at boot: resolves the config document, selects the correct storage adapter, initialises Application layer, mounts the React presentation. Shipped via npm and served via jsDelivr.",
+      "interfaces": [
+        {
+          "unique-id": "umd-bundle-interface",
+          "type": "cdn",
+          "name": "UMD bundle",
+          "description": "Single-file bundle: @alistigo/artifact-list/<version>/dist/artifact-list.umd.js"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact-list-skill-pkg",
+      "node-type": "service",
+      "name": "artifact-list-skill (@alistigo/artifact-list-skill)",
+      "description": "AI agent skill for the list artifact. Contains SKILL.md and api.json (AgentSkills.io standard, ADR 0015). Teaches Claude how to produce list documents and issue commands.",
+      "interfaces": [
+        {
+          "unique-id": "skill-md",
+          "type": "documentation",
+          "name": "SKILL.md",
+          "description": "Machine-readable skill specification for Claude Code and other AI agents"
+        }
+      ]
+    },
+    {
+      "unique-id": "event-log-store",
+      "node-type": "database",
+      "name": "Event Log",
+      "description": "Append-only log of domain events persisted to browser storage. The single source of truth at runtime. Keys: alistigo:evt:<list-id>:<seq>. The document is always re-derivable from this log.",
+      "interfaces": []
+    },
+    {
+      "unique-id": "gherkin-runner",
+      "node-type": "service",
+      "name": "list-features-runner-playwright",
+      "description": "Gherkin runner for list artifact. Drives list-document-editor command/query API directly (Application-level, not DOM) for fast deterministic feedback. Playwright bridge for E2E UI smoke tests. ADR: TDD via Gherkin constraint (C6).",
+      "interfaces": [
+        {
+          "unique-id": "gherkin-cli",
+          "type": "cli",
+          "name": "Gherkin CLI",
+          "description": "npx list-features-runner-playwright features/"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "editor-uses-domain",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-document-editor-pkg" },
+          "destination": { "node": "list-domain-pkg" }
+        }
+      },
+      "description": "Application layer imports domain types, entities, and event/command definitions"
+    },
+    {
+      "unique-id": "editor-uses-format",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-document-editor-pkg" },
+          "destination": { "node": "list-document-format-pkg" }
+        }
+      },
+      "description": "Application layer uses format package for type definitions; adapters use it for serialisation and validation"
+    },
+    {
+      "unique-id": "editor-declares-ports",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-document-editor-pkg" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Application layer owns port interface definitions (EventStore, SnapshotStore, etc.)"
+    },
+    {
+      "unique-id": "localstorage-implements-port",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-localstorage-eventstore" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Implements EventStore port; injected at boot for browser runtime"
+    },
+    {
+      "unique-id": "claude-storage-implements-port",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-claude-storage-eventstore" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Implements EventStore port; injected at boot when running inside Claude.ai artifact context"
+    },
+    {
+      "unique-id": "inmemory-implements-port",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-inmemory-eventstore" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Implements EventStore port; injected by test harness and Gherkin runner"
+    },
+    {
+      "unique-id": "serializer-implements-port",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-jsonld-serializer" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Implements DocumentSerializer port using list-document-format"
+    },
+    {
+      "unique-id": "validator-implements-port",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-ajv-validator" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Implements DocumentValidator and EventValidator ports using Ajv 2020"
+    },
+    {
+      "unique-id": "bridge-implements-port",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-postmessage-bridge" },
+          "destination": { "node": "ports" }
+        }
+      },
+      "description": "Implements HostBridge port for postMessage communication (M5+)"
+    },
+    {
+      "unique-id": "presentation-uses-editor",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-components-react-pkg" },
+          "destination": { "node": "list-document-editor-pkg" }
+        }
+      },
+      "description": "Presentation layer dispatches commands and subscribes to state from Application layer"
+    },
+    {
+      "unique-id": "artifact-wires-all",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list-pkg" },
+          "destination": { "node": "list-document-editor-pkg" }
+        }
+      },
+      "description": "artifact-list boot.ts wires all adapters into Application layer via dependency injection"
+    },
+    {
+      "unique-id": "artifact-mounts-presentation",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list-pkg" },
+          "destination": { "node": "list-components-react-pkg" }
+        }
+      },
+      "description": "artifact-list mounts the React presentation layer after boot"
+    },
+    {
+      "unique-id": "localstorage-persists-events",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "adapter-localstorage-eventstore" },
+          "destination": { "node": "event-log-store" }
+        }
+      },
+      "description": "LocalStorageEventStore appends events to browser localStorage"
+    },
+    {
+      "unique-id": "runner-tests-editor",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "gherkin-runner" },
+          "destination": { "node": "list-document-editor-pkg" }
+        }
+      },
+      "description": "Gherkin runner drives Application layer directly using InMemoryEventStore — no DOM, no browser required"
+    }
+  ]
+}
