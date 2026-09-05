@@ -96,11 +96,17 @@ All CALM tools are installed as project devDependencies or local workspace packa
 
 > **Note on MCP:** The CALM project does not yet publish a standalone MCP npm package (`@finos/calm-mcp`). The `calm` CLI binary (`@finos/calm-cli`) may expose MCP-compatible subcommands in a future release. When CALM MCP support is available, wire it into `.mcp.json` (for Claude Code) and `.vscode/mcp.json` (for VS Code). A placeholder `.vscode/mcp.json` is tracked in version control for this purpose.
 
-### 3. Archify integration (deferred task)
+### 3. Archify integration (future task)
 
-`vendor/archify` is already present as a git submodule. Archify consumes a typed JSON IR to produce interactive system-map HTML artifacts. CALM files need to be transformed to archify's IR format first.
+[Archify](https://github.com/tt-a1i/archify) is a tool that consumes a typed JSON IR to produce interactive system-map HTML artifacts. It is a good fit for communicating architecture visually but does not support CALM files natively.
 
-A small CLI tool (`cli/calm-to-archify/`) will be built to perform this transformation. This is out of scope for the current epic and will be a separate task once the CALM files are established. The tool must not be a permanent blocker for using Archify.
+Integration is deferred to a future task. When the time comes:
+
+1. Add Archify as a git submodule under `vendor/archify/`
+2. Build a small CLI transformer (`cli/calm-to-archify/`) to convert CALM JSON → Archify's JSON IR
+3. Wire the transformer into the build or a documentation script
+
+This is not a blocker for using CALM or calm-studio.
 
 ### 4. Architecture-first workflow
 
@@ -120,7 +126,7 @@ CALM files can generate Mermaid diagrams via the CALM visualizer. `architecture/
 - Architecture becomes machine-verifiable; drift is detected rather than accumulated silently
 - AI agents (Claude Code) can reason about the architecture using the MCP server context
 - Reusable patterns (DDD, event-sourcing) are modelled once and referenced, not duplicated
-- Archify visualisations for presentations are generated from the model, not drawn manually
+- Archify visualisations for presentations will be generated from the model once the integration task is complete (see §3)
 - Sets up for fitness functions in CI — quantitative architecture compliance
 
 **Negative / trade-offs:**
@@ -141,4 +147,4 @@ CALM files can generate Mermaid diagrams via the CALM visualizer. `architecture/
 - [Architecture as Code — 2026 state of the art](https://www.catio.tech/blog/architecture-as-code) — primary inspiration for the AasC approach and fitness functions
 - [ADR 0026](0026-alistigo-document-format-jsonld-schemaorg.md) — JSON-LD document format (same JSON-first philosophy)
 - [ADR 0015](0015-agent-skills-standard.md) — Agent skills standard (same AI-tooling-first philosophy)
-- `vendor/archify/` — Archify submodule for interactive system map generation
+- [tt-a1i/archify](https://github.com/tt-a1i/archify) — future submodule for interactive system map generation (not yet added)
