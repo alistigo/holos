@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/core.json",
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
   "unique-id": "list-artifact-ddd",
   "name": "List Artifact — DDD + Event-Sourcing + CQRS Internal Architecture",
   "description": "Internal architecture of the @alistigo/artifact-list reference implementation. Uses DDD hexagonal layering (pattern: ddd-hexagonal) + Event Sourcing + CQRS (pattern: event-sourcing-cqrs). The domain is pure; state changes are captured as immutable events; the current document is a projection.",
@@ -265,6 +265,16 @@
         }
       },
       "description": "Presentation layer dispatches commands and subscribes to state from Application layer"
+    },
+    {
+      "unique-id": "artifact-ships-skill",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list-pkg" },
+          "destination": { "node": "artifact-list-skill-pkg" }
+        }
+      },
+      "description": "Ships the agent skill definition alongside, teaching Claude how to produce documents and issue commands for"
     },
     {
       "unique-id": "artifact-wires-all",
