@@ -21,7 +21,7 @@ The calm-widgets framework provides reusable components for visualizing and docu
 Generate static documentation sites:
 
 ```bash
-calm docify \
+pnpm calm docify \
   --architecture architecture.json \
   --output ./docs \
   --template-dir ./templates
@@ -262,7 +262,7 @@ The calm-widgets framework supports multiple output formats:
 Always validate architectures before generating documentation:
 
 ```bash
-calm validate -a architecture.json --strict
+pnpm calm validate -a architecture.json --strict
 ```
 
 This ensures documentation is generated from valid, schema-compliant CALM models.

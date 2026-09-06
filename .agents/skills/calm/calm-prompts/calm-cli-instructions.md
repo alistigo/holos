@@ -4,7 +4,9 @@ The CALM CLI provides command-line utilities for working with Common Architectur
 
 ## Installation and Help
 
-Install globally via npm:
+**In this repo, `calm` is a local root devDependency (`@finos/calm-cli`), not a global install** (per [ADR 0027](../../../../docs/adrs/0027-architecture-as-code-calm.md) §2 — tooling stays local, never global). `calm` is not on PATH directly — invoke it as `pnpm calm <command>`, which pnpm resolves to the workspace's `node_modules/.bin/calm`. Every example below uses `pnpm calm`; drop the `pnpm ` prefix only if working outside this repo with a global install.
+
+If you ever need to install it elsewhere, global options are:
 
 ```shell
 npm install -g @finos/calm-cli
@@ -15,10 +17,10 @@ or if you use [Homebrew](https://brew.sh):
 brew install calm-cli
 ```
 
-Run `calm` with no arguments to see the top-level help:
+Run `pnpm calm` with no arguments to see the top-level help:
 
 ```shell
-calm
+pnpm calm
 ```
 
 This displays available commands such as `generate`, `validate`, `init-ai`, `template`, and `docify`.
@@ -28,7 +30,7 @@ This displays available commands such as `generate`, `validate`, `init-ai`, `tem
 Create an architecture scaffold from a CALM pattern:
 
 ```shell
-calm generate -p <pattern-file> [-o <output-file>] [--schema-directory <path>] [--url-to-local-file-mapping <json>] [--verbose]
+pnpm calm generate -p <pattern-file> [-o <output-file>] [--schema-directory <path>] [--url-to-local-file-mapping <json>] [--verbose]
 ```
 
 - `-p, --pattern`: Path or URL to the pattern file (required).
@@ -41,7 +43,7 @@ calm generate -p <pattern-file> [-o <output-file>] [--schema-directory <path>] [
 Example:
 
 ```shell
-calm generate -p calm/pattern/api-gateway.json
+pnpm calm generate -p calm/pattern/api-gateway.json
 ```
 
 ## Validate Architectures and Patterns
@@ -49,7 +51,7 @@ calm generate -p calm/pattern/api-gateway.json
 Validate CALM architectures and/or patterns. At least one of `-p` (pattern) or `-a` (architecture) must be provided.
 
 ```shell
-calm validate [-p <pattern-file>] [-a <architecture-file>] [-s <schema-directory>] [-c <calm-hub-url>] [--strict] [-f <format>] [-o <output>] [-v]
+pnpm calm validate [-p <pattern-file>] [-a <architecture-file>] [-s <schema-directory>] [-c <calm-hub-url>] [--strict] [-f <format>] [-o <output>] [-v]
 ```
 
 ### Options
@@ -73,7 +75,7 @@ The validate command operates in three modes depending on which flags are provid
 #### 1. Architecture Only (`-a`)
 
 ```shell
-calm validate -a my-system.architecture.json
+pnpm calm validate -a my-system.architecture.json
 ```
 
 Validates the architecture file. If the architecture contains a `$schema` property pointing to a pattern, it will automatically load and validate against that pattern. Otherwise, runs Spectral rules on the architecture structure only.
@@ -81,7 +83,7 @@ Validates the architecture file. If the architecture contains a `$schema` proper
 #### 2. Pattern Only (`-p`)
 
 ```shell
-calm validate -p my-pattern.json
+pnpm calm validate -p my-pattern.json
 ```
 
 Validates the pattern file by running Spectral rules and compiling it as a JSON schema to verify it is well-formed. Does not validate any architecture.
@@ -89,7 +91,7 @@ Validates the pattern file by running Spectral rules and compiling it as a JSON 
 #### 3. Both Architecture and Pattern (`-a` and `-p`)
 
 ```shell
-calm validate -p my-pattern.json -a my-system.architecture.json
+pnpm calm validate -p my-pattern.json -a my-system.architecture.json
 ```
 
 Full validation mode. Runs Spectral rules on both files, then validates the architecture against the pattern as a JSON schema. This is the most comprehensive validation.
@@ -107,19 +109,19 @@ The command exits with code 1 if errors are found. Warnings do not cause failure
 
 ```shell
 # Validate architecture against its embedded $schema reference
-calm validate -a trading-system.architecture.json
+pnpm calm validate -a trading-system.architecture.json
 
 # Validate a pattern is well-formed
-calm validate -p api-gateway.pattern.json
+pnpm calm validate -p api-gateway.pattern.json
 
 # Full validation with explicit pattern
-calm validate -p api-gateway.pattern.json -a trading-system.architecture.json
+pnpm calm validate -p api-gateway.pattern.json -a trading-system.architecture.json
 
 # Strict mode with pretty output
-calm validate -a my-arch.json --strict -f pretty
+pnpm calm validate -a my-arch.json --strict -f pretty
 
 # Output to file in JUnit format (useful for CI)
-calm validate -p pattern.json -a arch.json -f junit -o results.xml
+pnpm calm validate -p pattern.json -a arch.json -f junit -o results.xml
 ```
 
 ## AI Assistant Provider Setup
@@ -127,7 +129,7 @@ calm validate -p pattern.json -a arch.json -f junit -o results.xml
 Configure CALM-specific AI assistance inside a repo:
 
 ```shell
-calm init-ai -p <provider> [--directory <path>] [--verbose]
+pnpm calm init-ai -p <provider> [--directory <path>] [--verbose]
 ```
 
 At present GitHub Copilot (`copilot`), AWS Kiro (`kiro`), Claude Code (`claude`), and Codex (`codex`) are supported as providers.
@@ -139,7 +141,7 @@ This generates custom prompts for the specified <provider> to use CALM-aware too
 Generate arbitrary files from CALM models using Handlebars bundles:
 
 ```shell
-calm template -a <architecture> -o <output> [--bundle <path> | --template <file> | --template-dir <dir>] [--url-to-local-file-mapping <json>] [--clear-output-directory] [--verbose]
+pnpm calm template -a <architecture> -o <output> [--bundle <path> | --template <file> | --template-dir <dir>] [--url-to-local-file-mapping <json>] [--clear-output-directory] [--verbose]
 ```
 
 Useful for producing documentation, reports, or configs. Template bundles require an `index.json`, transformer implementation, and templates.
@@ -149,7 +151,7 @@ Useful for producing documentation, reports, or configs. Template bundles requir
 Generate a documentation website from a CALM model:
 
 ```shell
-calm docify -a <architecture> -o <output> [--template <file>] [--template-dir <dir>] [--url-to-local-file-mapping <json>] [--clear-output-directory] [--export-diagrams <svg|png>] [--browser-path <path>] [--diagram-render-timeout <ms>] [--verbose]
+pnpm calm docify -a <architecture> -o <output> [--template <file>] [--template-dir <dir>] [--url-to-local-file-mapping <json>] [--clear-output-directory] [--export-diagrams <svg|png>] [--browser-path <path>] [--diagram-render-timeout <ms>] [--verbose]
 ```
 
 Creates a browsable site that visualizes nodes, relationships, interfaces, and metadata.
@@ -159,7 +161,7 @@ Creates a browsable site that visualizes nodes, relationships, interfaces, and m
 By default, generated documentation contains Mermaid diagrams as ` ```mermaid ` code blocks. Pass `--export-diagrams <svg|png>` to render these into image files using a local Chromium-based browser, replacing each code block with an image reference (e.g. `_diagrams/my-page-1.svg`).
 
 ```shell
-calm docify -a architecture.json -o docs/output --export-diagrams svg
+pnpm calm docify -a architecture.json -o docs/output --export-diagrams svg
 ```
 
 - Requires Google Chrome or Microsoft Edge installed locally (auto-detected). Use `--browser-path <path>` to point at another Chromium-based browser (Brave, Vivaldi, Chromium, etc.) if auto-detection fails.
@@ -194,13 +196,13 @@ Paths are resolved relative to the mapping file's location.
 
 ```shell
 # Validate a pattern that references Standards via URLs
-calm validate -p pattern.json -a architecture.json -u url-mapping.json
+pnpm calm validate -p pattern.json -a architecture.json -u url-mapping.json
 
 # Generate architecture from a pattern with URL references
-calm generate -p pattern.json -o arch.json -u url-mapping.json
+pnpm calm generate -p pattern.json -o arch.json -u url-mapping.json
 
 # Docify with URL mapping
-calm docify -a architecture.json -o docs/ --url-to-local-file-mapping url-mapping.json
+pnpm calm docify -a architecture.json -o docs/ --url-to-local-file-mapping url-mapping.json
 ```
 
 **Relative path resolution:** For patterns without an `$id` field, the CLI automatically resolves relative `$ref` paths against the pattern file's directory. No mapping file is needed for relative references.
@@ -208,6 +210,6 @@ calm docify -a architecture.json -o docs/ --url-to-local-file-mapping url-mappin
 ## Tips
 
 - Keep schema files accessible via `--schema-directory` for offline use.
-- Use `calm generate` + `calm validate` workflow to quickly iterate on architectures.
+- Use `pnpm calm generate` + `pnpm calm validate` workflow to quickly iterate on architectures.
 - Leverage warnings to replace placeholder values before production.
-- Combine `calm init-ai` with VS Code for CALM-aware AI assistance.
+- Combine `pnpm calm init-ai` with VS Code for CALM-aware AI assistance.

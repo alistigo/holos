@@ -1,0 +1,760 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "monorepo-packages",
+  "name": "Holos Monorepo — Package Dependency Graph",
+  "description": "Ground-truth, code-derived view of every app, package, and CLI tool in the Holos monorepo, connected by their actual workspace:* dependencies from package.json. Complements the conceptual tier view (alistigo-platform.arch.json) with the real package-level topology.",
+  "nodes": [
+    {
+      "unique-id": "alistigo-artifact-playground",
+      "node-type": "webclient",
+      "name": "alistigo-artifact-playground",
+      "description": "Two-page dev playground for Alistigo artifacts. Host page provides a Dev Config Form for configuring artifacts; iframe page renders the artifact in an isolated context that mirrors the Claude embedding environment."
+    },
+    {
+      "unique-id": "artifact-claude-capabilities-demo-skill",
+      "node-type": "agent-skill",
+      "name": "@alistigo/artifact-claude-capabilities-demo-skill",
+      "description": "Alistigo artifact-claude-capabilities-demo agent skill — demonstrates all Claude artifact iframe APIs"
+    },
+    {
+      "unique-id": "artifact-claude-capabilities-demo",
+      "node-type": "library",
+      "name": "@alistigo/artifact-claude-capabilities-demo",
+      "description": "Self-contained UMD bundle — a Claude artifact that demonstrates all Claude iframe APIs: storage, AI completions, file download, network proxy, and external navigation."
+    },
+    {
+      "unique-id": "artifact-config-format",
+      "node-type": "library",
+      "name": "@alistigo/artifact-config-format",
+      "description": "Aggregate config schema and TypeScript types for Alistigo artifacts — discriminated union combining base config with per-artifact schemas."
+    },
+    {
+      "unique-id": "artifact-config-list-format",
+      "node-type": "library",
+      "name": "@alistigo/artifact-config-list-format",
+      "description": "JSON Schema and TypeScript types for the Alistigo list artifact config."
+    },
+    {
+      "unique-id": "artifact-core-components-react",
+      "node-type": "library",
+      "name": "@alistigo/artifact-core-components-react",
+      "description": "Platform-level React UI components shared by all Alistigo artifacts — LoadingScreen, ErrorScreen, ArtifactContextMenuContainer, ArtifactInfoPanel. Built on Tailwind v4."
+    },
+    {
+      "unique-id": "artifact-core",
+      "node-type": "library",
+      "name": "@alistigo/artifact-core",
+      "description": "Shared lifecycle, phases, error boundary, and plugin integration for Alistigo artifacts."
+    },
+    {
+      "unique-id": "artifact-list-checkbox-plugin",
+      "node-type": "library",
+      "name": "@alistigo/artifact-list-checkbox-plugin",
+      "description": "Checkbox domain-contribution plugin for @alistigo artifacts."
+    },
+    {
+      "unique-id": "artifact-list-skill",
+      "node-type": "agent-skill",
+      "name": "@alistigo/artifact-list-skill",
+      "description": "Alistigo artifact-list agent skill (agentskills.io)"
+    },
+    {
+      "unique-id": "artifact-list",
+      "node-type": "library",
+      "name": "@alistigo/artifact-list",
+      "description": "Self-contained UMD bundle of the Alistigo list widget — for Claude HTML artifacts and standalone pages. Includes React, Lingui, and all Alistigo packages; no external dependencies required."
+    },
+    {
+      "unique-id": "artifact-manager-skill",
+      "node-type": "agent-skill",
+      "name": "@alistigo/artifact-manager-skill",
+      "description": "Alistigo artifact-manager agent skill (agentskills.io)"
+    },
+    {
+      "unique-id": "artifact-manager",
+      "node-type": "library",
+      "name": "@alistigo/artifact-manager",
+      "description": "Artifact configuration management for Alistigo — reads, validates, and resolves artifact config at runtime."
+    },
+    {
+      "unique-id": "artifact-plugin-api",
+      "node-type": "library",
+      "name": "@alistigo/artifact-plugin-api",
+      "description": "Composable plugin interface, event bus, and CDN dynamic-import loader for @alistigo artifacts."
+    },
+    {
+      "unique-id": "artifact-posthog-plugin",
+      "node-type": "library",
+      "name": "@alistigo/artifact-posthog-plugin",
+      "description": "PostHog analytics plugin for @alistigo artifacts."
+    },
+    {
+      "unique-id": "artifact-sentry-plugin",
+      "node-type": "library",
+      "name": "@alistigo/artifact-sentry-plugin",
+      "description": "Sentry error-monitoring plugin for @alistigo artifacts."
+    },
+    {
+      "unique-id": "artifact-user-plugin",
+      "node-type": "library",
+      "name": "@alistigo/artifact-user-plugin",
+      "description": "User identity plugin for @alistigo artifacts — avatar generation via jdenticon."
+    },
+    {
+      "unique-id": "claude-artifact-api",
+      "node-type": "library",
+      "name": "@alistigo/claude-artifact-api",
+      "description": "TypeScript types and inject script for the Claude artifact iframe API. Reverse-engineered from live Claude sessions."
+    },
+    {
+      "unique-id": "claude-storage-plugin",
+      "node-type": "library",
+      "name": "@alistigo/claude-storage-plugin",
+      "description": "Window.storage-backed AlistigoPlugin (type: storage) implementation for the Claude artifact runtime."
+    },
+    {
+      "unique-id": "core-document",
+      "node-type": "library",
+      "name": "@alistigo/core-document",
+      "description": "Base types and JSON schema for all Alistigo artifact documents."
+    },
+    {
+      "unique-id": "explorer-components-react",
+      "node-type": "library",
+      "name": "@alistigo/explorer-components-react",
+      "description": "React UI components for the Claude storage explorer artifact — KeyList, JsonDocumentViewer, StorageSection, StorageExplorerApp."
+    },
+    {
+      "unique-id": "list-components-react",
+      "node-type": "library",
+      "name": "@alistigo/list-components-react",
+      "description": "React presentational components for the Alistigo base list app — built on the repo's chosen stack (Tailwind v4 + Radix Primitives + Vaul + Motion + Lucide + Radix Colors + Lingui i18n). Pinned to the driver-playwright contract; ships its own Storybook for component review."
+    },
+    {
+      "unique-id": "list-document",
+      "node-type": "library",
+      "name": "@alistigo/list-document",
+      "description": "Specification, JSON schemas, and TypeScript types for the Alistigo list document format."
+    },
+    {
+      "unique-id": "list-domain",
+      "node-type": "library",
+      "name": "@alistigo/list-domain",
+      "description": "Shared domain primitives and types for Alistigo — IDs, value objects, and core entities."
+    },
+    {
+      "unique-id": "list-features",
+      "node-type": "library",
+      "name": "@alistigo/list-features",
+      "description": "Gherkin behavior specifications for Alistigo AI. Source of truth for what the app should do; the runner reads these files to assert conformance."
+    },
+    {
+      "unique-id": "local-storage-plugin",
+      "node-type": "library",
+      "name": "@alistigo/local-storage-plugin",
+      "description": "localStorage-backed AlistigoPlugin implementation (storage type) for standard browser contexts."
+    },
+    {
+      "unique-id": "logger",
+      "node-type": "library",
+      "name": "@alistigo/logger",
+      "description": "Shared pino-based logger for Alistigo apps and packages. Wraps pino with a singleton root logger and a createLogger factory for named child loggers."
+    },
+    {
+      "unique-id": "agent-skill-tester",
+      "node-type": "cli",
+      "name": "@alistigo/agent-skill-tester",
+      "description": "CLI for evaluating skill trigger accuracy using labelled eval query sets."
+    },
+    {
+      "unique-id": "document-validator",
+      "node-type": "cli",
+      "name": "@alistigo/core-document-validator",
+      "description": "CLI to validate Alistigo document JSON files against the schema."
+    },
+    {
+      "unique-id": "list-features-runner-playwright",
+      "node-type": "cli",
+      "name": "@alistigo/list-features-runner-playwright",
+      "description": "Cucumber.js runner for Alistigo Gherkin features. Consumes .feature files from @alistigo/list-features and drives the app via Playwright in step definitions."
+    },
+    {
+      "unique-id": "actor-developer",
+      "node-type": "actor",
+      "name": "Developer / CI",
+      "description": "Human developer or CI pipeline invoking CLI tools directly rather than importing them as libraries."
+    },
+    {
+      "unique-id": "actor-ai-agent",
+      "node-type": "actor",
+      "name": "Claude / AI Agent",
+      "description": "Claude or another AI agent that loads and uses agent skill packages (SKILL.md + api.json) at conversation time."
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "playground-uses-claude-artifact-api",
+      "description": "Uses the Claude artifact iframe API types and inject script from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "claude-artifact-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "playground-uses-artifact-list",
+      "description": "Embeds and exercises the list widget bundle from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "artifact-list" }
+        }
+      }
+    },
+    {
+      "unique-id": "playground-uses-artifact-manager",
+      "description": "Resolves and injects artifact config at runtime using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "artifact-manager" }
+        }
+      }
+    },
+    {
+      "unique-id": "playground-uses-capabilities-demo",
+      "description": "Embeds and exercises the Claude capabilities demo bundle from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "artifact-claude-capabilities-demo" }
+        }
+      }
+    },
+    {
+      "unique-id": "playground-uses-list-document",
+      "description": "Validates and seeds fixtures against the document format defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "list-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "playground-uses-list-components-react",
+      "description": "Renders list UI using the presentational components from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "list-components-react" }
+        }
+      }
+    },
+    {
+      "unique-id": "playground-uses-local-storage-plugin",
+      "description": "Persists state during dev sessions via",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "alistigo-artifact-playground" },
+          "destination": { "node": "local-storage-plugin" }
+        }
+      }
+    },
+    {
+      "unique-id": "capabilities-demo-uses-artifact-core",
+      "description": "Uses the shared lifecycle, phases, and error boundary from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-claude-capabilities-demo" },
+          "destination": { "node": "artifact-core" }
+        }
+      }
+    },
+    {
+      "unique-id": "capabilities-demo-uses-core-components-react",
+      "description": "Renders shared platform UI (loading/error screens) from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-claude-capabilities-demo" },
+          "destination": { "node": "artifact-core-components-react" }
+        }
+      }
+    },
+    {
+      "unique-id": "capabilities-demo-uses-claude-artifact-api",
+      "description": "Calls the Claude artifact iframe API defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-claude-capabilities-demo" },
+          "destination": { "node": "claude-artifact-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "capabilities-demo-uses-claude-storage-plugin",
+      "description": "Persists demo state via the window.storage-backed plugin from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-claude-capabilities-demo" },
+          "destination": { "node": "claude-storage-plugin" }
+        }
+      }
+    },
+    {
+      "unique-id": "capabilities-demo-uses-explorer-components-react",
+      "description": "Renders the storage explorer UI using components from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-claude-capabilities-demo" },
+          "destination": { "node": "explorer-components-react" }
+        }
+      }
+    },
+    {
+      "unique-id": "config-format-uses-config-list-format",
+      "description": "Includes the list-specific schema branch as one arm of its discriminated union from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-config-format" },
+          "destination": { "node": "artifact-config-list-format" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-core-uses-plugin-api",
+      "description": "Integrates the composable plugin interface and event bus from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-core" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-core-uses-logger",
+      "description": "Logs lifecycle and error-boundary events using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-core" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "checkbox-plugin-uses-plugin-api",
+      "description": "Implements the domain-contribution plugin interface from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list-checkbox-plugin" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "checkbox-plugin-uses-list-document",
+      "description": "Reads and mutates checkbox item state against the document format from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list-checkbox-plugin" },
+          "destination": { "node": "list-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-skill-uses-config-list-format",
+      "description": "Validates skill inputs against the list config schema from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list-skill" },
+          "destination": { "node": "artifact-config-list-format" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-checkbox-plugin",
+      "description": "Bundles the checkbox domain plugin from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "artifact-list-checkbox-plugin" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-artifact-core",
+      "description": "Bundles the shared artifact lifecycle from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "artifact-core" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-claude-artifact-api",
+      "description": "Calls the Claude artifact iframe API defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "claude-artifact-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-core-components-react",
+      "description": "Renders shared platform UI (loading/error screens) from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "artifact-core-components-react" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-plugin-api",
+      "description": "Integrates the composable plugin interface and event bus from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-list-document",
+      "description": "Parses, validates, and serializes documents using the format defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "list-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-list-domain",
+      "description": "Uses the shared entities and value objects from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "list-domain" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-list-components-react",
+      "description": "Bundles the presentational UI components from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "list-components-react" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-list-uses-logger",
+      "description": "Logs runtime events using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-list" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "manager-skill-uses-artifact-manager",
+      "description": "Type-checks skill examples against the config resolution API from (dev-only, not bundled)",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-manager-skill" },
+          "destination": { "node": "artifact-manager" }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-manager-uses-config-format",
+      "description": "Validates resolved artifact config against the aggregate schema from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-manager" },
+          "destination": { "node": "artifact-config-format" }
+        }
+      }
+    },
+    {
+      "unique-id": "posthog-plugin-uses-logger",
+      "description": "Logs analytics events using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-posthog-plugin" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "posthog-plugin-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin interface from (dev-only, type reference)",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-posthog-plugin" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "sentry-plugin-uses-logger",
+      "description": "Logs error-monitoring events using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-sentry-plugin" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "sentry-plugin-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin interface from (dev-only, type reference)",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-sentry-plugin" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "user-plugin-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin interface from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-user-plugin" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "user-plugin-uses-core-components-react",
+      "description": "Renders identity UI using shared platform components from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-user-plugin" },
+          "destination": { "node": "artifact-core-components-react" }
+        }
+      }
+    },
+    {
+      "unique-id": "user-plugin-uses-logger",
+      "description": "Logs plugin events using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-user-plugin" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "claude-storage-plugin-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin interface from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "claude-storage-plugin" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "claude-storage-plugin-uses-claude-artifact-api",
+      "description": "Reads and writes via window.storage exposed by",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "claude-storage-plugin" },
+          "destination": { "node": "claude-artifact-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "claude-storage-plugin-uses-logger",
+      "description": "Logs storage operations using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "claude-storage-plugin" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "explorer-components-uses-claude-artifact-api",
+      "description": "Reads storage contents via the Claude artifact iframe API from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "explorer-components-react" },
+          "destination": { "node": "claude-artifact-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-components-uses-plugin-api",
+      "description": "Renders plugin-contributed UI via the event bus from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-components-react" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-components-uses-logger",
+      "description": "Logs UI events using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-components-react" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-components-uses-list-document",
+      "description": "Renders documents conforming to the format defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-components-react" },
+          "destination": { "node": "list-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-components-uses-list-domain",
+      "description": "Renders entities and value objects defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-components-react" },
+          "destination": { "node": "list-domain" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-components-uses-checkbox-plugin",
+      "description": "Demonstrates plugin-contributed UI in its Storybook using (dev-only, not bundled)",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-components-react" },
+          "destination": { "node": "artifact-list-checkbox-plugin" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-document-uses-core-document",
+      "description": "Extends the base document types and schema from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-document" },
+          "destination": { "node": "core-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-document-uses-list-domain",
+      "description": "Uses the shared entities and value objects from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-document" },
+          "destination": { "node": "list-domain" }
+        }
+      }
+    },
+    {
+      "unique-id": "list-document-uses-logger",
+      "description": "Logs parse/validate/serialize operations using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-document" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "local-storage-plugin-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin interface from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "local-storage-plugin" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "local-storage-plugin-uses-logger",
+      "description": "Logs storage operations using",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "local-storage-plugin" },
+          "destination": { "node": "logger" }
+        }
+      }
+    },
+    {
+      "unique-id": "document-validator-uses-list-document",
+      "description": "Validates document JSON files against the schema defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "document-validator" },
+          "destination": { "node": "list-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "features-runner-uses-plugin-api",
+      "description": "Drives plugin-contributed behavior through the event bus from",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-features-runner-playwright" },
+          "destination": { "node": "artifact-plugin-api" }
+        }
+      }
+    },
+    {
+      "unique-id": "features-runner-uses-list-document",
+      "description": "Asserts application state against the document format defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-features-runner-playwright" },
+          "destination": { "node": "list-document" }
+        }
+      }
+    },
+    {
+      "unique-id": "features-runner-uses-list-features",
+      "description": "Reads and executes the Gherkin scenarios defined in",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "list-features-runner-playwright" },
+          "destination": { "node": "list-features" }
+        }
+      }
+    },
+    {
+      "unique-id": "developer-uses-cli-tools",
+      "description": "Runs directly from the command line or CI, rather than importing as a library",
+      "relationship-type": {
+        "interacts": {
+          "actor": "actor-developer",
+          "nodes": ["agent-skill-tester", "document-validator", "list-features-runner-playwright"]
+        }
+      }
+    },
+    {
+      "unique-id": "ai-agent-uses-skills",
+      "description": "Loads and invokes at conversation time",
+      "relationship-type": {
+        "interacts": {
+          "actor": "actor-ai-agent",
+          "nodes": [
+            "artifact-list-skill",
+            "artifact-manager-skill",
+            "artifact-claude-capabilities-demo-skill"
+          ]
+        }
+      }
+    }
+  ]
+}

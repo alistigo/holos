@@ -39,8 +39,8 @@ Every CALM architecture MUST include:
 - [ ] Add relationships array to connect nodes
 - [ ] Include metadata array for operational info
 **🚨 MANDATORY VALIDATION (Do not skip):**
-- [ ] **Verify calm-cli is installed:** `which calm`
-- [ ] **Run CALM validation:** `calm validate -a <filename>.architecture.json`
+- [ ] **Verify calm-cli resolves:** `pnpm calm --version` (it's a local root devDependency, not a global install — see calm-cli-instructions.md)
+- [ ] **Run CALM validation:** `pnpm calm validate -a <filename>.architecture.json`
 - [ ] **Review output for errors:** `jsonSchemaValidationOutputs`, `spectralSchemaValidationOutputs`
 - [ ] **Fix ALL errors before proceeding** - Do not assume JSON validity equals CALM validity
 - [ ] **Confirm output shows:** `"hasErrors": false, "hasWarnings": false`
