@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/pattern.json",
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
   "unique-id": "ddd-hexagonal-pattern",
   "name": "DDD Hexagonal Architecture Pattern",
   "description": "Domain-Driven Design with hexagonal (ports-and-adapters) layering. Domain is pure; Application owns ports; Adapters implement ports; Presentation depends on Application.",

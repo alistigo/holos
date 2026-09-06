@@ -6,7 +6,7 @@
 
 ## Overview
 
-Patterns in CALM are JSON schemas that provide reusable, instantiable architecture templates. They define repeatable architectural solutions with configurable options that can be generated using the `calm generate` command.
+Patterns in CALM are JSON schemas that provide reusable, instantiable architecture templates. They define repeatable architectural solutions with configurable options that can be generated using the `pnpm calm generate` command.
 
 ## Pattern Structure
 
@@ -622,16 +622,16 @@ Always use specific interface schema references:
 - Use `minItems`/`maxItems` to constrain array sizes
 - Each array item should reference base schema + add constraints
 
-## Using Patterns with calm generate
+## Using Patterns with pnpm calm generate
 
-Patterns are instantiated using the `calm generate` command:
+Patterns are instantiated using the `pnpm calm generate` command:
 
 ```bash
 # Generate architecture from pattern
-calm generate --pattern https://patterns.company.com/conference-signup.pattern.json
+pnpm calm generate --pattern https://patterns.company.com/conference-signup.pattern.json
 
 # Generate with specific options
-calm generate --pattern conference-signup --output my-architecture.json
+pnpm calm generate --pattern conference-signup --output my-architecture.json
 ```
 
 The CLI will prompt for choices when encountering `anyOf`/`oneOf` options, or you can provide a configuration file.
@@ -666,7 +666,7 @@ The CLI will prompt for choices when encountering `anyOf`/`oneOf` options, or yo
 4. Relationship definitions must use `$ref` to core relationship schema
 5. Use `const` for fixed values, `anyOf`/`oneOf` for options
 6. All constraint properties must be valid JSON schema constructs
-7. Pattern should be testable with `calm validate -p <pattern-file>`
+7. Pattern should be testable with `pnpm calm validate -p <pattern-file>`
 
 ## Best Practices
 
@@ -686,13 +686,13 @@ Test patterns before publishing:
 
 ```bash
 # Validate pattern schema
-calm validate -p my-pattern.json
+pnpm calm validate -p my-pattern.json
 
 # Generate test architecture from pattern
-calm generate -p my-pattern.json -o test-arch.json
+pnpm calm generate -p my-pattern.json -o test-arch.json
 
 # Validate architecture against pattern
-calm validate -p my-pattern.json -a test-arch.json
+pnpm calm validate -p my-pattern.json -a test-arch.json
 ```
 
 > **Note:** See **calm-cli-instructions.md** for complete CLI usage, validation modes, and options.

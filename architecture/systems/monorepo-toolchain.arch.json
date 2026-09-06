@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/core.json",
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
   "unique-id": "monorepo-toolchain",
   "name": "Holos Monorepo Toolchain",
   "description": "Development toolchain for the Holos monorepo. Tools, runtimes, and CI pipeline that support building, testing, linting, and releasing Alistigo packages.",
@@ -208,6 +208,16 @@
         }
       },
       "description": "Developer uses pnpm to install deps, run tasks, and manage the workspace"
+    },
+    {
+      "unique-id": "developer-uses-mise",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "actor-developer" },
+          "destination": { "node": "mise" }
+        }
+      },
+      "description": "Installs pinned tool versions (node, bun, python, rust) with, before running any other tooling"
     },
     {
       "unique-id": "pnpm-delegates-to-nx",

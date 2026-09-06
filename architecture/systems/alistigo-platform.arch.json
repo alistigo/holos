@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/core.json",
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
   "unique-id": "alistigo-platform",
   "name": "Alistigo Platform — Four-Tier Architecture",
   "description": "Alistigo is a platform for AI artifacts. Architecture is organised in four independently-versioned tiers. Artifacts run fully client-side inside iframes — no backend required.",

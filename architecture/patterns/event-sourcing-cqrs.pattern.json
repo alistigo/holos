@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/finos/CALM/main/calm/draft/2024-12/meta/pattern.json",
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
   "unique-id": "event-sourcing-cqrs-pattern",
   "name": "Event Sourcing + CQRS Pattern",
   "description": "Mutations are captured as immutable, append-only domain events. Current state is derived by folding the event log through a pure projector function (CQRS read side). Commands (write side) validate intent and emit events; they never mutate state directly.",

@@ -16,7 +16,7 @@ They enable consistent requirements across CALM architectures while integrating 
 - **Organization Extensions**: Add company-specific properties to nodes, interfaces, relationships
 - **Compliance Integration**: Most controls use Standards to define requirements and specifications
 - **Community Sharing**: FINOS and industry groups can create reusable Standards
-- **Native Validation**: Works with standard JSON Schema validation in `calm validate`
+- **Native Validation**: Works with standard JSON Schema validation in `pnpm calm validate`
 
 ## JSON Schema 2020-12 Structure
 
@@ -173,7 +173,7 @@ The requirement file uses the Standard as its schema, ensuring all NIST requirem
 
 ## Validation Integration
 
-Standards work seamlessly with `calm validate`:
+Standards work seamlessly with `pnpm calm validate`:
 
 1. **Schema Resolution**: Validator resolves `$ref` to Standards automatically
 2. **Composition**: Uses `allOf` to combine core CALM and Standard schemas
@@ -191,7 +191,7 @@ When developing Standards locally before publishing to a public URL, use the `--
 }
 
 # Validate using the mapping
-calm validate -p pattern.json -a architecture.json -u url-mapping.json
+pnpm calm validate -p pattern.json -a architecture.json -u url-mapping.json
 ```
 
 This allows patterns and architectures to reference Standards via their canonical URLs while the actual files exist locally. See **calm-cli-instructions.md** for complete URL mapping documentation.
@@ -339,7 +339,7 @@ The FINOS community creates Standards for common financial services use cases:
 - **Clear Naming**: Make purpose obvious from title (e.g., "Company Node Standard")
 - **Document Thoroughly**: Include descriptions for all properties and constraints
 - **Version Semantically**: Use semantic versioning for Standard updates
-- **Test Validation**: Verify Standards work with `calm validate`
+- **Test Validation**: Verify Standards work with `pnpm calm validate`
 
 ### Schema Composition
 - **Use `allOf`**: Cleanly compose Standards with core CALM schemas
