@@ -20,7 +20,7 @@
     "qa": "nx run-many -t qa:lint qa:arch-check qa:dead-code qa:audit qa:stories-check qa:artifact-sandbox-check qa:arch-calm",
     "qa:lint": "nx run-many -t qa:lint",
     "qa:arch-check": "depcruise apps packages cli --config .dependency-cruiser.cjs",
-    "qa:arch-calm": "bash scripts/validate-architecture.sh",
+    "qa:arch-calm": "nx run architecture:qa:arch-calm",
     "qa:dead-code": "fallow dead-code",
     "qa:audit": "fallow audit",
     "qa:stories-check": "bash scripts/check-stories.sh",

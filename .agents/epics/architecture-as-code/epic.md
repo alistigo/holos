@@ -38,19 +38,27 @@ Move Alistigo's architecture from static Markdown files (`docs/architecture.md`,
 | 3 | #118 | Install CALM tooling + configure MCP for Claude Code + VS Code | done |
 | 4 | #119 | Add qa:arch-calm to GitHub Actions CI | todo |
 | 5 | #120 | Scaffold cli/calm-to-archify (CALM → Archify IR) | deferred |
+| 6 | — | Promote `architecture/` → `@alistigo/architecture` package (ADR 0028) | done |
 
 ## File Structure Established
 
+Moved to the `@alistigo/architecture` workspace package (ADR 0028):
+
 ```
-architecture/
+packages/architecture/
+├── package.json              # @alistigo/architecture
+├── project.json              # Nx targets: qa:arch-calm, qa:lint, clean
 ├── README.md
+├── scripts/validate.sh
 ├── patterns/
 │   ├── ddd-hexagonal.pattern.json
 │   └── event-sourcing-cqrs.pattern.json
 └── systems/
     ├── alistigo-platform.arch.json
     ├── list-artifact-ddd.arch.json
-    └── monorepo-toolchain.arch.json
+    ├── monorepo-toolchain.arch.json
+    ├── monorepo-packages.arch.json
+    └── alistigo-artifact-concept.arch.json
 ```
 
 ## Package Names (verify at install time)
