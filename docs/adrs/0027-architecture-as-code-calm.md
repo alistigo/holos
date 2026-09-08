@@ -85,7 +85,7 @@ packages/architecture/
     ├── list-artifact-ddd.arch.json   # List artifact DDD internals
     ├── monorepo-toolchain.arch.json  # Dev toolchain and CI
     ├── monorepo-packages.arch.json   # Package dependency graph
-    └── alistigo-artifact-concept.arch.json  # AI-environment / iframe / artifact concept
+    └── ai-chat-web-artifact.arch.json  # Generic artifact-capable AI chat environment
 ```
 
 ### 2. Tooling — local installations, not global

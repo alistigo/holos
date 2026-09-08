@@ -58,7 +58,7 @@ packages/architecture/
     ├── list-artifact-ddd.arch.json
     ├── monorepo-toolchain.arch.json
     ├── monorepo-packages.arch.json
-    └── alistigo-artifact-concept.arch.json
+    └── ai-chat-web-artifact.arch.json
 ```
 
 ## Package Names (verify at install time)
