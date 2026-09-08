@@ -1,0 +1,286 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "ai-chat-web-artifact",
+  "name": "Artifact-Capable AI Chat Environment",
+  "description": "Reference architecture for an AI chat product that lets users create, edit and share 'artifacts' — small self-contained web apps that run inside the chat. A human user converses with an AI through a web or desktop chat interface. The chat interface embeds a network-isolated iframe whose only boundary in or out is a postMessage message bus. An artifact is loaded from a CDN, runs inside that iframe, renders the UI the user interacts with, and reaches the AI API and a host-provided key-value store only by sending messages across the bus. Any AI environment that offers artifact creation/editing can be described as an implementation of this architecture. Conceptual model — not a package or deployment view.",
+  "metadata": [
+    {
+      "version": "0.2.0",
+      "kind": "concept",
+      "note": "The message-bus contract is defined by each AI environment; the message categories on the message-bus node are the shape common to artifact-capable environments."
+    }
+  ],
+  "nodes": [
+    {
+      "unique-id": "ai-user",
+      "node-type": "actor",
+      "name": "User",
+      "description": "A human working with an AI through a chat product. Only ever interacts with the chat interface and with the UI an artifact renders inside the iframe — never with the AI API, key-value store, or message bus directly."
+    },
+    {
+      "unique-id": "ai-environment",
+      "node-type": "system",
+      "name": "AI environment",
+      "description": "The AI chat product the user talks to. Hosts the chat interface, the AI API, and a persistent key-value store. Owns and mediates every capability a sandboxed artifact is granted.",
+      "interfaces": [
+        {
+          "unique-id": "ai-environment-boundary",
+          "description": "Everything an artifact can reach is brokered by this environment; the artifact has no ambient authority of its own."
+        }
+      ]
+    },
+    {
+      "unique-id": "ai-chat-interface",
+      "node-type": "webclient",
+      "name": "AI chat interface",
+      "description": "The web or desktop application the user chats in, built on web standards (HTML/CSS/JavaScript). Renders the conversation, calls the AI API, and embeds the artifact iframe. It is the host side of the message bus.",
+      "interfaces": [
+        {
+          "unique-id": "chat-web-ui",
+          "description": "Conversation UI rendered with HTML/CSS/JS; where the user reads and writes messages."
+        },
+        {
+          "unique-id": "iframe-embed-slot",
+          "description": "The <iframe sandbox='allow-scripts allow-same-origin'> element an artifact is mounted into."
+        }
+      ]
+    },
+    {
+      "unique-id": "ai-api",
+      "node-type": "service",
+      "name": "AI API",
+      "description": "The AI provider's HTTP API. Serves model completions and tool calls. Reachable directly by the chat interface; reachable by an artifact only as a proxied request forwarded across the message bus, with credentials injected host-side.",
+      "interfaces": [
+        {
+          "unique-id": "ai-completions-api",
+          "description": "HTTP endpoint serving model completions and tool calls."
+        }
+      ]
+    },
+    {
+      "unique-id": "key-storage",
+      "node-type": "database",
+      "name": "Key-value store",
+      "description": "Persistent key-value store provided by the AI environment. An artifact loads and saves its keys/values here by asking the message bus to do it — the artifact never holds a storage handle itself.",
+      "interfaces": [
+        {
+          "unique-id": "key-value-storage-api",
+          "operations": ["get", "set", "delete", "list"],
+          "scopes": ["private (per-user)", "shared (all users of the artifact)"]
+        }
+      ],
+      "metadata": [
+        {
+          "quotas": "host-imposed per-key and total size limits",
+          "value-types": "text / JSON only",
+          "semantics": "last-write-wins; reading a missing key may throw — always guard",
+          "not-available": ["localStorage", "sessionStorage"]
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact-iframe",
+      "node-type": "system",
+      "name": "Artifact iframe (sandbox)",
+      "description": "A sandboxed iframe running inside the chat interface. Network-isolated: no inbound or outbound network calls of its own. Its ONLY channel to anything outside is the postMessage message bus. Script loading is further restricted by CSP to the CDN source allowlist. Encapsulates the artifact runtime.",
+      "interfaces": [
+        {
+          "unique-id": "iframe-sandbox-boundary",
+          "sandbox": "allow-scripts allow-same-origin",
+          "note": "no allow-forms, no allow-popups, no allow-top-navigation"
+        }
+      ],
+      "metadata": [
+        {
+          "network-isolation": "no outgoing or incoming network; native fetch/XHR/WebSocket to arbitrary origins is blocked",
+          "only-boundary": "postMessage via the message bus",
+          "csp-script-src": "loads code only from origins in the cdn-source-allowlist",
+          "storage": "localStorage / sessionStorage unavailable; persistence is via the key-value store over the bus"
+        }
+      ]
+    },
+    {
+      "unique-id": "message-bus",
+      "node-type": "network",
+      "name": "Message bus (postMessage)",
+      "description": "The single, two-way boundary between the iframe and the rest of the AI environment. Implemented with postMessage. Every capability an artifact uses — receiving its config, calling the AI API, reading and writing the key-value store — is a message across this bus. The exact contract is defined per AI environment.",
+      "interfaces": [
+        {
+          "unique-id": "post-message-channel",
+          "mechanism": "window.postMessage",
+          "direction": "bidirectional (host <-> iframe)"
+        }
+      ],
+      "metadata": [
+        {
+          "contract": "host-defined",
+          "host-to-iframe": [
+            "initial artifact config / document payload",
+            "responses to artifact-initiated AI API calls (proxied)",
+            "responses to key-value store get/set/delete/list requests",
+            "theme / environment change notifications"
+          ],
+          "iframe-to-host": [
+            "AI API request to proxy (forwarded only to the environment's own AI endpoint; credentials injected host-side)",
+            "key-value store operation: get / set / delete / list (private or shared)",
+            "ready / height / clipboard signals"
+          ],
+          "typically-not-available": [
+            "arbitrary fetch to other origins",
+            "opening windows / navigating the parent",
+            "peer-to-peer / WebRTC"
+          ]
+        }
+      ]
+    },
+    {
+      "unique-id": "cdn-source-allowlist",
+      "node-type": "data-asset",
+      "name": "CDN source allowlist",
+      "description": "The enumerated set of external origins the iframe's CSP permits code to be loaded from. An artifact bundle is loaded from one of these (a public JS/npm CDN). This is a load-time allowlist only — it does NOT grant the artifact fetch/XHR access to those origins at runtime.",
+      "interfaces": [
+        {
+          "unique-id": "allowlisted-origins",
+          "description": "The origins CSP script-src permits; commonly one or more public npm/JS CDNs."
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact",
+      "node-type": "webclient",
+      "name": "Artifact",
+      "description": "A self-contained web app loaded from a CDN that runs inside the iframe. It renders the UI the user sees and interacts with, and uses the message bus to reach the AI API and to load/save values in the key-value store. Users create, edit and share artifacts through the chat.",
+      "interfaces": [
+        {
+          "unique-id": "rendered-artifact-ui",
+          "description": "The visible UI surface inside the iframe — the place the user interacts with the artifact."
+        },
+        {
+          "unique-id": "artifact-bundle",
+          "description": "A versioned, self-contained JS bundle served from a CDN."
+        }
+      ],
+      "metadata": [
+        {
+          "delivery": "served as a versioned, self-contained bundle from a CDN",
+          "outbound-capabilities": "AI API calls and key-value store reads/writes, both only via the message bus"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "ai-environment-composition",
+      "description": "Is composed of the chat interface, the AI API, and the key-value store",
+      "relationship-type": {
+        "composed-of": {
+          "container": "ai-environment",
+          "nodes": ["ai-chat-interface", "ai-api", "key-storage"]
+        }
+      }
+    },
+    {
+      "unique-id": "chat-interface-hosts-iframe",
+      "description": "Embeds and hosts the sandboxed artifact iframe",
+      "relationship-type": {
+        "composed-of": {
+          "container": "ai-chat-interface",
+          "nodes": ["artifact-iframe"]
+        }
+      }
+    },
+    {
+      "unique-id": "iframe-encapsulates-artifact",
+      "description": "Encapsulates the artifact; the iframe is the security and network boundary around it",
+      "relationship-type": {
+        "composed-of": {
+          "container": "artifact-iframe",
+          "nodes": ["artifact"]
+        }
+      }
+    },
+    {
+      "unique-id": "chat-interface-to-ai-api",
+      "description": "Sends prompts, conversation state and tool calls to, and streams completions back from",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "ai-chat-interface", "interfaces": ["chat-web-ui"] },
+          "destination": { "node": "ai-api", "interfaces": ["ai-completions-api"] }
+        }
+      }
+    },
+    {
+      "unique-id": "chat-interface-to-message-bus",
+      "description": "Two-way postMessage channel; the host side of the iframe's only boundary. Sends config and brokered responses in, receives proxied AI API calls and key-value store ops out",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "ai-chat-interface", "interfaces": ["iframe-embed-slot"] },
+          "destination": { "node": "message-bus", "interfaces": ["post-message-channel"] }
+        }
+      }
+    },
+    {
+      "unique-id": "message-bus-to-artifact",
+      "description": "Two-way postMessage channel; the artifact side of the iframe's only boundary. The artifact has no other way to reach anything outside the sandbox",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "message-bus", "interfaces": ["post-message-channel"] },
+          "destination": { "node": "artifact", "interfaces": ["artifact-bundle"] }
+        }
+      }
+    },
+    {
+      "unique-id": "message-bus-forwards-to-ai-api",
+      "description": "Forwards an artifact's proxied AI API requests to (only the environment's own AI endpoint; credentials injected host-side, none in the iframe)",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "message-bus" },
+          "destination": { "node": "ai-api", "interfaces": ["ai-completions-api"] }
+        }
+      }
+    },
+    {
+      "unique-id": "message-bus-accesses-key-storage",
+      "description": "Loads and saves an artifact's values in, on behalf of the sandboxed artifact",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "message-bus" },
+          "destination": { "node": "key-storage", "interfaces": ["key-value-storage-api"] }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-loaded-from-cdn",
+      "description": "Loaded at runtime as a versioned web-app bundle from a CDN URL — an origin in",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact", "interfaces": ["artifact-bundle"] },
+          "destination": { "node": "cdn-source-allowlist", "interfaces": ["allowlisted-origins"] }
+        }
+      }
+    },
+    {
+      "unique-id": "iframe-restricts-loads-to-allowlist",
+      "description": "CSP script-src permits code to be loaded only from the origins enumerated in; grants no runtime fetch access to them",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "artifact-iframe", "interfaces": ["iframe-sandbox-boundary"] },
+          "destination": { "node": "cdn-source-allowlist", "interfaces": ["allowlisted-origins"] }
+        }
+      }
+    },
+    {
+      "unique-id": "ai-user-uses-chat-and-artifact",
+      "description": "Chats with the AI through the web/desktop chat UI, and directly interacts with the artifact's rendered UI inside the iframe",
+      "relationship-type": {
+        "interacts": {
+          "actor": "ai-user",
+          "nodes": ["ai-chat-interface", "artifact"]
+        }
+      }
+    }
+  ]
+}

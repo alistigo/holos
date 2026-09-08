@@ -32,7 +32,7 @@ packages/architecture/
     ├── list-artifact-ddd.arch.json          ← list artifact internal DDD architecture
     ├── monorepo-toolchain.arch.json         ← dev toolchain and CI
     ├── monorepo-packages.arch.json          ← every app/package/CLI as a node, wired by workspace:* deps
-    └── alistigo-artifact-concept.arch.json  ← AI environment / iframe sandbox / artifact runtime concept
+    └── ai-chat-web-artifact.arch.json       ← generic artifact-capable AI chat environment (iframe sandbox + message bus)
 ```
 
 ## Architecture Views
@@ -161,43 +161,41 @@ monorepo-packages.arch.json
 
 Every app, package, and CLI tool in the workspace as a node (31 total: 1 app, 25 packages, 3 CLI tools, 2 actors), wired by their actual `workspace:*` dependencies from each `package.json`. This is the ground-truth, code-derived counterpart to the conceptual four-tier view above — useful as a fitness-function baseline once CALM-declared boundaries are compared against `dependency-cruiser` output (ADR 0027 §5).
 
-### 5. AI Artifact Concept — Environment, iframe Sandbox, Artifact Runtime
+### 5. Artifact-Capable AI Chat Environment
 
 ```
-alistigo-artifact-concept.arch.json
+ai-chat-web-artifact.arch.json
 ```
 
-The conceptual runtime layering an Alistigo artifact executes inside. The
-`ai-user` (a human driving an AI agent) only ever touches the chat UI and the UI
-the artifact renders. `alistigo` is encapsulated inside a network-isolated iframe
-whose *only* boundary to the outside is a `postMessage` message bus.
+A **generic** reference architecture for any AI chat product that lets users
+create, edit and share *artifacts* — small web apps that run inside the chat. No
+vendor specifics: a given AI web chat is one implementation of this shape. The
+`ai-user` only ever touches the chat UI and the UI an artifact renders. The
+`artifact` is encapsulated inside a network-isolated iframe whose *only* boundary
+to the outside is a `postMessage` message bus.
 
 ```mermaid
 graph TB
   aiuser([ai-user])
 
-  subgraph AIENV["ai-environment (e.g. Claude)"]
+  subgraph AIENV["ai-environment"]
     chat[ai-chat-interface — web/desktop app]
     api[ai-api]
-    keystore[(key-storage)]
+    keystore[(key-storage — key-value store)]
 
     subgraph IFRAME["artifact-iframe — no network in/out"]
       bus{{message-bus — postMessage}}
-      subgraph ALISTIGO["alistigo"]
-        artifact[alistigo-artifact — web-app from jsDelivr]
-        ui[artifact UI]
-      end
+      artifact[artifact — web-app from a CDN]
     end
   end
 
-  cdn[(jsDelivr / cdn allowlist)]
+  cdn[(cdn-source-allowlist)]
 
   aiuser -->|chats| chat
-  aiuser -->|interacts with| ui
+  aiuser -->|interacts with UI of| artifact
   chat --> api
   chat <-->|two-way| bus
   bus <--> artifact
-  artifact --> ui
   cdn -->|loads bundle| artifact
   artifact -->|"AI calls, load/save keys (via bus)"| bus
   bus -->|forwards to| api
