@@ -19,7 +19,9 @@ CALM architecture models.
    interface, metadata, control, flow, pattern, documentation, standards,
    moment, timeline, decorator creation, plus CALM CLI instructions).
 3. Proceeds with the requested CALM work — creating or modifying models under
-   `architecture/` per [ADR 0027](../../../docs/adrs/0027-architecture-as-code-calm.md),
+   `packages/architecture/` (the `@alistigo/architecture` package) per
+   [ADR 0027](../../../docs/adrs/0027-architecture-as-code-calm.md) and
+   [ADR 0028](../../../docs/adrs/0028-package-first-repository-structure.md),
    validating against the CALM 1.2 schema, or explaining existing architecture.
 
 This command is a thin passthrough — all CALM-specific behavior lives in the
@@ -30,5 +32,5 @@ This command is a thin passthrough — all CALM-specific behavior lives in the
 ```
 /calm
 /calm add a new node for the notification service
-/calm validate architecture/systems/alistigo-platform.arch.json
+/calm validate packages/architecture/systems/alistigo-platform.arch.json
 ```
