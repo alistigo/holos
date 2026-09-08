@@ -3,6 +3,7 @@ name: Holos project memory
 description: Persistent memory for the Holos monorepo — structure, preferences, and context
 type: project
 originSessionId: cf24885f-c895-4074-839a-72c712977fa3
+modified: 2026-09-08T11:46:25.058Z
 ---
 # Holos Memory
 
@@ -68,6 +69,7 @@ LinkedIn Skills: [vendoring pattern gap](feedback_vendor_symlink_gap.md) discove
 
 ## Preferences
 
+- [Package-first rule](feedback_package_first.md) — if a repo unit can be a package, make it one (ADR 0028); `architecture/` → `packages/architecture` (`@alistigo/architecture`) 2026-09-08
 - [TypeScript CLI convention](feedback_ts_cli.md) — use Clipanion + Ink for all TS CLI tools (skill: `ts-cli`)
 - [Gherkin features package conventions](feedback_gherkin_features.md) — by-group folders (not by-milestone), Entities/Actors/Actions glossary, portable parts live in skill `gherkin-features`
 - [Gherkin step style — tables for collections, implicit nouns](feedback_gherkin_collection_steps.md) — `Given a list:` + headerless table even for 1 row; `When I add "X"` not `When I add an element "X"`
