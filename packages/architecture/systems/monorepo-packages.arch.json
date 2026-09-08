@@ -977,6 +977,16 @@
           ]
         }
       }
+    },
+    {
+      "unique-id": "ai-agent-user-drives-ai-agent",
+      "description": "Prompts and steers to produce and edit artifacts",
+      "relationship-type": {
+        "interacts": {
+          "actor": "actor-ai-agent-user",
+          "nodes": ["actor-ai-agent"]
+        }
+      }
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "name": "architecture",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/architecture",
+  "targets": {
+    "qa:arch-calm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/validate.sh",
+        "cwd": "packages/architecture"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/architecture"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf .calm-out",
+        "cwd": "packages/architecture"
+      }
+    }
+  }
+}

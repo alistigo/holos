@@ -69,19 +69,23 @@ The JSON format aligns with the repo's prior decisions (ADR 0026: JSON-LD for do
 
 ### 1. CALM as the single Architecture as Code language
 
-All architectural models for Alistigo are written in CALM-compliant JSON and stored under `architecture/` at the repo root. The `docs/architecture.md` and `docs/platform/` files remain as human-readable prose supplements but are not the source of truth for architecture validation.
+All architectural models for Alistigo are written in CALM-compliant JSON and stored in the `@alistigo/architecture` workspace package. The `docs/architecture.md` and `docs/platform/` files remain as human-readable prose supplements but are not the source of truth for architecture validation.
+
+> **Amended by [ADR 0028](0028-package-first-repository-structure.md) (2026-09-08):** the files originally landed under `architecture/` at the repo root. They now live in `packages/architecture/`, published as `@alistigo/architecture`, so the model is versioned and `workspace:*`-referenceable. All paths below gain a `packages/architecture/` prefix; nothing else in this ADR changes. The `qa:arch-calm` gate is now the package's own Nx target (`nx run architecture:qa:arch-calm`).
 
 Structure:
 ```
-architecture/
+packages/architecture/
 ├── README.md                         # Navigation and conventions
 ├── patterns/                         # Reusable CALM patterns ($.pattern.json)
 │   ├── ddd-hexagonal.pattern.json    # DDD + hexagonal layers
-│   └── event-sourcing.pattern.json   # Event sourcing + CQRS pattern
+│   └── event-sourcing-cqrs.pattern.json  # Event sourcing + CQRS pattern
 └── systems/                          # Instantiated architectures ($.arch.json)
     ├── alistigo-platform.arch.json   # Four-tier platform view
-    ├── list-artifact.arch.json       # List artifact DDD internals
-    └── artifact-runtime.arch.json    # Runtime/deployment view
+    ├── list-artifact-ddd.arch.json   # List artifact DDD internals
+    ├── monorepo-toolchain.arch.json  # Dev toolchain and CI
+    ├── monorepo-packages.arch.json   # Package dependency graph
+    └── alistigo-artifact-concept.arch.json  # AI-environment / iframe / artifact concept
 ```
 
 ### 2. Tooling — local installations, not global
@@ -114,11 +118,11 @@ New architectural elements (packages, external dependencies, cross-boundary rela
 
 ### 5. CI integration (future task)
 
-A CI step will run `pnpm nx qa:arch-calm` (using `@finos/calm validate`) to reject PRs that contain invalid CALM files. Fitness functions comparing CALM-declared boundaries against actual `dependency-cruiser` boundaries are a follow-up task.
+A CI step will run `pnpm nx run architecture:qa:arch-calm` (using `@finos/calm validate`) to reject PRs that contain invalid CALM files. Fitness functions comparing CALM-declared boundaries against actual `dependency-cruiser` boundaries are a follow-up task.
 
 ### 6. Markdown integration via calm-visualizer
 
-CALM files can generate Mermaid diagrams via the CALM visualizer. `architecture/README.md` includes generated Mermaid blocks with instructions on how to refresh them. This keeps the prose docs in sync with the machine-readable model.
+CALM files can generate Mermaid diagrams via the CALM visualizer. `packages/architecture/README.md` includes generated Mermaid blocks with instructions on how to refresh them. This keeps the prose docs in sync with the machine-readable model.
 
 ## Consequences
 
