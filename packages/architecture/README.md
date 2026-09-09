@@ -172,34 +172,43 @@ create, edit and share *artifacts* — small web apps that run inside the chat. 
 vendor specifics: a given AI web chat is one implementation of this shape. The
 `ai-user` only ever touches the chat UI and the UI an artifact renders. The
 `artifact` is encapsulated inside a network-isolated iframe whose *only* boundary
-to the outside is a `postMessage` message bus.
+to the outside is a `postMessage` message bus, modelled as the paired bus
+interfaces on `ai-chat-web-app` and `artifact` (there is no standalone bus node).
+`ai-artifact-environment` splits into an `ai-artifact-backend`
+(`ai-api`, `ai-key-value-storage`, `ai-artifact-source-code-server`) and an
+`ai-artifact-frontend-application` (`ai-chat-web-app`, the sandboxed iframe, and
+the `ai-cdn-source-allowlist`).
 
 ```mermaid
 graph TB
   aiuser([ai-user])
 
-  subgraph AIENV["ai-environment"]
-    chat[ai-chat-interface — web/desktop app]
-    api[ai-api]
-    keystore[(key-storage — key-value store)]
+  subgraph AIENV["ai-artifact-environment"]
+    subgraph BE["ai-artifact-backend — private, protected"]
+      api[ai-api]
+      keystore[(ai-key-value-storage)]
+      srcserver[ai-artifact-source-code-server]
+    end
 
-    subgraph IFRAME["artifact-iframe — no network in/out"]
-      bus{{message-bus — postMessage}}
-      artifact[artifact — web-app from a CDN]
+    subgraph FE["ai-artifact-frontend-application"]
+      chat[ai-chat-web-app — web/desktop app]
+      cdn[(ai-cdn-source-allowlist)]
+
+      subgraph IFRAME["artifact-view-sandboxed-iframe — no network in/out"]
+        artifact[artifact — web-app from a CDN]
+      end
     end
   end
 
-  cdn[(cdn-source-allowlist)]
-
   aiuser -->|chats| chat
   aiuser -->|interacts with UI of| artifact
-  chat --> api
-  chat <-->|two-way| bus
-  bus <--> artifact
-  cdn -->|loads bundle| artifact
-  artifact -->|"AI calls, load/save keys (via bus)"| bus
-  bus -->|forwards to| api
-  bus -->|load/save| keystore
+  chat -->|HTTPS| api
+  chat <-->|"two-way postMessage bus"| artifact
+  chat -->|"brokers AI calls (creds host-side)"| api
+  chat -->|"brokers get/set/delete/list"| keystore
+  srcserver -->|"HTTPS: artifact document"| artifact
+  artifact -->|"bundle + libs, HTTPS"| cdn
+  IFRAME -.->|"CSP script-src limited to"| cdn
 ```
 
 ## Adding New Architecture Elements
