@@ -22,7 +22,7 @@
     "calm",
     "finos"
   ],
-  "private": false,
+  "private": true,
   "type": "module",
   "description": "Architecture as Code for the Alistigo platform: FINOS CALM (Common Architecture Language Model) patterns and system models, plus the validation script that gates them. See ADR 0027 (CALM adoption) and ADR 0028 (package-first structure).",
   "files": [

@@ -5,9 +5,12 @@
   "description": "Reference architecture for an AI chat product that lets users create, edit and share 'artifacts' — small self-contained web apps that run inside the chat. A human user converses with an AI through a web or desktop chat interface. The chat interface embeds a network-isolated iframe whose only boundary in or out is a postMessage message bus. An artifact is loaded from a CDN, runs inside that iframe, renders the UI the user interacts with, and reaches the AI API and a host-provided key-value store only by sending messages across the bus. Any AI environment that offers artifact creation/editing can be described as an implementation of this architecture. Conceptual model — not a package or deployment view.",
   "metadata": [
     {
-      "version": "0.2.0",
+      "version": "0.3.0",
       "kind": "concept",
       "note": "The message-bus contract is defined by each AI environment; the message categories captured on the ai-chat-web-app-to-artifact-iframe-message-bus relationship metadata are the shape common to artifact-capable environments. The bus itself is modelled as the paired postMessage interfaces on ai-chat-web-app and artifact rather than as a standalone node."
+    },
+    {
+      "changelog": "0.3.0 adds the create-artifact-from-chat-flow flow and the ai-api-to-artifact-source-code-server relationship it traverses — the API tier's write path into the artifact source-code service."
     }
   ],
   "nodes": [
@@ -71,7 +74,7 @@
       "interfaces": [
         {
           "unique-id": "ai-artifact-source-code-server-interface",
-          "description": "HTTP endpoint returning the versioned artifact document for an artifact id."
+          "description": "HTTP endpoint that stores a model-generated artifact document under a new artifact id and returns the versioned artifact document for an artifact id."
         }
       ]
     },
@@ -285,6 +288,23 @@
       }
     },
     {
+      "unique-id": "ai-api-to-artifact-source-code-server",
+      "description": "Writes the model-generated artifact document to, versioned under a new artifact id",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ai-api",
+            "interfaces": ["ai-api-interface"]
+          },
+          "destination": {
+            "node": "ai-artifact-source-code-server",
+            "interfaces": ["ai-artifact-source-code-server-interface"]
+          }
+        }
+      }
+    },
+    {
       "unique-id": "load-artifact-sourcecode",
       "description": "Loaded at runtime as a versioned web-app document",
       "protocol": "HTTPS",
@@ -343,6 +363,52 @@
           "nodes": ["ai-chat-web-app", "artifact"]
         }
       }
+    }
+  ],
+  "flows": [
+    {
+      "unique-id": "create-artifact-from-chat-flow",
+      "name": "User asks the AI to create an artifact",
+      "description": "A user asks the AI, in the chat interface, to build an artifact. The chat app calls the AI API; the model generates a self-contained web-app document; the API stores it in the artifact source-code service under a new artifact id; the chat app then loads that document into the sandboxed iframe, where the artifact renders its UI for the user.",
+      "transitions": [
+        {
+          "relationship-unique-id": "ai-user-uses-chat-and-artifact",
+          "sequence-number": 1,
+          "description": "In the chat UI, the user asks the AI to create an artifact.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "ai-chat-web-app-to-ai-api",
+          "sequence-number": 2,
+          "description": "The chat interface sends the user's request and conversation state to the AI API; the model uses them to generate the artifact's HTML/JS document.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "ai-api-to-artifact-source-code-server",
+          "sequence-number": 3,
+          "description": "The API stores the generated artifact document in the artifact source-code service, versioned under a new artifact id.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "load-artifact-sourcecode",
+          "sequence-number": 4,
+          "description": "The chat web app loads the stored artifact document from the source-code service into the sandboxed iframe.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "ai-user-uses-chat-and-artifact",
+          "sequence-number": 5,
+          "description": "The artifact renders its UI inside the iframe; the user sees and interacts with the newly created artifact.",
+          "direction": "destination-to-source"
+        }
+      ],
+      "metadata": [
+        {
+          "trigger": "a user request in chat to create an artifact",
+          "outcome": "a new versioned artifact exists in the source-code service and is rendered in the chat",
+          "note": "Transition 4 traverses load-artifact-sourcecode; some environments instead have the host hand the document to the iframe as a config payload over the message bus (see ai-chat-web-app-to-artifact-iframe-message-bus) rather than the iframe loading it directly."
+        }
+      ]
     }
   ]
 }
