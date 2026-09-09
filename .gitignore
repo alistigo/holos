@@ -1,6 +1,9 @@
 # Git worktrees
 .worktrees/
 
+# macOS
+**/.DS_Store
+
 # Logs
 logs
 *.log

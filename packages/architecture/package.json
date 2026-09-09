@@ -1,0 +1,44 @@
+{
+  "name": "@alistigo/architecture",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/architecture"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/architecture#readme",
+  "keywords": [
+    "alistigo",
+    "architecture",
+    "architecture-as-code",
+    "calm",
+    "finos"
+  ],
+  "private": true,
+  "type": "module",
+  "description": "Architecture as Code for the Alistigo platform: FINOS CALM (Common Architecture Language Model) patterns and system models, plus the validation script that gates them. See ADR 0027 (CALM adoption) and ADR 0028 (package-first structure).",
+  "files": [
+    "patterns",
+    "systems",
+    "scripts",
+    "README.md"
+  ],
+  "exports": {
+    "./patterns/*": "./patterns/*",
+    "./systems/*": "./systems/*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@finos/calm-cli": "^1.58.0"
+  }
+}
