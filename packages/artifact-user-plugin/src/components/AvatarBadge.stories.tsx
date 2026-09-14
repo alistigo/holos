@@ -6,7 +6,7 @@ import { AvatarBadge } from "./AvatarBadge.js";
 const mockUser = generateDefaultUser();
 
 const meta: Meta<typeof AvatarBadge> = {
-  title: "artifact-user-plugin/AvatarBadge",
+  title: "AvatarBadge",
   component: AvatarBadge,
   decorators: [
     (Story) => (

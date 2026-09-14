@@ -69,7 +69,9 @@
     "@emotion/is-prop-valid",
     "astro",
     "@astrojs/starlight",
-    "sharp"
+    "sharp",
+    "storybook",
+    "@storybook/react-vite"
   ],
   "duplicates": {
     "minOccurrences": 3

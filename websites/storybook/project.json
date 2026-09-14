@@ -1,0 +1,30 @@
+{
+  "name": "storybook",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "websites/storybook",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "storybook dev --port 6006 --host 0.0.0.0",
+        "cwd": "websites/storybook"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/storybook-static"],
+      "options": {
+        "command": "storybook build",
+        "cwd": "websites/storybook"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf storybook-static",
+        "cwd": "websites/storybook"
+      }
+    }
+  }
+}

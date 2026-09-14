@@ -19,5 +19,14 @@ module.exports = {
       autorestart: true,
       watch: false,
     },
+    {
+      name: "storybook",
+      script: "pnpm",
+      args: "exec storybook dev --port 6006 --host 0.0.0.0",
+      interpreter: "none",
+      cwd: `${root}/websites/storybook`,
+      autorestart: true,
+      watch: false,
+    },
   ],
 };
