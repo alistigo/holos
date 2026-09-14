@@ -1,3 +1,15 @@
+## 0.3.3 (2026-09-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.3.3
+- Updated list-components-react to 0.4.1
+- Updated local-storage-plugin to 0.4.3
+- Updated claude-artifact-api to 0.3.3
+- Updated artifact-manager to 0.3.3
+- Updated artifact-list to 0.7.1
+- Updated list-document to 0.4.1
+
 ## 0.3.2 (2026-09-03)
 
 ### 🚀 Features

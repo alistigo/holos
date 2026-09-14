@@ -1,3 +1,9 @@
+## 0.4.1 (2026-09-14)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document to 0.4.1
+
 ## 0.4.0 (2026-09-03)
 
 ### 🚀 Features

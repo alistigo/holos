@@ -1,3 +1,13 @@
+## 0.4.1 (2026-09-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-list-checkbox-plugin to 0.2.1
+- Updated artifact-plugin-api to 0.5.1
+- Updated list-document to 0.4.1
+- Updated list-domain to 0.3.3
+- Updated logger to 0.3.3
+
 ## 0.4.0 (2026-09-03)
 
 ### 🚀 Features

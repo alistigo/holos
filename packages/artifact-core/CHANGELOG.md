@@ -1,3 +1,10 @@
+## 0.3.3 (2026-09-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.5.1
+- Updated logger to 0.3.3
+
 ## 0.3.2 (2026-09-03)
 
 ### 🧱 Updated Dependencies

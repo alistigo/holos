@@ -1,3 +1,17 @@
+## 0.7.1 (2026-09-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.4.3
+- Updated artifact-list-checkbox-plugin to 0.2.1
+- Updated list-components-react to 0.4.1
+- Updated artifact-plugin-api to 0.5.1
+- Updated claude-artifact-api to 0.3.3
+- Updated artifact-core to 0.3.3
+- Updated list-document to 0.4.1
+- Updated list-domain to 0.3.3
+- Updated logger to 0.3.3
+
 ## 0.7.0 (2026-09-03)
 
 ### 🚀 Features
