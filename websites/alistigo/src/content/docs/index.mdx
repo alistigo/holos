@@ -1,0 +1,33 @@
+---
+title: Alistigo
+description: Platform for embeddable AI artifacts — interactive list widgets for any AI chat.
+template: splash
+hero:
+  title: Alistigo
+  tagline: Embeddable AI artifacts — interactive, event-sourced list widgets for any AI chat interface.
+  actions:
+    - text: View Architecture
+      link: /platform/overview/
+      icon: right-arrow
+      variant: primary
+    - text: Open Playground
+      link: /app/
+      icon: external
+      variant: secondary
+---
+
+## What is Alistigo?
+
+Alistigo is a platform for building **embeddable AI artifacts** — structured, interactive UI components that run inside AI chat interfaces like Claude.
+
+The reference implementation is the **list artifact** (`@alistigo/artifact-list`): an iframe-embeddable widget that renders a portable `ListDocument` (JSON-LD) and handles all user interactions, persistence, and plugin composition.
+
+## Key Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Artifact** | A self-contained iframe widget that renders a document and handles interactions |
+| **Document** | A JSON-LD object (`ListDocument`) that is the portable, serializable state |
+| **Event log** | An append-only sequence of commands; the document is a projection |
+| **Plugin** | A composable unit of capability (storage, analytics, user identity, etc.) |
+| **Artifact Manager** | The CDN-loaded bootstrap script that resolves and mounts artifact bundles |
