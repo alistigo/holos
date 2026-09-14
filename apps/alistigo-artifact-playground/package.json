@@ -28,12 +28,10 @@
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
     "@lingui/vite-plugin": "^6.0.0",
-    "@storybook/react-vite": "^10.3.0",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "storybook": "^10.3.0",
     "tailwindcss": "^4.0.0",
     "vite": "^7.0.0"
   }

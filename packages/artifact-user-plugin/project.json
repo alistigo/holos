@@ -33,21 +33,6 @@
         "cwd": "packages/artifact-user-plugin"
       }
     },
-    "storybook": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "storybook dev -p 6007",
-        "cwd": "packages/artifact-user-plugin"
-      }
-    },
-    "build-storybook": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/storybook-static"],
-      "options": {
-        "command": "storybook build",
-        "cwd": "packages/artifact-user-plugin"
-      }
-    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
