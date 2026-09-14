@@ -32,3 +32,4 @@ This directory contains architectural decisions for the Holos monorepo — both 
 | [0026](0026-alistigo-document-format-jsonld-schemaorg.md) | Alistigo Document Format: JSON-LD + schema.org Foundation and Package Standard | Accepted | 2026-08-29 |
 | [0027](0027-architecture-as-code-calm.md) | Architecture as Code: Adopting CALM (Common Architecture Language Model) | Accepted | 2026-09-04 |
 | [0028](0028-package-first-repository-structure.md) | Package-First Repository Structure | Accepted | 2026-09-08 |
+| [0030](0030-pm2-server-dev-mode.md) | PM2 Server Dev Mode | Accepted | 2026-09-14 |

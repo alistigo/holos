@@ -33,6 +33,21 @@ pnpm build:typecheck    # Type-check all packages
 pnpm test               # Run all tests
 ```
 
+## Server Mode
+
+The repo can run on a remote server for persistent AI-agent sessions (Claude in tmux, accessible from anywhere). Use the `server:*` commands to manage background dev processes via PM2:
+
+| Command | What it does |
+|---------|-------------|
+| `pnpm server:start:dev` | Start playground, website, and storybook as background daemons |
+| `pnpm server:kill-all` | Stop and remove all background dev processes |
+| `pnpm server:status` | Show status of all managed processes |
+| `pnpm server:logs` | Tail logs from all processes |
+| `pnpm server:restart` | Restart all running processes (e.g. after a branch switch) |
+| `pnpm server:install-service` | Install a systemd user service that auto-starts dev on login/boot |
+
+See [ADR 0030](packages/architecture/adrs/0030-pm2-server-dev-mode.md) for the rationale.
+
 ## Quality Assurance
 
 All static analysis and linting tools follow the `qa:*` prefix — keeping QA commands grouped and discoverable, separate from build/run/test commands.
