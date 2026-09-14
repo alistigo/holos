@@ -1,8 +1,12 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
+import os from "node:os";
 
 export default defineConfig({
   site: "https://www.alistigo.com",
+  server: {
+    allowedHosts: [os.hostname(), `${os.hostname()}.local`],
+  },
   integrations: [
     starlight({
       title: "Alistigo",
