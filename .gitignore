@@ -167,3 +167,4 @@ data/**/*.sqlite3
 
 .nx/polygraph
 .claude/worktrees
+.astro
