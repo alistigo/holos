@@ -34,7 +34,9 @@
 
     "packages/alistigo-*",
     "cli/alistigo-*",
-    "packages/artifact-storage-explorer"
+    "packages/artifact-storage-explorer",
+    "websites/storybook",
+    "websites/alistigo/**"
   ],
   "dynamicallyLoaded": [
     "**/*.test.{ts,tsx}",
@@ -64,7 +66,10 @@
     "gherklin",
     "@cucumber/pretty-formatter",
     "@lingui/format-po",
-    "@emotion/is-prop-valid"
+    "@emotion/is-prop-valid",
+    "astro",
+    "@astrojs/starlight",
+    "sharp"
   ],
   "duplicates": {
     "minOccurrences": 3
