@@ -15,6 +15,7 @@
  *   3. Add a `build:<new>` target in this app's project.json.
  */
 
+import os from "node:os";
 import path, { resolve } from "node:path";
 import linguiMacro from "@lingui/babel-plugin-lingui-macro";
 import { lingui } from "@lingui/vite-plugin";
@@ -65,7 +66,7 @@ const componentsPackageRoot = path.resolve(__dirname, "../../packages/list-compo
 
 const activeCatalogPath = path.join(componentsPackageRoot, `src/locales/${LOCALE}/messages.po`);
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   base: "./", // relative paths — required for GitHub Pages subpath deployment
   plugins: [
     {
@@ -98,10 +99,12 @@ export default defineConfig({
   define: {
     __ALISTIGO_LOCALE__: JSON.stringify(LOCALE),
     __ALISTIGO_DEV_PLUGIN_SRC_PATHS__: JSON.stringify(devPluginSrcPaths),
+    __ALISTIGO_DEV_HOSTNAME__: JSON.stringify(command === "serve" ? os.hostname() : ""),
   },
   server: {
     port: 5173,
     strictPort: false,
+    allowedHosts: [os.hostname(), `${os.hostname()}.local`],
   },
   build: {
     outDir: `dist/${LOCALE}`,
@@ -118,4 +121,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

@@ -1,14 +1,26 @@
 import claudeBridgeHtml from "@alistigo/claude-artifact-api/inject-script.html?raw";
 import type { Config } from "./hooks/useHostConfig";
 
+const _devHost = typeof __ALISTIGO_DEV_HOSTNAME__ !== "undefined" ? __ALISTIGO_DEV_HOSTNAME__ : "";
+const _devHostOrigins = _devHost ? [`http://${_devHost}:*`, `ws://${_devHost}:*`] : [];
+
 export const SRCDOC_CSP = [
   "default-src 'none'",
-  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net http://localhost:* http://127.0.0.1:*",
+  [
+    "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
+    "http://localhost:* http://127.0.0.1:*",
+    ..._devHostOrigins.slice(0, 1),
+  ].join(" "),
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  "connect-src 'self' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*",
-  "frame-src 'self' http://localhost:* http://127.0.0.1:*",
+  [
+    "connect-src 'self' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*",
+    ..._devHostOrigins,
+  ].join(" "),
+  ["frame-src 'self' http://localhost:* http://127.0.0.1:*", ..._devHostOrigins.slice(0, 1)].join(
+    " ",
+  ),
   "worker-src blob:",
   "media-src 'self' blob:",
 ].join("; ");
