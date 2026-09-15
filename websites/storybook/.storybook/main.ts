@@ -1,5 +1,4 @@
 import { existsSync, readFileSync } from "node:fs";
-import os from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { lingui } from "@lingui/vite-plugin";
@@ -51,7 +50,7 @@ const config: StorybookConfig = {
       ...viteConfig,
       server: {
         ...viteConfig.server,
-        allowedHosts: [os.hostname(), `${os.hostname()}.local`],
+        allowedHosts: true,
       },
       plugins: [...(viteConfig.plugins ?? []), tailwindcss(), lingui()],
     };
