@@ -5,6 +5,7 @@ const meta: Meta<typeof StorageExplorer> = {
   title: "Playground/StorageExplorer",
   component: StorageExplorer,
   parameters: { layout: "fullscreen" },
+  tags: ["playground"],
   decorators: [
     (Story) => (
       <div style={{ height: "400px", display: "flex", border: "1px solid #e5e7eb" }}>

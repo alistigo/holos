@@ -7,6 +7,7 @@ const meta: Meta<typeof ClaudeSimulator> = {
   title: "Components/ClaudeSimulator",
   component: ClaudeSimulator,
   parameters: { layout: "fullscreen" },
+  tags: ["playground"],
   args: {
     aiContext: "",
     simulatorDelayMs: 500,

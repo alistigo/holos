@@ -5,6 +5,7 @@ const meta: Meta<typeof HostPage> = {
   title: "Dev/HostPage",
   component: HostPage,
   parameters: { layout: "fullscreen" },
+  tags: ["playground"],
 };
 
 export default meta;
