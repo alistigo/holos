@@ -2,6 +2,7 @@ packages:
   - apps/*
   - packages/*
   - cli/*
+  - websites/*
 ignoredBuiltDependencies:
   - '@sentry/cli'
   - core-js

@@ -6,7 +6,7 @@ import { UserEditModal } from "./UserEditModal.js";
 const mockUser = generateDefaultUser();
 
 const meta: Meta<typeof UserEditModal> = {
-  title: "artifact-user-plugin/UserEditModal",
+  title: "UserEditModal",
   component: UserEditModal,
   decorators: [
     (Story) => (

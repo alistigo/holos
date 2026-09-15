@@ -21,6 +21,7 @@ const meta: Meta<typeof SourceView> = {
   title: "Playground/SourceView",
   component: SourceView,
   parameters: { layout: "fullscreen" },
+  tags: ["playground"],
   decorators: [
     (Story) => (
       <div style={{ height: "100vh" }}>

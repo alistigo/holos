@@ -6,6 +6,7 @@ const meta: Meta<typeof HostForm> = {
   title: "Playground/HostForm",
   component: HostForm,
   parameters: { layout: "fullscreen" },
+  tags: ["playground"],
   decorators: [
     (Story) => (
       <div

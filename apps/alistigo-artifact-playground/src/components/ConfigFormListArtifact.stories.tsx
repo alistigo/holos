@@ -5,6 +5,7 @@ const meta: Meta<typeof ConfigFormListArtifact> = {
   title: "Playground/ConfigFormListArtifact",
   component: ConfigFormListArtifact,
   parameters: { layout: "centered" },
+  tags: ["playground"],
 };
 
 export default meta;

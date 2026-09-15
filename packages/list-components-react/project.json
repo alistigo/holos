@@ -26,21 +26,6 @@
         "cwd": "packages/list-components-react"
       }
     },
-    "storybook": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "storybook dev -p 6006",
-        "cwd": "packages/list-components-react"
-      }
-    },
-    "build-storybook": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/storybook-static"],
-      "options": {
-        "command": "storybook build",
-        "cwd": "packages/list-components-react"
-      }
-    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

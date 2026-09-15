@@ -1,0 +1,30 @@
+{
+  "name": "alistigo-website",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "websites/alistigo/src",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro dev --host 0.0.0.0",
+        "cwd": "websites/alistigo"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "astro build",
+        "cwd": "websites/alistigo"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist .astro",
+        "cwd": "websites/alistigo"
+      }
+    }
+  }
+}

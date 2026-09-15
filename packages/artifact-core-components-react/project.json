@@ -26,21 +26,6 @@
         "cwd": "packages/artifact-core-components-react"
       }
     },
-    "storybook": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "storybook dev -p 6007",
-        "cwd": "packages/artifact-core-components-react"
-      }
-    },
-    "build-storybook": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/storybook-static"],
-      "options": {
-        "command": "storybook build",
-        "cwd": "packages/artifact-core-components-react"
-      }
-    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

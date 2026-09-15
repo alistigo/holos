@@ -93,21 +93,6 @@
         "command": "rm -rf dist",
         "cwd": "apps/alistigo-artifact-playground"
       }
-    },
-    "storybook": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "storybook dev -p 6007",
-        "cwd": "apps/alistigo-artifact-playground"
-      }
-    },
-    "build-storybook": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/storybook-static"],
-      "options": {
-        "command": "storybook build",
-        "cwd": "apps/alistigo-artifact-playground"
-      }
     }
   }
 }

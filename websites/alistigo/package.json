@@ -1,0 +1,16 @@
+{
+  "name": "@alistigo/alistigo-website",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.34.8",
+    "astro": "^5.18.2",
+    "sharp": "^0.33.5"
+  }
+}
