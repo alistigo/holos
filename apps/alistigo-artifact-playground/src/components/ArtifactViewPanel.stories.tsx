@@ -29,6 +29,7 @@ const meta: Meta<typeof ArtifactViewPanel> = {
   title: "Playground/ArtifactViewPanel",
   component: ArtifactViewPanel,
   parameters: { layout: "fullscreen" },
+  tags: ["playground"],
   decorators: [
     (Story) => (
       <div style={{ height: "100vh", display: "flex" }}>

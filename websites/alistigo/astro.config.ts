@@ -1,6 +1,6 @@
+import os from "node:os";
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
-import os from "node:os";
 
 export default defineConfig({
   site: "https://www.alistigo.com",
