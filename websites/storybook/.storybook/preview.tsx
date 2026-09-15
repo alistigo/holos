@@ -1,4 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
+// biome-ignore lint/correctness/noUnusedImports: Storybook preview JSX requires React in scope
+import React from "react";
 import "./preview.css";
 
 const preview: Preview = {
