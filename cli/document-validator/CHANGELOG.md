@@ -1,3 +1,9 @@
+## 0.5.0 (2026-09-15)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document to 0.5.0
+
 ## 0.4.1 (2026-09-14)
 
 ### 🧱 Updated Dependencies

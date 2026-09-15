@@ -1,3 +1,19 @@
+## 0.5.0 (2026-09-15)
+
+### 🩹 Fixes
+
+- lint ([386f4c9](https://github.com/alistigo/holos/commit/386f4c9))
+
+### 🧱 Updated Dependencies
+
+- Updated core-document to 0.3.0
+- Updated list-domain to 0.4.0
+- Updated logger to 0.4.0
+
+### ❤️ Thank You
+
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.1 (2026-09-14)
 
 ### 🧱 Updated Dependencies

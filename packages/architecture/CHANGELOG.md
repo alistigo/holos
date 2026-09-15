@@ -1,3 +1,15 @@
+## 1.1.0 (2026-09-15)
+
+### 🚀 Features
+
+- **website:** scaffold websites/alistigo — Astro 5 + Starlight ([6a6d5d5](https://github.com/alistigo/holos/commit/6a6d5d5))
+- restore PM2 server management and Tailscale LAN access ([076c301](https://github.com/alistigo/holos/commit/076c301))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 # 1.0.0 (2026-09-14)
 
 ### 🩹 Fixes

@@ -1,3 +1,21 @@
+## 0.4.0 (2026-09-15)
+
+### 🩹 Fixes
+
+- lint ([386f4c9](https://github.com/alistigo/holos/commit/386f4c9))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.0
+- Updated explorer-components-react to 0.5.0
+- Updated claude-storage-plugin to 0.6.0
+- Updated claude-artifact-api to 0.4.0
+- Updated artifact-core to 0.4.0
+
+### ❤️ Thank You
+
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.3 (2026-09-14)
 
 ### 🧱 Updated Dependencies

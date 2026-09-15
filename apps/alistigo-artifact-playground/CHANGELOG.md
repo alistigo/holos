@@ -1,3 +1,30 @@
+## 0.4.0 (2026-09-15)
+
+### 🚀 Features
+
+- **storybook:** add playground decorator via tags-based scoping ([01c9fe9](https://github.com/alistigo/holos/commit/01c9fe9))
+- **storybook:** consolidate all per-package storybbooks into a single global instance at websites/storybook ([8f4d1bf](https://github.com/alistigo/holos/commit/8f4d1bf))
+- restore PM2 server management and Tailscale LAN access ([076c301](https://github.com/alistigo/holos/commit/076c301))
+
+### 🩹 Fixes
+
+- **storybook:** restore @storybook/react-vite types in packages, add stories to dynamicallyLoaded ([5c1764c](https://github.com/alistigo/holos/commit/5c1764c))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.0
+- Updated list-components-react to 0.5.0
+- Updated local-storage-plugin to 0.5.0
+- Updated claude-artifact-api to 0.4.0
+- Updated artifact-manager to 0.4.0
+- Updated artifact-list to 0.8.0
+- Updated list-document to 0.5.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.3 (2026-09-14)
 
 ### 🧱 Updated Dependencies
