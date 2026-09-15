@@ -10,7 +10,7 @@ export function checkboxReducer(
     listItem?: { "@id"?: string };
     checked?: boolean;
   };
-  if (ev["alistigo:eventType"] === "ListElementChecked" && ev["listItem"]?.["@id"] === elementId) {
+  if (ev["alistigo:eventType"] === "ListElementChecked" && ev.listItem?.["@id"] === elementId) {
     return { selected: (event as AlistigoListElementCheckedRecord).checked };
   }
   return meta;

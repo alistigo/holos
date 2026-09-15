@@ -95,7 +95,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
       return {
         ...base,
         type: "ListElementAdded",
-        listElementId: parseListElementId(added["listItem"]["@id"]),
+        listElementId: parseListElementId(added.listItem["@id"]),
         content: createListElementContent(added.name),
       };
     }
@@ -104,7 +104,7 @@ function recordToEvent(record: AlistigoEventRecord): ListEvent | null {
       return {
         ...base,
         type: "ListElementDeleted",
-        listElementId: parseListElementId(deleted["listItem"]["@id"]),
+        listElementId: parseListElementId(deleted.listItem["@id"]),
       };
     }
     case "ListExported": {

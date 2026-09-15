@@ -277,7 +277,7 @@ export function JsonEditor({
     }
   }
 
-  const html = jsonToHTML(value) + "\n";
+  const html = `${jsonToHTML(value)}\n`;
   const heightRem = rows * 1.375 + 1;
 
   return (
