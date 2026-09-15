@@ -1,11 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
+import os from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { lingui } from "@lingui/vite-plugin";
 import type { StorybookConfig } from "@storybook/react-vite";
 import tailwindcss from "@tailwindcss/vite";
 import { globSync } from "glob";
-import os from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = join(__dirname, "../../..");
