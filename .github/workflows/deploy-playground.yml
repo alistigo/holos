@@ -1,4 +1,4 @@
-name: Deploy Playground
+name: Deploy to GitHub Pages
 
 on:
   workflow_run:
@@ -23,6 +23,8 @@ jobs:
     # On workflow_run: only proceed when CI passed.
     # On workflow_dispatch: always proceed (manual re-deploy).
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    env:
+      STORYBOOK_BASE_PATH: /storybook/
 
     steps:
       - name: Checkout
@@ -62,53 +64,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build playground (all locales)
-        run: pnpm exec nx run alistigo-artifact-playground:build:all
+      - name: Build deployed apps and website
+        run: pnpm exec nx run holos:build:deploy
 
-      - name: Assemble site
-        run: |
-          mkdir -p _site/playground
-          echo "www.alistigo.com" > _site/CNAME
-
-          cp -r apps/alistigo-artifact-playground/dist/en _site/playground/en
-          cp -r apps/alistigo-artifact-playground/dist/fr _site/playground/fr
-
-          # /playground/ — detect browser language and redirect to the right bundle.
-          cat > _site/playground/index.html << 'HTMLEOF'
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="utf-8" />
-              <title>Alistigo Playground</title>
-              <script>
-                var supported = ['en', 'fr'];
-                var loc = (navigator.languages || [navigator.language || 'en'])
-                  .map(function (l) { return l.slice(0, 2).toLowerCase(); })
-                  .find(function (l) { return supported.indexOf(l) !== -1; }) || 'en';
-                window.location.replace('./' + loc + '/');
-              </script>
-            </head>
-            <body>
-              <a href="./en/">English</a> | <a href="./fr/">Fran&#231;ais</a>
-            </body>
-          </html>
-          HTMLEOF
-
-          # Site root — redirect visitors straight to the playground.
-          cat > _site/index.html << 'HTMLEOF'
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="utf-8" />
-              <meta http-equiv="refresh" content="0;url=./playground/" />
-              <title>Alistigo</title>
-              <script>window.location.replace('./playground/');</script>
-            </head>
-            <body>
-              <a href="./playground/">Open Playground</a>
-            </body>
-          </html>
-          HTMLEOF
+      - name: Assemble _site
+        run: bash scripts/assemble-site.sh
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

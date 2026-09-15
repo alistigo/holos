@@ -5,6 +5,7 @@ import { lingui } from "@lingui/vite-plugin";
 import type { StorybookConfig } from "@storybook/react-vite";
 import tailwindcss from "@tailwindcss/vite";
 import { globSync } from "glob";
+import os from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = join(__dirname, "../../..");
@@ -48,9 +49,12 @@ const config: StorybookConfig = {
   async viteFinal(viteConfig) {
     return {
       ...viteConfig,
+      ...(process.env.STORYBOOK_BASE_PATH !== undefined
+        ? { base: process.env.STORYBOOK_BASE_PATH }
+        : {}),
       server: {
         ...viteConfig.server,
-        allowedHosts: true,
+        allowedHosts: [os.hostname(), `${os.hostname()}.local`],
       },
       plugins: [...(viteConfig.plugins ?? []), tailwindcss(), lingui()],
     };

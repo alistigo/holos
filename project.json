@@ -32,6 +32,14 @@
         "command": "true"
       }
     },
+    "build:deploy": {
+      "executor": "nx:noop",
+      "dependsOn": [
+        { "projects": ["alistigo-website"], "target": "build" },
+        { "projects": ["storybook"], "target": "build" },
+        { "projects": ["alistigo-artifact-playground"], "target": "build:all" }
+      ]
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
