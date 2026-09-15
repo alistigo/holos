@@ -1,0 +1,5 @@
+@import "../../../packages/list-components-react/src/styles/globals.css";
+
+/* Extend Tailwind scan to every app and package in the workspace */
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../packages/**/*.{ts,tsx}";
