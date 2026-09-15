@@ -113,8 +113,7 @@ function initCapture(): void {
 
   if (typeof w.fetch === "function") {
     const origFetch = w.fetch.bind(window);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).fetch = (url: RequestInfo | URL, init: RequestInit = {}) => {
+    window.fetch = (url: RequestInfo | URL, init: RequestInit = {}) => {
       addEntry({
         id: crypto.randomUUID(),
         direction: "out",
@@ -145,8 +144,7 @@ function initCapture(): void {
       });
       return origGet(key, shared);
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (s as any).set = (key: string, value: unknown, shared = false) => {
+    s.set = (key: string, value: unknown, shared = false) => {
       addEntry({
         id: crypto.randomUUID(),
         direction: "out",
@@ -330,7 +328,6 @@ export function PostMessageLogTab(): JSX.Element {
       SUBSCRIBERS.delete(forceUpdate);
     };
     // forceUpdate from useReducer is stable — no deps needed
-    // biome-ignore lint/correctness/useExhaustiveDependencies: stable reducer dispatch
   }, []);
 
   function clearLog(): void {
