@@ -3,7 +3,7 @@
 Every `@alistigo` artifact ships an agent skill that teaches AI chat (Claude and other
 LLM agents) what the artifact is, when to use it, and how to interact with it.
 
-See [ADR 0015](../adrs/0015-agent-skills-standard.md) for the agentskills.io standard
+See [ADR 0015](../../adrs/0015-agent-skills-standard.md) for the agentskills.io standard
 that all Alistigo skills follow.
 
 ---

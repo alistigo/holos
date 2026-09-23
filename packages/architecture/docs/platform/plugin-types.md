@@ -1,7 +1,7 @@
 # Plugin Type Taxonomy
 
 All `@alistigo` plugins implement the `AlistigoPlugin` interface from
-`@alistigo/artifact-plugin-api` (see [ADR 0016](../adrs/0016-artifact-plugin-system.md)).
+`@alistigo/artifact-plugin-api` (see [ADR 0016](../../adrs/0016-artifact-plugin-system.md)).
 The plugin type determines what the plugin does, not how it's wired — the interface
 is the same for all types.
 
@@ -82,7 +82,7 @@ plugin in order and uses the first one that returns `true`.
 
 **Fallback:** `InMemoryStore` — used when no storage plugin is available; data is lost on reload.
 
-See [ADR 0017](../adrs/0017-storage-plugin-system.md) for the storage plugin system design.
+See [ADR 0017](../../adrs/0017-storage-plugin-system.md) for the storage plugin system design.
 
 ---
 
@@ -116,4 +116,4 @@ All plugins are:
 - Loaded at runtime from jsDelivr CDN using the `@0` major-version-pin convention (ADR 0011)
 - Never bundled into the artifact at build time (enabling/disabling is a config change)
 
-See [ADR 0016](../adrs/0016-artifact-plugin-system.md) for distribution details.
+See [ADR 0016](../../adrs/0016-artifact-plugin-system.md) for distribution details.

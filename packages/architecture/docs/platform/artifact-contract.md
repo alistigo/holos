@@ -119,7 +119,7 @@ const ctx = await startArtifact({
 });
 ```
 
-See [ADR 0016](../adrs/0016-artifact-plugin-system.md) for the full plugin interface.
+See [ADR 0016](../../adrs/0016-artifact-plugin-system.md) for the full plugin interface.
 
 ---
 
@@ -137,7 +137,7 @@ Every artifact operates on exactly two documents:
 Config fields common to all artifacts: `app` (required), `lang` (optional). Artifact-
 specific fields are in the artifact's leaf config-format package.
 
-See `docs/architecture.md §12` for the full spec.
+See `../architecture.md §12` for the full spec.
 
 ---
 

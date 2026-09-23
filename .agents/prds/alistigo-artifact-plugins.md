@@ -93,7 +93,7 @@ Two existing ADRs already chose the underlying tools and are **not** being revis
 
 ## References
 
-- Architecture: `docs/architecture.md`, `docs/milestones.md`
+- Architecture: `packages/architecture/docs/architecture.md`, `docs/milestones.md`
 - ADRs: `docs/adrs/0008-error-monitoring.md`, `docs/adrs/0010-product-analytics.md`, `docs/adrs/0011-jsdelivr-versioning-strategy.md`
 - Related PRD (naming conflict, see above): `.agents/prds/alistigo-ai-m3.md`
 - Config-format precedent: `.agents/prds/alistigo-ai-m2.md`

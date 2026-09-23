@@ -103,7 +103,7 @@ PLATFORM INFRA artifact-manager, artifact-config-format, sentry-plugin, posthog-
 4. List artifact loads with LoadingScreen → badge visible top-right → modal works
 5. Playground AI API tab sends `addElement`, call log shows result
 6. ADR 0018 in `docs/adrs/` with entry in README.md index
-7. `docs/platform/` contains 4 documents
+7. `packages/architecture/docs/platform/` contains 4 documents
 
 ## Estimated Effort
 

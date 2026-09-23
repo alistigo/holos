@@ -59,9 +59,9 @@ since the entire repo is alistigo.
 | F8 | `@alistigo/ai-chat-async-api` package: `<api-calls>` tag parser + executor + AsyncAPI-subset definition |
 | F9 | List artifact publishes its API definition (`api.json`) |
 | F10 | Playground "AI API" tab: load artifact API definition, send actions, show call log |
-| F11 | `docs/architecture.md` rewritten for platform scope |
+| F11 | `packages/architecture/docs/architecture.md` rewritten for platform scope |
 | F12 | `docs/milestones.md` gains P0 milestone; M1-M6 become "List Artifact Milestones" |
-| F13 | `docs/platform/` created with artifact-contract, skill-pattern, plugin-types, layer-diagram |
+| F13 | `packages/architecture/docs/platform/` created with artifact-contract, skill-pattern, plugin-types, layer-diagram |
 | F14 | `docs/domain/` subdocs gain "List Artifact domain only" scope banners |
 | F15 | All existing Gherkin scenarios pass after the refactor |
 
