@@ -29,11 +29,13 @@
     "patterns",
     "systems",
     "scripts",
+    "docs",
     "README.md"
   ],
   "exports": {
     "./patterns/*": "./patterns/*",
-    "./systems/*": "./systems/*"
+    "./systems/*": "./systems/*",
+    "./docs/*": "./docs/*"
   },
   "publishConfig": {
     "access": "public"

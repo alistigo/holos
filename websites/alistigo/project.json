@@ -1,5 +1,6 @@
 {
   "name": "alistigo-website",
+  "implicitDependencies": ["architecture"],
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "websites/alistigo/src",
   "projectType": "application",
