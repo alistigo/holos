@@ -1,12 +1,9 @@
-[settings]
-disable_tools = ["pnpm"]
-
 [tools]
 node = "lts"
 bun = "latest"
 python = "3.12"
 rust = "stable"
-"npm:pnpm" = "10"
+pnpm = "10.7.0"
 
 [tasks.setup]
 description = "Bootstrap the repo on a fresh machine"
