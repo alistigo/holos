@@ -1,4 +1,3 @@
-@platform
 @artifact-plugins
 @capability:plugins
 @actor:host

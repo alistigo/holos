@@ -1,4 +1,3 @@
-@platform
 @artifact-plugins
 @capability:user-identity
 Feature: Edit user identity

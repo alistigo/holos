@@ -10,25 +10,11 @@ Each tag falls into exactly one category. The category determines where it goes 
 
 | Category | Required? | Where | Purpose |
 |----------|-----------|-------|---------|
-| **Milestone** | yes — exactly one | Feature-level | Which milestone owns this feature |
 | **Group** | yes — exactly one | Feature-level | Which feature group (mirrors the folder under `features/`) |
 | **Capability** | yes — at least one | Feature-level | What the app does |
 | **Test type** | no | Scenario-level | What kind of scenario |
 | **Suite** | no | Scenario-level | Which named runs include it |
 | **Actor** | no | either | Who triggers the scenario |
-
-## Milestone tags
-
-Exactly one per Feature. See [`projects/alistigo-ai/milestones.md`](../../../projects/alistigo-ai/milestones.md).
-
-| Tag | Means |
-|-----|-------|
-| `@m1` | Milestone 1 — Todo list MVP |
-| `@m2` | Milestone 2 — Plugin architecture |
-| `@m3` | Milestone 3 — Second list type via plugins |
-| `@m4` | Milestone 4 — Host ↔ iframe protocol |
-| `@v1` | Milestone 5 / 1.0 — Public beta |
-| `@platform` | Cross-cutting platform capability, not tied to a numbered milestone (e.g. the artifact plugin system) |
 
 ## Group tags
 
@@ -74,7 +60,7 @@ Zero or more per Scenario. Composable.
 | Tag | Means |
 |-----|-------|
 | `@smoke` | The smallest representative subset to run on every commit. Keep tiny. |
-| `@regression` | The full milestone suite — what blocks a milestone from being marked done |
+| `@regression` | The full scenario suite |
 | `@todo` | Todo; runner skips by default |
 
 ## Actor tags

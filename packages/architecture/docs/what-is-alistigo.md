@@ -21,10 +21,9 @@ problems follow:
 Alistigo solves this: the AI describes a *document*, not an app. Alistigo handles
 rendering, interaction, and persistence. The AI stays in its lane (data and intent).
 
-## The Platform (P0+)
+## The Platform
 
-Alistigo started as a single-purpose list app. After shipping M1 (base list) and M2
-(artifact playground + config system), the scope expanded: Alistigo is now a **platform
+Alistigo started as a single-purpose list app. The scope expanded: Alistigo is now a **platform
 for AI artifacts** — a shared set of libraries (`artifact-core`, `artifact-plugin-api`,
 `artifact-manager`, …) that any artifact type plugs into. The list artifact became the
 reference implementation, not the product.
@@ -58,21 +57,6 @@ scaffolding copied from the list.
 
 See [`architecture.md`](architecture.md) for the full set of load-bearing constraints and
 the [`platform/`](platform/README.md) docs for the four-tier architecture diagram.
-
-## Milestones
-
-| Milestone | Goal | Status |
-|-----------|------|--------|
-| M1 — Base list | Prove event → projection → render end-to-end with text elements | ✅ shipped |
-| M2 — Playground | Generic artifact playground, config format, artifact manager | ✅ shipped |
-| P0 — Platform Foundation | Rename packages, add artifact-core, AI API, platform docs | 🔄 in progress |
-| M3 — Plugin Architecture | Plugin interface + checkbox-element as first plugin | ⬜ backlog |
-| M4 — Second List Type | Prove plugin composability with a second artifact type | ⬜ backlog |
-| M5 — Host Protocol | postMessage protocol for real embedded widget behavior | ⬜ backlog |
-| M6 — Public Beta | npm publishing, public docs, discoverability | ⬜ backlog |
-
-See [`docs/milestones.md`](../../../docs/milestones.md) for full scope and acceptance
-criteria per milestone.
 
 ## Core Principles
 

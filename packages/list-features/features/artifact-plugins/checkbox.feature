@@ -1,4 +1,3 @@
-@platform
 @artifact-plugins
 @capability:checkbox
 Feature: Checkbox Plugin

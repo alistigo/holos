@@ -12,5 +12,5 @@ export function createSchemaVersion(raw: string): SchemaVersion {
   return raw as SchemaVersion;
 }
 
-/** The current M1 schema version. */
+/** The current schema version. */
 export const CURRENT_SCHEMA_VERSION: SchemaVersion = "1.0.0";
