@@ -1,4 +1,3 @@
-@m1
 @core
 @capability:list
 @capability:loading

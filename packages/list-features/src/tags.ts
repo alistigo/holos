@@ -8,19 +8,9 @@
  * When you introduce a new tag, add it here AND document it in `docs/tags.md`.
  * Untyped or undocumented tags are rejected by the lint pipeline.
  *
- * Tag categories follow the `gherkin-features` skill: Milestone, Group,
+ * Tag categories follow the `gherkin-features` skill: Group,
  * Capability, Test type, Suite, Actor.
  */
-
-/**
- * Which milestone a feature belongs to. Required — every Feature has exactly one.
- *
- * `@platform` marks cross-cutting platform capabilities (e.g. the artifact plugin
- * system) that are orthogonal to the numbered milestone sequence, rather than
- * belonging to a specific numbered milestone.
- */
-export const MILESTONE_TAGS = ["@m1", "@m2", "@m3", "@m4", "@v1", "@platform"] as const;
-export type MilestoneTag = (typeof MILESTONE_TAGS)[number];
 
 /**
  * Which feature group a feature belongs to. Required — every Feature has
@@ -60,7 +50,6 @@ export const ACTOR_TAGS = ["@actor:user", "@actor:ai", "@actor:host"] as const;
 export type ActorTag = (typeof ACTOR_TAGS)[number];
 
 export type AlistigoTag =
-  | MilestoneTag
   | GroupTag
   | CapabilityTag
   | TestTypeTag
@@ -68,7 +57,6 @@ export type AlistigoTag =
   | ActorTag;
 
 export const ALL_TAGS: readonly AlistigoTag[] = [
-  ...MILESTONE_TAGS,
   ...GROUP_TAGS,
   ...CAPABILITY_TAGS,
   ...TEST_TYPE_TAGS,

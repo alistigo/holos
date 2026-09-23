@@ -1,4 +1,3 @@
-@m1
 @core
 @capability:persistence
 Feature: Persist a list across reloads

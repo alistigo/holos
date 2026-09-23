@@ -7,7 +7,6 @@
  *   errors the linter might miss).
  * - Checks that every tag used in the package is part of the typed taxonomy
  *   in `src/tags.ts`.
- * - Checks that every Feature has at least one milestone tag.
  *
  * Exits non-zero on the first failure. Designed to be cheap enough to run on
  * every commit.
@@ -17,7 +16,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { AstBuilder, GherkinClassicTokenMatcher, Parser } from "@cucumber/gherkin";
 import { IdGenerator } from "@cucumber/messages";
-import { ALL_TAGS, GROUP_TAGS, isKnownTag, MILESTONE_TAGS } from "../src/tags.ts";
+import { ALL_TAGS, GROUP_TAGS, isKnownTag } from "../src/tags.ts";
 
 const FEATURES_DIR = path.resolve(import.meta.dir, "..", "features");
 
@@ -56,17 +55,6 @@ async function validate(file: string): Promise<void> {
   const allTags = new Set<string>(featureTags);
   for (const child of feature.children) {
     if (child.scenario) for (const t of child.scenario.tags) allTags.add(t.name);
-  }
-
-  // Every Feature must declare exactly one milestone tag.
-  const milestones = featureTags.filter((t) => (MILESTONE_TAGS as readonly string[]).includes(t));
-  if (milestones.length === 0) {
-    failures.push({
-      file,
-      reason: `no milestone tag — expected one of ${MILESTONE_TAGS.join(", ")}`,
-    });
-  } else if (milestones.length > 1) {
-    failures.push({ file, reason: `multiple milestone tags: ${milestones.join(", ")}` });
   }
 
   // Every Feature must declare exactly one group tag, and it must match the
