@@ -6,7 +6,7 @@ node = "lts"
 bun = "latest"
 python = "3.12"
 rust = "stable"
-"npm:pnpm" = "latest"
+"npm:pnpm" = "10"
 
 [tasks.setup]
 description = "Bootstrap the repo on a fresh machine"
