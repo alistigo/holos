@@ -1,17 +1,5 @@
 # Alistigo — Milestones
 
-> **Source of truth:** Each milestone's PRD is the authoritative reference for scope, requirements, and acceptance criteria. This file is a roadmap overview; use the PRDs for implementation planning.
->
-> | Milestone | PRD |
-> |-----------|-----|
-> | **P0 — Platform Foundation** | [`.agents/prds/alistigo-platform-foundation.md`](../../.agents/prds/alistigo-platform-foundation.md) |
-> | M1 — Base list app | [`.agents/prds/alistigo-ai-m1.md`](../../.agents/prds/alistigo-ai-m1.md) |
-> | M2 — Artifact Playground & Common Architecture | [`.agents/prds/alistigo-ai-m2.md`](../../.agents/prds/alistigo-ai-m2.md) |
-> | M3 — Plugin Architecture & First Plugin | [`.agents/prds/alistigo-ai-m3.md`](../../.agents/prds/alistigo-ai-m3.md) |
-> | M4 — Second List Type via Plugins | [`.agents/prds/alistigo-ai-m4.md`](../../.agents/prds/alistigo-ai-m4.md) |
-> | M5 — Host ↔ Iframe Protocol | [`.agents/prds/alistigo-ai-m5.md`](../../.agents/prds/alistigo-ai-m5.md) |
-> | M6 — Public Beta | [`.agents/prds/alistigo-ai-m6.md`](../../.agents/prds/alistigo-ai-m6.md) |
-
 Each milestone has: a **goal**, a **scope** (what's in / what's out), the **deliverables**, and pointers to the **Gherkin features** that define acceptance.
 
 Milestones are versioned and incremental. Each one ships something that works end-to-end — not a shelf of half-built layers.

@@ -745,6 +745,9 @@ importers:
 
   websites/alistigo:
     dependencies:
+      '@alistigo/architecture':
+        specifier: workspace:*
+        version: link:../../packages/architecture
       '@astrojs/starlight':
         specifier: ^0.34.8
         version: 0.34.8(astro@5.18.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.2)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))

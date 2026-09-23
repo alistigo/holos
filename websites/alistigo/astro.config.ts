@@ -25,6 +25,12 @@ export default defineConfig({
       ],
       sidebar: [
         {
+          label: "About",
+          items: [
+            { label: "What is Alistigo?", slug: "about/what-is-alistigo" },
+          ],
+        },
+        {
           label: "Platform",
           items: [
             { label: "Overview", slug: "platform/overview" },
