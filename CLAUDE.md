@@ -39,7 +39,7 @@ All QA tools follow the `qa:*` prefix convention:
 ```sh
 pnpm qa                 # Run all qa:* checks in parallel (via Nx)
 pnpm qa:lint            # Biome lint across the workspace
-pnpm qa:arch-check      # Architectural linting (dependency-cruiser) — see docs/arch-check.md
+pnpm qa:arch-check      # Architectural linting (dependency-cruiser) — see packages/architecture/docs/arch-check.md
 pnpm qa:dead-code       # Fallow: unused files, exports, dead code (full repo scan)
 pnpm qa:audit           # Fallow: fast changed-file risk gate (pre-push / CI)
 ```

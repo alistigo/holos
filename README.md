@@ -56,7 +56,7 @@ All static analysis and linting tools follow the `qa:*` prefix — keeping QA co
 |--------|------|----------------|
 | `pnpm qa` | All QA tools | Run all `qa:*` checks (lint + arch-check + dead-code + audit + stories) |
 | `pnpm qa:lint` | [Biome](https://biomejs.dev/) | Code style, formatting, and lint rules across all packages |
-| `pnpm qa:arch-check` | [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) | Architectural boundary violations — see `docs/arch-check.md` |
+| `pnpm qa:arch-check` | [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) | Architectural boundary violations — see `packages/architecture/docs/arch-check.md` |
 | `pnpm qa:dead-code` | [Fallow](https://github.com/fallow-rs/fallow) | Unused files, exports, and dead code (full repo scan) |
 | `pnpm qa:audit` | [Fallow](https://github.com/fallow-rs/fallow) | Changed-file risk gate — fast audit for pre-push and CI |
 | `pnpm qa:stories-check` | custom script | Every component has a co-located `.stories.tsx` (ADR 0012) |
@@ -72,7 +72,7 @@ All `qa:*` checks run automatically:
 | Doc | What it covers |
 |-----|----------------|
 | [docs/sdlc.md](docs/sdlc.md) | AI-augmented SDLC philosophy — lifecycle stages, AI touchpoints per stage, human review gates, agent orchestration patterns |
-| [docs/arch-check.md](docs/arch-check.md) | Architectural boundary rules enforced |
+| [packages/architecture/docs/arch-check.md](packages/architecture/docs/arch-check.md) | Architectural boundary rules enforced |
 | [docs/adrs/](docs/adrs/) | Architecture Decision Records — why the repo is shaped the way it is |§§§§§§§§§§§§§§§§§
 
 ## Continuous Deployment

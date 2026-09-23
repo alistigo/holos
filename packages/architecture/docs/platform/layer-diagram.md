@@ -86,7 +86,7 @@ Full layer diagram with all package names as of P0 (2026-07-27).
 5. **Platform Infra packages are loaded at CDN runtime, not bundled into artifacts.**
 6. **Dev Tools are never imported by shipped packages.**
 
-These rules are enforced by `dependency-cruiser` (see `docs/arch-check.md`).
+These rules are enforced by `dependency-cruiser` (see `../arch-check.md`).
 
 ---
 

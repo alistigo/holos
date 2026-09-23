@@ -7,7 +7,7 @@ consistent quality floor and minimal boilerplate.
 The **list artifact** (`@alistigo/artifact-list`) is the reference implementation.
 All platform concepts are demonstrated there first.
 
-See [ADR 0018](../adrs/0018-alistigo-platform.md) for the decision record capturing
+See [ADR 0018](../../adrs/0018-alistigo-platform.md) for the decision record capturing
 this scope change.
 
 ---

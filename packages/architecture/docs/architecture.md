@@ -1,6 +1,6 @@
 # Alistigo — Architecture
 
-> **Platform scope (P0+):** Alistigo is a platform for AI artifacts. The list artifact (`@alistigo/artifact-list`) is the reference implementation. For platform-level architecture see [`docs/platform/`](platform/README.md) and [ADR 0018](adrs/0018-alistigo-platform.md).
+> **Platform scope (P0+):** Alistigo is a platform for AI artifacts. The list artifact (`@alistigo/artifact-list`) is the reference implementation. For platform-level architecture see [`docs/platform/`](platform/README.md) and [ADR 0018](../adrs/0018-alistigo-platform.md).
 
 This document describes the technical architecture for the Alistigo platform and its reference implementation (the list artifact): stack, layering, runtime model, evolution path, and the non-negotiable principles that drive design choices.
 
