@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from "astro:content";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+
+export async function getStaticPaths() {
+  const adrs = await getCollection("adrs");
+  return adrs.map((e) => ({ params: { slug: e.id }, props: { entry: e } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const title = entry.body?.match(/^# (.+)$/m)?.[1] ?? entry.id;
+---
+
+<StarlightPage frontmatter={{ title }} headings={headings}>
+  <div data-adr>
+    <Content />
+  </div>
+</StarlightPage>
+
+<style is:global>
+  /* The ADR body starts with an H1 that repeats the page title StarlightPage renders */
+  [data-adr] h1:first-child {
+    display: none;
+  }
+</style>

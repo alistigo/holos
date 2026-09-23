@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-06-02
+---
+
 # ADR-004: Artifact Delivery Strategy — npm/jsDelivr over GitHub Pages
 
 **Status:** Accepted

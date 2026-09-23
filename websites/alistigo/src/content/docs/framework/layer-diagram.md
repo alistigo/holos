@@ -1,9 +1,9 @@
 ---
 title: Layer Diagram
-description: Package dependency graph and layer boundaries of the Alistigo platform.
+description: Package dependency graph and layer boundaries of the Alistigo framework.
 ---
 
-The Alistigo platform has strict layer boundaries enforced by `dependency-cruiser` in CI.
+The Alistigo framework has strict layer boundaries enforced by `dependency-cruiser` in CI.
 No cross-layer imports are permitted. Violations block merge.
 
 ## Package Layers (top to bottom)
@@ -29,7 +29,7 @@ Artifact Core (tier 2 — shared)
   ├── ai-chat-async-api                     (<api-calls> executor)
   └── logger                                (pino-based structured logging)
 
-Platform Infrastructure (tier 1 — CDN-loaded)
+Core Infrastructure (tier 1 — CDN-loaded)
   ├── artifact-manager                      (CDN resolver + script injector)
   ├── artifact-config-format                (discriminated union config schema)
   ├── artifact-sentry-plugin                (error monitoring plugin)
@@ -49,7 +49,7 @@ CLIs
 ## Allowed Import Directions
 
 ```
-Applications → Artifacts → Artifact Core → Platform Infrastructure
+Applications → Artifacts → Artifact Core → Core Infrastructure
                          ↘ Architecture (private, never published)
 CLIs → any layer (build-time tools only)
 ```

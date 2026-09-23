@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-06-02
+---
+
 # ADR-005: Storage in Claude Artifact Context — window.storage over localStorage
 
 **Status:** Accepted

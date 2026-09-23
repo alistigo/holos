@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-08-15
+---
+
 # ADR-0021: AI Input Action — Markdown as Document Source Format
 
 **Status:** Accepted

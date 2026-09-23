@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-08-09
+---
+
 # ADR 0020 — Claude Artifact `window.fetch` is Anthropic-API-Only
 
 **Status:** Accepted  

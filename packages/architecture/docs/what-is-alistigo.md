@@ -1,6 +1,6 @@
 # What is Alistigo?
 
-Alistigo is a platform for embeddable AI artifacts — a shared set of libraries and
+Alistigo is a framework and collection of embeddable AI artifacts — a shared set of libraries and
 conventions that let developers build any artifact (list, kanban, table, form, timeline…)
 with a consistent quality floor, running 100% in the browser without a backend.
 The **list artifact** (`@alistigo/artifact-list`) is the reference implementation.
@@ -21,9 +21,9 @@ problems follow:
 Alistigo solves this: the AI describes a *document*, not an app. Alistigo handles
 rendering, interaction, and persistence. The AI stays in its lane (data and intent).
 
-## The Platform
+## The Framework
 
-Alistigo started as a single-purpose list app. The scope expanded: Alistigo is now a **platform
+Alistigo started as a single-purpose list app. The scope expanded: Alistigo is now a **framework
 for AI artifacts** — a shared set of libraries (`artifact-core`, `artifact-plugin-api`,
 `artifact-manager`, …) that any artifact type plugs into. The list artifact became the
 reference implementation, not the product.
@@ -56,7 +56,7 @@ scaffolding copied from the list.
 | Architecture as Code | CALM models define boundaries; dependency-cruiser validates in CI |
 
 See [`architecture.md`](architecture.md) for the full set of load-bearing constraints and
-the [`platform/`](platform/README.md) docs for the four-tier architecture diagram.
+the [`framework/`](framework/README.md) docs for the four-tier architecture diagram.
 
 ## Core Principles
 
