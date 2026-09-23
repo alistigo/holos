@@ -49,12 +49,7 @@ export type SuiteTag = (typeof SUITE_TAGS)[number];
 export const ACTOR_TAGS = ["@actor:user", "@actor:ai", "@actor:host"] as const;
 export type ActorTag = (typeof ACTOR_TAGS)[number];
 
-export type AlistigoTag =
-  | GroupTag
-  | CapabilityTag
-  | TestTypeTag
-  | SuiteTag
-  | ActorTag;
+export type AlistigoTag = GroupTag | CapabilityTag | TestTypeTag | SuiteTag | ActorTag;
 
 export const ALL_TAGS: readonly AlistigoTag[] = [
   ...GROUP_TAGS,
