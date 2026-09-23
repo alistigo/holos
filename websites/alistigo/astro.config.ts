@@ -10,8 +10,13 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Alistigo",
+      logo: {
+        src: "./src/assets/logo.svg",
+        alt: "Alistigo",
+      },
+      favicon: "/favicon.svg",
       description:
-        "Platform for embeddable AI artifacts — interactive list widgets for any AI chat.",
+        "Framework and collection of embeddable AI artifacts — interactive list widgets for any AI chat.",
       defaultLocale: "root",
       locales: {
         root: { label: "English", lang: "en" },
@@ -26,21 +31,23 @@ export default defineConfig({
       sidebar: [
         {
           label: "About",
+          items: [{ label: "What is Alistigo?", slug: "about/what-is-alistigo" }],
+        },
+        {
+          label: "Framework",
           items: [
-            { label: "What is Alistigo?", slug: "about/what-is-alistigo" },
+            { label: "Overview", slug: "framework/overview" },
+            { label: "Architecture", slug: "framework/architecture" },
+            { label: "Layer Model", slug: "framework/layer-diagram" },
           ],
         },
         {
-          label: "Platform",
-          items: [
-            { label: "Overview", slug: "platform/overview" },
-            { label: "Architecture", slug: "platform/architecture" },
-            { label: "Layer Model", slug: "platform/layer-diagram" },
-          ],
+          label: "Artifacts",
+          items: [{ label: "Artifact Catalog", slug: "artifacts" }],
         },
         {
           label: "Architecture Decisions",
-          items: [{ label: "All ADRs", slug: "adrs" }],
+          items: [{ label: "All ADRs", link: "/adrs/" }],
         },
         {
           label: "Playground",

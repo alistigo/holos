@@ -1,0 +1,8 @@
+---
+import os from "node:os";
+import { LinkButton } from "@astrojs/starlight/components";
+
+const href = import.meta.env.DEV ? `http://${os.hostname()}:5173/` : "/app/";
+---
+
+<LinkButton href={href} variant="secondary" icon="external">Open Playground</LinkButton>

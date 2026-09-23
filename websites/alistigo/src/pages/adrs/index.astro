@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+
+const adrs = await getCollection("adrs");
+const rows = adrs
+  .map((e) => {
+    const h1 = e.body?.match(/^# (.+)$/m)?.[1] ?? e.id;
+    const num = e.id.match(/^(\d+)/)?.[0] ?? "";
+    return {
+      id: e.id,
+      num,
+      title: h1,
+      status: e.data.status,
+      date: e.data.date,
+    };
+  })
+  .sort((a, b) => a.num.localeCompare(b.num));
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "Architecture Decision Records",
+    description:
+      "All architectural decisions for Alistigo — what was decided, why, and what alternatives were rejected.",
+  }}
+>
+  <p>
+    Architecture Decision Records capture every significant architectural choice
+    made for Alistigo. Each ADR explains the context, the decision,
+    the alternatives considered, and the trade-offs accepted.
+  </p>
+  <p>
+    Source of truth: <a
+      href="https://github.com/alistigo/holos/tree/main/packages/architecture/adrs"
+      ><code>packages/architecture/adrs/</code></a
+    >
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((r) => (
+          <tr>
+            <td>{r.num}</td>
+            <td>
+              <a href={`/adrs/${r.id}/`}>{r.title}</a>
+            </td>
+            <td>{r.status}</td>
+            <td>{r.date.toISOString().split("T")[0]}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</StarlightPage>

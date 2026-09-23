@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-08-06
+---
+
 # ADR-0019: Claude Artifact Lifecycle — Draft vs. Published Storage Behavior
 
 **Status:** Accepted

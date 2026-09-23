@@ -30,12 +30,14 @@
     "systems",
     "scripts",
     "docs",
+    "adrs",
     "README.md"
   ],
   "exports": {
     "./patterns/*": "./patterns/*",
     "./systems/*": "./systems/*",
-    "./docs/*": "./docs/*"
+    "./docs/*": "./docs/*",
+    "./adrs": "./adrs/index.js"
   },
   "publishConfig": {
     "access": "public"

@@ -1,11 +1,11 @@
 ---
-title: Platform Overview
-description: High-level overview of the Alistigo platform architecture and its four tiers.
+title: Framework Overview
+description: High-level overview of the Alistigo framework architecture and its four tiers.
 ---
 
-Alistigo is a four-tier platform for building embeddable AI artifacts.
+Alistigo is a four-tier framework for building embeddable AI artifacts.
 
-## Four Platform Tiers
+## Four Framework Tiers
 
 ```plaintext
 ┌─────────────────────────────────────────────────────────────────┐
@@ -22,7 +22,7 @@ Alistigo is a four-tier platform for building embeddable AI artifacts.
 │  artifact-core · artifact-core-components-react                 │
 │  artifact-plugin-api · ai-chat-async-api · logger               │
 ├─────────────────────────────────────────────────────────────────┤
-│  TIER 1 — PLATFORM INFRASTRUCTURE (CDN-loaded)                  │
+│  TIER 1 — CORE INFRASTRUCTURE (CDN-loaded)                      │
 │  artifact-manager · artifact-config-format                      │
 │  artifact-sentry-plugin · artifact-posthog-plugin               │
 │  claude-storage-plugin · local-storage-plugin                   │
@@ -38,7 +38,7 @@ Alistigo is a four-tier platform for building embeddable AI artifacts.
 
 ## Packages
 
-The platform is a pnpm + Nx monorepo. Published packages are scoped to `@alistigo/*`
+The framework is a pnpm + Nx monorepo. Published packages are scoped to `@alistigo/*`
 and independently versioned. Architecture models live in `@alistigo/architecture` (private).
 
 See the [Architecture Decisions](/adrs/) for the rationale behind each major choice.

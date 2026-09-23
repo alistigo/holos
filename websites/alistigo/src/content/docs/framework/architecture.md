@@ -1,6 +1,6 @@
 ---
 title: Architecture
-description: Eight load-bearing constraints that define the Alistigo platform architecture.
+description: Eight load-bearing constraints that define the Alistigo framework architecture.
 ---
 
 The Alistigo architecture is defined in two forms:
@@ -25,7 +25,7 @@ These constraints are non-negotiable. Every package decision is evaluated agains
 
 ## DDD Layer Model
 
-The platform follows a strict Domain-Driven Design layer model:
+The framework follows a strict Domain-Driven Design layer model:
 
 - **Domain** — pure business logic; no framework or infrastructure dependencies
 - **Document** — serialization and projection; reads the event log, emits documents
@@ -37,7 +37,7 @@ Cross-layer imports are forbidden and enforced by `dependency-cruiser` in CI.
 ## Architecture as Code
 
 The `@alistigo/architecture` package contains CALM (Common Architecture Language Model) JSON models
-that define every system, interface, and relationship in the platform. The `calm validate` CLI
+that define every system, interface, and relationship in the framework. The `calm validate` CLI
 runs in CI and blocks merge if models diverge from code.
 
 See [ADR 0027](/adrs/) for the full rationale behind adopting CALM.

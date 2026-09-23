@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-06-02
+---
+
 # ADR-006: GitHub Pages Scope — Testing/Demos Only
 
 **Status:** Accepted

@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-09-14
+---
+
 # ADR 0030 — PM2 Server Dev Mode
 
 **Status:** Accepted  

@@ -1,33 +1,33 @@
 ---
 title: Alistigo
-description: Platform for embeddable AI artifacts — interactive list widgets for any AI chat.
+description: Framework and collection of embeddable AI artifacts — interactive list widgets for any AI chat.
 template: splash
 hero:
   title: Alistigo
   tagline: Embeddable AI artifacts — interactive, event-sourced list widgets for any AI chat interface.
   actions:
-    - text: View Architecture
-      link: /platform/overview/
+    - text: Explore the Framework
+      link: /framework/overview/
       icon: right-arrow
       variant: primary
-    - text: Open Playground
-      link: /app/
-      icon: external
+    - text: Browse Artifacts
+      link: /artifacts/
+      icon: right-arrow
       variant: secondary
 ---
 
+import PlaygroundLink from "../../components/PlaygroundLink.astro";
+import { LinkButton } from "@astrojs/starlight/components";
+
 ## What is Alistigo?
 
-Alistigo is a platform for building **embeddable AI artifacts** — structured, interactive UI components that run inside AI chat interfaces like Claude.
+Alistigo is a **framework and collection** of embeddable AI artifacts — structured, interactive UI components that run inside AI chat interfaces like Claude.
 
-The reference implementation is the **list artifact** (`@alistigo/artifact-list`): an iframe-embeddable widget that renders a portable `ListDocument` (JSON-LD) and handles all user interactions, persistence, and plugin composition.
+**The framework** — a set of `@alistigo/*` npm packages (`artifact-core`, `artifact-plugin-api`, `artifact-manager`, …) that give developers the building blocks to create new artifact types with a consistent quality floor.
 
-## Key Concepts
+**The catalog** — ready-to-use artifacts built with the framework (`@alistigo/artifact-list`, …), each published on npm and paired with an agent skill so any AI can drop it into a chat with a single config line.
 
-| Concept | Description |
-|---------|-------------|
-| **Artifact** | A self-contained iframe widget that renders a document and handles interactions |
-| **Document** | A JSON-LD object (`ListDocument`) that is the portable, serializable state |
-| **Event log** | An append-only sequence of commands; the document is a projection |
-| **Plugin** | A composable unit of capability (storage, analytics, user identity, etc.) |
-| **Artifact Manager** | The CDN-loaded bootstrap script that resolves and mounts artifact bundles |
+<div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
+  <PlaygroundLink />
+  <LinkButton href="/framework/architecture/" variant="minimal" icon="right-arrow">Architecture</LinkButton>
+</div>
