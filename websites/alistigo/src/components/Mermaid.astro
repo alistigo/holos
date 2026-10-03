@@ -1,0 +1,47 @@
+---
+interface Props {
+  code: string;
+}
+const { code } = Astro.props;
+---
+
+<div class="not-content mermaid-wrapper">
+  <pre class="mermaid">{code}</pre>
+</div>
+
+<style>
+  .mermaid-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  .mermaid svg {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+
+<script>
+  import mermaid from 'mermaid';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Ubuntu', sans-serif",
+      darkMode: false,
+      fontSize: '14px',
+      edgeLabelBackground: '#d5d7e1',
+      lineColor: '#000000',
+    },
+  });
+
+  function renderDiagrams() {
+    mermaid.run({ querySelector: '.mermaid' });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderDiagrams);
+  } else {
+    renderDiagrams();
+  }
+</script>

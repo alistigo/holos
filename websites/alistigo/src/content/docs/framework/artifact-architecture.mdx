@@ -1,0 +1,82 @@
+---
+title: Artifact Architecture
+description: CALM model of a typical Alistigo artifact — nodes, layers, plugin bus, and storage plugins.
+sidebar:
+  order: 3
+---
+
+import Mermaid from '../../../components/Mermaid.astro';
+
+This diagram is generated from the CALM (Common Architecture Language Model) definition in
+`packages/architecture/systems/typical-alistigo-artifact.arch.json`.
+
+## High-Level Architecture
+
+<Mermaid code={`
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
+flowchart TB
+classDef boundary fill:#e1e4f0,stroke:#204485,stroke-dasharray: 5 4,stroke-width:1px,color:#000000;
+classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
+
+        subgraph npm-cdn["npm CDN"]
+        direction TB
+            artifact-skill["Artifact Skill"]:::node
+                subgraph alistigo-artifact["Alistigo Artifact"]
+                direction TB
+                    claude-storage-plugin["Claude Storage Plugin"]:::node
+                    document-layer["Document Layer"]:::node
+                    domain-layer["Domain Layer"]:::node
+                    list-checkbox-plugin["List Checkbox Plugin"]:::node
+                    local-storage-plugin["Local Storage Plugin"]:::node
+                    platform-layer["Platform Layer"]:::node
+                    plugin-bus["Plugin Event Bus"]:::node
+                    presentation-layer["Presentation Layer"]:::node
+                    user-plugin["User Plugin"]:::node
+                end
+                class alistigo-artifact boundary
+        end
+        class npm-cdn boundary
+
+    artifact-host["Artifact Host"]:::node
+    user["User"]:::node
+
+    presentation-layer -->|"Dispatches commands via ListApplicationService, reads list projections from"| document-layer
+    document-layer -->|"Applies commands to domain aggregates, builds projections via ListProjector from"| domain-layer
+    document-layer -->|"Uses plugin contracts and lifecycle hooks provided by"| platform-layer
+    presentation-layer -->|"Uses shared UI components and logger provided by"| platform-layer
+    document-layer -->|"Routes storage operations through the plugin runtime to the active plugin via"| plugin-bus
+    plugin-bus -->|"Dispatches storage ops to — first choice when window.claude is present"| claude-storage-plugin
+    plugin-bus -->|"Dispatches storage ops to — fallback in dev / playground / draft mode"| local-storage-plugin
+    plugin-bus -->|"Delivers lifecycle hooks to; user plugin emits user:changed so document layer records the actor"| user-plugin
+    plugin-bus -->|"Delivers lifecycle hooks to; checkbox plugin injects UI slots into the presentation layer"| list-checkbox-plugin
+    artifact-host -->|"Embeds artifact in sandboxed iframe, injects alistigo-config, brokers storage and AI API calls for"| alistigo-artifact
+    alistigo-artifact -->|"UMD bundle fetched at load time, plugins dynamically imported at runtime from"| npm-cdn
+    artifact-skill -->|"Defines the Claude agent capability contract for"| alistigo-artifact
+    user -->|"Interacts with the rendered UI inside the sandboxed iframe"| alistigo-artifact
+`} />
+
+## Layers
+
+| Layer | Package(s) | Responsibility |
+|-------|-----------|----------------|
+| **Domain** | `@alistigo/artifact-list-domain` | Pure business logic — aggregates, events, value objects |
+| **Document** | `@alistigo/artifact-list-document` | JSON-LD serialisation, `ListApplicationService`, `ListProjector` |
+| **Presentation** | `@alistigo/artifact-list-ui` | React components, UMD entry point |
+| **Platform** | `@alistigo/artifact-platform` | Logger, shared UI primitives, plugin contracts |
+| **Plugin Bus** | `@alistigo/artifact-plugin-api` | Typed in-process pub/sub (`createPluginBus`) |
+
+## Plugins
+
+| Plugin | Role | Active when |
+|--------|------|-------------|
+| **Claude Storage** | Wraps `window.storage` postMessage API | `window.claude?.complete` present (inside Claude.ai iframe) |
+| **Local Storage** | Wraps `localStorage` | Fallback — dev, playground, or draft mode |
+| **User Plugin** | Emits `user:changed` for actor attribution | Always mounted |
+| **List Checkbox Plugin** | Injects checkbox UI slots | Loaded when checklist feature is enabled |
+
+## Key Design Decisions
+
+- **Plugin bus decoupling** — the document layer never imports storage plugins directly; it routes all reads/writes through the bus so the active plugin can be swapped without touching core code.
+- **iframe isolation** — the entire artifact bundle runs inside a sandboxed iframe; `artifact-host` brokers all privileged API calls across the boundary.
+- **CDN delivery** — the UMD bundle and plugins are fetched from jsDelivr at runtime; no npm install happens inside the Claude artifact context.
+- **Skill as capability contract** — `artifact-skill` exposes a stable schema so Claude agents can generate artifact instances without knowing the internal implementation.

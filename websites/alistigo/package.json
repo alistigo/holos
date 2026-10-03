@@ -12,6 +12,7 @@
     "@alistigo/architecture": "workspace:*",
     "@astrojs/starlight": "^0.34.8",
     "astro": "^5.18.2",
+    "mermaid": "^11.4.1",
     "sharp": "^0.33.5"
   }
 }

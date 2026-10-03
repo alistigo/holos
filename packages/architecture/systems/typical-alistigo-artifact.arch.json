@@ -1,0 +1,634 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "typical-alistigo-artifact",
+  "name": "Typical Alistigo Artifact — Internal Architecture",
+  "description": "Internal package architecture of a typical Alistigo artifact — a self-contained web application published on npm and loaded into a sandboxed AI-chat iframe. The list artifact (@alistigo/artifact-list) is the canonical implementation. Every artifact shares this blueprint: a domain layer of pure business logic (DDD), a document layer that serialises domain state to JSON-LD and owns the application service, a presentation layer of React components, a platform layer of shared infrastructure, a typed in-process event bus that decouples the document layer from concrete storage backends, storage and feature plugins resolved at runtime, a companion skill package exposing capabilities to Claude agents, and a self-contained UMD bundle deployed on npm/CDN. Conceptual model — not a runtime process or deployment view.",
+  "metadata": [
+    {
+      "version": "0.1.0",
+      "kind": "concept",
+      "canonical-implementation": "@alistigo/artifact-list",
+      "note": "Artifact-specific packages (domain, document, UI components) carry list-* names here. Substitute list-* with the corresponding artifact name for other artifact types (e.g. kanban-*, note-*). The platform layer and plugin bus are shared across all artifacts unchanged."
+    }
+  ],
+  "nodes": [
+    {
+      "unique-id": "user",
+      "node-type": "actor",
+      "name": "User",
+      "description": "Human working with the artifact. Interacts only with the rendered UI inside the sandboxed iframe — never with storage, the bus, the host's backend, or any backing service directly."
+    },
+    {
+      "unique-id": "artifact-host",
+      "node-type": "system",
+      "name": "Artifact Host",
+      "description": "External host environment (AI chat web app, alistigo-artifact-playground) that embeds the artifact inside a sandboxed iframe. Injects the initial config and optional document payload over the iframe boundary, and brokers storage and AI API calls on the artifact's behalf via a postMessage bus. Defined in full by the ai-chat-web-artifact.arch.json reference architecture.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-host-iframe-interface",
+          "description": "Sandboxed iframe boundary. Injects alistigo-config JSON into the iframe DOM via <script id='alistigo-config'>; brokers window.storage and window.claude API calls via postMessage."
+        }
+      ]
+    },
+    {
+      "unique-id": "npm-cdn",
+      "node-type": "service",
+      "name": "npm CDN",
+      "description": "Public npm CDN (jsDelivr) from which the artifact UMD bundle and all dynamically-loaded plugin packages are fetched at runtime. The iframe CSP script-src allowlist restricts script loading to this origin. Packages are pinned by major version (e.g. @alistigo/artifact-list@0).",
+      "interfaces": [
+        {
+          "unique-id": "npm-cdn-interface",
+          "description": "HTTPS endpoint serving versioned npm package UMD bundles. Accessed at load time for the artifact bundle and at runtime for each dynamically-loaded plugin."
+        }
+      ]
+    },
+    {
+      "unique-id": "alistigo-artifact",
+      "node-type": "system",
+      "name": "Alistigo Artifact",
+      "description": "The artifact as a complete, deployable system — a self-contained UMD bundle published on npm (canonical: @alistigo/artifact-list). Bundles React, Lingui i18n, and all Alistigo packages; requires no dependencies from the host page. Mounts into a host-provided DOM container via mount(), composes all internal layers and default plugins, sequences the startup lifecycle, and renders the user-facing UI.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-mount-interface",
+          "description": "mount(container, options) API. Reads alistigo-config from the DOM, resolves the active storage plugin, initialises the plugin runtime, and renders the React app tree."
+        },
+        {
+          "unique-id": "artifact-config-interface",
+          "description": "JSON config injected by the host via <script id='alistigo-config'>. Specifies artifact package name, locale, read-only flag, pre-seeded document, and per-plugin config overrides."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-list",
+          "distribution": "self-contained UMD bundle — React, Lingui, and all Alistigo layers bundled in; no peer dependencies on the host page",
+          "loading": "fetched from npm CDN at iframe load time via <script src> in the iframe srcdoc"
+        }
+      ]
+    },
+    {
+      "unique-id": "platform-layer",
+      "node-type": "system",
+      "name": "Platform Layer",
+      "description": "Shared infrastructure packages common to all artifact types. Provides: the plugin system contract (AlistigoPlugin, PluginRuntime factory, KeyValueStore interface) via @alistigo/artifact-plugin-api; artifact lifecycle management (loading → ready → mounted → error phases, useStartArtifact hook) via @alistigo/artifact-core; shared React UI components (LoadingScreen, ErrorScreen, ArtifactContextMenuContainer, PluginList) via @alistigo/artifact-core-components-react; a structured Pino logger via @alistigo/logger; and TypeScript types for the Claude iframe bridge APIs (window.storage, window.claude) via @alistigo/claude-artifact-api.",
+      "interfaces": [
+        {
+          "unique-id": "plugin-api-interface",
+          "description": "AlistigoPlugin contract and PluginRuntime factory (createPluginRuntime). KeyValueStore interface (get/set/del/list). All storage and feature plugins implement AlistigoPlugin; the document layer consumes KeyValueStore.",
+          "operations": ["setup", "beforeMount", "mounted", "destroy", "wrapRoot"]
+        },
+        {
+          "unique-id": "core-components-interface",
+          "description": "Shared React UI components used by all artifact presentation layers: LoadingScreen, ErrorScreen, ArtifactContextMenuContainer (renders plugin-provided menu slots), PluginList."
+        }
+      ],
+      "metadata": [
+        {
+          "packages": [
+            "@alistigo/artifact-core",
+            "@alistigo/artifact-plugin-api",
+            "@alistigo/artifact-core-components-react",
+            "@alistigo/logger",
+            "@alistigo/claude-artifact-api"
+          ]
+        }
+      ]
+    },
+    {
+      "unique-id": "domain-layer",
+      "node-type": "system",
+      "name": "Domain Layer",
+      "description": "Pure, framework-free domain model following DDD. Defines aggregates (List), entities (ListElement), value objects (ListId, ListElementId, Timestamp …), domain events (ListCreated, ListElementAdded, ListElementDeleted …), commands (CreateList, AddListElement, DeleteListElement …), and the repository interface (ListRepository). Has no knowledge of storage, React, or the plugin system. TypeID provides stable, sortable identifiers.",
+      "interfaces": [
+        {
+          "unique-id": "domain-aggregate-interface",
+          "description": "Aggregate roots and the ListRepository interface. The document layer applies commands via List, reads the resulting event log for serialisation, and implements the repository through the storage adapter chain."
+        }
+      ],
+      "metadata": [
+        {
+          "packages": [
+            "@alistigo/list-domain",
+            "@alistigo/core-document"
+          ],
+          "patterns": ["DDD aggregates", "event sourcing", "value objects", "TypeID stable IDs"]
+        }
+      ]
+    },
+    {
+      "unique-id": "document-layer",
+      "node-type": "system",
+      "name": "Document Layer",
+      "description": "Owns the artifact's data model and application service. Serialises domain aggregates to/from JSON-LD documents (AlistigoDocument) via ListDocumentSerializer; orchestrates commands through ListApplicationService; builds read-model projections from the event log via ListProjector; and adapts any KeyValueStore backend to the AlistigoListStore interface via ListKeyValueAdapter. Routes all persistence through the plugin bus rather than calling any storage backend directly.",
+      "interfaces": [
+        {
+          "unique-id": "document-editor-interface",
+          "description": "AlistigoListStore: loadDocument() and saveDocument(). Implemented by ListKeyValueAdapter, which wraps whichever KeyValueStore the active storage plugin provides."
+        },
+        {
+          "unique-id": "application-service-interface",
+          "description": "ListApplicationService commands: createList, addListElement, deleteListElement, exportListDocument. Called by the presentation layer in response to user actions."
+        }
+      ],
+      "metadata": [
+        {
+          "packages": [
+            "@alistigo/list-document",
+            "@alistigo/list-document-editor"
+          ],
+          "document-format": "JSON-LD with custom alistigo: namespace",
+          "storage-key": "'document' — a single key per artifact instance holds the full serialised document"
+        }
+      ]
+    },
+    {
+      "unique-id": "presentation-layer",
+      "node-type": "service",
+      "name": "Presentation Layer",
+      "description": "React component tree rendering the artifact's user-facing UI. Dispatches ListApplicationService commands in response to user interactions, reads projections returned by the document layer, and renders plugin-provided UI slots (leading edge of list items via renderListElementLeading, context menu entries via renderMenuContent, status badge via renderStatusBadge). Built with Tailwind v4 and Radix primitives.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-ui-interface",
+          "description": "The visible UI surface rendered inside the iframe. User interactions dispatch commands to the application service; updated projections propagate back as React state changes."
+        }
+      ],
+      "metadata": [
+        {
+          "packages": ["@alistigo/list-components-react"],
+          "ui-slots": ["renderListElementLeading", "renderStatusBadge", "renderMenuContent"],
+          "styling": "Tailwind v4, Radix Primitives"
+        }
+      ]
+    },
+    {
+      "unique-id": "plugin-bus",
+      "node-type": "service",
+      "name": "Plugin Event Bus",
+      "description": "In-process, typed pub/sub event bus shared by all plugins loaded into the artifact runtime. Created by createPluginBus() from @alistigo/artifact-plugin-api. Decouples the document layer from concrete storage backends and decouples plugins from each other. The plugin runtime wraps each handler invocation in a try/catch so one plugin failure never breaks the host or other plugins.",
+      "interfaces": [
+        {
+          "unique-id": "plugin-bus-interface",
+          "description": "on(event, handler) → unsubscribe; emit(event, payload). Typed event map: widget:displayed (fired after first mount), error:uncaught (fatal errors), user:changed (user identity updates from user-plugin).",
+          "events": ["widget:displayed", "error:uncaught", "user:changed"]
+        }
+      ],
+      "metadata": [
+        {
+          "implementation": "createPluginBus() in @alistigo/artifact-plugin-api",
+          "scope": "in-process — one bus instance per artifact mount; not shared across iframes",
+          "isolation": "each handler is individually try/caught; one broken plugin never blocks the host or other plugins"
+        }
+      ]
+    },
+    {
+      "unique-id": "claude-storage-plugin",
+      "node-type": "database",
+      "name": "Claude Storage Plugin",
+      "description": "Storage plugin that wraps the host-provided window.storage API injected into the iframe by the Claude environment. Active when the artifact is running as a published Claude artifact (window.claude?.complete is present). Implements KeyValueStore by forwarding get/set/del/list calls as postMessage requests to the artifact host, which brokers them to the AI provider's cloud key-value store. Selected first when available; includes auto-retry for transient failures.",
+      "interfaces": [
+        {
+          "unique-id": "claude-storage-interface",
+          "description": "KeyValueStore: get / set / del / list. Values are JSON-serialised strings. Backed by the AI host's cloud key-value store, scoped per user session.",
+          "operations": ["get", "set", "del", "list"]
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/claude-storage-plugin",
+          "plugin-type": "storage",
+          "availability-check": "window.claude?.complete present (published Claude artifact context)",
+          "transport": "postMessage to artifact-host, which brokers to the AI provider key-value store (see ai-chat-web-artifact.arch.json)",
+          "resilience": "automatic retry via withStorageRetry()"
+        }
+      ]
+    },
+    {
+      "unique-id": "local-storage-plugin",
+      "node-type": "database",
+      "name": "Local Storage Plugin",
+      "description": "Storage plugin that wraps the browser localStorage API. Used as the fallback when Claude storage is unavailable (development, playground, or draft-mode artifacts). Implements the same KeyValueStore interface as the Claude storage plugin so the document layer is unaware of which backend is active.",
+      "interfaces": [
+        {
+          "unique-id": "local-storage-interface",
+          "description": "KeyValueStore: get / set / del / list. Values are JSON-serialised. Keys are prefixed to avoid collisions with other scripts on the same origin.",
+          "operations": ["get", "set", "del", "list"]
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/local-storage-plugin",
+          "plugin-type": "storage",
+          "availability-check": "localStorage writable probe (__alistigo_probe__)",
+          "persistence": "survives page reloads within the same browser; not shared across devices or users"
+        }
+      ]
+    },
+    {
+      "unique-id": "user-plugin",
+      "node-type": "service",
+      "name": "User Plugin",
+      "description": "Default feature plugin that manages user identity inside the artifact runtime. Generates a deterministic jdenticon avatar for the current session and emits a user:changed event on the plugin bus. The document layer subscribes to this event and records the actor in the document's alistigo:agents log, enabling per-user attribution of list changes.",
+      "interfaces": [
+        {
+          "unique-id": "user-plugin-bus-interface",
+          "description": "Emits user:changed { userId, pseudo, avatar? } on the plugin bus after the mounted() lifecycle hook. The document layer listens and records the actor in AlistigoDocument['alistigo:agents']."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-user-plugin",
+          "plugin-type": "monitoring",
+          "loading": "dynamically loaded from npm CDN; always present in DEFAULT_FEATURE_PLUGINS"
+        }
+      ]
+    },
+    {
+      "unique-id": "list-checkbox-plugin",
+      "node-type": "service",
+      "name": "List Checkbox Plugin",
+      "description": "List-specific feature plugin that extends list elements with checkbox UI. Provides the renderListElementLeading slot to render a checkbox control, and dispatches check/uncheck commands through the document layer's application service. Stores checked state in the element's alistigo:metadatas node in the JSON-LD document. An example of an artifact-specific domain extension delivered through the plugin system.",
+      "interfaces": [
+        {
+          "unique-id": "checkbox-plugin-slot-interface",
+          "description": "renderListElementLeading(elementId, metadata, onCommand): returns a React node for the checkbox. Checked state is persisted in alistigo:metadatas on the corresponding list element."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-list-checkbox-plugin",
+          "plugin-type": "list-element",
+          "loading": "bundled inside the @alistigo/artifact-list UMD; always active for the list artifact"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact-skill",
+      "node-type": "data-asset",
+      "name": "Artifact Skill",
+      "description": "Claude agent skill definition that is published alongside the artifact npm package as a separate package (canonical: @alistigo/artifact-list-skill). Contains SKILL.md (the agent capability definition consumed by the Claude agent skill platform), supporting reference documentation, and the artifact config JSON schema (@alistigo/artifact-config-list-format). Enables Claude agents to create, configure, and interact with the artifact through a structured, versioned capability contract. Versioned independently to allow skill updates without redeploying the artifact bundle.",
+      "interfaces": [
+        {
+          "unique-id": "skill-definition-interface",
+          "description": "SKILL.md — the agent skill definition file. References the artifact config JSON schema and provides examples for config-driven artifact creation."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-list-skill",
+          "config-schema-package": "@alistigo/artifact-config-list-format",
+          "loading": "loaded by Claude agents on demand from npm; independent release cadence from the artifact"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "artifact-composition",
+      "description": "The artifact system is internally composed of its platform, domain, document, presentation layers, the plugin bus, and the default storage and feature plugins",
+      "relationship-type": {
+        "composed-of": {
+          "container": "alistigo-artifact",
+          "nodes": [
+            "platform-layer",
+            "domain-layer",
+            "document-layer",
+            "presentation-layer",
+            "plugin-bus",
+            "claude-storage-plugin",
+            "local-storage-plugin",
+            "user-plugin",
+            "list-checkbox-plugin"
+          ]
+        }
+      }
+    },
+    {
+      "unique-id": "presentation-to-document",
+      "description": "Dispatches user commands to (addListElement, deleteListElement …) via ListApplicationService, and reads updated list projections from",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "presentation-layer",
+            "interfaces": ["artifact-ui-interface"]
+          },
+          "destination": {
+            "node": "document-layer",
+            "interfaces": ["application-service-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-to-domain",
+      "description": "Applies commands to domain aggregates, reads the resulting event log for JSON-LD serialisation, and builds read-model projections from via ListProjector",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document-layer",
+            "interfaces": ["document-editor-interface"]
+          },
+          "destination": {
+            "node": "domain-layer",
+            "interfaces": ["domain-aggregate-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-to-platform",
+      "description": "Uses plugin contracts (KeyValueStore, AlistigoPlugin) and the lifecycle hooks and logger provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document-layer"
+          },
+          "destination": {
+            "node": "platform-layer",
+            "interfaces": ["plugin-api-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "presentation-to-platform",
+      "description": "Uses shared UI components (LoadingScreen, ErrorScreen, ArtifactContextMenuContainer) and the logger provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "presentation-layer"
+          },
+          "destination": {
+            "node": "platform-layer",
+            "interfaces": ["core-components-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-to-bus",
+      "description": "Routes all storage read/write operations through the plugin runtime to the active storage plugin via, and subscribes to user:changed events to record actor attribution in the document",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document-layer",
+            "interfaces": ["document-editor-interface"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "bus-to-claude-storage",
+      "description": "Dispatches KeyValueStore get/set/del/list operations to (first-choice; active when window.claude?.complete is present in the iframe context)",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-interface"]
+          },
+          "destination": {
+            "node": "claude-storage-plugin",
+            "interfaces": ["claude-storage-interface"]
+          }
+        }
+      },
+      "metadata": [
+        {
+          "priority": "first-choice storage plugin",
+          "selection": "resolved at startup; isAvailable() checks for window.claude?.complete"
+        }
+      ]
+    },
+    {
+      "unique-id": "bus-to-local-storage",
+      "description": "Dispatches KeyValueStore get/set/del/list operations to (fallback; active when Claude storage is unavailable — development, playground, draft mode)",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-interface"]
+          },
+          "destination": {
+            "node": "local-storage-plugin",
+            "interfaces": ["local-storage-interface"]
+          }
+        }
+      },
+      "metadata": [
+        {
+          "priority": "fallback storage plugin",
+          "selection": "resolved at startup when claude-storage-plugin.isAvailable() returns false"
+        }
+      ]
+    },
+    {
+      "unique-id": "bus-to-user-plugin",
+      "description": "Delivers lifecycle hook invocations to; the user plugin emits user:changed on the bus after mounted() so the document layer can record the actor",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-interface"]
+          },
+          "destination": {
+            "node": "user-plugin",
+            "interfaces": ["user-plugin-bus-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "bus-to-checkbox-plugin",
+      "description": "Delivers plugin lifecycle hooks to; the checkbox plugin provides UI rendering slots injected into the presentation layer's list element rendering",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-interface"]
+          },
+          "destination": {
+            "node": "list-checkbox-plugin",
+            "interfaces": ["checkbox-plugin-slot-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-host-embeds-artifact",
+      "description": "Embeds the artifact in a sandboxed iframe, injects the alistigo-config payload, and brokers window.storage and AI API calls on behalf of",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact-host",
+            "interfaces": ["artifact-host-iframe-interface"]
+          },
+          "destination": {
+            "node": "alistigo-artifact",
+            "interfaces": ["artifact-config-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-deployed-on-cdn",
+      "description": "Artifact bundle, dynamically-loaded plugin packages, and the skill package are all published to and served from",
+      "relationship-type": {
+        "deployed-in": {
+          "container": "npm-cdn",
+          "nodes": [
+            "alistigo-artifact",
+            "claude-storage-plugin",
+            "local-storage-plugin",
+            "user-plugin",
+            "artifact-skill"
+          ]
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-loads-from-cdn",
+      "description": "UMD bundle is fetched at iframe load time, and plugin packages are dynamically imported at runtime, from",
+      "protocol": "HTTPS",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "alistigo-artifact",
+            "interfaces": ["artifact-mount-interface"]
+          },
+          "destination": {
+            "node": "npm-cdn",
+            "interfaces": ["npm-cdn-interface"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "skill-for-artifact",
+      "description": "Defines the Claude agent capability contract for; enables agents to generate config-driven artifact instances without knowing the artifact's internal implementation",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact-skill",
+            "interfaces": ["skill-definition-interface"]
+          },
+          "destination": {
+            "node": "alistigo-artifact"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "user-uses-artifact",
+      "description": "Interacts directly with the rendered UI of the artifact inside the sandboxed iframe",
+      "relationship-type": {
+        "interacts": {
+          "actor": "user",
+          "nodes": ["alistigo-artifact"]
+        }
+      }
+    }
+  ],
+  "flows": [
+    {
+      "unique-id": "artifact-bootstrap-flow",
+      "name": "Artifact bootstrap",
+      "description": "Sequence from the host embedding the artifact iframe to the UI becoming visible and interactive. The host injects config, the UMD bundle is fetched from CDN, plugins are loaded and initialised via the bus, the active storage plugin is resolved, and the React UI mounts.",
+      "transitions": [
+        {
+          "relationship-unique-id": "artifact-host-embeds-artifact",
+          "sequence-number": 1,
+          "description": "The host creates the sandboxed iframe with the artifact entry script and injects the alistigo-config JSON into the iframe DOM.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "artifact-loads-from-cdn",
+          "sequence-number": 2,
+          "description": "The CDN serves the artifact UMD bundle to the iframe. The auto-mount entry point reads the injected config from the DOM.",
+          "direction": "destination-to-source"
+        },
+        {
+          "relationship-unique-id": "document-to-bus",
+          "sequence-number": 3,
+          "description": "The plugin runtime is created; all plugins execute their setup() hooks via the bus. The active storage plugin (Claude preferred, localStorage fallback) is resolved.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "bus-to-user-plugin",
+          "sequence-number": 4,
+          "description": "The user plugin runs its mounted() hook and emits user:changed on the bus; the document layer subscribes and records the actor in the document.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "presentation-to-document",
+          "sequence-number": 5,
+          "description": "The React tree mounts; the presentation layer loads the current document via ListApplicationService and renders the initial list state.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "user-uses-artifact",
+          "sequence-number": 6,
+          "description": "The artifact UI is fully rendered; the user sees and can interact with it.",
+          "direction": "destination-to-source"
+        }
+      ],
+      "metadata": [
+        {
+          "trigger": "host embeds the artifact iframe (page load or chat artifact creation)",
+          "outcome": "artifact UI is visible and interactive; storage is connected; actor is recorded in the document"
+        }
+      ]
+    },
+    {
+      "unique-id": "user-persists-data-flow",
+      "name": "User persists a change",
+      "description": "Sequence from a user interaction (e.g. adding a list element) through the domain and document layers to durable storage. The command is applied to the domain aggregate, the resulting event appended to the event log, the document serialised to JSON-LD, and written to the active storage plugin via the plugin bus.",
+      "transitions": [
+        {
+          "relationship-unique-id": "user-uses-artifact",
+          "sequence-number": 1,
+          "description": "User performs a state-changing action in the artifact UI (e.g. types a new list item and confirms).",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "presentation-to-document",
+          "sequence-number": 2,
+          "description": "The presentation layer dispatches the corresponding command (e.g. AddListElement) to ListApplicationService.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "document-to-domain",
+          "sequence-number": 3,
+          "description": "The application service applies the command to the List aggregate; the resulting domain event (ListElementAdded) is appended to the event log.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "document-to-bus",
+          "sequence-number": 4,
+          "description": "ListDocumentSerializer produces the updated JSON-LD document. ListKeyValueAdapter writes it to the active KeyValueStore via the plugin runtime.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "bus-to-claude-storage",
+          "sequence-number": 5,
+          "description": "The active storage plugin (Claude storage preferred) persists the serialised document under the 'document' key.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "presentation-to-document",
+          "sequence-number": 6,
+          "description": "The updated list projection is returned to the presentation layer and the UI re-renders to reflect the new state.",
+          "direction": "destination-to-source"
+        }
+      ],
+      "metadata": [
+        {
+          "trigger": "any state-changing user action: add element, delete element, check/uncheck element",
+          "outcome": "domain event appended to event log; document serialised and persisted in storage; UI reflects the updated state",
+          "note": "Step 5 uses bus-to-local-storage instead of bus-to-claude-storage when running outside a published Claude artifact context."
+        }
+      ]
+    }
+  ]
+}

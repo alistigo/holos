@@ -41,3 +41,6 @@ that define every system, interface, and relationship in the framework. The `cal
 runs in CI and blocks merge if models diverge from code.
 
 See [ADR 0027](/adrs/) for the full rationale behind adopting CALM.
+
+The rendered architecture diagram for a typical artifact is available on the
+[Artifact Architecture](/framework/artifact-architecture) page.
