@@ -42,5 +42,7 @@ runs in CI and blocks merge if models diverge from code.
 
 See [ADR 0027](/adrs/) for the full rationale behind adopting CALM.
 
-The rendered architecture diagram for a typical artifact is available on the
-[Artifact Architecture](/framework/artifact-architecture) page.
+The CALM pattern that every artifact must implement is on the
+[Artifact Pattern](/framework/alistigo-artifact-pattern) page.
+The list artifact's concrete implementation is on the
+[List Artifact Architecture](/framework/artifact-architecture) page.

@@ -1,0 +1,622 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "$id": "https://alistigo.com/architecture/patterns/alistigo-artifact.pattern.json",
+  "title": "Alistigo Artifact Pattern",
+  "description": "Reusable architecture pattern for all Alistigo artifacts — self-contained web applications published on npm and loaded into sandboxed AI-chat iframes. Every artifact must include: a domain layer (pure DDD), a document layer (JSON-LD serialisation + application service), a presentation layer (React), a shared platform layer, a typed plugin event bus, Claude and local-storage plugins, a user plugin, and an artifact skill package. Artifact-specific feature plugins extend this baseline.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "minItems": 13,
+      "prefixItems": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "user" },
+            "node-type": { "const": "actor" },
+            "name": { "const": "User" },
+            "description": { "type": "string" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-host" },
+            "node-type": { "const": "system" },
+            "name": { "const": "Artifact Host" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "artifact-host-iframe-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "npm-cdn" },
+            "node-type": { "const": "service" },
+            "name": { "const": "npm CDN" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "npm-cdn-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "alistigo-artifact" },
+            "node-type": { "const": "system" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "artifact-mount-interface" }
+                  }
+                },
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "artifact-config-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["name", "description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "platform-layer" },
+            "node-type": { "const": "system" },
+            "name": { "const": "Platform Layer" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "plugin-api-interface" }
+                  }
+                },
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "core-components-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "domain-layer" },
+            "node-type": { "const": "system" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "domain-aggregate-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["name", "description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "document-layer" },
+            "node-type": { "const": "system" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "document-editor-interface" }
+                  }
+                },
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "application-service-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["name", "description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "presentation-layer" },
+            "node-type": { "const": "service" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "artifact-ui-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["name", "description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "plugin-bus" },
+            "node-type": { "const": "service" },
+            "name": { "const": "Plugin Event Bus" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "plugin-bus-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "claude-storage-plugin" },
+            "node-type": { "const": "database" },
+            "name": { "const": "Claude Storage Plugin" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "claude-storage-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "local-storage-plugin" },
+            "node-type": { "const": "database" },
+            "name": { "const": "Local Storage Plugin" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "local-storage-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "user-plugin" },
+            "node-type": { "const": "service" },
+            "name": { "const": "User Plugin" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "user-plugin-bus-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-skill" },
+            "node-type": { "const": "data-asset" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "interfaces": {
+              "type": "array",
+              "minItems": 1,
+              "prefixItems": [
+                {
+                  "$ref": "https://calm.finos.org/release/1.2/meta/interface.json#/defs/interface-type",
+                  "properties": {
+                    "unique-id": { "const": "skill-definition-interface" }
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["name", "description"]
+        }
+      ]
+    },
+    "relationships": {
+      "type": "array",
+      "minItems": 14,
+      "prefixItems": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-composition" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "composed-of": {
+                  "container": "alistigo-artifact",
+                  "nodes": [
+                    "platform-layer",
+                    "domain-layer",
+                    "document-layer",
+                    "presentation-layer",
+                    "plugin-bus",
+                    "claude-storage-plugin",
+                    "local-storage-plugin",
+                    "user-plugin"
+                  ]
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "presentation-to-document" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": {
+                    "node": "presentation-layer",
+                    "interfaces": ["artifact-ui-interface"]
+                  },
+                  "destination": {
+                    "node": "document-layer",
+                    "interfaces": ["application-service-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "document-to-domain" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": {
+                    "node": "document-layer",
+                    "interfaces": ["document-editor-interface"]
+                  },
+                  "destination": {
+                    "node": "domain-layer",
+                    "interfaces": ["domain-aggregate-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "document-to-platform" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "document-layer" },
+                  "destination": {
+                    "node": "platform-layer",
+                    "interfaces": ["plugin-api-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "presentation-to-platform" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "presentation-layer" },
+                  "destination": {
+                    "node": "platform-layer",
+                    "interfaces": ["core-components-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "document-to-bus" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": {
+                    "node": "document-layer",
+                    "interfaces": ["document-editor-interface"]
+                  },
+                  "destination": { "node": "plugin-bus", "interfaces": ["plugin-bus-interface"] }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "bus-to-claude-storage" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "plugin-bus", "interfaces": ["plugin-bus-interface"] },
+                  "destination": {
+                    "node": "claude-storage-plugin",
+                    "interfaces": ["claude-storage-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "bus-to-local-storage" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "plugin-bus", "interfaces": ["plugin-bus-interface"] },
+                  "destination": {
+                    "node": "local-storage-plugin",
+                    "interfaces": ["local-storage-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "bus-to-user-plugin" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": { "node": "plugin-bus", "interfaces": ["plugin-bus-interface"] },
+                  "destination": {
+                    "node": "user-plugin",
+                    "interfaces": ["user-plugin-bus-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-host-embeds-artifact" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": {
+                    "node": "artifact-host",
+                    "interfaces": ["artifact-host-iframe-interface"]
+                  },
+                  "destination": {
+                    "node": "alistigo-artifact",
+                    "interfaces": ["artifact-config-interface"]
+                  }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-deployed-on-cdn" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "deployed-in": {
+                  "container": "npm-cdn",
+                  "nodes": [
+                    "alistigo-artifact",
+                    "claude-storage-plugin",
+                    "local-storage-plugin",
+                    "user-plugin",
+                    "artifact-skill"
+                  ]
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-loads-from-cdn" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": {
+                    "node": "alistigo-artifact",
+                    "interfaces": ["artifact-mount-interface"]
+                  },
+                  "destination": { "node": "npm-cdn", "interfaces": ["npm-cdn-interface"] }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "skill-for-artifact" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "connects": {
+                  "source": {
+                    "node": "artifact-skill",
+                    "interfaces": ["skill-definition-interface"]
+                  },
+                  "destination": { "node": "alistigo-artifact" }
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "user-uses-artifact" },
+            "description": { "type": "string" },
+            "relationship-type": {
+              "const": {
+                "interacts": {
+                  "actor": "user",
+                  "nodes": ["alistigo-artifact"]
+                }
+              }
+            }
+          },
+          "required": ["description"]
+        }
+      ]
+    }
+  },
+  "required": ["nodes", "relationships"]
+}
