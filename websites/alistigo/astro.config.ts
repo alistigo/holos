@@ -38,6 +38,7 @@ export default defineConfig({
           items: [
             { label: "Overview", slug: "framework/overview" },
             { label: "Architecture", slug: "framework/architecture" },
+            { label: "Artifact Architecture", slug: "framework/artifact-architecture" },
             { label: "Layer Model", slug: "framework/layer-diagram" },
           ],
         },

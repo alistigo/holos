@@ -18,10 +18,25 @@
         "cwd": "packages/architecture"
       }
     },
+    "arch-docify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/docify.sh",
+        "cwd": "packages/architecture"
+      },
+      "inputs": [
+        "{projectRoot}/systems/*.arch.json",
+        "{projectRoot}/patterns/*.pattern.json",
+        "{projectRoot}/scripts/docify.sh"
+      ],
+      "outputs": [
+        "{projectRoot}/.calm-docs"
+      ]
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -rf .calm-out",
+        "command": "rm -rf .calm-out .calm-docs",
         "cwd": "packages/architecture"
       }
     }
