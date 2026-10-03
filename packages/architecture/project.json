@@ -27,11 +27,10 @@
       "inputs": [
         "{projectRoot}/systems/*.arch.json",
         "{projectRoot}/patterns/*.pattern.json",
+        "{workspaceRoot}/packages/list-domain/artifact-list.arch.json",
         "{projectRoot}/scripts/docify.sh"
       ],
-      "outputs": [
-        "{projectRoot}/.calm-docs"
-      ]
+      "outputs": ["{projectRoot}/.calm-docs"]
     },
     "clean": {
       "executor": "nx:run-commands",

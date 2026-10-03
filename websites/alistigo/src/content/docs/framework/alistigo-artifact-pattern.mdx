@@ -1,0 +1,86 @@
+---
+title: Alistigo Artifact Pattern
+description: The base CALM pattern that every Alistigo artifact implements — fixed infrastructure and variable artifact-specific layers.
+sidebar:
+  order: 3
+---
+
+import Mermaid from '../../../components/Mermaid.astro';
+
+Every Alistigo artifact implements this CALM pattern, defined in
+`packages/architecture/patterns/alistigo-artifact.pattern.json` and validated in CI.
+
+**Fixed nodes** (the same in every artifact) are shown in blue.
+**Variable nodes** (filled in per artifact) are shown in orange.
+
+## Pattern Structure
+
+<Mermaid code={`
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
+flowchart TB
+classDef boundary fill:#e1e4f0,stroke:#204485,stroke-dasharray: 5 4,stroke-width:1px,color:#000000;
+classDef fixed fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
+classDef variable fill:#fff3e0,stroke:#b85c00,stroke-width:1.5px,color:#000000;
+
+    subgraph npm-cdn["npm CDN"]
+    direction TB
+        artifact-skill["&lt;artifact&gt;-skill"]:::variable
+            subgraph alistigo-artifact["&lt;artifact&gt;"]
+            direction TB
+                claude-storage-plugin["Claude Storage Plugin"]:::fixed
+                document-layer["Document Layer"]:::variable
+                domain-layer["Domain Layer"]:::variable
+                local-storage-plugin["Local Storage Plugin"]:::fixed
+                platform-layer["Platform Layer"]:::fixed
+                plugin-bus["Plugin Event Bus"]:::fixed
+                presentation-layer["Presentation Layer"]:::variable
+                user-plugin["User Plugin"]:::fixed
+            end
+            class alistigo-artifact boundary
+    end
+    class npm-cdn boundary
+
+    artifact-host["Artifact Host"]:::fixed
+    user["User"]:::fixed
+
+    presentation-layer -->|"Dispatches commands via ApplicationService, reads projections from"| document-layer
+    document-layer -->|"Applies commands to aggregates, builds projections from"| domain-layer
+    document-layer -->|"Uses plugin contracts and lifecycle hooks from"| platform-layer
+    presentation-layer -->|"Uses shared UI components from"| platform-layer
+    document-layer -->|"Routes storage operations through"| plugin-bus
+    plugin-bus -->|"First-choice storage — when window.claude is present"| claude-storage-plugin
+    plugin-bus -->|"Fallback storage — dev / playground / draft mode"| local-storage-plugin
+    plugin-bus -->|"User identity lifecycle hooks"| user-plugin
+    artifact-host -->|"Embeds in iframe, injects config, brokers storage and AI APIs for"| alistigo-artifact
+    alistigo-artifact -->|"Bundle fetched at load time, plugins imported at runtime from"| npm-cdn
+    artifact-skill -->|"Agent capability contract for"| alistigo-artifact
+    user -->|"Interacts with"| alistigo-artifact
+`} />
+
+## Fixed vs Variable Nodes
+
+| Node | Fixed / Variable | Rationale |
+|------|-----------------|-----------|
+| **User** | Fixed | Same actor in every artifact |
+| **Artifact Host** | Fixed | Same iframe host contract |
+| **npm CDN** | Fixed | Same jsDelivr delivery mechanism |
+| **Platform Layer** | Fixed | Shared across all artifacts unchanged |
+| **Plugin Event Bus** | Fixed | Same `createPluginBus()` in every artifact |
+| **Claude Storage Plugin** | Fixed | Same `window.storage` wrapper everywhere |
+| **Local Storage Plugin** | Fixed | Same `localStorage` fallback everywhere |
+| **User Plugin** | Fixed | Same identity/attribution plugin everywhere |
+| **&lt;artifact&gt;** | Variable | Artifact-specific name, npm package, description |
+| **Domain Layer** | Variable | Artifact-specific aggregates, events, value objects |
+| **Document Layer** | Variable | Artifact-specific serialiser and application service |
+| **Presentation Layer** | Variable | Artifact-specific React component tree |
+| **Artifact Skill** | Variable | Artifact-specific Claude agent skill package |
+
+## Extension Point
+
+Each artifact extends the base pattern with artifact-specific **feature plugins** (e.g. `list-checkbox-plugin` for the list artifact). Feature plugins are connected to the artifact through the plugin bus — they are not part of the structural skeleton captured here, but appear in the concrete implementation architecture.
+
+## Implementations
+
+| Artifact | CALM Architecture | Pattern conformance |
+|----------|-------------------|---------------------|
+| [List Artifact](/framework/artifact-architecture) | `packages/list-domain/artifact-list.arch.json` | Validated in CI (`calm validate -p … -a …`) |

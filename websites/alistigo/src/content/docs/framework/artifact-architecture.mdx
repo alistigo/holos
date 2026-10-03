@@ -1,16 +1,18 @@
 ---
-title: Artifact Architecture
-description: CALM model of a typical Alistigo artifact — nodes, layers, plugin bus, and storage plugins.
+title: List Artifact Architecture
+description: CALM architecture of the Alistigo list artifact — nodes, layers, plugin bus, storage plugins, and the list-checkbox feature plugin.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 import Mermaid from '../../../components/Mermaid.astro';
 
-This diagram is generated from the CALM (Common Architecture Language Model) definition in
-`packages/architecture/systems/typical-alistigo-artifact.arch.json`.
+This diagram is generated from the CALM architecture in
+`packages/list-domain/artifact-list.arch.json`.
+It implements the [Alistigo Artifact Pattern](/framework/alistigo-artifact-pattern),
+validated in CI via `calm validate -p … -a …`.
 
-## High-Level Architecture
+## Architecture Diagram
 
 <Mermaid code={`
 %%{init: {"flowchart": {"htmlLabels": false}}}%%
@@ -20,17 +22,17 @@ classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
 
         subgraph npm-cdn["npm CDN"]
         direction TB
-            artifact-skill["Artifact Skill"]:::node
-                subgraph alistigo-artifact["Alistigo Artifact"]
+            artifact-skill["List Artifact Skill"]:::node
+                subgraph alistigo-artifact["Alistigo List Artifact"]
                 direction TB
                     claude-storage-plugin["Claude Storage Plugin"]:::node
-                    document-layer["Document Layer"]:::node
-                    domain-layer["Domain Layer"]:::node
+                    document-layer["List Document Layer"]:::node
+                    domain-layer["List Domain Layer"]:::node
                     list-checkbox-plugin["List Checkbox Plugin"]:::node
                     local-storage-plugin["Local Storage Plugin"]:::node
                     platform-layer["Platform Layer"]:::node
                     plugin-bus["Plugin Event Bus"]:::node
-                    presentation-layer["Presentation Layer"]:::node
+                    presentation-layer["List Presentation Layer"]:::node
                     user-plugin["User Plugin"]:::node
                 end
                 class alistigo-artifact boundary
@@ -41,7 +43,7 @@ classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
     user["User"]:::node
 
     presentation-layer -->|"Dispatches commands via ListApplicationService, reads list projections from"| document-layer
-    document-layer -->|"Applies commands to domain aggregates, builds projections via ListProjector from"| domain-layer
+    document-layer -->|"Applies commands to List aggregate, builds projections via ListProjector from"| domain-layer
     document-layer -->|"Uses plugin contracts and lifecycle hooks provided by"| platform-layer
     presentation-layer -->|"Uses shared UI components and logger provided by"| platform-layer
     document-layer -->|"Routes storage operations through the plugin runtime to the active plugin via"| plugin-bus
@@ -59,10 +61,10 @@ classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
 
 | Layer | Package(s) | Responsibility |
 |-------|-----------|----------------|
-| **Domain** | `@alistigo/artifact-list-domain` | Pure business logic — aggregates, events, value objects |
-| **Document** | `@alistigo/artifact-list-document` | JSON-LD serialisation, `ListApplicationService`, `ListProjector` |
-| **Presentation** | `@alistigo/artifact-list-ui` | React components, UMD entry point |
-| **Platform** | `@alistigo/artifact-platform` | Logger, shared UI primitives, plugin contracts |
+| **Domain** | `@alistigo/list-domain` | Pure business logic — List aggregate, events, value objects |
+| **Document** | `@alistigo/list-document`, `@alistigo/list-document-editor` | JSON-LD serialisation, `ListApplicationService`, `ListProjector` |
+| **Presentation** | `@alistigo/list-components-react` | React components, UMD entry point |
+| **Platform** | `@alistigo/artifact-core`, `@alistigo/artifact-plugin-api`, `@alistigo/artifact-core-components-react` | Logger, shared UI primitives, plugin contracts |
 | **Plugin Bus** | `@alistigo/artifact-plugin-api` | Typed in-process pub/sub (`createPluginBus`) |
 
 ## Plugins
@@ -72,7 +74,7 @@ classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
 | **Claude Storage** | Wraps `window.storage` postMessage API | `window.claude?.complete` present (inside Claude.ai iframe) |
 | **Local Storage** | Wraps `localStorage` | Fallback — dev, playground, or draft mode |
 | **User Plugin** | Emits `user:changed` for actor attribution | Always mounted |
-| **List Checkbox Plugin** | Injects checkbox UI slots | Loaded when checklist feature is enabled |
+| **List Checkbox Plugin** | Injects checkbox UI slots into list elements | Bundled in artifact; always active |
 
 ## Key Design Decisions
 
@@ -80,3 +82,4 @@ classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
 - **iframe isolation** — the entire artifact bundle runs inside a sandboxed iframe; `artifact-host` brokers all privileged API calls across the boundary.
 - **CDN delivery** — the UMD bundle and plugins are fetched from jsDelivr at runtime; no npm install happens inside the Claude artifact context.
 - **Skill as capability contract** — `artifact-skill` exposes a stable schema so Claude agents can generate artifact instances without knowing the internal implementation.
+- **Pattern conformance** — this architecture implements the [Alistigo Artifact Pattern](/framework/alistigo-artifact-pattern); `calm validate -p … -a …` runs in CI to prevent drift.
