@@ -151,6 +151,9 @@ vite.config.ts.timestamp-*
 .nx/cache
 .nx/workspace-data
 
+# Archify intermediate build output
+**/.archify-out
+
 # Rust
 **/target/
 

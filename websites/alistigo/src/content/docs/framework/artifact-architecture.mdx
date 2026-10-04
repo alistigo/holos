@@ -5,6 +5,7 @@ sidebar:
   order: 4
 ---
 
+import ArchifyDiagram from '../../../components/ArchifyDiagram.astro';
 import Mermaid from '../../../components/Mermaid.astro';
 
 This diagram is generated from the CALM architecture in
@@ -56,6 +57,13 @@ classDef node fill:#eef1ff,stroke:#007dff,stroke-width:1px,color:#000000;
     artifact-skill -->|"Defines the Claude agent capability contract for"| alistigo-artifact
     user -->|"Interacts with the rendered UI inside the sandboxed iframe"| alistigo-artifact
 `} />
+
+## Interactive Architecture Diagram
+
+<ArchifyDiagram
+  src="/archify/artifact-list.archify.html"
+  title="Alistigo List Artifact — Interactive Architecture"
+/>
 
 ## Layers
 

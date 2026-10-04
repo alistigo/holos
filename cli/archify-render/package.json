@@ -1,0 +1,35 @@
+{
+  "name": "@alistigo/archify-render",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "cli/archify-render"
+  },
+  "private": false,
+  "type": "module",
+  "description": "Render archify JSON into standalone interactive HTML",
+  "bin": {
+    "archify-render": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "clipanion": "4.0.0-rc.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}
