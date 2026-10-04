@@ -43,6 +43,8 @@
     "access": "public"
   },
   "devDependencies": {
+    "@alistigo/archify-render": "workspace:*",
+    "@alistigo/calm-to-archify": "workspace:*",
     "@finos/calm-cli": "^1.58.0"
   }
 }

@@ -1,0 +1,39 @@
+{
+  "name": "archify-render",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "cli/archify-render/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "cli/archify-render/dist",
+        "tsConfig": "cli/archify-render/tsconfig.build.json",
+        "main": "cli/archify-render/src/cli.ts",
+        "rootDir": "cli/archify-render/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "cli/archify-render"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "cli/archify-render"
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun src/cli.ts",
+        "cwd": "cli/archify-render"
+      }
+    }
+  }
+}

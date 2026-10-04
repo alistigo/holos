@@ -1,0 +1,39 @@
+{
+  "name": "calm-to-archify",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "cli/calm-to-archify/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "cli/calm-to-archify/dist",
+        "tsConfig": "cli/calm-to-archify/tsconfig.build.json",
+        "main": "cli/calm-to-archify/src/cli.ts",
+        "rootDir": "cli/calm-to-archify/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "cli/calm-to-archify"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "cli/calm-to-archify"
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun src/cli.ts",
+        "cwd": "cli/calm-to-archify"
+      }
+    }
+  }
+}

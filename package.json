@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
-    "pm2": "^5.4.0",
     "@finos/calm-cli": "^1.58.0",
     "@finos/calm-schema": "^1.2.0",
     "@finos/calm-server": "^0.4.0",
@@ -56,10 +55,13 @@
     "@nx/js": "22.5.4",
     "@nx/workspace": "22.5.4",
     "@types/bun": "^1.2.0",
+    "archify": "github:tt-a1i/archify",
     "dependency-cruiser": "^17.4.0",
     "fallow": "^2.80.0",
     "lefthook": "^2.1.8",
     "nx": "22.5.4",
+    "pm2": "^5.4.0",
+    "skills": "^1.7.0",
     "typescript": "^5.8.0",
     "yaml": "^2.7.0"
   },
