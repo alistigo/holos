@@ -1,3 +1,15 @@
+## 1.2.0 (2026-10-04)
+
+### 🚀 Features
+
+- **architecture:** introduce Alistigo Artifact CALM pattern + list artifact implementation ([55cbf79](https://github.com/alistigo/holos/commit/55cbf79))
+- **architecture:** add CALM model for typical alistigo artifact + website visualization ([0c2cc8a](https://github.com/alistigo/holos/commit/0c2cc8a))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 ## 1.1.0 (2026-09-15)

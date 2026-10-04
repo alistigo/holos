@@ -1,3 +1,14 @@
+## 0.4.1 (2026-10-04)
+
+### 🚀 Features
+
+- **architecture:** introduce Alistigo Artifact CALM pattern + list artifact implementation ([55cbf79](https://github.com/alistigo/holos/commit/55cbf79))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 
