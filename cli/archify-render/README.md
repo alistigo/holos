@@ -49,7 +49,3 @@ archify-render flow.json --type workflow
 ## Input format
 
 Expects an archify JSON-IR file — the intermediate format produced by [`@alistigo/calm-to-archify transform`](../calm-to-archify). The `meta.output` field in the JSON determines where the HTML is written.
-
-## Related packages
-
-- [`@alistigo/calm-to-archify`](../calm-to-archify) — full pipeline: CALM `.arch.json` → JSON-IR → HTML; calls this package internally

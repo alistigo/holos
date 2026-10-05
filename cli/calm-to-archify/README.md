@@ -57,17 +57,3 @@ calm-to-archify transform path/to/my.arch.json --output path/to/output.archify.j
 ## Input format
 
 Accepts CALM architecture instances — files that contain `nodes` and `relationships` at the top level. Pattern files (`.pattern.json`) are JSON Schema documents and are not supported.
-
-## In-repo usage (Nx)
-
-Within the Alistigo monorepo this CLI is invoked via Nx targets:
-
-```sh
-nx run architecture:build          # runs: pnpm calm-to-archify build systems/*.arch.json
-nx run list-domain:arch-archify    # runs: pnpm calm-to-archify build artifact-list.arch.json
-```
-
-## Related packages
-
-- [`@alistigo/archify-render`](../archify-render) — lower-level CLI that wraps the archify renderer; called internally by `build`
-- [`@alistigo/architecture`](../../packages/architecture) — the Alistigo CALM architecture models
