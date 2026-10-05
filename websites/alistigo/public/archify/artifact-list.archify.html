@@ -9,7 +9,7 @@
   <script>
     // Resolve the theme before first paint so light-preference users don't
     // see a dark flash. The toolbar script below re-applies with UI state.
-    (function () {
+    (() => {
       try {
         var theme = null;
         try {
@@ -5468,7 +5468,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
   <script>
     var Archify = {};
-    var archifyI18nData = (function () {
+    var archifyI18nData = (() => {
       var node = document.getElementById('archify-i18n-data');
       try { return JSON.parse(node ? node.textContent : '{}'); }
       catch (_) { return { locale: 'en', messages: {} }; }
@@ -5477,10 +5477,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
     function viewerText(key, values) {
       var messages = archifyI18nData.messages || {};
-      var template = Object.prototype.hasOwnProperty.call(messages, key) ? messages[key] : key;
-      return String(template).replace(/\{([a-zA-Z0-9_]+)\}/g, function (match, name) {
-        return values && Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match;
-      });
+      var template = Object.hasOwn(messages, key) ? messages[key] : key;
+      return String(template).replace(/\{([a-zA-Z0-9_]+)\}/g, (match, name) => values && Object.hasOwn(values, name) ? String(values[name]) : match);
     }
 
     function viewerCount(key, count, values) {
@@ -5497,7 +5495,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       return normalized
         .replace(/messagebus/gi, 'message bus')
         .replace(/[-_]+/g, ' ')
-        .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
     }
 
     function hasDrawableGeometry(element) {
@@ -5505,7 +5503,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       var geometries = /^(path|line|polyline)$/i.test(element.tagName)
         ? [element]
         : Array.prototype.slice.call(element.querySelectorAll('path, line, polyline'));
-      return geometries.some(function (geometry) {
+      return geometries.some((geometry) => {
         var source = geometry.tagName.toLowerCase() === 'path'
           ? geometry.getAttribute('d')
           : geometry.tagName.toLowerCase() === 'polyline'
@@ -5527,7 +5525,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        live page and canonical SVG together, but never rewrites the source,
        URL, or a later diagram's authored default.
        ============================================================ */
-    Archify.preset = (function () {
+    Archify.preset = (() => {
       var PRESETS = ['classic', 'signal-flow', 'blueprint', 'editorial'];
       var LABELS = {
         classic: viewerText('viewer.preset.classic.short'),
@@ -5540,9 +5538,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       var btn = document.getElementById('btn-preset');
       var label = document.getElementById('preset-label');
       var menu = document.getElementById('preset-menu');
-      var options = function () {
-        return Array.prototype.slice.call(menu.querySelectorAll('[data-preset-value]'));
-      };
+      var options = () => Array.prototype.slice.call(menu.querySelectorAll('[data-preset-value]'));
       var authored = PRESETS.indexOf(html.getAttribute('data-preset')) >= 0
         ? html.getAttribute('data-preset')
         : 'classic';
@@ -5563,7 +5559,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         label.textContent = LABELS[preset];
         btn.setAttribute('aria-label', viewerText('viewer.preset.current', { style: LABELS[preset] }));
         btn.title = viewerText('viewer.preset.choose.title');
-        options().forEach(function (option) {
+        options().forEach((option) => {
           var selected = option.getAttribute('data-preset-value') === preset;
           option.setAttribute('aria-checked', String(selected));
         });
@@ -5578,7 +5574,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         menu.classList.add('open');
         btn.setAttribute('aria-expanded', 'true');
         var available = options();
-        var selected = available.find(function (option) { return option.getAttribute('aria-checked') === 'true'; });
+        var selected = available.find((option) => option.getAttribute('aria-checked') === 'true');
         var target = focusLast ? available[available.length - 1] : (selected || available[0]);
         if (target) target.focus();
         return true;
@@ -5591,26 +5587,26 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
 
       apply(authored);
-      btn.addEventListener('click', function (e) {
+      btn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (isOpen()) close(false);
         else open(false);
       });
-      btn.addEventListener('keydown', function (e) {
+      btn.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
           e.preventDefault();
           if (!isOpen()) open(e.key === 'ArrowUp');
         }
       });
-      document.addEventListener('click', function (e) {
+      document.addEventListener('click', (e) => {
         if (!menu.contains(e.target) && e.target !== btn) close(false);
       });
-      menu.addEventListener('click', function (e) {
+      menu.addEventListener('click', (e) => {
         var option = e.target.closest('[data-preset-value]');
         if (!option || !menu.contains(option)) return;
         if (apply(option.getAttribute('data-preset-value'))) close(true);
       });
-      menu.addEventListener('keydown', function (e) {
+      menu.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') { e.preventDefault(); close(true); return; }
         if (e.key === 'Tab') { close(false); return; }
         var available = options();
@@ -5641,7 +5637,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Theme toggle — persists to localStorage, respects system pref
        ============================================================ */
 
-    Archify.theme = (function () {
+    Archify.theme = (() => {
       var STORAGE_KEY = 'archify-theme';
       var html = document.documentElement;
       var btn = document.getElementById('btn-theme');
@@ -5690,7 +5686,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       // Follow live OS theme changes while the user has no explicit preference.
       try {
         var media = window.matchMedia('(prefers-color-scheme: light)');
-        var onChange = function (e) {
+        var onChange = (e) => {
           var saved = readStored();
           if (urlOverride() || saved === 'light' || saved === 'dark') return;
           apply(e.matches ? 'light' : 'dark');
@@ -5714,7 +5710,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        JPEG/WebP paint the current theme's background explicitly since
        those formats have no alpha channel.
        ============================================================ */
-    (function () {
+    (() => {
       var RASTER_SCALE = 4;
       var MOTION_DURATION = 6000;
       var MOTION_FPS = 30;
@@ -5740,7 +5736,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           .replace(/\s+Architecture(\s+Diagram)?$/i, '')
           .replace(/\s+Diagram$/i, '')
           .trim();
-        return title.replace(/[^a-z0-9_\-]+/gi, '-')
+        return title.replace(/[^a-z0-9_-]+/gi, '-')
                     .toLowerCase()
                     .replace(/^-+|-+$/g, '') || 'diagram';
       }
@@ -5770,22 +5766,22 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         clone.removeAttribute('data-route-journey');
         clone.removeAttribute('data-share-route');
         clone.removeAttribute('data-share-reach');
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-intent-trace-overlay]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-intent-trace-overlay]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-route-probe-overlay]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-route-probe-overlay]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-route-journey-overlay]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-route-journey-overlay]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-semantic-lens-overlay]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-semantic-lens-overlay]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-bridge-runtime]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-bridge-runtime]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-kind]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-kind]'), (el) => {
           el.removeAttribute('data-legend-kind');
           el.removeAttribute('data-legend-label');
           el.removeAttribute('data-legend-count');
@@ -5799,57 +5795,57 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           el.removeAttribute('aria-controls');
           el.removeAttribute('aria-expanded');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-bridge]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-bridge]'), (el) => {
           el.removeAttribute('data-legend-bridge');
           el.removeAttribute('role');
           el.removeAttribute('aria-label');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-relationship-pulse-overlay]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-relationship-pulse-overlay]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-relationship-hit-overlay]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-relationship-hit-overlay]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-source-evidence-beacon]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-source-evidence-beacon]'), (el) => {
           el.remove();
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-source-evidence-count]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-source-evidence-count]'), (el) => {
           var originalLabel = el.getAttribute('data-source-evidence-original-label');
           if (originalLabel == null || originalLabel === '') el.removeAttribute('aria-label');
           else el.setAttribute('aria-label', originalLabel);
           el.removeAttribute('data-source-evidence-count');
           el.removeAttribute('data-source-evidence-original-label');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-focus-match], [data-focus-selected]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-focus-match], [data-focus-selected]'), (el) => {
           el.removeAttribute('data-focus-match');
           el.removeAttribute('data-focus-selected');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-reach-match], [data-reach-origin], [data-reach-depth]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-reach-match], [data-reach-origin], [data-reach-depth]'), (el) => {
           el.removeAttribute('data-reach-match');
           el.removeAttribute('data-reach-origin');
           el.removeAttribute('data-reach-depth');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-lens-match], [data-lens-selected], [data-lens-peer]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-lens-match], [data-lens-selected], [data-lens-peer]'), (el) => {
           el.removeAttribute('data-lens-match');
           el.removeAttribute('data-lens-selected');
           el.removeAttribute('data-lens-peer');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-preview-match], [data-legend-preview-selected], [data-legend-preview-peer]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-legend-preview-match], [data-legend-preview-selected], [data-legend-preview-peer]'), (el) => {
           el.removeAttribute('data-legend-preview-match');
           el.removeAttribute('data-legend-preview-selected');
           el.removeAttribute('data-legend-preview-peer');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-relationship-preview], [data-relationship-preview-node], [data-relationship-preview-source], [data-relationship-preview-target]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-relationship-preview], [data-relationship-preview-node], [data-relationship-preview-source], [data-relationship-preview-target]'), (el) => {
           el.removeAttribute('data-relationship-preview');
           el.removeAttribute('data-relationship-preview-node');
           el.removeAttribute('data-relationship-preview-source');
           el.removeAttribute('data-relationship-preview-target');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-intent-trace-match], [data-intent-trace-selected]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-intent-trace-match], [data-intent-trace-selected]'), (el) => {
           el.removeAttribute('data-intent-trace-match');
           el.removeAttribute('data-intent-trace-selected');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-route-match], [data-route-start], [data-route-end], [data-route-step], [data-route-candidate], [data-route-journey-state], [data-route-journey-current]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-route-match], [data-route-start], [data-route-end], [data-route-step], [data-route-candidate], [data-route-journey-state], [data-route-journey-current]'), (el) => {
           el.removeAttribute('data-route-match');
           el.removeAttribute('data-route-start');
           el.removeAttribute('data-route-end');
@@ -5859,23 +5855,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           el.removeAttribute('data-route-journey-current');
           el.style.removeProperty('--route-step');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-share-route-match], [data-share-route-step], [data-share-route-start], [data-share-route-end], [data-share-route-middle]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-share-route-match], [data-share-route-step], [data-share-route-start], [data-share-route-end], [data-share-route-middle]'), (el) => {
           el.removeAttribute('data-share-route-match');
           el.removeAttribute('data-share-route-step');
           el.removeAttribute('data-share-route-start');
           el.removeAttribute('data-share-route-end');
           el.removeAttribute('data-share-route-middle');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-share-reach-match], [data-share-reach-origin], [data-share-reach-depth]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-share-reach-match], [data-share-reach-origin], [data-share-reach-depth]'), (el) => {
           el.removeAttribute('data-share-reach-match');
           el.removeAttribute('data-share-reach-origin');
           el.removeAttribute('data-share-reach-depth');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-detail], [data-detail-anchor]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-detail], [data-detail-anchor]'), (el) => {
           el.removeAttribute('data-detail');
           el.removeAttribute('data-detail-anchor');
         });
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-node-id][aria-pressed]'), function (el) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-node-id][aria-pressed]'), (el) => {
           el.setAttribute('aria-pressed', 'false');
         });
         return !clone.hasAttribute('data-view-scale') &&
@@ -5924,7 +5920,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             snapshot.target.id !== snapshot.nodeIds[snapshot.nodeIds.length - 1]) return false;
 
         clone.removeAttribute('data-animation');
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-animate]'), function (element) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-animate]'), (element) => {
           element.removeAttribute('data-animate');
           element.style.removeProperty('--step');
         });
@@ -5939,9 +5935,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         for (var nodeIndex = 0; nodeIndex < snapshot.nodeIds.length; nodeIndex++) {
           var nodeId = snapshot.nodeIds[nodeIndex];
           if (typeof nodeId !== 'string' || !nodeId || nodeIds[nodeId]) return false;
-          var matchedNodes = cloneNodes.filter(function (candidate) {
-            return candidate.getAttribute('data-node-id') === nodeId;
-          });
+          var matchedNodes = cloneNodes.filter((candidate) => candidate.getAttribute('data-node-id') === nodeId);
           if (matchedNodes.length !== 1) return false;
           nodeIds[nodeId] = true;
           nodeMatches.push(matchedNodes);
@@ -5953,22 +5947,18 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           var toId = snapshot.nodeIds[edgeIndex + 1];
           if (!edge || typeof edge.key !== 'string' || !edge.key || edgeKeys[edge.key] ||
               edge.from !== fromId || edge.to !== toId) return false;
-          var matchedEdges = cloneEdges.filter(function (candidate) {
-            return candidate.getAttribute('data-edge-key') === edge.key;
-          });
+          var matchedEdges = cloneEdges.filter((candidate) => candidate.getAttribute('data-edge-key') === edge.key);
           var drawableMatches = matchedEdges.filter(hasDrawableGeometry);
-          if (!matchedEdges.length || drawableMatches.length !== 1 || !matchedEdges.every(function (candidate) {
-            return candidate.getAttribute('data-edge-from') === edge.from &&
+          if (!matchedEdges.length || drawableMatches.length !== 1 || !matchedEdges.every((candidate) => candidate.getAttribute('data-edge-from') === edge.from &&
               candidate.getAttribute('data-edge-to') === edge.to &&
-              (candidate.getAttribute('data-edge-id') || '') === (edge.id || '');
-          })) return false;
+              (candidate.getAttribute('data-edge-id') || '') === (edge.id || ''))) return false;
           edgeKeys[edge.key] = true;
           edgeMatches.push(matchedEdges);
         }
 
         clone.setAttribute('data-share-route', '');
-        nodeMatches.forEach(function (matches, step) {
-          matches.forEach(function (element) {
+        nodeMatches.forEach((matches, step) => {
+          matches.forEach((element) => {
             element.setAttribute('data-share-route-match', '');
             element.setAttribute('data-share-route-step', String(step));
             if (step === 0) element.setAttribute('data-share-route-start', '');
@@ -5976,8 +5966,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             else element.setAttribute('data-share-route-middle', '');
           });
         });
-        edgeMatches.forEach(function (matches, step) {
-          matches.forEach(function (element) {
+        edgeMatches.forEach((matches, step) => {
+          matches.forEach((element) => {
             element.setAttribute('data-share-route-match', '');
             element.setAttribute('data-share-route-step', String(step));
           });
@@ -5989,8 +5979,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           !clone.hasAttribute('data-route-journey') &&
           clone.querySelectorAll('[data-animate], [data-route-match], [data-route-step], [data-route-start], [data-route-end], [data-route-journey-state], [data-route-journey-current], [data-route-journey-overlay]').length === 0 &&
           clone.querySelectorAll('[data-share-route-match]').length ===
-            nodeMatches.reduce(function (count, matches) { return count + matches.length; }, 0) +
-            edgeMatches.reduce(function (count, matches) { return count + matches.length; }, 0);
+            nodeMatches.reduce((count, matches) => count + matches.length, 0) +
+            edgeMatches.reduce((count, matches) => count + matches.length, 0);
       }
 
       function applyReachSnapshot(clone, snapshot) {
@@ -6004,7 +5994,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             snapshot.nodeIds[0] !== snapshot.origin.id) return false;
 
         clone.removeAttribute('data-animation');
-        Array.prototype.forEach.call(clone.querySelectorAll('[data-animate]'), function (element) {
+        Array.prototype.forEach.call(clone.querySelectorAll('[data-animate]'), (element) => {
           element.removeAttribute('data-animate');
           element.style.removeProperty('--step');
         });
@@ -6023,9 +6013,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           if (typeof nodeId !== 'string' || !nodeId || nodeIds[nodeId] ||
               !Number.isInteger(depth) || depth < 0 || depth > snapshot.maxDepth ||
               (nodeId === snapshot.origin.id ? depth !== 0 : depth < 1)) return false;
-          var matchedNodes = cloneNodes.filter(function (candidate) {
-            return candidate.getAttribute('data-node-id') === nodeId;
-          });
+          var matchedNodes = cloneNodes.filter((candidate) => candidate.getAttribute('data-node-id') === nodeId);
           if (matchedNodes.length !== 1) return false;
           nodeIds[nodeId] = true;
           measuredMaxDepth = Math.max(measuredMaxDepth, depth);
@@ -6039,29 +6027,25 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               !nodeIds[edge.from] || !nodeIds[edge.to] ||
               !Number.isInteger(edge.depth) || edge.depth < 1 || edge.depth > snapshot.maxDepth ||
               edge.depth !== Math.max(snapshot.depths[edge.from], snapshot.depths[edge.to])) return false;
-          var matchedEdges = cloneEdges.filter(function (candidate) {
-            return candidate.getAttribute('data-edge-key') === edge.key;
-          });
+          var matchedEdges = cloneEdges.filter((candidate) => candidate.getAttribute('data-edge-key') === edge.key);
           var drawableMatches = matchedEdges.filter(hasDrawableGeometry);
-          if (!matchedEdges.length || drawableMatches.length !== 1 || !matchedEdges.every(function (candidate) {
-            return candidate.getAttribute('data-edge-from') === edge.from &&
+          if (!matchedEdges.length || drawableMatches.length !== 1 || !matchedEdges.every((candidate) => candidate.getAttribute('data-edge-from') === edge.from &&
               candidate.getAttribute('data-edge-to') === edge.to &&
-              (candidate.getAttribute('data-edge-id') || '') === (edge.id || '');
-          })) return false;
+              (candidate.getAttribute('data-edge-id') || '') === (edge.id || ''))) return false;
           edgeKeys[edge.key] = true;
           edgeMatches.push({ elements: matchedEdges, depth: edge.depth });
         }
 
         clone.setAttribute('data-share-reach', snapshot.direction);
-        nodeMatches.forEach(function (match) {
-          match.elements.forEach(function (element) {
+        nodeMatches.forEach((match) => {
+          match.elements.forEach((element) => {
             element.setAttribute('data-share-reach-match', '');
             element.setAttribute('data-share-reach-depth', String(match.depth));
             if (match.id === snapshot.origin.id) element.setAttribute('data-share-reach-origin', '');
           });
         });
-        edgeMatches.forEach(function (match) {
-          match.elements.forEach(function (element) {
+        edgeMatches.forEach((match) => {
+          match.elements.forEach((element) => {
             element.setAttribute('data-share-reach-match', '');
             element.setAttribute('data-share-reach-depth', String(match.depth));
           });
@@ -6073,8 +6057,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           clone.querySelectorAll('[data-animate], [data-reach-match], [data-reach-origin], [data-reach-depth]').length === 0 &&
           clone.querySelectorAll('[data-share-reach-origin]').length === 1 &&
           clone.querySelectorAll('[data-share-reach-match]').length ===
-            nodeMatches.reduce(function (count, match) { return count + match.elements.length; }, 0) +
-            edgeMatches.reduce(function (count, match) { return count + match.elements.length; }, 0);
+            nodeMatches.reduce((count, match) => count + match.elements.length, 0) +
+            edgeMatches.reduce((count, match) => count + match.elements.length, 0);
       }
 
       function serializeSvg(scale, opts) {
@@ -6116,13 +6100,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         // Only the SVG-relevant rules: semantic classes, markers, and the
         // theme variable blocks. Toolbar/cards/print CSS can never apply
         // inside a standalone SVG and would only bloat the export.
-        var hostStyle = (function () {
+        var hostStyle = (() => {
           var out = [];
-          Array.prototype.forEach.call(document.styleSheets, function (sheet) {
+          Array.prototype.forEach.call(document.styleSheets, (sheet) => {
             var rules;
             try { rules = sheet.cssRules; } catch (_) { return; } // cross-origin
             if (!rules) return;
-            Array.prototype.forEach.call(rules, function (rule) {
+            Array.prototype.forEach.call(rules, (rule) => {
               if (rule.type === 7 && /^archify-/.test(rule.name || '')) {
                 out.push(rule.cssText);
                 return;
@@ -6134,7 +6118,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               } else if (opts.figure && sel.indexOf('.diagram-container > svg') !== -1) {
                 // Figures look like the Viewer canvas: keep its preset/theme paint
                 // (quiet grid, lifted nodes) by rescoping matching rules to svg.
-                var scoped = sel.split(',').map(function (part) {
+                var scoped = sel.split(',').map((part) => {
                   var at = part.indexOf('.diagram-container > svg');
                   if (at === -1) return null;
                   var prefix = part.slice(0, at).trim();
@@ -6151,10 +6135,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         // Derive the variable list from the stylesheet so newly added theme
         // variables can never be missed by the export pipeline again
         // (--lane-fill/--lane-stroke once were).
-        var varNames = (function () {
+        var varNames = (() => {
           var seen = {};
           var names = [];
-          (hostStyle.match(/--[a-zA-Z0-9-]+(?=\s*:)/g) || []).forEach(function (n) {
+          (hostStyle.match(/--[a-zA-Z0-9-]+(?=\s*:)/g) || []).forEach((n) => {
             if (!seen[n]) { seen[n] = true; names.push(n); }
           });
           return names;
@@ -6172,9 +6156,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             var c = getComputedStyle(probe);
             return {
               background: c.getPropertyValue('--bg').trim(),
-              vars: varNames.map(function (n) {
-                return n + ': ' + c.getPropertyValue(n).trim() + ';';
-              }).join(' ')
+              vars: varNames.map((n) => n + ': ' + c.getPropertyValue(n).trim() + ';').join(' ')
             };
           } finally {
             document.body.removeChild(probe);
@@ -6223,9 +6205,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           var lockedTheme = requestedTheme || document.documentElement.getAttribute('data-theme') || 'dark';
           var resolvedTheme = requestedTheme && resolveVars(lockedTheme);
           var computed = getComputedStyle(document.documentElement);
-          var vars = resolvedTheme ? resolvedTheme.vars : varNames.map(function (n) {
-            return n + ': ' + computed.getPropertyValue(n).trim() + ';';
-          }).join(' ');
+          var vars = resolvedTheme ? resolvedTheme.vars : varNames.map((n) => n + ': ' + computed.getPropertyValue(n).trim() + ';').join(' ');
 
           // IMPORTANT: inject the resolved variables AFTER hostStyle,
           // otherwise hostStyle's ":root, [data-theme=\"dark\"] { ... }" rule
@@ -6284,7 +6264,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         document.body.appendChild(a);
         a.click();
         a.remove();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        setTimeout(() => { URL.revokeObjectURL(url); }, 1000);
       }
 
       // Conservative upper bound on total canvas pixels. Older Safari on iOS
@@ -6414,9 +6394,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var svgBlob = new Blob([data.svgString], { type: 'image/svg+xml;charset=utf-8' });
         var svgUrl = URL.createObjectURL(svgBlob);
 
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           var img = new Image();
-          img.onload = function () {
+          img.onload = () => {
             try {
               var canvas = document.createElement('canvas');
               canvas.width = Math.round(layout.width * scale);
@@ -6432,7 +6412,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               var mime = format === 'jpeg' ? 'image/jpeg' :
                          format === 'webp' ? 'image/webp' : 'image/png';
               var quality = format === 'png' ? undefined : 0.95;
-              canvas.toBlob(function (blob) {
+              canvas.toBlob((blob) => {
                 if (!blob) reject(exportError('viewer.export.error.toBlobNull', { label: format }));
                 else resolve(blob);
               }, mime, quality);
@@ -6441,7 +6421,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               reject(error);
             }
           };
-          img.onerror = function (e) {
+          img.onerror = (e) => {
             URL.revokeObjectURL(svgUrl);
             reject(e);
           };
@@ -6491,9 +6471,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var svgBlob = new Blob([data.svgString], { type: 'image/svg+xml;charset=utf-8' });
         var svgUrl = URL.createObjectURL(svgBlob);
 
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           var img = new Image();
-          img.onload = function () {
+          img.onload = () => {
             try {
               var canvas = document.createElement('canvas');
               canvas.width = SHARE_CARD_WIDTH;
@@ -6580,7 +6560,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
               URL.revokeObjectURL(svgUrl);
 
-              canvas.toBlob(function (blob) {
+              canvas.toBlob((blob) => {
                 if (!blob) reject(exportError('viewer.export.error.toBlobNull', { label: viewerText('viewer.export.shareCard') }));
                 else resolve(blob);
               }, 'image/png');
@@ -6589,7 +6569,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               reject(error);
             }
           };
-          img.onerror = function (e) {
+          img.onerror = (e) => {
             URL.revokeObjectURL(svgUrl);
             reject(e);
           };
@@ -6688,7 +6668,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             return Number.isFinite(value) ? value : fallback;
           }
 
-          var edges = Array.prototype.slice.call(root.querySelectorAll('[data-animate="edge"]')).map(function (element, index) {
+          var edges = Array.prototype.slice.call(root.querySelectorAll('[data-animate="edge"]')).map((element, index) => {
             var computed = getComputedStyle(element);
             return {
               points: samplesFor(element),
@@ -6696,9 +6676,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               width: Math.max(1.5, parseFloat(computed.strokeWidth) || 1.5),
               delay: Math.min(12, authoredStep(element, index)) * 0.16
             };
-          }).filter(function (edge) { return edge.points.length > 1; });
+          }).filter((edge) => edge.points.length > 1);
 
-          var nodes = Array.prototype.slice.call(root.querySelectorAll('[data-node-id][data-animate="node"]')).map(function (element, index) {
+          var nodes = Array.prototype.slice.call(root.querySelectorAll('[data-node-id][data-animate="node"]')).map((element, index) => {
             var box;
             try { box = element.getBBox(); } catch (_) { return null; }
             var painted = element.querySelector('[class*="c-"]') || element;
@@ -6748,7 +6728,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           ctx.scale(ctx.canvas.width / motionScene.width, ctx.canvas.height / motionScene.height);
           ctx.translate(-motionScene.x, -motionScene.y);
 
-          motionScene.edges.forEach(function (edge) {
+          motionScene.edges.forEach((edge) => {
             var duration = 1.75;
             var progress = (elapsed - edge.delay) / duration;
             if (progress < 0 || progress > 1) return;
@@ -6781,7 +6761,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             ctx.restore();
           });
 
-          motionScene.nodes.forEach(function (node) {
+          motionScene.nodes.forEach((node) => {
             var progress = (elapsed - node.delay) / 2.6;
             if (progress < 0 || progress > 1) return;
             var pulse = Math.sin(Math.PI * progress);
@@ -6803,9 +6783,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
         var motionScene = createMotionScene(svg);
 
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           var backgroundImage = new Image();
-          backgroundImage.onload = function () {
+          backgroundImage.onload = () => {
             var canvas = document.createElement('canvas');
             canvas.width = Math.max(2, Math.round(data.width / 2) * 2);
             canvas.height = Math.max(2, Math.round(data.height / 2) * 2);
@@ -6817,7 +6797,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 6000000 });
             } catch (err) {
               URL.revokeObjectURL(sourceUrl);
-              stream.getTracks().forEach(function (track) { track.stop(); });
+              stream.getTracks().forEach((track) => { track.stop(); });
               reject(err);
               return;
             }
@@ -6830,21 +6810,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               stopped = true;
               cancelAnimationFrame(raf);
               URL.revokeObjectURL(sourceUrl);
-              stream.getTracks().forEach(function (track) { track.stop(); });
+              stream.getTracks().forEach((track) => { track.stop(); });
             }
             function draw(now) {
               var elapsed = Math.max(0, ((Number(now) || performance.now()) - startedAt) / 1000);
               drawMotionFrame(ctx, backgroundImage, motionScene, elapsed);
               raf = requestAnimationFrame(draw);
             }
-            recorder.ondataavailable = function (event) {
+            recorder.ondataavailable = (event) => {
               if (event.data && event.data.size) chunks.push(event.data);
             };
-            recorder.onerror = function (event) {
+            recorder.onerror = (event) => {
               cleanup();
               reject(event.error || exportError('viewer.export.error.mediaRecorder'));
             };
-            recorder.onstop = function () {
+            recorder.onstop = () => {
               cleanup();
               var blob = new Blob(chunks, { type: recorder.mimeType || mime });
               if (!blob.size) reject(exportError('viewer.export.error.emptyWebm'));
@@ -6854,19 +6834,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             recorder.start(250);
             startedAt = performance.now();
             raf = requestAnimationFrame(draw);
-            setTimeout(function () {
+            setTimeout(() => {
               if (recorder.state === 'inactive') return;
               // Chromium normally emits the final chunk during stop(), but
               // some embedded browser shells need an explicit encoder flush
               // first. Keep the short grace window bounded and harmless for
               // browsers that already delivered timeslice chunks.
               try { recorder.requestData(); } catch (_) {}
-              setTimeout(function () {
+              setTimeout(() => {
                 if (recorder.state !== 'inactive') recorder.stop();
               }, 120);
             }, duration);
           };
-          backgroundImage.onerror = function () {
+          backgroundImage.onerror = () => {
             URL.revokeObjectURL(sourceUrl);
             reject(exportError('viewer.export.error.webmBackground'));
           };
@@ -6878,9 +6858,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       var btn = document.getElementById('btn-export');
       var routeShareItem = menu.querySelector('button[data-action="route-share-card"]');
       var reachShareItem = menu.querySelector('button[data-action="reach-share-card"]');
-      var items = function () {
-        return Array.prototype.slice.call(menu.querySelectorAll('button[role="menuitem"]'));
-      };
+      var items = () => Array.prototype.slice.call(menu.querySelectorAll('button[role="menuitem"]'));
 
       function syncRouteShareItem() {
         var snapshot = Archify.routeProbe && typeof Archify.routeProbe.exportSnapshot === 'function'
@@ -6922,7 +6900,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
 
       // Gray out unsupported items.
-      items().forEach(function (it) {
+      items().forEach((it) => {
         if (it.dataset.format && !supports(it.dataset.format)) {
           it.disabled = true;
           it.title = viewerText('viewer.export.unsupported');
@@ -6944,12 +6922,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       function toast(msg) {
         toastEl.textContent = '';
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
           toastEl.textContent = msg;
           toastEl.classList.add('show');
         });
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1500);
+        toastTimer = setTimeout(() => { toastEl.classList.remove('show'); }, 1500);
       }
 
       function open(focusLast) {
@@ -6960,7 +6938,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         syncReachShareItem();
         menu.classList.add('open');
         btn.setAttribute('aria-expanded', 'true');
-        var available = items().filter(function (i) { return !i.hidden && !i.disabled; });
+        var available = items().filter((i) => !i.hidden && !i.disabled);
         var target = focusLast ? available[available.length - 1] : available[0];
         if (target) target.focus();
       }
@@ -6971,30 +6949,30 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function isOpen() { return menu.classList.contains('open'); }
 
-      btn.addEventListener('click', function (e) {
+      btn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (isOpen()) close(false);
         else open();
       });
       // APG menu-button pattern: ArrowDown/ArrowUp on the trigger opens the menu.
-      btn.addEventListener('keydown', function (e) {
+      btn.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
           e.preventDefault();
           if (!isOpen()) open(e.key === 'ArrowUp');
         }
       });
-      document.addEventListener('click', function (e) {
+      document.addEventListener('click', (e) => {
         if (!menu.contains(e.target) && e.target !== btn) close(false);
       });
 
       // Keyboard navigation inside the menu.
       //   Menu items: Up/Down, Home/End.
       //   Esc closes + returns focus to trigger; Tab closes.
-      menu.addEventListener('keydown', function (e) {
+      menu.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') { e.preventDefault(); close(true); return; }
         if (e.key === 'Tab')    { close(false); return; }
 
-        var available = items().filter(function (i) { return !i.hidden && !i.disabled; });
+        var available = items().filter((i) => !i.hidden && !i.disabled);
         var current = available.indexOf(document.activeElement);
         switch (e.key) {
           case 'ArrowDown':
@@ -7028,23 +7006,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         clearExportReceipt();
         if (format === 'webm') toast(viewerText('viewer.export.recording'));
         return (svgTheme
-          ? Promise.resolve(serializeSvg(1, { theme: svgTheme })).then(function (d) {
+          ? Promise.resolve(serializeSvg(1, { theme: svgTheme })).then((d) => {
               var blob = new Blob([d.svgString], { type: 'image/svg+xml;charset=utf-8' });
               recordExportReceipt('svg', blob, d.canonicalStateClean);
               download(blob, base + (svgTheme === 'auto' ? '' : '-' + svgTheme) + '.svg');
             })
           : format === 'webm'
-            ? recordWebm().then(function (blob) {
+            ? recordWebm().then((blob) => {
                 document.documentElement.setAttribute('data-last-motion-bytes', String(blob.size));
                 recordExportReceipt('webm', blob, true);
                 download(blob, base + '.webm');
                 toast(viewerText('viewer.export.downloadedWebm'));
               })
-          : rasterize(format).then(function (blob) {
+          : rasterize(format).then((blob) => {
               recordExportReceipt(format, blob, true);
               download(blob, base + '.' + format);
             })
-        ).catch(function (err) {
+        ).catch((err) => {
           console.error(err);
           var technicalMessage = err && err.message ? err.message : format;
           var message = exportMessage(err);
@@ -7071,12 +7049,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var blobPromise = snapshot
           ? renderShareCard({ routeSnapshot: snapshot })
           : Promise.reject(exportError('viewer.export.routeRequired'));
-        return blobPromise.then(function (blob) {
+        return blobPromise.then((blob) => {
           recordExportReceipt('share-card', blob, false, { width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT }, 'route', true);
           download(blob, diagramFilename() + '-route-share-card.png');
           toast(viewerText('viewer.export.downloadedRoute'));
           return blob;
-        }).catch(function (err) {
+        }).catch((err) => {
           console.error(err);
           var technicalMessage = err && err.message ? err.message : 'share-card';
           var message = exportMessage(err);
@@ -7095,12 +7073,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var blobPromise = snapshot
           ? renderShareCard({ reachSnapshot: snapshot })
           : Promise.reject(exportError('viewer.export.reachRequired'));
-        return blobPromise.then(function (blob) {
+        return blobPromise.then((blob) => {
           recordExportReceipt('share-card', blob, false, { width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT }, 'reach', false, true);
           download(blob, diagramFilename() + '-' + snapshot.direction + '-reach-share-card.png');
           toast(viewerText('viewer.export.downloadedReach'));
           return blob;
-        }).catch(function (err) {
+        }).catch((err) => {
           console.error(err);
           var technicalMessage = err && err.message ? err.message : 'share-card';
           var message = exportMessage(err);
@@ -7161,9 +7139,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         try {
           return navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
         } catch (_) {
-          return blobPromise.then(function (blob) {
-            return navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-          });
+          return blobPromise.then((blob) => navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]));
         }
       }
 
@@ -7175,9 +7151,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           return;
         }
         var blobPromise = rasterize('png');
-        return writePngToClipboard(blobPromise).then(function () {
+        return writePngToClipboard(blobPromise).then(() => {
           toast(viewerText('viewer.export.copiedPng'));
-        }).catch(function (err) {
+        }).catch((err) => {
           console.error(err);
           alert(viewerText('viewer.export.copyFailed', {
             message: exportMessage(err)
@@ -7185,7 +7161,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         });
       }
 
-      menu.addEventListener('click', function (e) {
+      menu.addEventListener('click', (e) => {
         var routeShareCardBtn = e.target.closest('button[data-action="route-share-card"]');
         if (routeShareCardBtn && !routeShareCardBtn.disabled && !routeShareCardBtn.hidden) { runRouteShareCard(); return; }
 
@@ -7218,8 +7194,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       // Font Loading API.
       try {
         if (new URLSearchParams(window.location.search).get('openExport') === '1') {
-          var openWhenReady = function () {
-            requestAnimationFrame(function () { requestAnimationFrame(open); });
+          var openWhenReady = () => {
+            requestAnimationFrame(() => { requestAnimationFrame(open); });
           };
           if (document.fonts && document.fonts.ready) {
             document.fonts.ready.then(openWhenReady);
@@ -7236,7 +7212,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        trace yields to the strongest semantic owner; Still also parks bounded
        viewer signals without discarding their static meaning.
        ============================================================ */
-    Archify.motionGovernor = (function () {
+    Archify.motionGovernor = (() => {
       var STORAGE_KEY = 'archify-motion';
       var html = document.documentElement;
       var svg = document.querySelector('.diagram-container svg');
@@ -7400,7 +7376,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var active = true;
         suspensions[key] = (suspensions[key] || 0) + 1;
         render();
-        return function () {
+        return () => {
           if (!active) return false;
           active = false;
           if (suspensions[key] > 1) suspensions[key] -= 1;
@@ -7429,30 +7405,30 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         html.removeAttribute('data-ambient-settle-reason');
         return {
           capable: false,
-          pause: function () { return false; },
-          resume: function () { return false; },
-          toggle: function () { return false; },
-          setMode: function () { return 'still'; },
-          mode: function () { return 'still'; },
-          claim: function () { return 0; },
-          release: function () { return false; },
-          suspend: function () { return function () { return false; }; },
-          isPaused: function () { return true; },
-          owner: function () { return ''; }
+          pause: () => false,
+          resume: () => false,
+          toggle: () => false,
+          setMode: () => 'still',
+          mode: () => 'still',
+          claim: () => 0,
+          release: () => false,
+          suspend: () => () => false,
+          isPaused: () => true,
+          owner: () => ''
         };
       }
 
       html.setAttribute('data-motion-capable', 'true');
       btn.hidden = false;
       readerPaused = readStored() === 'still';
-      btn.addEventListener('click', function () { setPaused(!readerPaused); });
+      btn.addEventListener('click', () => { setPaused(!readerPaused); });
       if (motionQuery) {
         if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', render);
         else if (typeof motionQuery.addListener === 'function') motionQuery.addListener(render);
       }
       document.addEventListener('visibilitychange', syncVisibility);
       if (document.documentElement.getAttribute('data-embed') !== 'true' && typeof MutationObserver !== 'undefined' && typeof Node !== 'undefined' && svg instanceof Node) {
-        var ownerObserver = new MutationObserver(function () { publishOwner(); });
+        var ownerObserver = new MutationObserver(() => { publishOwner(); });
         ownerObserver.observe(svg, {
           attributes: true,
           attributeFilter: [
@@ -7468,19 +7444,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       return {
         capable: true,
-        pause: function () { return setPaused(true); },
-        resume: function () { return setPaused(false); },
-        toggle: function () { return setPaused(!readerPaused); },
-        setMode: function (next, options) {
+        pause: () => setPaused(true),
+        resume: () => setPaused(false),
+        toggle: () => setPaused(!readerPaused),
+        setMode: (next, options) => {
           setPaused(next === 'still', options);
           return effectivePaused() ? 'still' : 'live';
         },
-        mode: function () { return effectivePaused() ? 'still' : 'live'; },
+        mode: () => effectivePaused() ? 'still' : 'live',
         claim: claim,
         release: release,
         suspend: suspend,
         isPaused: effectivePaused,
-        owner: function () { return owner; }
+        owner: () => owner
       };
     })();
 
@@ -7488,7 +7464,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        the authored GitHub revision, source blobs, and optional line ranges
        against the explicit --repo-root. It remains outside the SVG so every
        canonical visual export stays free of repository paths. */
-    Archify.sourceEvidence = (function () {
+    Archify.sourceEvidence = (() => {
       var element = document.getElementById('archify-source-evidence-data');
       var payload = null;
       var svgNamespace = 'http://www.w3.org/2000/svg';
@@ -7503,7 +7479,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var svg = document.querySelector('.diagram-container svg');
         if (!svg) return 0;
         var installed = 0;
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-node-id]'), function (node) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-node-id]'), (node) => {
           var id = node.getAttribute('data-node-id');
           var sources = payload.nodes[id];
           if (!Array.isArray(sources) || !sources.length || node.querySelector('[data-source-evidence-beacon]')) return;
@@ -7558,9 +7534,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return installed;
       }
       return {
-        available: function () { return Boolean(payload); },
-        repository: function () { return payload ? payload.repository : null; },
-        node: function (id) {
+        available: () => Boolean(payload),
+        repository: () => payload ? payload.repository : null,
+        node: (id) => {
           var sources = payload && payload.nodes ? payload.nodes[id] : null;
           return Array.isArray(sources) ? sources.slice() : [];
         },
@@ -7574,7 +7550,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Renderer IDs become deep-linkable semantic hooks without turning the
        standalone artifact into a canvas editor.
        ============================================================ */
-    Archify.focus = (function () {
+    Archify.focus = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector('svg');
@@ -7630,7 +7606,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function reachabilityRelationships() {
         var seen = Object.create(null);
         var relationships = [];
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           var key = edge.getAttribute('data-edge-key') || (from + '\u0000' + to + '\u0000' + (edge.getAttribute('data-edge-label') || ''));
@@ -7646,7 +7622,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             !Array.isArray(relationships)) return null;
         var records = [];
         var seenKeys = Object.create(null);
-        relationships.forEach(function (relationship, index) {
+        relationships.forEach((relationship, index) => {
           if (!relationship || typeof relationship.from !== 'string' || !relationship.from ||
               typeof relationship.to !== 'string' || !relationship.to) return;
           var key = typeof relationship.key === 'string' && relationship.key
@@ -7662,25 +7638,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         depths[originId] = 0;
         for (var cursor = 0; cursor < queue.length; cursor += 1) {
           var current = queue[cursor];
-          records.forEach(function (relationship) {
+          records.forEach((relationship) => {
             var next = null;
             if (direction === 'downstream' && relationship.from === current) next = relationship.to;
             else if (direction === 'upstream' && relationship.to === current) next = relationship.from;
-            if (next == null || Object.prototype.hasOwnProperty.call(depths, next)) return;
+            if (next == null || Object.hasOwn(depths, next)) return;
             depths[next] = depths[current] + 1;
             queue.push(next);
           });
         }
-        queue.forEach(function (id) { order.push(id); });
+        queue.forEach((id) => { order.push(id); });
 
         var edgeKeys = [];
-        records.forEach(function (relationship) {
-          if (Object.prototype.hasOwnProperty.call(depths, relationship.from) &&
-              Object.prototype.hasOwnProperty.call(depths, relationship.to)) edgeKeys.push(relationship.key);
+        records.forEach((relationship) => {
+          if (Object.hasOwn(depths, relationship.from) &&
+              Object.hasOwn(depths, relationship.to)) edgeKeys.push(relationship.key);
         });
-        var maxDepth = order.reduce(function (maximum, id) {
-          return Math.max(maximum, depths[id]);
-        }, 0);
+        var maxDepth = order.reduce((maximum, id) => Math.max(maximum, depths[id]), 0);
         return {
           direction: direction,
           originId: originId,
@@ -7703,12 +7677,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         activeReachability = null;
         svg.removeAttribute('data-reach-active');
         chip.removeAttribute('data-reach-mode');
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           node.removeAttribute('data-reach-match');
           node.removeAttribute('data-reach-origin');
           node.removeAttribute('data-reach-depth');
         });
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           edge.removeAttribute('data-reach-match');
           edge.removeAttribute('data-reach-depth');
         });
@@ -7755,17 +7729,17 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         reachabilityMode = direction;
         activeReachability = result;
         var edgeKeySet = Object.create(null);
-        result.edgeKeys.forEach(function (key) { edgeKeySet[key] = true; });
+        result.edgeKeys.forEach((key) => { edgeKeySet[key] = true; });
         svg.setAttribute('data-reach-active', direction);
         chip.setAttribute('data-reach-mode', direction);
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           var id = node.getAttribute('data-node-id');
-          if (!Object.prototype.hasOwnProperty.call(result.depths, id)) return;
+          if (!Object.hasOwn(result.depths, id)) return;
           node.setAttribute('data-reach-match', '');
           node.setAttribute('data-reach-depth', String(result.depths[id]));
           if (id === result.originId) node.setAttribute('data-reach-origin', '');
         });
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           var key = edge.getAttribute('data-edge-key') || (
             edge.getAttribute('data-edge-from') + '\u0000' +
             edge.getAttribute('data-edge-to') + '\u0000' +
@@ -7829,11 +7803,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var originNode = null;
         var measuredMaxDepth = 0;
 
-        if (nodeIds.some(function (id) {
+        if (nodeIds.some((id) => {
           var depth = activeReachability.depths[id];
-          var matches = allNodes.filter(function (node) {
-            return node.getAttribute('data-node-id') === id;
-          });
+          var matches = allNodes.filter((node) => node.getAttribute('data-node-id') === id);
           if (typeof id !== 'string' || !id || seenNodeIds[id] || matches.length !== 1 ||
               !matches[0].hasAttribute('data-reach-match') ||
               !Number.isInteger(depth) || depth < 0 || depth > activeReachability.maxDepth ||
@@ -7847,27 +7819,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           if (id === originId) originNode = matches[0];
           return false;
         }) || !originNode || measuredMaxDepth !== activeReachability.maxDepth ||
-            allNodes.filter(function (node) { return node.hasAttribute('data-reach-match'); }).length !== nodeIds.length) return null;
+            allNodes.filter((node) => node.hasAttribute('data-reach-match')).length !== nodeIds.length) return null;
 
         var edgeRecords = [];
-        if (edgeKeys.some(function (key) {
+        if (edgeKeys.some((key) => {
           if (typeof key !== 'string' || !key || seenEdgeKeys[key]) return true;
-          var fragments = allEdges.filter(function (edge) {
-            return edge.getAttribute('data-edge-key') === key;
-          });
+          var fragments = allEdges.filter((edge) => edge.getAttribute('data-edge-key') === key);
           var drawableFragments = fragments.filter(hasDrawableGeometry);
           if (!fragments.length || drawableFragments.length !== 1 ||
-              !fragments.every(function (fragment) { return fragment.hasAttribute('data-reach-match'); })) return true;
+              !fragments.every((fragment) => fragment.hasAttribute('data-reach-match'))) return true;
           var first = fragments[0];
           var from = first.getAttribute('data-edge-from');
           var to = first.getAttribute('data-edge-to');
           var id = first.getAttribute('data-edge-id') || '';
           var labelValue = first.getAttribute('data-edge-label') || '';
-          if (!nodeIdSet[from] || !nodeIdSet[to] || !fragments.every(function (fragment) {
-            return fragment.getAttribute('data-edge-from') === from &&
+          if (!nodeIdSet[from] || !nodeIdSet[to] || !fragments.every((fragment) => fragment.getAttribute('data-edge-from') === from &&
               fragment.getAttribute('data-edge-to') === to &&
-              (fragment.getAttribute('data-edge-id') || '') === id;
-          })) return true;
+              (fragment.getAttribute('data-edge-id') || '') === id)) return true;
           seenEdgeKeys[key] = true;
           edgeRecords.push({
             key: key,
@@ -7881,7 +7849,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         })) return null;
 
         var liveEdgeKeys = Object.create(null);
-        if (allEdges.some(function (edge) {
+        if (allEdges.some((edge) => {
           if (!edge.hasAttribute('data-reach-match')) return false;
           var key = edge.getAttribute('data-edge-key');
           if (!key || !seenEdgeKeys[key]) return true;
@@ -7920,7 +7888,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           repositoryLink.setAttribute('aria-label', viewerText('viewer.passport.repository.open', { revision: repository.revision }));
         }
         evidence.title = viewerText('viewer.passport.verificationScope');
-        sources.forEach(function (source) {
+        sources.forEach((source) => {
           var link = document.createElement(source.href ? 'a' : 'div');
           link.className = 'semantic-passport-source';
           if (source.href) {
@@ -7958,7 +7926,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function relationshipsFor(id, byId) {
         var seen = {};
         var relationships = [];
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           if (from !== id && to !== id) return;
@@ -7996,9 +7964,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var recordsByKey = {};
         var recordsById = Object.create(null);
         var byId = Object.create(null);
-        nodes().forEach(function (node) { byId[node.getAttribute('data-node-id')] = node; });
+        nodes().forEach((node) => { byId[node.getAttribute('data-node-id')] = node; });
         var records = [];
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           var shapes = relationshipEdgeShapes(edge);
           if (!shapes.length) return;
           var from = edge.getAttribute('data-edge-from');
@@ -8012,7 +7980,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               existing.invalid = true;
               return;
             }
-            shapes.forEach(function (shape) {
+            shapes.forEach((shape) => {
               if (existing.shapes.indexOf(shape) === -1) existing.shapes.push(shape);
             });
             return;
@@ -8043,10 +8011,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           }
           records.push(record);
         });
-        return records.filter(function (record) { return !record.invalid && record.from && record.to; });
+        return records.filter((record) => !record.invalid && record.from && record.to);
       }
       function relationshipRecordForKey(key) {
-        return relationshipHitRecords().find(function (record) { return record.key === key; }) || null;
+        return relationshipHitRecords().find((record) => record.key === key) || null;
       }
       function pinnedRelationshipRecord() {
         return pinnedRelationshipKey ? relationshipRecordForKey(pinnedRelationshipKey) : null;
@@ -8088,7 +8056,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return clone;
       }
       function removeRelationshipPulse() {
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-relationship-pulse-overlay]'), function (element) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-relationship-pulse-overlay]'), (element) => {
           element.remove();
         });
       }
@@ -8120,13 +8088,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function relationshipTokenKind(edge) {
         var shapes = relationshipEdgeShapes(edge);
-        var classEvidence = [edge.getAttribute('class') || ''].concat(shapes.map(function (shape) {
-          return shape.getAttribute('class') || '';
-        })).join(' ');
+        var classEvidence = [edge.getAttribute('class') || ''].concat(shapes.map((shape) => shape.getAttribute('class') || '')).join(' ');
         var from = edge.getAttribute('data-edge-from') || '';
         var to = edge.getAttribute('data-edge-to') || '';
-        var source = nodes().find(function (node) { return node.getAttribute('data-node-id') === from; });
-        var target = nodes().find(function (node) { return node.getAttribute('data-node-id') === to; });
+        var source = nodes().find((node) => node.getAttribute('data-node-id') === from);
+        var target = nodes().find((node) => node.getAttribute('data-node-id') === to);
         var sourceKind = source ? source.getAttribute('data-node-kind') || 'neutral' : 'neutral';
         var targetKind = target ? target.getAttribute('data-node-kind') || 'neutral' : 'neutral';
         if (/\ba-security\b/.test(classEvidence) || sourceKind === 'security' || targetKind === 'security' || targetKind === 'failure') return 'security';
@@ -8156,7 +8122,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function relationshipTokenPart(tagName, className, attrs) {
         var part = document.createElementNS(svgNamespace, tagName);
         part.setAttribute('class', className);
-        Object.keys(attrs || {}).forEach(function (name) { part.setAttribute(name, attrs[name]); });
+        Object.keys(attrs || {}).forEach((name) => { part.setAttribute(name, attrs[name]); });
         return part;
       }
       function relationshipTokenGeometry(shape, kind, key, options) {
@@ -8208,7 +8174,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       Archify.flowTokens = {
         create: createSemanticFlowToken,
-        kind: function (edge) { return relationshipTokenKind(edge); },
+        kind: (edge) => relationshipTokenKind(edge),
         path: relationshipTokenPath
       };
       function renderRelationshipPulse(key) {
@@ -8216,9 +8182,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         if (!key || document.documentElement.getAttribute('data-embed') === 'true') return false;
         if (document.hidden || (Archify.motionGovernor && Archify.motionGovernor.isPaused())) return false;
         if (reducedMotionQuery && reducedMotionQuery.matches) return false;
-        var matchingEdges = edges().filter(function (edge) {
-          return edge.getAttribute('data-edge-key') === key;
-        });
+        var matchingEdges = edges().filter((edge) => edge.getAttribute('data-edge-key') === key);
         if (!matchingEdges.length) return false;
         var overlay = document.createElementNS(svgNamespace, 'g');
         overlay.setAttribute('class', 'relationship-pulse-overlay');
@@ -8226,11 +8190,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         overlay.setAttribute('data-relationship-pulse-key', key);
         overlay.setAttribute('aria-hidden', 'true');
         var tokenAdded = false;
-        matchingEdges.forEach(function (edge) {
+        matchingEdges.forEach((edge) => {
           var wrapper = document.createElementNS(svgNamespace, 'g');
           if (edge.hasAttribute('transform')) wrapper.setAttribute('transform', edge.getAttribute('transform'));
           var shapes = relationshipEdgeShapes(edge);
-          shapes.forEach(function (shape) {
+          shapes.forEach((shape) => {
             wrapper.appendChild(relationshipPulseGeometry(shape));
           });
           if (!tokenAdded && shapes.length) {
@@ -8245,7 +8209,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           if (wrapper.childNodes.length) overlay.appendChild(wrapper);
         });
         if (!overlay.childNodes.length) return false;
-        var finishPulse = function () {
+        var finishPulse = () => {
           if (overlay.parentNode) overlay.remove();
         };
         overlay.addEventListener('animationend', finishPulse, { once: true });
@@ -8269,16 +8233,16 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           svg.removeAttribute('data-relationship-pin-active');
         }
         chip.removeAttribute('data-relationship-previewing');
-        edges().forEach(function (edge) { edge.removeAttribute('data-relationship-preview'); });
-        nodes().forEach(function (node) {
+        edges().forEach((edge) => { edge.removeAttribute('data-relationship-preview'); });
+        nodes().forEach((node) => {
           node.removeAttribute('data-relationship-preview-node');
           node.removeAttribute('data-relationship-preview-source');
           node.removeAttribute('data-relationship-preview-target');
         });
-        Array.prototype.forEach.call(relationshipList.querySelectorAll('[data-preview-active]'), function (button) {
+        Array.prototype.forEach.call(relationshipList.querySelectorAll('[data-preview-active]'), (button) => {
           button.removeAttribute('data-preview-active');
         });
-        relationshipHitTargets.forEach(function (target) {
+        relationshipHitTargets.forEach((target) => {
           target.setAttribute('aria-pressed', pinnedRelationshipKey && target.getAttribute('data-relationship-key') === pinnedRelationshipKey ? 'true' : 'false');
           target.removeAttribute('data-preview-active');
         });
@@ -8296,10 +8260,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         if (!key || !from || !to) return;
         svg.setAttribute('data-relationship-preview-active', key);
         if (options.direct === true) svg.setAttribute('data-relationship-direct-active', key);
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           if (edge.getAttribute('data-edge-key') === key) edge.setAttribute('data-relationship-preview', '');
         });
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           var id = node.getAttribute('data-node-id');
           if (id !== from && id !== to) return;
           node.setAttribute('data-relationship-preview-node', '');
@@ -8329,16 +8293,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function scheduleDirectRelationshipPreview(target) {
         if (directPreviewTimer) window.clearTimeout(directPreviewTimer);
         if (pinnedRelationshipKey) return;
-        directPreviewTimer = window.setTimeout(function () {
+        directPreviewTimer = window.setTimeout(() => {
           directPreviewTimer = null;
           if (pinnedRelationshipKey || hoveredRelationship !== target || directRelationshipBlocked()) return;
           previewRelationship(target, { direct: true });
         }, reducedMotionQuery && reducedMotionQuery.matches ? 0 : 90);
       }
       function relationshipHitTarget(key) {
-        return relationshipHitTargets.find(function (target) {
-          return target.getAttribute('data-relationship-key') === key;
-        }) || null;
+        return relationshipHitTargets.find((target) => target.getAttribute('data-relationship-key') === key) || null;
       }
       function revealPinnedRelationship(record) {
         function reveal() {
@@ -8364,9 +8326,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var record = relationshipRecordForKey(key);
         if (!record) return false;
         set(record.from, { toggle: false, updateUrl: false });
-        var row = Array.prototype.slice.call(relationshipList.querySelectorAll('[data-relationship-key]')).find(function (candidate) {
-          return candidate.getAttribute('data-relationship-key') === key;
-        });
+        var row = Array.prototype.slice.call(relationshipList.querySelectorAll('[data-relationship-key]')).find((candidate) => candidate.getAttribute('data-relationship-key') === key);
         if (!row) return false;
         previewRelationship(row);
         pinnedRelationship = row;
@@ -8387,7 +8347,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return true;
       }
       function inspectRelationshipById(id, options) {
-        var record = relationshipHitRecords().find(function (item) { return item.id === id; });
+        var record = relationshipHitRecords().find((item) => item.id === id);
         return record ? inspectRelationship(record.key, options) : false;
       }
       function installRelationshipHitTargets() {
@@ -8403,7 +8363,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         relationshipHelp.id = 'archify-relationship-help';
         relationshipHelp.textContent = viewerText('viewer.passport.relationship.help');
         relationshipHitOverlay.appendChild(relationshipHelp);
-        records.forEach(function (record, index) {
+        records.forEach((record, index) => {
           var target = document.createElementNS(svgNamespace, 'g');
           target.setAttribute('class', 'relationship-hit-target');
           target.setAttribute('data-relationship-hit-key', record.key);
@@ -8426,7 +8386,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           var title = document.createElementNS(svgNamespace, 'title');
           title.textContent = record.fromLabel + ' \u2192 ' + record.toLabel + ' \u00b7 ' + record.label;
           target.appendChild(title);
-          record.shapes.forEach(function (shape) {
+          record.shapes.forEach((shape) => {
             target.appendChild(relationshipHitGeometry(shape));
             target.appendChild(relationshipHitGeometry(shape, 'relationship-focus-rail'));
           });
@@ -8442,10 +8402,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         if (nodeLayer && nodeLayer.parentNode === svg) svg.insertBefore(relationshipHitOverlay, nodeLayer);
         else svg.appendChild(relationshipHitOverlay);
 
-        relationshipHitOverlay.addEventListener('pointerdown', function (event) {
+        relationshipHitOverlay.addEventListener('pointerdown', (event) => {
           if (event.target.closest('[data-relationship-hit-key]')) event.stopPropagation();
         });
-        relationshipHitOverlay.addEventListener('pointerover', function (event) {
+        relationshipHitOverlay.addEventListener('pointerover', (event) => {
           if (event.pointerType === 'touch') return;
           if (finePointerQuery && !finePointerQuery.matches) return;
           var target = event.target.closest('[data-relationship-hit-key]');
@@ -8454,25 +8414,25 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           hoveredRelationship = target;
           scheduleDirectRelationshipPreview(target);
         });
-        relationshipHitOverlay.addEventListener('pointerout', function (event) {
+        relationshipHitOverlay.addEventListener('pointerout', (event) => {
           var target = event.target.closest('[data-relationship-hit-key]');
           if (!target || (event.relatedTarget && target.contains(event.relatedTarget))) return;
           if (hoveredRelationship === target) hoveredRelationship = null;
           syncRelationshipPreview();
         });
-        relationshipHitOverlay.addEventListener('focusin', function (event) {
+        relationshipHitOverlay.addEventListener('focusin', (event) => {
           var target = event.target.closest('[data-relationship-hit-key]');
           if (!target || directRelationshipBlocked()) return;
           focusedRelationship = target;
           if (!pinnedRelationshipKey) previewRelationship(target, { direct: true });
         });
-        relationshipHitOverlay.addEventListener('focusout', function (event) {
+        relationshipHitOverlay.addEventListener('focusout', (event) => {
           var target = event.target.closest('[data-relationship-hit-key]');
           if (!target || (event.relatedTarget && target.contains(event.relatedTarget))) return;
           if (focusedRelationship === target) focusedRelationship = null;
           syncRelationshipPreview();
         });
-        relationshipHitOverlay.addEventListener('click', function (event) {
+        relationshipHitOverlay.addEventListener('click', (event) => {
           var target = event.target.closest('[data-relationship-hit-key]');
           if (!target || directRelationshipBlocked()) return;
           event.preventDefault();
@@ -8481,7 +8441,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           hoveredRelationship = null;
           inspectRelationship(target.getAttribute('data-relationship-key'));
         });
-        relationshipHitOverlay.addEventListener('keydown', function (event) {
+        relationshipHitOverlay.addEventListener('keydown', (event) => {
           var target = event.target.closest('[data-relationship-hit-key]');
           if (!target) return;
           if (event.key === 'Escape' && pinnedRelationshipKey) {
@@ -8503,7 +8463,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') index = (index + 1) % relationshipHitTargets.length;
           else index = (index - 1 + relationshipHitTargets.length) % relationshipHitTargets.length;
           event.preventDefault();
-          relationshipHitTargets.forEach(function (item, itemIndex) { item.setAttribute('tabindex', itemIndex === index ? '0' : '-1'); });
+          relationshipHitTargets.forEach((item, itemIndex) => { item.setAttribute('tabindex', itemIndex === index ? '0' : '-1'); });
           try { relationshipHitTargets[index].focus({ preventScroll: true }); }
           catch (_) { try { relationshipHitTargets[index].focus(); } catch (_) {} }
         });
@@ -8520,7 +8480,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         relationsBtn.textContent = viewerCount('viewer.passport.relationship.count', relationships.length);
         relationsBtn.setAttribute('aria-label', viewerCount('viewer.passport.relationship.show', relationships.length));
         var counts = { out: 0, in: 0, loop: 0 };
-        relationships.forEach(function (relationship) { counts[relationship.direction] += 1; });
+        relationships.forEach((relationship) => { counts[relationship.direction] += 1; });
         summary.textContent = viewerText('viewer.passport.relationship.summary', {
           out: counts.out,
           in: counts.in,
@@ -8540,8 +8500,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           { id: 'out', label: viewerText('viewer.passport.relationship.group.out') },
           { id: 'in', label: viewerText('viewer.passport.relationship.group.in') },
           { id: 'loop', label: viewerText('viewer.passport.relationship.group.loop') }
-        ].forEach(function (group) {
-          var items = relationships.filter(function (relationship) { return relationship.direction === group.id; });
+        ].forEach((group) => {
+          var items = relationships.filter((relationship) => relationship.direction === group.id);
           if (!items.length) return;
           var section = document.createElement('div');
           section.className = 'relationship-lens-group';
@@ -8549,7 +8509,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           heading.className = 'relationship-lens-group-title';
           heading.textContent = group.label + ' · ' + items.length;
           section.appendChild(heading);
-          items.forEach(function (relationship) {
+          items.forEach((relationship) => {
             var button = document.createElement('button');
             button.type = 'button';
             button.className = 'relationship-lens-row';
@@ -8774,37 +8734,29 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var protectedRects = (protectViewerChrome
           ? [svg.querySelector('[data-legend]'), container.querySelector('.diagram-nav')]
           : [])
-          .filter(function (element) {
+          .filter((element) => {
             if (!element || element.hidden) return false;
             var style = window.getComputedStyle(element);
             return style.display !== 'none' && style.visibility !== 'hidden';
           })
-          .map(function (element) { return element.getBoundingClientRect(); })
-          .filter(function (rect) {
-            return rect.width > 0 && rect.height > 0 &&
-              chipRect.left < rect.right + safeGap && chipRect.right > rect.left - safeGap;
-          });
+          .map((element) => element.getBoundingClientRect())
+          .filter((rect) => rect.width > 0 && rect.height > 0 &&
+              chipRect.left < rect.right + safeGap && chipRect.right > rect.left - safeGap);
         if (protectedRects.length) {
           var candidates = [top, minTop, maxTop];
-          protectedRects.forEach(function (rect) {
+          protectedRects.forEach((rect) => {
             candidates.push(
               rect.top - containerRect.top - chip.offsetHeight - safeGap,
               rect.bottom - containerRect.top + safeGap
             );
           });
-          var valid = candidates.map(function (candidate) {
-            return Math.max(minTop, Math.min(maxTop, candidate));
-          }).filter(function (candidate, index, all) {
+          var valid = candidates.map((candidate) => Math.max(minTop, Math.min(maxTop, candidate))).filter((candidate, index, all) => {
             if (all.indexOf(candidate) !== index) return false;
             var candidateTop = containerRect.top + candidate;
             var candidateBottom = candidateTop + chip.offsetHeight;
-            return protectedRects.every(function (rect) {
-              return candidateBottom <= rect.top - safeGap || candidateTop >= rect.bottom + safeGap;
-            });
+            return protectedRects.every((rect) => candidateBottom <= rect.top - safeGap || candidateTop >= rect.bottom + safeGap);
           });
-          valid.sort(function (first, second) {
-            return Math.abs(first - preferred) - Math.abs(second - preferred);
-          });
+          valid.sort((first, second) => Math.abs(first - preferred) - Math.abs(second - preferred));
           if (valid.length) top = valid[0];
         }
         chip.style.top = Math.round(top) + 'px';
@@ -8834,12 +8786,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         clearRelationshipPreview({ clearPin: true });
         activeIds = [];
         svg.removeAttribute('data-focus-active');
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           node.removeAttribute('data-focus-match');
           node.removeAttribute('data-focus-selected');
           node.setAttribute('aria-pressed', 'false');
         });
-        edges().forEach(function (edge) { edge.removeAttribute('data-focus-match'); });
+        edges().forEach((edge) => { edge.removeAttribute('data-focus-match'); });
         chip.hidden = true;
         label.textContent = '';
         detail.textContent = '';
@@ -8893,13 +8845,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         var nodeList = nodes();
         var byId = Object.create(null);
-        nodeList.forEach(function (node) { byId[node.getAttribute('data-node-id')] = node; });
+        nodeList.forEach((node) => { byId[node.getAttribute('data-node-id')] = node; });
         var normalized = [];
-        (ids || []).forEach(function (id) {
+        (ids || []).forEach((id) => {
           if (byId[id] && normalized.indexOf(id) === -1) normalized.push(id);
         });
         if (!normalized.length) return false;
-        if (normalized.length === activeIds.length && normalized.every(function (id, index) { return activeIds[index] === id; }) && options.toggle !== false) {
+        if (normalized.length === activeIds.length && normalized.every((id, index) => activeIds[index] === id) && options.toggle !== false) {
           clear();
           return true;
         }
@@ -8911,10 +8863,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var related = Object.create(null);
         var seenEdges = {};
         var matchedEdges = 0;
-        normalized.forEach(function (id) { selected[id] = true; related[id] = true; });
+        normalized.forEach((id) => { selected[id] = true; related[id] = true; });
         var selectionMode = options.mode === 'selection' || normalized.length > 1;
 
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           var match = selectionMode ? selected[from] && selected[to] : selected[from] || selected[to];
@@ -8924,7 +8876,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           var edgeKey = edge.getAttribute('data-edge-key') || (from + '\u0000' + to + '\u0000' + (edge.getAttribute('data-edge-label') || ''));
           if (!seenEdges[edgeKey]) { seenEdges[edgeKey] = true; matchedEdges += 1; }
         });
-        nodeList.forEach(function (node) {
+        nodeList.forEach((node) => {
           var nodeId = node.getAttribute('data-node-id');
           if (related[nodeId]) node.setAttribute('data-focus-match', '');
           if (selected[nodeId]) {
@@ -8978,21 +8930,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           ? '#relation=' + encodeURIComponent(relationId)
           : '#focus=' + encodeURIComponent(activeIds[0]) + (reachabilityMode ? '&reach=' + reachabilityMode : ''));
         var copy = navigator.clipboard && typeof navigator.clipboard.writeText === 'function'
-          ? navigator.clipboard.writeText(value).then(function () { return true; }).catch(function () { return fallbackCopy(value); })
+          ? navigator.clipboard.writeText(value).then(() => true).catch(() => fallbackCopy(value))
           : Promise.resolve(fallbackCopy(value));
-        return copy.then(function (copied) {
+        return copy.then((copied) => {
           copyBtn.textContent = viewerText(copied ? 'viewer.common.copied' : 'viewer.common.copyFailed');
           copyBtn.setAttribute('aria-label', copied
             ? viewerText(relationId ? 'viewer.passport.copy.pinned.success' : 'viewer.passport.copy.focused.success')
             : viewerText(relationId ? 'viewer.passport.copy.pinned.failed' : 'viewer.passport.copy.focused.failed'));
-          window.setTimeout(function () {
+          window.setTimeout(() => {
             renderRelationshipCopyAction();
           }, 1600);
           return copied;
         });
       }
 
-      svg.addEventListener('click', function (event) {
+      svg.addEventListener('click', (event) => {
         if (container.getAttribute('data-just-panned') === 'true') return;
         var node = event.target.closest('[data-node-id]');
         if (node) {
@@ -9004,7 +8956,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         else if (activeIds.length) clear();
       });
-      svg.addEventListener('keydown', function (event) {
+      svg.addEventListener('keydown', (event) => {
         var node = event.target.closest('[data-node-id]');
         if (!node || (event.key !== 'Enter' && event.key !== ' ')) return;
         event.preventDefault();
@@ -9016,20 +8968,20 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       });
       moveBtn.addEventListener('pointerdown', beginLensDrag);
       moveBtn.addEventListener('pointermove', moveLensDrag);
-      moveBtn.addEventListener('pointerup', function (event) { finishLensDrag(event, false); });
-      moveBtn.addEventListener('pointercancel', function (event) { finishLensDrag(event, true); });
-      moveBtn.addEventListener('lostpointercapture', function (event) { finishLensDrag(event, true); });
-      moveBtn.addEventListener('dblclick', function (event) {
+      moveBtn.addEventListener('pointerup', (event) => { finishLensDrag(event, false); });
+      moveBtn.addEventListener('pointercancel', (event) => { finishLensDrag(event, true); });
+      moveBtn.addEventListener('lostpointercapture', (event) => { finishLensDrag(event, true); });
+      moveBtn.addEventListener('dblclick', (event) => {
         event.preventDefault();
         event.stopPropagation();
         resetLensPlacement();
       });
       moveBtn.addEventListener('keydown', moveLensWithKeyboard);
-      clearBtn.addEventListener('click', function () { clear({ restoreFocus: true }); });
+      clearBtn.addEventListener('click', () => { clear({ restoreFocus: true }); });
       copyBtn.addEventListener('click', copyFocusLink);
-      upstreamBtn.addEventListener('click', function () { applyReachability('upstream'); });
-      downstreamBtn.addEventListener('click', function () { applyReachability('downstream'); });
-      relationsBtn.addEventListener('click', function () {
+      upstreamBtn.addEventListener('click', () => { applyReachability('upstream'); });
+      downstreamBtn.addEventListener('click', () => { applyReachability('downstream'); });
+      relationsBtn.addEventListener('click', () => {
         var expanded = chip.getAttribute('data-relations-expanded') === 'true';
         if (expanded) chip.removeAttribute('data-relations-expanded');
         else chip.setAttribute('data-relations-expanded', 'true');
@@ -9039,7 +8991,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           : 'viewer.passport.relations.hide'));
         placeRelationshipLens();
       });
-      relationshipList.addEventListener('click', function (event) {
+      relationshipList.addEventListener('click', (event) => {
         var button = event.target.closest('[data-relationship-target]');
         if (!button) return;
         var id = button.getAttribute('data-relationship-target');
@@ -9052,7 +9004,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           try { node.focus({ preventScroll: true }); } catch (_) { try { node.focus(); } catch (_) {} }
         }
       });
-      relationshipList.addEventListener('pointerover', function (event) {
+      relationshipList.addEventListener('pointerover', (event) => {
         if (event.pointerType === 'touch') return;
         if (finePointerQuery && !finePointerQuery.matches) return;
         var button = event.target.closest('[data-relationship-key]');
@@ -9061,25 +9013,25 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         hoveredRelationship = button;
         syncRelationshipPreview();
       });
-      relationshipList.addEventListener('pointerout', function (event) {
+      relationshipList.addEventListener('pointerout', (event) => {
         var button = event.target.closest('[data-relationship-key]');
         if (!button || (event.relatedTarget && button.contains(event.relatedTarget))) return;
         if (hoveredRelationship === button) hoveredRelationship = null;
         syncRelationshipPreview();
       });
-      relationshipList.addEventListener('focusin', function (event) {
+      relationshipList.addEventListener('focusin', (event) => {
         var button = event.target.closest('[data-relationship-key]');
         if (!button) return;
         focusedRelationship = button;
         syncRelationshipPreview();
       });
-      relationshipList.addEventListener('focusout', function (event) {
+      relationshipList.addEventListener('focusout', (event) => {
         var button = event.target.closest('[data-relationship-key]');
         if (!button || (event.relatedTarget && button.contains(event.relatedTarget))) return;
         if (focusedRelationship === button) focusedRelationship = null;
         syncRelationshipPreview();
       });
-      relationshipList.addEventListener('keydown', function (event) {
+      relationshipList.addEventListener('keydown', (event) => {
         if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && event.key !== 'Home' && event.key !== 'End') return;
         var buttons = Array.prototype.slice.call(relationshipList.querySelectorAll('[data-relationship-target]'));
         if (!buttons.length) return;
@@ -9091,10 +9043,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         event.preventDefault();
         buttons[index].focus();
       });
-      document.addEventListener('pointerdown', function () {
+      document.addEventListener('pointerdown', () => {
         lensDragClickPointer = null;
       }, true);
-      document.addEventListener('click', function (event) {
+      document.addEventListener('click', (event) => {
         // Losing capture (for example when a resize hides the handle) can
         // retarget this drag's final click to the page. It is not dismissal.
         // A new pointerdown releases the guard; keyboard clicks remain live.
@@ -9114,7 +9066,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       window.addEventListener('scroll', requestLensPlacement, { passive: true });
       window.addEventListener('resize', requestLensPlacement);
       container.addEventListener('scroll', requestLensPlacement, { passive: true });
-      document.addEventListener('visibilitychange', function () {
+      document.addEventListener('visibilitychange', () => {
         if (document.hidden) removeRelationshipPulse();
       });
       function syncRelationshipMotionPreference(event) {
@@ -9164,20 +9116,18 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         inspectRelationship: inspectRelationship,
         inspectRelationshipById: inspectRelationshipById,
         reposition: placeRelationshipLens,
-        relationship: function () {
+        relationship: () => {
           var record = pinnedRelationshipRecord();
           return record ? { id: record.id || null, key: record.key, from: record.from, to: record.to, label: record.label } : null;
         },
-        reachability: function () {
-          return activeReachability ? {
+        reachability: () => activeReachability ? {
             direction: activeReachability.direction,
             originId: activeReachability.originId,
             nodeIds: activeReachability.nodeIds.slice(),
             edgeKeys: activeReachability.edgeKeys.slice(),
             maxDepth: activeReachability.maxDepth
-          } : null;
-        },
-        active: function () { return activeIds.length === 0 ? null : (activeIds.length === 1 ? activeIds[0] : activeIds.slice()); }
+          } : null,
+        active: () => activeIds.length === 0 ? null : (activeIds.length === 1 ? activeIds[0] : activeIds.slice())
       };
     })();
 
@@ -9187,7 +9137,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Fine-pointer hover and keyboard focus share the same stable-ID preview;
        touch continues directly to the existing click-to-focus contract.
        ============================================================ */
-    Archify.intentTrace = (function () {
+    Archify.intentTrace = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector(':scope > svg');
@@ -9228,7 +9178,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return Array.prototype.slice.call(edge.querySelectorAll('path, line, polyline'));
       }
       function removeOverlay() {
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-intent-trace-overlay]'), function (overlay) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-intent-trace-overlay]'), (overlay) => {
           overlay.remove();
         });
       }
@@ -9239,11 +9189,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         activeId = null;
         svg.removeAttribute('data-intent-trace-active');
         removeOverlay();
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           node.removeAttribute('data-intent-trace-match');
           node.removeAttribute('data-intent-trace-selected');
         });
-        edges().forEach(function (edge) { edge.removeAttribute('data-intent-trace-match'); });
+        edges().forEach((edge) => { edge.removeAttribute('data-intent-trace-match'); });
         if (options.announce !== false) status.textContent = '';
       }
       function traceGeometry(shape, direction) {
@@ -9281,7 +9231,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var nodeList = nodes();
         var edgeList = edges();
         var byId = Object.create(null);
-        nodeList.forEach(function (node) { byId[node.getAttribute('data-node-id')] = node; });
+        nodeList.forEach((node) => { byId[node.getAttribute('data-node-id')] = node; });
         var selected = byId[id];
         if (!selected) return false;
 
@@ -9294,7 +9244,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var counts = { out: 0, in: 0, loop: 0 };
         related[id] = true;
 
-        edgeList.forEach(function (edge) {
+        edgeList.forEach((edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           if (from !== id && to !== id) return;
@@ -9310,13 +9260,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           edge.setAttribute('data-intent-trace-match', '');
           var wrapper = document.createElementNS(namespace, 'g');
           if (edge.hasAttribute('transform')) wrapper.setAttribute('transform', edge.getAttribute('transform'));
-          edgeShapes(edge).forEach(function (shape) {
+          edgeShapes(edge).forEach((shape) => {
             wrapper.appendChild(traceGeometry(shape, direction));
           });
           if (wrapper.childNodes.length) overlay.appendChild(wrapper);
         });
 
-        nodeList.forEach(function (node) {
+        nodeList.forEach((node) => {
           var nodeId = node.getAttribute('data-node-id');
           if (related[nodeId]) node.setAttribute('data-intent-trace-match', '');
           if (nodeId === id) node.setAttribute('data-intent-trace-selected', '');
@@ -9344,7 +9294,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function schedule(node) {
         if (enterTimer) window.clearTimeout(enterTimer);
-        enterTimer = window.setTimeout(function () {
+        enterTimer = window.setTimeout(() => {
           enterTimer = null;
           if (hoveredNode === node) show(node.getAttribute('data-node-id'), { announce: false });
         }, reducedMotion() ? 0 : 90);
@@ -9358,40 +9308,40 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         show(candidate.getAttribute('data-node-id'), { announce: candidate === focusedNode });
       }
 
-      svg.addEventListener('pointerover', function (event) {
+      svg.addEventListener('pointerover', (event) => {
         var node = event.target.closest('[data-node-id]');
         if (!node || !finePointer() || event.pointerType === 'touch') return;
         if (event.relatedTarget && node.contains(event.relatedTarget)) return;
         hoveredNode = node;
         schedule(node);
       });
-      svg.addEventListener('pointerout', function (event) {
+      svg.addEventListener('pointerout', (event) => {
         var node = event.target.closest('[data-node-id]');
         if (!node || (event.relatedTarget && node.contains(event.relatedTarget))) return;
         if (hoveredNode === node) hoveredNode = null;
         sync();
       });
-      svg.addEventListener('focusin', function (event) {
+      svg.addEventListener('focusin', (event) => {
         var node = event.target.closest('[data-node-id]');
         if (!node) return;
         focusedNode = node;
         show(node.getAttribute('data-node-id'), { announce: true });
       });
-      svg.addEventListener('focusout', function (event) {
+      svg.addEventListener('focusout', (event) => {
         var node = event.target.closest('[data-node-id]');
         if (!node || (event.relatedTarget && node.contains(event.relatedTarget))) return;
         if (focusedNode === node) focusedNode = null;
         sync();
       });
-      container.addEventListener('pointerdown', function (event) {
+      container.addEventListener('pointerdown', (event) => {
         if (!event.target.closest('[data-node-id]')) clear({ announce: false });
       });
-      window.addEventListener('blur', function () { clear({ announce: false }); });
+      window.addEventListener('blur', () => { clear({ announce: false }); });
 
       return {
         show: show,
         clear: clear,
-        active: function () { return activeId; }
+        active: () => activeId
       };
     })();
 
@@ -9405,15 +9355,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        ============================================================ */
     // Fixed script-private participants; the CLI sees only the joint wait below.
     const archifyLayoutOwners = { reader: null, viewerChrome: null };
-    Archify.waitForStableLayout = function (options) {
+    Archify.waitForStableLayout = (options) => {
       options = options || {};
       var maximumFrames = Math.max(1, Number(options.maximumFrames) || 240);
       var fontsReady = document.fonts && document.fonts.ready
-        ? document.fonts.ready.catch(function () {})
+        ? document.fonts.ready.catch(() => {})
         : Promise.resolve();
-      return fontsReady.then(function () {
+      return fontsReady.then(() => {
         if (typeof options.schedule === 'function') options.schedule();
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           var previous = '';
           var stableFrames = 0;
           var sampledFrames = 0;
@@ -9445,7 +9395,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       });
     };
 
-    Archify.readerLayout = (function () {
+    Archify.readerLayout = (() => {
       var html = document.documentElement;
       var body = document.body;
       var shell = document.querySelector('.container');
@@ -9527,7 +9477,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var nodeMinimum = null;
         var edgeMinimum = null;
         var selectors = 'text[data-node-label], text[data-boundary-label], text[data-detail="context"], g[data-detail="context"] text';
-        Array.from(svg.querySelectorAll(selectors)).forEach(function (text) {
+        Array.from(svg.querySelectorAll(selectors)).forEach((text) => {
           if (text.getAttribute('data-detail') === 'fine' || text.closest('[data-detail="fine"]')) return;
           var sourceFontPx = parseFloat(text.getAttribute('font-size') || '');
           if (!Number.isFinite(sourceFontPx)) return;
@@ -9548,7 +9498,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return scale > 0 ? Math.min(1, scale) : 1;
       }
       var sourcePrimary = null;
-      if (svg) Array.from(svg.querySelectorAll('text[data-node-label]')).forEach(function (text) {
+      if (svg) Array.from(svg.querySelectorAll('text[data-node-label]')).forEach((text) => {
         var size = parseFloat(text.getAttribute('font-size') || '');
         if (Number.isFinite(size) && size > 0) sourcePrimary = sourcePrimary == null ? size : Math.max(sourcePrimary, size);
       });
@@ -9665,7 +9615,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function settleOverflow(minWidth) {
         if (settleFrame) cancelAnimationFrame(settleFrame);
-        settleFrame = requestAnimationFrame(function () {
+        settleFrame = requestAnimationFrame(() => {
           settleFrame = 0;
           if (!eligible() || !lastWidth) return;
           fitDockedRail();
@@ -9781,15 +9731,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       archifyLayoutOwners.reader = { schedule: schedule, pending: layoutPending, snapshot: stableSnapshot };
 
-      window.addEventListener('resize', function () {
+      window.addEventListener('resize', () => {
         settledCap = 0;
         schedule();
       }, { passive: true });
       window.addEventListener('load', schedule, { once: true });
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule).catch(function () {});
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule).catch(() => {});
       if (typeof ResizeObserver === 'function') {
         var resizeObserver = new ResizeObserver(schedule);
-        [header, cards].forEach(function (element) { if (element) resizeObserver.observe(element); });
+        [header, cards].forEach((element) => { if (element) resizeObserver.observe(element); });
       }
       if (typeof MutationObserver === 'function') {
         var contentObserver = new MutationObserver(schedule);
@@ -9805,19 +9755,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function collapseRail() {
         chooseRail(RAIL_COLLAPSED_KEY, '1');
-        if (railReveal) requestAnimationFrame(function () { try { railReveal.focus({ preventScroll: true }); } catch (_) {} });
+        if (railReveal) requestAnimationFrame(() => { try { railReveal.focus({ preventScroll: true }); } catch (_) {} });
       }
-      if (railReveal) railReveal.addEventListener('click', function () { chooseRail(RAIL_COLLAPSED_KEY, '0'); });
+      if (railReveal) railReveal.addEventListener('click', () => { chooseRail(RAIL_COLLAPSED_KEY, '0'); });
       if (railCollapse) railCollapse.addEventListener('click', collapseRail);
-      if (railPlacement) railPlacement.addEventListener('click', function () {
+      if (railPlacement) railPlacement.addEventListener('click', () => {
         var toBottom = html.getAttribute('data-reader-rail') !== 'bottom';
         if (!toBottom) writePreference(RAIL_COLLAPSED_KEY, '0');
         chooseRail(RAIL_PLACEMENT_KEY, toBottom ? 'bottom' : 'right');
       });
-      document.addEventListener('keydown', function (event) {
+      document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && html.getAttribute('data-reader-rail') === 'overlay') collapseRail();
       });
-      document.addEventListener('pointerdown', function (event) {
+      document.addEventListener('pointerdown', (event) => {
         if (html.getAttribute('data-reader-rail') !== 'overlay' || !railPanel) return;
         if (!railPanel.contains(event.target) && !(railReveal && railReveal.contains(event.target))) chooseRail(RAIL_COLLAPSED_KEY, '1');
       });
@@ -9828,8 +9778,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         measure: measure,
         schedule: schedule,
         whenStable: whenStable,
-        active: function () { return html.getAttribute('data-reader-layout') === 'adaptive'; },
-        receipt: function () { return { ratio: ratio, width: lastWidth }; }
+        active: () => html.getAttribute('data-reader-layout') === 'adaptive',
+        receipt: () => ({ ratio: ratio, width: lastWidth })
       };
     })();
 
@@ -9839,7 +9789,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        appearance while a small bottom stage rail becomes part of the reader
        budget whenever its zero-reserve position would enter the stage.
        ============================================================ */
-    Archify.viewerChromeLayout = (function () {
+    Archify.viewerChromeLayout = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container && container.querySelector(':scope > svg');
@@ -9947,7 +9897,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         if (options.quiet !== true) {
           if (settleFrame) cancelAnimationFrame(settleFrame);
-          settleFrame = requestAnimationFrame(function () {
+          settleFrame = requestAnimationFrame(() => {
             settleFrame = 0;
             schedule();
           });
@@ -10096,9 +10046,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         restorableReserve = 0;
         writeReserve(0, { quiet: true });
         var readerReady = Archify.readerLayout && typeof Archify.readerLayout.whenStable === 'function'
-          ? Archify.readerLayout.whenStable().catch(function () {})
+          ? Archify.readerLayout.whenStable().catch(() => {})
           : Promise.resolve();
-        probePromise = readerReady.then(function () {
+        probePromise = readerReady.then(() => {
           probingBaseline = false;
           probePromise = null;
           if (!cameraAtBaseline() && probeFallbackReserve > 0) {
@@ -10146,18 +10096,16 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       window.addEventListener('load', schedule, { once: true });
       window.addEventListener('beforeprint', schedule);
       window.addEventListener('afterprint', reprobe);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(reprobe).catch(function () {});
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(reprobe).catch(() => {});
       if (typeof ResizeObserver === 'function') {
         var resizeObserver = new ResizeObserver(schedule);
-        [nav, svg, legend].forEach(function (element) { if (element) resizeObserver.observe(element); });
+        [nav, svg, legend].forEach((element) => { if (element) resizeObserver.observe(element); });
       }
       if (typeof MutationObserver === 'function') {
-        var contentObserver = new MutationObserver(function (records) {
+        var contentObserver = new MutationObserver((records) => {
           // A theme switch changes paint, not the stage geometry. Reprobing
           // drops the bottom rail for several frames and makes the diagram jump.
-          var viewerModeChanged = records.some(function (record) {
-            return record.target === html && record.attributeName !== 'data-theme';
-          });
+          var viewerModeChanged = records.some((record) => record.target === html && record.attributeName !== 'data-theme');
           if (viewerModeChanged) reprobe();
           else schedule();
         });
@@ -10175,14 +10123,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         reprobe: reprobe,
         whenStable: whenStable,
         stageRect: protectedStageRect,
-        dockRect: function () { return nav ? restingNavRect() : null; },
-        active: function () { return reserve > 0; },
-        receipt: function () { return lastReceipt || measure(); }
+        dockRect: () => nav ? restingNavRect() : null,
+        active: () => reserve > 0,
+        receipt: () => lastReceipt || measure()
       };
     })();
 
     Archify.layoutStability = {
-      whenStable: function () {
+      whenStable: () => {
         var reader = archifyLayoutOwners.reader;
         var chrome = archifyLayoutOwners.viewerChrome;
         if (!reader || !chrome) {
@@ -10199,7 +10147,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             observedFontsReady = ready;
             fontCyclePending = true;
             var generation = ++fontGeneration;
-            ready.catch(function () {}).then(function () {
+            ready.catch(() => {}).then(() => {
               if (generation !== fontGeneration) return;
               fontCyclePending = false;
               scheduleOwners();
@@ -10210,21 +10158,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return Archify.waitForStableLayout({
           maximumFrames: 960,
           schedule: scheduleOwners,
-          pending: function () {
+          pending: () => {
             // Recapture readiness for font cycles that begin during sampling.
             return fontsPending() || reader.pending() || chrome.pending();
           },
-          snapshot: function () {
-            return JSON.stringify([
+          snapshot: () => JSON.stringify([
               ['reader', reader.snapshot()],
               ['viewerChrome', chrome.snapshot()]
-            ]);
-          },
+            ]),
           timeoutMessage: 'Joint reader and viewer chrome layout did not reach stable dimensions.'
         });
       }
     };
-    Archify.view = (function () {
+    Archify.view = (() => {
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector('svg');
       var outBtn = container.querySelector('[data-view="out"]');
@@ -10337,9 +10283,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var left = Math.max(0, Math.min(width, -camera.x / scale));
         var right = Math.max(0, Math.min(width, width - (width - camera.x) / scale));
         var bottom = Math.max(0, Math.min(height, height - (height - camera.y) / scale));
-        svg.style.clipPath = 'inset(' + [top, right, bottom, left].map(function (value) {
-          return Math.round(value * 1000) / 1000 + 'px';
-        }).join(' ') + ')';
+        svg.style.clipPath = 'inset(' + [top, right, bottom, left].map((value) => Math.round(value * 1000) / 1000 + 'px').join(' ') + ')';
       }
       function cameraSettled(rendered) {
         return Math.abs(rendered.scale - state.scale) < 0.001 &&
@@ -10409,12 +10353,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           settled: false,
           frame: null,
           timer: null,
-          finished: new Promise(function (resolve) { resolver = resolve; }),
+          finished: new Promise((resolve) => { resolver = resolve; }),
           resolve: resolver,
-          cancel: function (reason, commitTarget) {
+          cancel: (reason, commitTarget) => {
             if (transaction.settled) return false;
             if (commitTarget && transaction.target) {
-              if (Object.prototype.hasOwnProperty.call(transaction.target, 'scrollLeft')) {
+              if (Object.hasOwn(transaction.target, 'scrollLeft')) {
                 container.scrollLeft = transaction.target.scrollLeft;
               } else {
                 state = {
@@ -10512,9 +10456,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function semanticIds(ids, includeNeighbors) {
         var seeds = Object.create(null);
         var wanted = Object.create(null);
-        (ids || []).forEach(function (id) { seeds[id] = true; wanted[id] = true; });
+        (ids || []).forEach((id) => { seeds[id] = true; wanted[id] = true; });
         if (includeNeighbors) {
-          Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), function (edge) {
+          Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), (edge) => {
             var from = edge.getAttribute('data-edge-from');
             var to = edge.getAttribute('data-edge-to');
             if (seeds[from] || seeds[to]) { wanted[from] = true; wanted[to] = true; }
@@ -10525,8 +10469,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function boxesFor(ids, includeNeighbors) {
         var wanted = semanticIds(ids, includeNeighbors);
         return Array.prototype.slice.call(svg.querySelectorAll('[data-node-id]'))
-          .filter(function (node) { return wanted[node.getAttribute('data-node-id')]; })
-          .map(function (node) {
+          .filter((node) => wanted[node.getAttribute('data-node-id')])
+          .map((node) => {
             try { return node.getBBox(); } catch (_) { return null; }
           })
           .filter(Boolean);
@@ -10540,10 +10484,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var contentScale = Math.min(svgWidth / viewBox.width, svgHeight / viewBox.height);
         var contentOffsetX = (svgWidth - viewBox.width * contentScale) / 2;
         var contentOffsetY = (svgHeight - viewBox.height * contentScale) / 2;
-        var minX = Math.min.apply(Math, boxes.map(function (box) { return box.x; }));
-        var minY = Math.min.apply(Math, boxes.map(function (box) { return box.y; }));
-        var maxX = Math.max.apply(Math, boxes.map(function (box) { return box.x + box.width; }));
-        var maxY = Math.max.apply(Math, boxes.map(function (box) { return box.y + box.height; }));
+        var minX = Math.min.apply(Math, boxes.map((box) => box.x));
+        var minY = Math.min.apply(Math, boxes.map((box) => box.y));
+        var maxX = Math.max.apply(Math, boxes.map((box) => box.x + box.width));
+        var maxY = Math.max.apply(Math, boxes.map((box) => box.y + box.height));
         var bounds = {
           x: contentOffsetX + (minX - viewBox.x) * contentScale,
           y: contentOffsetY + (minY - viewBox.y) * contentScale,
@@ -10606,11 +10550,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         container.classList.add('is-camera-moving');
         container.classList.add('is-camera-transaction');
         container.setAttribute('data-camera-transaction', String(transaction.id));
-        var step = function (timestamp) {
+        var step = (timestamp) => {
           if (cameraTransaction !== transaction || transaction.settled) return;
           if (!startedAt) startedAt = timestamp;
           var fraction = Math.max(0, Math.min(1, (timestamp - startedAt) / duration));
-          var eased = 1 - Math.pow(1 - fraction, 3);
+          var eased = 1 - (1 - fraction) ** 3;
           state = {
             scale: start.scale + (target.scale - start.scale) * eased,
             x: start.x + (target.x - start.x) * eased,
@@ -10648,8 +10592,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         var boxes = boxesFor(ids, options.includeNeighbors === true);
         if (!boxes.length || !viewBox || viewBox.width <= 0) return false;
-        var minX = Math.min.apply(Math, boxes.map(function (box) { return box.x; }));
-        var maxX = Math.max.apply(Math, boxes.map(function (box) { return box.x + box.width; }));
+        var minX = Math.min.apply(Math, boxes.map((box) => box.x));
+        var maxX = Math.max.apply(Math, boxes.map((box) => box.x + box.width));
         var center = (((minX + maxX) / 2 - viewBox.x) / viewBox.width) * (svg.clientWidth || 1);
         var target = Math.max(0, Math.min(svg.clientWidth - container.clientWidth, center - container.clientWidth / 2));
         var transaction = cameraReceipt({ scrollLeft: target }, options);
@@ -10660,7 +10604,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         catch (_) { container.scrollLeft = target; }
         if (instant) finishCameraTransaction(transaction, reducedMotion() ? 'reduced-motion' : (document.hidden ? 'hidden' : 'complete'));
         else {
-          transaction.timer = setTimeout(function () { finishCameraTransaction(transaction, 'complete'); }, 460);
+          transaction.timer = setTimeout(() => { finishCameraTransaction(transaction, 'complete'); }, 460);
           cameraTimer = transaction.timer;
           container.classList.add('is-camera-moving');
           container.setAttribute('data-camera-transaction', String(transaction.id));
@@ -10691,21 +10635,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         try { container.releasePointerCapture(event.pointerId); } catch (_) {}
         if (moved) {
           container.setAttribute('data-just-panned', 'true');
-          setTimeout(function () { container.removeAttribute('data-just-panned'); }, 80);
+          setTimeout(() => { container.removeAttribute('data-just-panned'); }, 80);
         }
       }
 
-      inBtn.addEventListener('click', function () { zoom(state.scale + 0.25); });
-      outBtn.addEventListener('click', function () { zoom(state.scale - 0.25); });
+      inBtn.addEventListener('click', () => { zoom(state.scale + 0.25); });
+      outBtn.addEventListener('click', () => { zoom(state.scale - 0.25); });
       resetBtn.addEventListener('click', reset);
-      container.addEventListener('pointerdown', function (event) {
+      container.addEventListener('pointerdown', (event) => {
         if (state.scale <= 1 || event.button !== 0 || event.target.closest('.diagram-nav, .focus-chip, .node-finder, .diagram-guide, .overview-map, .route-probe, .semantic-lens') || event.target.closest('[data-node-id]') || event.target.closest('[data-relationship-hit-key]')) return;
         interruptCamera();
         drag = { startX: event.clientX, startY: event.clientY, x: state.x, y: state.y, moved: false };
         container.classList.add('is-panning');
         try { container.setPointerCapture(event.pointerId); } catch (_) {}
       });
-      container.addEventListener('pointermove', function (event) {
+      container.addEventListener('pointermove', (event) => {
         if (!drag) return;
         var dx = event.clientX - drag.startX;
         var dy = event.clientY - drag.startY;
@@ -10717,28 +10661,28 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       container.addEventListener('pointerup', onPointerEnd);
       container.addEventListener('pointercancel', onPointerEnd);
       container.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', function () {
+      window.addEventListener('resize', () => {
         if (resizeFrame) cancelAnimationFrame(resizeFrame);
-        resizeFrame = requestAnimationFrame(function () {
+        resizeFrame = requestAnimationFrame(() => {
           resizeFrame = 0;
           if (state.mode === 'semantic') syncSemantic();
           else apply();
         });
       });
-      window.addEventListener('hashchange', function () { requestAnimationFrame(syncSemantic); });
+      window.addEventListener('hashchange', () => { requestAnimationFrame(syncSemantic); });
       apply();
       pinControls();
       requestAnimationFrame(syncSemantic);
 
       return {
-        zoomIn: function () { zoom(state.scale + 0.25); },
-        zoomOut: function () { zoom(state.scale - 0.25); },
+        zoomIn: () => { zoom(state.scale + 0.25); },
+        zoomOut: () => { zoom(state.scale - 0.25); },
         reset: reset,
         reveal: reveal,
         centerAt: centerAt,
         logicalViewport: logicalViewport,
         sync: syncSemantic,
-        state: function () { return { scale: state.scale, x: state.x, y: state.y, mode: state.mode }; }
+        state: () => ({ scale: state.scale, x: state.x, y: state.y, mode: state.mode })
       };
     })();
 
@@ -10747,7 +10691,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        The radar is built at runtime so the checked artifact still contains
        one canonical SVG block, and export serialization remains untouched.
        ============================================================ */
-    Archify.radar = (function () {
+    Archify.radar = (() => {
       var container = document.querySelector('.diagram-container');
       var diagram = container.querySelector(':scope > svg');
       var panel = document.getElementById('overview-map');
@@ -10798,7 +10742,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         mapSvg.setAttribute('viewBox', [viewBox.x, viewBox.y, viewBox.width, viewBox.height].join(' '));
         nodeLayer.textContent = '';
         nodes = [];
-        Array.prototype.forEach.call(diagram.querySelectorAll('[data-node-id]'), function (node) {
+        Array.prototype.forEach.call(diagram.querySelectorAll('[data-node-id]'), (node) => {
           var box;
           try { box = node.getBBox(); } catch (_) { box = null; }
           if (!box || box.width <= 0 || box.height <= 0) return;
@@ -10879,7 +10823,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var rect = panelRectAt(position);
         var bounds = context.bounds;
         if (rect.left < bounds.left || rect.top < bounds.top || rect.right > bounds.right || rect.bottom > bounds.bottom) return false;
-        return context.hardBlockers.every(function (blocker) { return !rectsIntersect(rect, blocker, placementGap); });
+        return context.hardBlockers.every((blocker) => !rectsIntersect(rect, blocker, placementGap));
       }
       function cornerCandidates(context) {
         var bounds = context.bounds;
@@ -10894,9 +10838,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           { left: alternateLeft, top: bottom },
           { left: preferredLeft, top: top },
           { left: alternateLeft, top: top }
-        ].filter(function (candidate, index, all) {
-          return all.findIndex(function (other) { return other.left === candidate.left && other.top === candidate.top; }) === index;
-        });
+        ].filter((candidate, index, all) => all.findIndex((other) => other.left === candidate.left && other.top === candidate.top) === index);
       }
       function nearbyCandidates(context, reference) {
         var bounds = context.bounds;
@@ -10912,7 +10854,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           horizontal.push(requested.left);
           vertical.push(requested.top);
         }
-        context.hardBlockers.forEach(function (blocker) {
+        context.hardBlockers.forEach((blocker) => {
           horizontal.push(
             blocker.left - placementGap - panel.offsetWidth,
             blocker.right + placementGap
@@ -10922,32 +10864,28 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             blocker.bottom + placementGap
           );
         });
-        horizontal = horizontal.map(function (left) { return clamp(left, bounds.left, maximumLeft); });
-        vertical = vertical.map(function (top) { return clamp(top, bounds.top, maximumTop); });
+        horizontal = horizontal.map((left) => clamp(left, bounds.left, maximumLeft));
+        vertical = vertical.map((top) => clamp(top, bounds.top, maximumTop));
         var candidates = [];
-        horizontal.forEach(function (left) {
-          vertical.forEach(function (top) { candidates.push({ left: left, top: top }); });
+        horizontal.forEach((left) => {
+          vertical.forEach((top) => { candidates.push({ left: left, top: top }); });
         });
-        return candidates.filter(function (candidate, index, all) {
-          return all.findIndex(function (other) { return other.left === candidate.left && other.top === candidate.top; }) === index;
-        });
+        return candidates.filter((candidate, index, all) => all.findIndex((other) => other.left === candidate.left && other.top === candidate.top) === index);
       }
       function placementScore(position, context, reference, softWeight) {
         var rect = panelRectAt(position);
         var referenceLeft = reference ? reference.left : (context.preferredSide === 'left' ? context.bounds.left : context.bounds.right - panel.offsetWidth);
         var referenceTop = reference ? reference.top : context.bounds.bottom - panel.offsetHeight;
-        var distance = Math.pow(position.left - referenceLeft, 2) + Math.pow(position.top - referenceTop, 2);
-        var softOverlap = context.softBlockers.reduce(function (total, blocker) { return total + intersectionArea(rect, blocker); }, 0);
+        var distance = (position.left - referenceLeft) ** 2 + (position.top - referenceTop) ** 2;
+        var softOverlap = context.softBlockers.reduce((total, blocker) => total + intersectionArea(rect, blocker), 0);
         return distance + softOverlap * softWeight;
       }
       function chooseRadarPlacement(context, reference, options) {
         options = options || {};
         var softWeight = Number.isFinite(options.softWeight) ? options.softWeight : 100;
         var candidates = nearbyCandidates(context, reference).concat(cornerCandidates(context));
-        var valid = candidates.filter(function (candidate) { return positionIsValid(candidate, context); });
-        valid.sort(function (first, second) {
-          return placementScore(first, context, reference, softWeight) - placementScore(second, context, reference, softWeight);
-        });
+        var valid = candidates.filter((candidate) => positionIsValid(candidate, context));
+        valid.sort((first, second) => placementScore(first, context, reference, softWeight) - placementScore(second, context, reference, softWeight));
         return valid.length ? valid[0] : null;
       }
       function applyPlacement(position, remember) {
@@ -11048,7 +10986,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function scheduleSpaceRetry() {
         if (!requestedOpen || spaceRetryTimer || spaceRetryCount >= 4) return;
         spaceRetryCount += 1;
-        spaceRetryTimer = window.setTimeout(function () {
+        spaceRetryTimer = window.setTimeout(() => {
           spaceRetryTimer = 0;
           attemptRequestedOpen();
         }, 60);
@@ -11123,7 +11061,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             ? viewerText('viewer.radar.viewport.width', { percent: Math.round(visible.width / viewBox.width * 100) })
             : viewerText('viewer.radar.viewport.scale', { percent: Math.round(visible.scale * 100) }));
         status.textContent = viewerText('viewer.radar.status', { count: nodes.length, viewport: viewportCopy });
-        nodes.forEach(function (item) {
+        nodes.forEach((item) => {
           var active = item.node.hasAttribute('data-focus-selected');
           if (active) item.rect.setAttribute('data-radar-active', 'true');
           else item.rect.removeAttribute('data-radar-active');
@@ -11175,7 +11113,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function close(options) { return setOpen(false, options); }
       function bringNodeIntoWindow(node) {
         var delay = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 540;
-        window.setTimeout(function () {
+        window.setTimeout(() => {
           var rect = node.getBoundingClientRect();
           var safeTop = 64;
           var safeBottom = window.innerHeight - 64;
@@ -11277,13 +11215,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
 
       trigger.addEventListener('click', toggle);
-      closeBtn.addEventListener('click', function () { close({ restoreFocus: true }); });
+      closeBtn.addEventListener('click', () => { close({ restoreFocus: true }); });
       expandBtn.addEventListener('click', expandCompactRadar);
       panelHead.addEventListener('pointerdown', beginPanelDrag);
       panelHead.addEventListener('pointermove', movePanelDrag);
-      panelHead.addEventListener('pointerup', function (event) { finishPanelDrag(event, false); });
-      panelHead.addEventListener('pointercancel', function (event) { finishPanelDrag(event, true); });
-      surface.addEventListener('pointerdown', function (event) {
+      panelHead.addEventListener('pointerup', (event) => { finishPanelDrag(event, false); });
+      panelHead.addEventListener('pointercancel', (event) => { finishPanelDrag(event, true); });
+      surface.addEventListener('pointerdown', (event) => {
         if (event.button !== 0 || event.target.closest('[data-radar-node-id]')) return;
         event.preventDefault();
         viewportDrag = { pointerId: event.pointerId };
@@ -11292,17 +11230,17 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         try { surface.setPointerCapture(event.pointerId); } catch (_) {}
         navigate(event);
       });
-      surface.addEventListener('pointermove', function (event) {
+      surface.addEventListener('pointermove', (event) => {
         if (!viewportDrag || viewportDrag.pointerId !== event.pointerId) return;
         navigate(event);
       });
       surface.addEventListener('pointerup', endViewportDrag);
       surface.addEventListener('pointercancel', endViewportDrag);
-      surface.addEventListener('click', function (event) {
+      surface.addEventListener('click', (event) => {
         var node = event.target.closest('[data-radar-node-id]');
         if (node) focusNode(node.getAttribute('data-radar-node-id'));
       });
-      surface.addEventListener('keydown', function (event) {
+      surface.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
           event.preventDefault();
           event.stopPropagation();
@@ -11330,12 +11268,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         Archify.view.centerAt(x, y, { minimumScale: 1.5, instant: true });
         sync();
       });
-      document.addEventListener('keydown', function (event) {
+      document.addEventListener('keydown', (event) => {
         if (!panelDrag || event.key !== 'Escape') return;
         finishPanelDrag({
           pointerId: panelDrag.pointerId,
-          preventDefault: function () { event.preventDefault(); },
-          stopPropagation: function () { event.stopPropagation(); }
+          preventDefault: () => { event.preventDefault(); },
+          stopPropagation: () => { event.stopPropagation(); }
         }, true);
       }, true);
       function reflow() {
@@ -11347,25 +11285,25 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       window.addEventListener('resize', reflow);
       window.addEventListener('scroll', reflow, { passive: true });
       if (typeof ResizeObserver === 'function') {
-        var radarResizeObserver = new ResizeObserver(function (entries) {
+        var radarResizeObserver = new ResizeObserver((entries) => {
           if (!requestedOpen) return;
-          if (panel.hidden && entries.every(function (entry) { return entry.target === panel; })) return;
+          if (panel.hidden && entries.every((entry) => entry.target === panel)) return;
           reflow();
         });
-        [container, navigation, document.getElementById('focus-chip'), panel].filter(Boolean).forEach(function (element) {
+        [container, navigation, document.getElementById('focus-chip'), panel].filter(Boolean).forEach((element) => {
           radarResizeObserver.observe(element);
         });
       }
       requestAnimationFrame(build);
 
       return {
-        open: function () { return setOpen(true); },
+        open: () => setOpen(true),
         close: close,
         toggle: toggle,
         sync: sync,
         focus: focusNode,
-        isOpen: function () { return requestedOpen; },
-        count: function () { return nodes.length; }
+        isOpen: () => requestedOpen,
+        count: () => nodes.length
       };
     })();
 
@@ -11375,7 +11313,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        serialization remain untouched. Escape first clears an active
        focus, then exits the stage.
        ============================================================ */
-    Archify.presentation = (function () {
+    Archify.presentation = (() => {
       var html = document.documentElement;
       var btn = document.getElementById('btn-present');
       var label = document.getElementById('present-label');
@@ -11416,10 +11354,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         render(next);
         if (options.updateUrl !== false) updateUrl(next);
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
           if (Archify.view && typeof Archify.view.reset === 'function') {
             Archify.view.reset({ automatic: true });
-            requestAnimationFrame(function () {
+            requestAnimationFrame(() => {
               if (Archify.view && typeof Archify.view.sync === 'function') Archify.view.sync();
             });
           }
@@ -11436,8 +11374,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       btn.addEventListener('click', toggle);
 
       return {
-        enter: function () { return setActive(true); },
-        exit: function () { return setActive(false); },
+        enter: () => setActive(true),
+        exit: () => setActive(false),
         toggle: toggle,
         active: active
       };
@@ -11448,7 +11386,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Search never changes the IR or SVG geometry: selecting a result resets
        the viewport and delegates to semantic focus.
        ============================================================ */
-    Archify.finder = (function () {
+    Archify.finder = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector('svg');
@@ -11481,13 +11419,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var authored = node.getAttribute('data-node-kind');
         if (authored) return authored;
         var types = ['frontend', 'backend', 'database', 'cloud', 'security', 'messagebus', 'external'];
-        return types.find(function (type) { return node.querySelector('.c-' + type); }) || 'node';
+        return types.find((type) => node.querySelector('.c-' + type)) || 'node';
       }
 
       function connectionsFor(id) {
         var count = 0;
         var seen = {};
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), function (edge) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), (edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           var key = from + '\u0000' + to;
@@ -11499,7 +11437,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return count;
       }
 
-      var items = Array.prototype.map.call(svg.querySelectorAll('[data-node-id]'), function (node) {
+      var items = Array.prototype.map.call(svg.querySelectorAll('[data-node-id]'), (node) => {
         var id = node.getAttribute('data-node-id');
         var label = node.getAttribute('data-node-label') || (node.getAttribute('aria-label') || id).replace(/^Focus\s+/, '');
         var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
@@ -11509,9 +11447,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var brand = node.getAttribute('data-node-brand') || '';
         var type = semanticType(node);
         var sources = Archify.sourceEvidence.node(id);
-        var sourceSearch = sources.map(function (source) {
-          return [source.path, source.label, source.line, source.endLine].filter(Boolean).join(' ');
-        }).join(' ');
+        var sourceSearch = sources.map((source) => [source.path, source.label, source.line, source.endLine].filter(Boolean).join(' ')).join(' ');
         return {
           id: id,
           label: label,
@@ -11538,13 +11474,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         if (!requested) return defaultContext();
         var resolved = defaultContext();
-        Object.keys(requested).forEach(function (key) { resolved[key] = requested[key]; });
+        Object.keys(requested).forEach((key) => { resolved[key] = requested[key]; });
         return resolved;
       }
 
       function availableItems() {
         if (!context.allowedIds) return items.slice();
-        return items.filter(function (item) { return context.allowedIds.indexOf(item.id) !== -1; });
+        return items.filter((item) => context.allowedIds.indexOf(item.id) !== -1);
       }
 
       function applyContext() {
@@ -11556,7 +11492,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
 
       function select(id) {
-        var item = items.find(function (candidate) { return candidate.id === id; });
+        var item = items.find((candidate) => candidate.id === id);
         if (!item) return false;
         var routeSelection = context.kind === 'route-source' || context.kind === 'route-target';
         if (routeSelection) {
@@ -11581,9 +11517,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function render(query) {
         query = (query || '').trim().toLowerCase();
         var available = availableItems();
-        visibleItems = available.filter(function (item) { return !query || item.search.indexOf(query) !== -1; });
+        visibleItems = available.filter((item) => !query || item.search.indexOf(query) !== -1);
         results.textContent = '';
-        visibleItems.forEach(function (item) {
+        visibleItems.forEach((item) => {
           var button = document.createElement('button');
           button.type = 'button';
           button.className = 'node-finder-result';
@@ -11611,7 +11547,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           button.appendChild(name);
           button.appendChild(links);
           button.appendChild(meta);
-          button.addEventListener('click', function () { select(item.id); });
+          button.addEventListener('click', () => { select(item.id); });
           results.appendChild(button);
         });
         empty.hidden = visibleItems.length !== 0;
@@ -11638,7 +11574,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         input.value = '';
         render('');
-        requestAnimationFrame(function () { input.focus(); });
+        requestAnimationFrame(() => { input.focus(); });
         return true;
       }
 
@@ -11658,9 +11594,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function toggle() { return panel.hidden ? open() : (close(), false); }
 
       trigger.addEventListener('click', toggle);
-      closeBtn.addEventListener('click', function () { close(); });
-      input.addEventListener('input', function () { render(input.value); });
-      input.addEventListener('keydown', function (event) {
+      closeBtn.addEventListener('click', () => { close(); });
+      input.addEventListener('input', () => { render(input.value); });
+      input.addEventListener('keydown', (event) => {
         var buttons = resultButtons();
         if (event.key === 'ArrowDown' && buttons.length) {
           event.preventDefault();
@@ -11670,7 +11606,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           select(visibleItems[0].id);
         }
       });
-      results.addEventListener('keydown', function (event) {
+      results.addEventListener('keydown', (event) => {
         var buttons = resultButtons();
         var index = buttons.indexOf(document.activeElement);
         if (index < 0 || !buttons.length) return;
@@ -11684,13 +11620,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           buttons[next].focus();
         }
       });
-      panel.addEventListener('keydown', function (event) {
+      panel.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') return;
         event.preventDefault();
         event.stopPropagation();
         close();
       });
-      document.addEventListener('click', function (event) {
+      document.addEventListener('click', (event) => {
         if (!panel.hidden && !panel.contains(event.target) && !event.target.closest('[data-node-finder-trigger]')) close({ restoreFocus: false });
       });
 
@@ -11700,8 +11636,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         close: close,
         toggle: toggle,
         select: select,
-        isOpen: function () { return !panel.hidden; },
-        context: function () { return context.kind; },
+        isOpen: () => !panel.hidden,
+        context: () => context.kind,
         count: items.length
       };
     })();
@@ -11712,16 +11648,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        selection delegates to the Finder's focus-and-reveal path. It reads
        the canonical SVG and never changes geometry or export state.
        ============================================================ */
-    Archify.outline = (function () {
+    Archify.outline = (() => {
       var panel = document.getElementById('node-outline');
       var list = document.getElementById('node-outline-list');
       var count = document.getElementById('node-outline-count');
       var svg = document.querySelector('.diagram-container > svg');
       if (!panel || !list || !svg) return { count: 0 };
       var TONES = ['frontend', 'backend', 'database', 'cloud', 'security', 'messagebus', 'external'];
-      var nodes = Array.from(svg.querySelectorAll('[data-node-id]')).filter(function (node) {
-        return !node.closest('[data-legend-hit], .legend') && node.getAttribute('data-node-label');
-      });
+      var nodes = Array.from(svg.querySelectorAll('[data-node-id]')).filter((node) => !node.closest('[data-legend-hit], .legend') && node.getAttribute('data-node-label'));
       var buttons = Object.create(null);
 
       function tone(node) {
@@ -11749,7 +11683,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       var groups = [];
       var byContext = Object.create(null);
-      nodes.forEach(function (node) {
+      nodes.forEach((node) => {
         // Group by the outermost context (lane or stage); deeper segments
         // such as workflow groups and columns would split the index into
         // one-node sections.
@@ -11761,7 +11695,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         byContext[context].nodes.push(node);
       });
 
-      groups.forEach(function (group) {
+      groups.forEach((group) => {
         var section = document.createElement('li');
         section.className = 'node-outline-group';
         if (groups.length > 1 && group.label) {
@@ -11776,7 +11710,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           section.appendChild(heading);
         }
         var items = document.createElement('ul');
-        group.nodes.forEach(function (node) {
+        group.nodes.forEach((node) => {
           var id = node.getAttribute('data-node-id');
           var item = document.createElement('li');
           var button = document.createElement('button');
@@ -11797,11 +11731,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             detail.textContent = sublabel;
             button.appendChild(detail);
           }
-          button.addEventListener('pointerenter', function () { preview(id); });
-          button.addEventListener('focus', function () { preview(id); });
+          button.addEventListener('pointerenter', () => { preview(id); });
+          button.addEventListener('focus', () => { preview(id); });
           button.addEventListener('pointerleave', clearPreview);
           button.addEventListener('blur', clearPreview);
-          button.addEventListener('click', function () { select(id); });
+          button.addEventListener('click', () => { select(id); });
           buttons[id] = button;
           item.appendChild(button);
           items.appendChild(item);
@@ -11812,7 +11746,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       var previewing = null;
       function syncCurrent() {
-        nodes.forEach(function (node) {
+        nodes.forEach((node) => {
           var button = buttons[node.getAttribute('data-node-id')];
           if (!button) return;
           if (node.getAttribute('aria-pressed') === 'true') button.setAttribute('aria-current', 'true');
@@ -11851,7 +11785,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        endpoints. BFS order follows authored DOM edge order, so equal-length
        choices are deterministic without adding weights or a graph runtime.
        ============================================================ */
-    Archify.routeProbe = (function () {
+    Archify.routeProbe = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector(':scope > svg');
@@ -11894,7 +11828,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function nodesById() {
         var out = Object.create(null);
-        nodes().forEach(function (node) { out[node.getAttribute('data-node-id')] = node; });
+        nodes().forEach((node) => { out[node.getAttribute('data-node-id')] = node; });
         return out;
       }
       function nodeLabel(node, fallback) {
@@ -11908,28 +11842,22 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var seenNodeIds = Object.create(null);
         var seenEdgeKeys = Object.create(null);
         if (startId !== activeNodeIds[0] || endId !== activeNodeIds[activeNodeIds.length - 1] ||
-            activeNodeIds.some(function (id) {
-              if (seenNodeIds[id] || allNodes.filter(function (node) {
-                return node.getAttribute('data-node-id') === id;
-              }).length !== 1) return true;
+            activeNodeIds.some((id) => {
+              if (seenNodeIds[id] || allNodes.filter((node) => node.getAttribute('data-node-id') === id).length !== 1) return true;
               seenNodeIds[id] = true;
               return !byId[id];
             }) ||
-            activeEdges.some(function (edge, index) {
+            activeEdges.some((edge, index) => {
               if (!edge || !svg.contains(edge)) return true;
               var edgeKey = edge.getAttribute('data-edge-key');
               var edgeId = edge.getAttribute('data-edge-id') || '';
               if (!edgeKey || seenEdgeKeys[edgeKey]) return true;
               seenEdgeKeys[edgeKey] = true;
-              var fragments = Array.prototype.slice.call(svg.querySelectorAll('[data-edge-key]')).filter(function (candidate) {
-                return candidate.getAttribute('data-edge-key') === edgeKey;
-              });
+              var fragments = Array.prototype.slice.call(svg.querySelectorAll('[data-edge-key]')).filter((candidate) => candidate.getAttribute('data-edge-key') === edgeKey);
               var drawableFragments = fragments.filter(hasDrawableGeometry);
-              return !fragments.length || !fragments.every(function (fragment) {
-                return fragment.getAttribute('data-edge-from') === activeNodeIds[index] &&
+              return !fragments.length || !fragments.every((fragment) => fragment.getAttribute('data-edge-from') === activeNodeIds[index] &&
                   fragment.getAttribute('data-edge-to') === activeNodeIds[index + 1] &&
-                  (fragment.getAttribute('data-edge-id') || '') === edgeId;
-              }) || drawableFragments.length !== 1 || drawableFragments[0] !== edge ||
+                  (fragment.getAttribute('data-edge-id') || '') === edgeId) || drawableFragments.length !== 1 || drawableFragments[0] !== edge ||
                 edge.getAttribute('data-edge-from') !== activeNodeIds[index] ||
                 edge.getAttribute('data-edge-to') !== activeNodeIds[index + 1];
             })) return null;
@@ -11938,15 +11866,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           target: { id: endId, label: nodeLabel(byId[endId], endId) },
           nodeIds: activeNodeIds.slice(),
           hops: activeEdges.length,
-          edges: activeEdges.map(function (edge) {
-            return {
+          edges: activeEdges.map((edge) => ({
               key: edge.getAttribute('data-edge-key'),
               id: edge.getAttribute('data-edge-id') || '',
               from: edge.getAttribute('data-edge-from'),
               to: edge.getAttribute('data-edge-to'),
               label: edge.getAttribute('data-edge-label') || ''
-            };
-          })
+            }))
         };
       }
       function edgeShapes(edge) {
@@ -11954,13 +11880,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return Array.prototype.slice.call(edge.querySelectorAll('path, line, polyline'));
       }
       function removeOverlay() {
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-route-probe-overlay]'), function (overlay) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-route-probe-overlay]'), (overlay) => {
           overlay.remove();
         });
       }
       function removeJourneyPulse(options) {
         options = options || {};
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-route-journey-overlay]'), function (overlay) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-route-journey-overlay]'), (overlay) => {
           overlay.remove();
         });
         if (journeyOwnerToken && options.release !== false && Archify.motionGovernor) {
@@ -11987,15 +11913,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         removeJourneyPulse();
         svg.removeAttribute('data-route-journey');
         panel.removeAttribute('data-route-journey');
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           node.removeAttribute('data-route-journey-state');
           node.removeAttribute('data-route-journey-current');
         });
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           edge.removeAttribute('data-route-journey-state');
           edge.removeAttribute('data-route-journey-current');
         });
-        Array.prototype.forEach.call(path.querySelectorAll('[data-route-journey-index]'), function (button, index) {
+        Array.prototype.forEach.call(path.querySelectorAll('[data-route-journey-index]'), (button, index) => {
           button.removeAttribute('data-route-journey-state');
           button.removeAttribute('aria-current');
           button.setAttribute('tabindex', index === 0 ? '0' : '-1');
@@ -12015,7 +11941,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         svg.removeAttribute('data-route-picking');
         svg.removeAttribute('data-route-active');
         removeOverlay();
-        nodes().forEach(function (node) {
+        nodes().forEach((node) => {
           node.removeAttribute('data-route-match');
           node.removeAttribute('data-route-start');
           node.removeAttribute('data-route-end');
@@ -12023,7 +11949,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           node.removeAttribute('data-route-candidate');
           node.style.removeProperty('--route-step');
         });
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           edge.removeAttribute('data-route-match');
           edge.removeAttribute('data-route-step');
           edge.style.removeProperty('--route-step');
@@ -12046,7 +11972,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         options = options || {};
         var byId = nodesById();
         path.textContent = '';
-        ids.forEach(function (id, index) {
+        ids.forEach((id, index) => {
           if (index) {
             var arrow = document.createElement('span');
             arrow.className = 'route-probe-arrow';
@@ -12112,7 +12038,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function outgoingByNode() {
         var byId = nodesById();
         var outgoing = Object.create(null);
-        edges().forEach(function (edge) {
+        edges().forEach((edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           if (!byId[from] || !byId[to] || from === to) return;
@@ -12128,7 +12054,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         reached[source] = true;
         for (var cursor = 0; cursor < queue.length; cursor += 1) {
           var links = outgoing[queue[cursor]] || [];
-          links.forEach(function (link) {
+          links.forEach((link) => {
             if (reached[link.to]) return;
             reached[link.to] = true;
             queue.push(link.to);
@@ -12143,8 +12069,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         distances[source] = 0;
         for (var cursor = 0; cursor < queue.length; cursor += 1) {
           var links = outgoing[queue[cursor]] || [];
-          links.forEach(function (link) {
-            if (Object.prototype.hasOwnProperty.call(distances, link.to)) return;
+          links.forEach((link) => {
+            if (Object.hasOwn(distances, link.to)) return;
             distances[link.to] = distances[queue[cursor]] + 1;
             queue.push(link.to);
           });
@@ -12157,16 +12083,16 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var previous = Object.create(null);
         var queue = [source];
         previous[source] = null;
-        for (var cursor = 0; cursor < queue.length && !Object.prototype.hasOwnProperty.call(previous, target); cursor += 1) {
+        for (var cursor = 0; cursor < queue.length && !Object.hasOwn(previous, target); cursor += 1) {
           var links = outgoing[queue[cursor]] || [];
-          links.some(function (link) {
-            if (Object.prototype.hasOwnProperty.call(previous, link.to)) return false;
+          links.some((link) => {
+            if (Object.hasOwn(previous, link.to)) return false;
             previous[link.to] = { from: queue[cursor], edge: link.edge };
             queue.push(link.to);
             return link.to === target;
           });
         }
-        if (!Object.prototype.hasOwnProperty.call(previous, target)) return null;
+        if (!Object.hasOwn(previous, target)) return null;
         var nodeIds = [target];
         var routeEdges = [];
         var current = target;
@@ -12210,10 +12136,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         overlay.setAttribute('class', 'route-probe-overlay');
         overlay.setAttribute('data-route-probe-overlay', '');
         overlay.setAttribute('aria-hidden', 'true');
-        routeEdges.forEach(function (edge, step) {
+        routeEdges.forEach((edge, step) => {
           var wrapper = document.createElementNS(namespace, 'g');
           if (edge.hasAttribute('transform')) wrapper.setAttribute('transform', edge.getAttribute('transform'));
-          edgeShapes(edge).forEach(function (shape) { wrapper.appendChild(traceGeometry(shape, step)); });
+          edgeShapes(edge).forEach((shape) => { wrapper.appendChild(traceGeometry(shape, step)); });
           if (wrapper.childNodes.length) overlay.appendChild(wrapper);
         });
         var firstNode = svg.querySelector('[data-node-id]');
@@ -12245,7 +12171,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var buttons = journeyButtons();
         if (!buttons.length) return false;
         var next = Math.max(0, Math.min(buttons.length - 1, index));
-        buttons.forEach(function (button, buttonIndex) {
+        buttons.forEach((button, buttonIndex) => {
           button.setAttribute('tabindex', buttonIndex === next ? '0' : '-1');
         });
         try { buttons[next].focus({ preventScroll: true }); } catch (_) { buttons[next].focus(); }
@@ -12313,7 +12239,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         overlay.setAttribute('aria-hidden', 'true');
         var wrapper = document.createElementNS(namespace, 'g');
         if (edge.hasAttribute('transform')) wrapper.setAttribute('transform', edge.getAttribute('transform'));
-        edgeShapes(edge).forEach(function (shape) { wrapper.appendChild(journeyGeometry(shape)); });
+        edgeShapes(edge).forEach((shape) => { wrapper.appendChild(journeyGeometry(shape)); });
         if (!wrapper.childNodes.length) return false;
         overlay.appendChild(wrapper);
         var firstNode = svg.querySelector('[data-node-id]');
@@ -12321,16 +12247,16 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         else svg.appendChild(overlay);
         if (Archify.motionGovernor && Archify.motionGovernor.capable) {
           var token = 0;
-          token = Archify.motionGovernor.claim('route', function () {
+          token = Archify.motionGovernor.claim('route', () => {
             if (journeyOwnerToken === token) journeyOwnerToken = 0;
             removeJourneyPulse({ release: false });
           });
           journeyOwnerToken = token;
         }
-        overlay.addEventListener('animationend', function () {
+        overlay.addEventListener('animationend', () => {
           if (overlay.isConnected) removeJourneyPulse();
         }, { once: true });
-        window.setTimeout(function () {
+        window.setTimeout(() => {
           if (overlay.isConnected) removeJourneyPulse();
         }, 860);
         return true;
@@ -12343,7 +12269,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         removeJourneyPulse();
         svg.setAttribute('data-route-journey', (journeyIndex + 1) + '/' + activeNodeIds.length);
         panel.setAttribute('data-route-journey', String(journeyIndex));
-        activeNodeIds.forEach(function (id, step) {
+        activeNodeIds.forEach((id, step) => {
           var node = byId[id];
           if (!node) return;
           var state = step < journeyIndex ? 'past' : (step === journeyIndex ? 'current' : 'future');
@@ -12351,7 +12277,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           if (step === journeyIndex) node.setAttribute('data-route-journey-current', '');
           else node.removeAttribute('data-route-journey-current');
         });
-        activeEdges.forEach(function (edge, step) {
+        activeEdges.forEach((edge, step) => {
           var destination = step + 1;
           var state = destination < journeyIndex ? 'past' : (destination === journeyIndex ? 'current' : 'future');
           edge.setAttribute('data-route-journey-state', state);
@@ -12359,7 +12285,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           else edge.removeAttribute('data-route-journey-current');
         });
         var buttons = journeyButtons();
-        buttons.forEach(function (button, step) {
+        buttons.forEach((button, step) => {
           var state = step < journeyIndex ? 'past' : (step === journeyIndex ? 'current' : 'future');
           button.setAttribute('data-route-journey-state', state);
           button.setAttribute('tabindex', step === journeyIndex ? '0' : '-1');
@@ -12439,7 +12365,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var generation = ++journeyGeneration;
         var remaining = Math.max(0, JOURNEY_DWELL_MS - journeyElapsedMs);
         journeyStartedAt = Date.now();
-        journeyTimer = window.setTimeout(function () {
+        journeyTimer = window.setTimeout(() => {
           if (generation !== journeyGeneration || !journeyPlaying) return;
           journeyTimer = null;
           journeyStartedAt = 0;
@@ -12517,11 +12443,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         };
         var byId = nodesById();
         var relevant = activeNodeIds.length ? activeNodeIds : (startId ? [startId] : []);
-        var blockers = relevant.map(function (id) { return byId[id]; }).filter(Boolean).map(function (node) {
-          return node.getBoundingClientRect();
-        });
+        var blockers = relevant.map((id) => byId[id]).filter(Boolean).map((node) => node.getBoundingClientRect());
         function score(candidate) {
-          var value = blockers.reduce(function (sum, rect) { return sum + overlapArea(candidate, rect); }, 0);
+          var value = blockers.reduce((sum, rect) => sum + overlapArea(candidate, rect), 0);
           if (navRect) value += overlapArea(candidate, navRect) * 4;
           if (candidate.top < containerRect.top || candidate.bottom > containerRect.bottom) value += 1000000;
           return value;
@@ -12544,7 +12468,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var reached = reachableFrom(id);
         byId[id].setAttribute('data-route-start', '');
         byId[id].setAttribute('data-route-match', '');
-        Object.keys(reached).forEach(function (candidateId) {
+        Object.keys(reached).forEach((candidateId) => {
           if (candidateId !== id && byId[candidateId]) byId[candidateId].setAttribute('data-route-candidate', '');
         });
         svg.setAttribute('data-route-picking', 'target');
@@ -12570,7 +12494,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         endId = result.nodes[result.nodes.length - 1];
         activeNodeIds = result.nodes.slice();
         activeEdges = result.edges.slice();
-        result.nodes.forEach(function (id, step) {
+        result.nodes.forEach((id, step) => {
           var node = byId[id];
           if (!node) return;
           node.setAttribute('data-route-match', '');
@@ -12579,7 +12503,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           if (step === 0) node.setAttribute('data-route-start', '');
           if (step === result.nodes.length - 1) node.setAttribute('data-route-end', '');
         });
-        result.edges.forEach(function (edge, step) {
+        result.edges.forEach((edge, step) => {
           edge.setAttribute('data-route-match', '');
           edge.setAttribute('data-route-step', String(step));
           edge.style.setProperty('--route-step', String(step));
@@ -12678,11 +12602,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var byId = nodesById();
         if (mode === 'source') {
           var outgoing = outgoingByNode();
-          var sourceIds = nodes().map(function (node) { return node.getAttribute('data-node-id'); }).filter(function (id) {
-            return outgoing[id] && outgoing[id].length;
-          });
+          var sourceIds = nodes().map((node) => node.getAttribute('data-node-id')).filter((id) => outgoing[id] && outgoing[id].length);
           var sourceBadges = Object.create(null);
-          sourceIds.forEach(function (id) { sourceBadges[id] = viewerText('viewer.route.finder.source.badge'); });
+          sourceIds.forEach((id) => { sourceBadges[id] = viewerText('viewer.route.finder.source.badge'); });
           return {
             kind: 'route-source',
             title: viewerText('viewer.route.finder.source.title'),
@@ -12696,9 +12618,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
         if (mode === 'target' && startId && byId[startId]) {
           var distances = hopDistancesFrom(startId);
-          var targetIds = Object.keys(distances).filter(function (id) { return id !== startId && byId[id]; });
+          var targetIds = Object.keys(distances).filter((id) => id !== startId && byId[id]);
           var targetBadges = Object.create(null);
-          targetIds.forEach(function (id) {
+          targetIds.forEach((id) => {
             targetBadges[id] = viewerCount('viewer.route.hop', distances[id]);
           });
           return {
@@ -12745,12 +12667,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         if (mode !== 'result') return Promise.resolve(false);
         var value = location.href.replace(/#.*$/, '') + '#route=' + encodeURIComponent(startId) + '~' + encodeURIComponent(endId);
         var copy = navigator.clipboard && typeof navigator.clipboard.writeText === 'function'
-          ? navigator.clipboard.writeText(value).then(function () { return true; }).catch(function () { return fallbackCopy(value); })
+          ? navigator.clipboard.writeText(value).then(() => true).catch(() => fallbackCopy(value))
           : Promise.resolve(fallbackCopy(value));
-        return copy.then(function (copied) {
+        return copy.then((copied) => {
           copyBtn.textContent = viewerText(copied ? 'viewer.common.copied' : 'viewer.common.copyFailed');
           copyBtn.setAttribute('aria-label', viewerText(copied ? 'viewer.route.copy.success' : 'viewer.route.copy.failed'));
-          window.setTimeout(function () {
+          window.setTimeout(() => {
             copyBtn.textContent = viewerText('viewer.route.copy');
             copyBtn.setAttribute('aria-label', viewerText('viewer.route.copy.aria'));
           }, 1600);
@@ -12804,23 +12726,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return journeyMotionAllowed();
       }
 
-      trigger.addEventListener('click', function () { toggle({ focusNode: false }); });
+      trigger.addEventListener('click', () => { toggle({ focusNode: false }); });
       findBtn.addEventListener('click', openFinder);
-      clearBtn.addEventListener('click', function () { clear({ restoreFocus: true }); });
+      clearBtn.addEventListener('click', () => { clear({ restoreFocus: true }); });
       copyBtn.addEventListener('click', copyLink);
       journeyPrevBtn.addEventListener('click', previousJourney);
       journeyPlayBtn.addEventListener('click', toggleJourney);
       journeyNextBtn.addEventListener('click', nextJourney);
-      journeyOverviewBtn.addEventListener('click', function () { showJourneyOverview({ reveal: true }); });
-      path.addEventListener('click', function (event) {
+      journeyOverviewBtn.addEventListener('click', () => { showJourneyOverview({ reveal: true }); });
+      path.addEventListener('click', (event) => {
         var button = event.target.closest('[data-route-journey-index]');
         if (!button) return;
         selectJourneyIndex(Number(button.getAttribute('data-route-journey-index')));
       });
-      path.addEventListener('focusin', function (event) {
+      path.addEventListener('focusin', (event) => {
         if (journeyPlaying && event.target.closest('[data-route-journey-index]')) pauseJourney({ preserveElapsed: true });
       });
-      path.addEventListener('keydown', function (event) {
+      path.addEventListener('keydown', (event) => {
         var button = event.target.closest('[data-route-journey-index]');
         if (!button) return;
         var index = Number(button.getAttribute('data-route-journey-index'));
@@ -12843,11 +12765,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       svg.addEventListener('keydown', interceptSelection, true);
       container.addEventListener('scroll', updateDocking, { passive: true });
       window.addEventListener('resize', requestDocking);
-      window.addEventListener('beforeprint', function () {
+      window.addEventListener('beforeprint', () => {
         if (journeyPlaying) pauseJourney({ preserveElapsed: true, reason: 'print' });
         else removeJourneyPulse();
       });
-      window.addEventListener('hashchange', function () { requestAnimationFrame(syncFromHash); });
+      window.addEventListener('hashchange', () => { requestAnimationFrame(syncFromHash); });
       syncFromHash();
 
       return {
@@ -12862,18 +12784,16 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         showOverview: showJourneyOverview,
         selectJourneyIndex: selectJourneyIndex,
         syncMotion: syncJourneyMotion,
-        isJourneyPlaying: function () { return journeyPlaying; },
+        isJourneyPlaying: () => journeyPlaying,
         finderContext: finderContext,
         finderOpening: finderOpening,
         finderClosed: finderClosed,
         openFinder: openFinder,
         exportSnapshot: exportSnapshot,
-        active: function () { return mode === 'idle' ? null : mode; },
-        result: function () {
-          return mode === 'result'
+        active: () => mode === 'idle' ? null : mode,
+        result: () => mode === 'result'
             ? { source: startId, target: endId, nodes: activeNodeIds.slice(), hops: activeEdges.length, journey: journeyIndex, playing: journeyPlaying }
-            : null;
-        }
+            : null
       };
     })();
 
@@ -12883,7 +12803,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Two selected kinds compare only direct cross-kind relationships while
        preserving the full diagram as a dimmed spatial reference.
        ============================================================ */
-    Archify.semanticLens = (function () {
+    Archify.semanticLens = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector(':scope > svg');
@@ -12907,7 +12827,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       function nodesById() {
         var byId = Object.create(null);
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-node-id][data-node-kind]'), function (node) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-node-id][data-node-kind]'), (node) => {
           var id = node.getAttribute('data-node-id');
           if (id && !byId[id]) byId[id] = node;
         });
@@ -12916,26 +12836,24 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function collectKinds() {
         var kinds = {};
         var byId = nodesById();
-        Object.keys(byId).forEach(function (id) {
+        Object.keys(byId).forEach((id) => {
           var node = byId[id];
           var value = node.getAttribute('data-node-kind') || 'neutral';
           var kind = kinds[value] || (kinds[value] = { id: value, label: viewerKindLabel(value), nodes: [] });
           kind.nodes.push(node);
         });
-        return Object.keys(kinds).map(function (key) { return kinds[key]; }).sort(function (a, b) {
-          return b.nodes.length - a.nodes.length || a.label.localeCompare(b.label);
-        });
+        return Object.keys(kinds).map((key) => kinds[key]).sort((a, b) => b.nodes.length - a.nodes.length || a.label.localeCompare(b.label));
       }
       function edgeGroups() {
         var groups = {};
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), function (edge) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), (edge) => {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
           var key = edge.getAttribute('data-edge-key') || [from, to, edge.getAttribute('data-edge-label') || ''].join('\u0000');
           if (!groups[key]) groups[key] = { key: key, from: from, to: to, members: [] };
           groups[key].members.push(edge);
         });
-        return Object.keys(groups).map(function (key) { return groups[key]; });
+        return Object.keys(groups).map((key) => groups[key]);
       }
       function edgeShapes(edge) {
         if (!edge) return [];
@@ -12944,7 +12862,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function legendSourceBounds(entry) {
         var bounds = null;
-        Array.prototype.forEach.call(entry.children, function (child) {
+        Array.prototype.forEach.call(entry.children, (child) => {
           if (child.hasAttribute('data-legend-bridge-runtime')) return;
           var box;
           try { box = child.getBBox(); } catch (_) { return; }
@@ -12996,8 +12914,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         legendEntries = [];
         if (!legendBridge || html.getAttribute('data-embed') === 'true') return false;
         var facts = {};
-        collectKinds().forEach(function (kind) { facts[kind.id] = kind; });
-        Array.prototype.forEach.call(legendBridge.querySelectorAll('[data-legend-kind]'), function (entry) {
+        collectKinds().forEach((kind) => { facts[kind.id] = kind; });
+        Array.prototype.forEach.call(legendBridge.querySelectorAll('[data-legend-kind]'), (entry) => {
           var kind = entry.getAttribute('data-legend-kind');
           var fact = facts[kind];
           var count = fact ? fact.nodes.length : 0;
@@ -13041,7 +12959,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return true;
       }
       function syncLegendBridge() {
-        legendEntries.forEach(function (entry) {
+        legendEntries.forEach((entry) => {
           var selected = selectedKinds.indexOf(entry.getAttribute('data-legend-kind')) >= 0;
           entry.setAttribute('aria-pressed', selected ? 'true' : 'false');
           entry.setAttribute('aria-expanded', !panel.hidden && lensOpener === entry ? 'true' : 'false');
@@ -13052,7 +12970,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function clearLegendPreview() {
         activeLegendPreview = null;
         svg.removeAttribute('data-legend-preview-active');
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-legend-preview-match], [data-legend-preview-selected], [data-legend-preview-peer]'), function (element) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-legend-preview-match], [data-legend-preview-selected], [data-legend-preview-peer]'), (element) => {
           element.removeAttribute('data-legend-preview-match');
           element.removeAttribute('data-legend-preview-selected');
           element.removeAttribute('data-legend-preview-peer');
@@ -13069,20 +12987,18 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         if (!entry || strongerLegendOwnerActive()) return false;
         var kind = entry.getAttribute('data-legend-kind');
         var byId = nodesById();
-        var matches = Object.keys(byId).filter(function (id) {
-          return (byId[id].getAttribute('data-node-kind') || 'neutral') === kind;
-        });
+        var matches = Object.keys(byId).filter((id) => (byId[id].getAttribute('data-node-kind') || 'neutral') === kind);
         if (!matches.length) return false;
         var chosen = Object.create(null);
-        matches.forEach(function (id) {
+        matches.forEach((id) => {
           chosen[id] = true;
           byId[id].setAttribute('data-legend-preview-match', '');
           byId[id].setAttribute('data-legend-preview-selected', '');
         });
-        edgeGroups().forEach(function (edge) {
+        edgeGroups().forEach((edge) => {
           if (!chosen[edge.from] && !chosen[edge.to]) return;
-          edge.members.forEach(function (member) { member.setAttribute('data-legend-preview-match', ''); });
-          [edge.from, edge.to].forEach(function (id) {
+          edge.members.forEach((member) => { member.setAttribute('data-legend-preview-match', ''); });
+          [edge.from, edge.to].forEach((id) => {
             if (!byId[id] || chosen[id]) return;
             byId[id].setAttribute('data-legend-preview-match', '');
             byId[id].setAttribute('data-legend-preview-peer', '');
@@ -13105,7 +13021,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         return open({ opener: entry });
       }
       function removeFlowOverlay() {
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-semantic-lens-overlay]'), function (element) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-semantic-lens-overlay]'), (element) => {
           element.remove();
         });
         svg.removeAttribute('data-lens-flow-count');
@@ -13147,12 +13063,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         overlay.setAttribute('class', 'semantic-lens-overlay');
         overlay.setAttribute('data-semantic-lens-overlay', '');
         overlay.setAttribute('aria-hidden', 'true');
-        entries.forEach(function (entry, step) {
+        entries.forEach((entry, step) => {
           var wrapper = document.createElementNS(namespace, 'g');
           if (entry.edge.members[0].hasAttribute('transform')) {
             wrapper.setAttribute('transform', entry.edge.members[0].getAttribute('transform'));
           }
-          edgeShapes(entry.edge.members[0]).forEach(function (shape) {
+          edgeShapes(entry.edge.members[0]).forEach((shape) => {
             wrapper.appendChild(flowGeometry(shape, entry.direction, step));
           });
           if (wrapper.childNodes.length) overlay.appendChild(wrapper);
@@ -13166,7 +13082,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function cleanSvgState() {
         removeFlowOverlay();
         svg.removeAttribute('data-lens-active');
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-lens-match], [data-lens-selected], [data-lens-peer]'), function (element) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-lens-match], [data-lens-selected], [data-lens-peer]'), (element) => {
           element.removeAttribute('data-lens-match');
           element.removeAttribute('data-lens-selected');
           element.removeAttribute('data-lens-peer');
@@ -13174,7 +13090,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       function renderKinds() {
         kindsRoot.textContent = '';
-        collectKinds().forEach(function (kind) {
+        collectKinds().forEach((kind) => {
           var button = document.createElement('button');
           button.type = 'button';
           button.className = 'semantic-lens-kind';
@@ -13221,26 +13137,18 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var panelRect = panel.getBoundingClientRect();
         var containerRect = container.getBoundingClientRect();
         if (!panelRect.width || !panelRect.height) return 'right';
-        var selectedRects = Object.keys(byId).filter(function (id) {
-          return selectedKinds.indexOf(byId[id].getAttribute('data-node-kind') || 'neutral') >= 0;
-        }).map(function (id) { return byId[id].getBoundingClientRect(); });
+        var selectedRects = Object.keys(byId).filter((id) => selectedKinds.indexOf(byId[id].getAttribute('data-node-kind') || 'neutral') >= 0).map((id) => byId[id].getBoundingClientRect());
         var top = panelRect.top;
         var width = panelRect.width;
         var leftCandidate = { left: containerRect.left + 16, right: containerRect.left + 16 + width, top: top, bottom: panelRect.bottom };
         var rightCandidate = { left: containerRect.right - 16 - width, right: containerRect.right - 16, top: top, bottom: panelRect.bottom };
-        var leftScore = selectedRects.reduce(function (score, rect) { return score + overlapArea(leftCandidate, rect); }, 0);
-        var rightScore = selectedRects.reduce(function (score, rect) { return score + overlapArea(rightCandidate, rect); }, 0);
+        var leftScore = selectedRects.reduce((score, rect) => score + overlapArea(leftCandidate, rect), 0);
+        var rightScore = selectedRects.reduce((score, rect) => score + overlapArea(rightCandidate, rect), 0);
         var legend = svg.querySelector('[data-legend]');
         var nav = container.querySelector('.diagram-nav');
-        var protectedRects = [legend, nav].filter(function (element) {
-          return element && !element.hidden && window.getComputedStyle(element).display !== 'none';
-        }).map(function (element) { return element.getBoundingClientRect(); });
-        leftScore += protectedRects.reduce(function (score, rect) {
-          return score + overlapArea(leftCandidate, rect) * 1000;
-        }, 0);
-        rightScore += protectedRects.reduce(function (score, rect) {
-          return score + overlapArea(rightCandidate, rect) * 1000;
-        }, 0);
+        var protectedRects = [legend, nav].filter((element) => element && !element.hidden && window.getComputedStyle(element).display !== 'none').map((element) => element.getBoundingClientRect());
+        leftScore += protectedRects.reduce((score, rect) => score + overlapArea(leftCandidate, rect) * 1000, 0);
+        rightScore += protectedRects.reduce((score, rect) => score + overlapArea(rightCandidate, rect) * 1000, 0);
         var side = leftScore < rightScore ? 'left' : 'right';
         panel.setAttribute('data-dock-side', side);
         return side;
@@ -13250,7 +13158,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         cleanSvgState();
         var byId = nodesById();
         var nodeKind = Object.create(null);
-        Object.keys(byId).forEach(function (id) { nodeKind[id] = byId[id].getAttribute('data-node-kind') || 'neutral'; });
+        Object.keys(byId).forEach((id) => { nodeKind[id] = byId[id].getAttribute('data-node-kind') || 'neutral'; });
         if (!selectedKinds.length) {
           status.textContent = viewerText('viewer.lens.choose');
           updateTrigger();
@@ -13261,8 +13169,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         }
 
         var chosen = {};
-        selectedKinds.forEach(function (kind) { chosen[kind] = true; });
-        Object.keys(byId).forEach(function (id) {
+        selectedKinds.forEach((kind) => { chosen[kind] = true; });
+        Object.keys(byId).forEach((id) => {
           if (!chosen[nodeKind[id]]) return;
           byId[id].setAttribute('data-lens-match', '');
           byId[id].setAttribute('data-lens-selected', '');
@@ -13273,7 +13181,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         var reverse = 0;
         var crossKind = selectedKinds.length === 2;
         var matchedFlow = [];
-        edgeGroups().forEach(function (edge) {
+        edgeGroups().forEach((edge) => {
           var fromKind = nodeKind[edge.from];
           var toKind = nodeKind[edge.to];
           var match = false;
@@ -13293,9 +13201,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               : (toKind === selectedKinds[0] && fromKind !== selectedKinds[0] ? 'in' : 'within');
           }
           matchedFlow.push({ edge: edge, direction: direction });
-          edge.members.forEach(function (member) { member.setAttribute('data-lens-match', ''); });
+          edge.members.forEach((member) => { member.setAttribute('data-lens-match', ''); });
           if (!crossKind) {
-            [edge.from, edge.to].forEach(function (id) {
+            [edge.from, edge.to].forEach((id) => {
               if (!byId[id]) return;
               byId[id].setAttribute('data-lens-match', '');
               if (!chosen[nodeKind[id]]) byId[id].setAttribute('data-lens-peer', '');
@@ -13314,7 +13222,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             reverse: reverse
           });
         } else {
-          var nodeCount = collectKinds().filter(function (kind) { return kind.id === selectedKinds[0]; })[0].nodes.length;
+          var nodeCount = collectKinds().filter((kind) => kind.id === selectedKinds[0])[0].nodes.length;
           status.textContent = viewerText('viewer.lens.single', {
             nodes: viewerCount('viewer.lens.node', nodeCount, { label: viewerKindLabel(selectedKinds[0]) }),
             relationships: viewerCount('viewer.lens.relationship', touching)
@@ -13341,7 +13249,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function select(kind, options) {
         options = options || {};
         clearLegendPreview();
-        var exists = collectKinds().some(function (entry) { return entry.id === kind; });
+        var exists = collectKinds().some((entry) => entry.id === kind);
         if (!exists) return false;
         var index = selectedKinds.indexOf(kind);
         if (index >= 0) selectedKinds.splice(index, 1);
@@ -13372,7 +13280,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         panel.hidden = false;
         trigger.setAttribute('aria-expanded', 'true');
         updateTrigger();
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
           dockPanel(nodesById());
           var activeButton = kindsRoot.querySelector('[aria-pressed="true"]');
           var firstButton = activeButton || kindsRoot.querySelector('button:not(:disabled)');
@@ -13413,11 +13321,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         if (!selectedKinds.length) return Promise.resolve(false);
         var value = location.href.replace(/#.*$/, '') + '#lens=' + selectedKinds.map(encodeURIComponent).join('~');
         var copy = navigator.clipboard && typeof navigator.clipboard.writeText === 'function'
-          ? navigator.clipboard.writeText(value).then(function () { return true; }).catch(function () { return fallbackCopy(value); })
+          ? navigator.clipboard.writeText(value).then(() => true).catch(() => fallbackCopy(value))
           : Promise.resolve(fallbackCopy(value));
-        return copy.then(function (copied) {
+        return copy.then((copied) => {
           copyBtn.textContent = viewerText(copied ? 'viewer.common.copied' : 'viewer.common.copyFailed');
-          window.setTimeout(function () { copyBtn.textContent = viewerText('viewer.common.copyLink'); }, 1600);
+          window.setTimeout(() => { copyBtn.textContent = viewerText('viewer.common.copyLink'); }, 1600);
           return copied;
         });
       }
@@ -13429,10 +13337,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             if (selectedKinds.length) clear({ updateUrl: false, preserveView: true });
             return;
           }
-          var available = collectKinds().map(function (kind) { return kind.id; });
-          var requested = value.split('~').filter(function (kind, index, list) {
-            return available.indexOf(kind) >= 0 && list.indexOf(kind) === index;
-          }).slice(0, 2);
+          var available = collectKinds().map((kind) => kind.id);
+          var requested = value.split('~').filter((kind, index, list) => available.indexOf(kind) >= 0 && list.indexOf(kind) === index).slice(0, 2);
           if (!requested.length) return;
           prepareForLens();
           selectedKinds = requested;
@@ -13442,39 +13348,39 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       trigger.addEventListener('click', toggle);
       if (decorateLegendBridge()) {
-        legendBridge.addEventListener('click', function (event) {
+        legendBridge.addEventListener('click', (event) => {
           var entry = event.target.closest('[data-legend-kind][role="button"]');
           if (entry) activateLegendEntry(entry);
         });
-        legendBridge.addEventListener('pointerover', function (event) {
+        legendBridge.addEventListener('pointerover', (event) => {
           if (event.pointerType === 'touch' || (finePointerQuery && !finePointerQuery.matches)) return;
           var entry = event.target.closest('[data-legend-kind][role="button"]');
           if (!entry || (event.relatedTarget && entry.contains(event.relatedTarget))) return;
           hoveredLegendEntry = entry;
           syncLegendPreview();
         });
-        legendBridge.addEventListener('pointerout', function (event) {
+        legendBridge.addEventListener('pointerout', (event) => {
           var entry = event.target.closest('[data-legend-kind][role="button"]');
           if (!entry || (event.relatedTarget && entry.contains(event.relatedTarget))) return;
           if (hoveredLegendEntry === entry) hoveredLegendEntry = null;
           syncLegendPreview();
         });
-        legendBridge.addEventListener('focusin', function (event) {
+        legendBridge.addEventListener('focusin', (event) => {
           var entry = event.target.closest('[data-legend-kind][role="button"]');
           if (!entry) return;
           focusedLegendEntry = entry;
-          legendEntries.forEach(function (candidate) {
+          legendEntries.forEach((candidate) => {
             candidate.setAttribute('tabindex', candidate === entry ? '0' : '-1');
           });
           syncLegendPreview();
         });
-        legendBridge.addEventListener('focusout', function (event) {
+        legendBridge.addEventListener('focusout', (event) => {
           var entry = event.target.closest('[data-legend-kind][role="button"]');
           if (!entry || (event.relatedTarget && entry.contains(event.relatedTarget))) return;
           if (focusedLegendEntry === entry) focusedLegendEntry = null;
           syncLegendPreview();
         });
-        legendBridge.addEventListener('keydown', function (event) {
+        legendBridge.addEventListener('keydown', (event) => {
           var entry = event.target.closest('[data-legend-kind][role="button"]');
           if (!entry) return;
           if (event.key === 'Enter' || event.key === ' ') {
@@ -13490,21 +13396,21 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           else if (event.key === 'End') next = legendEntries.length - 1;
           if (next === null) return;
           event.preventDefault();
-          legendEntries.forEach(function (candidate, candidateIndex) {
+          legendEntries.forEach((candidate, candidateIndex) => {
             candidate.setAttribute('tabindex', candidateIndex === next ? '0' : '-1');
           });
           legendEntries[next].focus();
         });
       }
-      closeBtn.addEventListener('click', function () { close(); });
-      clearBtn.addEventListener('click', function () { clear({ preserveView: true }); });
+      closeBtn.addEventListener('click', () => { close(); });
+      clearBtn.addEventListener('click', () => { clear({ preserveView: true }); });
       copyBtn.addEventListener('click', copyLink);
-      kindsRoot.addEventListener('click', function (event) {
+      kindsRoot.addEventListener('click', (event) => {
         var button = event.target.closest('[data-kind]');
         if (!button || button.disabled) return;
         select(button.getAttribute('data-kind'));
       });
-      kindsRoot.addEventListener('keydown', function (event) {
+      kindsRoot.addEventListener('keydown', (event) => {
         var buttons = Array.prototype.slice.call(kindsRoot.querySelectorAll('button:not(:disabled)'));
         var index = buttons.indexOf(document.activeElement);
         var next = null;
@@ -13514,22 +13420,20 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         else if (event.key === 'End' && buttons.length) next = buttons.length - 1;
         if (next !== null) { event.preventDefault(); buttons[next].focus(); }
       });
-      panel.addEventListener('keydown', function (event) {
+      panel.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') return;
         event.preventDefault();
         event.stopPropagation();
         close();
       });
-      document.addEventListener('click', function (event) {
+      document.addEventListener('click', (event) => {
         var eventPath = typeof event.composedPath === 'function' ? event.composedPath() : [];
         var clickedInside = eventPath.indexOf(panel) >= 0 || panel.contains(event.target);
-        var clickedLauncher = event.target === trigger || legendEntries.some(function (entry) {
-          return event.target === entry || entry.contains(event.target);
-        });
+        var clickedLauncher = event.target === trigger || legendEntries.some((entry) => event.target === entry || entry.contains(event.target));
         if (!panel.hidden && !clickedInside && !clickedLauncher) close({ restoreFocus: false });
       });
       window.addEventListener('hashchange', syncFromHash);
-      window.addEventListener('resize', function () {
+      window.addEventListener('resize', () => {
         if (!panel.hidden && selectedKinds.length) dockPanel(nodesById());
         layoutLegendBridge();
       });
@@ -13544,9 +13448,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         clearPreview: clearLegendPreview,
         select: select,
         copyLink: copyLink,
-        isOpen: function () { return !panel.hidden; },
-        active: function () { return selectedKinds.length ? selectedKinds.slice() : null; },
-        kinds: function () { return collectKinds().map(function (kind) { return { id: kind.id, count: kind.nodes.length }; }); }
+        isOpen: () => !panel.hidden,
+        active: () => selectedKinds.length ? selectedKinds.slice() : null,
+        kinds: () => collectKinds().map((kind) => ({ id: kind.id, count: kind.nodes.length }))
       };
     })();
 
@@ -13556,7 +13460,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Probe, Semantic Radar, Semantic Lens, Presentation, theme, export, and
        camera without adding a second command implementation or SVG state.
        ============================================================ */
-    Archify.guide = (function () {
+    Archify.guide = (() => {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
       var svg = container.querySelector(':scope > svg');
@@ -13571,7 +13475,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       function relationshipCount() {
         var seen = {};
-        Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), function (edge) {
+        Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), (edge) => {
           var key = edge.getAttribute('data-edge-key') || [
             edge.getAttribute('data-edge-from'),
             edge.getAttribute('data-edge-to'),
@@ -13624,7 +13528,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         trigger.setAttribute('aria-expanded', 'true');
         trigger.setAttribute('aria-label', viewerText('viewer.guide.close'));
         feedback.textContent = '';
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
           var first = actionButtons()[0];
           if (first) first.focus();
         });
@@ -13665,14 +13569,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
 
       trigger.addEventListener('click', toggle);
-      closeBtn.addEventListener('click', function () { close(); });
-      actions.addEventListener('click', function (event) {
+      closeBtn.addEventListener('click', () => { close(); });
+      actions.addEventListener('click', (event) => {
         var button = event.target.closest('[data-guide-action]');
         if (!button || button.disabled) return;
         event.stopPropagation();
         execute(button.getAttribute('data-guide-action'));
       });
-      panel.addEventListener('keydown', function (event) {
+      panel.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' || event.key === '?') {
           event.preventDefault();
           event.stopPropagation();
@@ -13700,7 +13604,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         event.stopPropagation();
         execute(action);
       });
-      document.addEventListener('click', function (event) {
+      document.addEventListener('click', (event) => {
         if (!panel.hidden && !panel.contains(event.target) && event.target !== trigger) close({ restoreFocus: false });
       });
 
@@ -13710,13 +13614,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         close: close,
         toggle: toggle,
         execute: execute,
-        isOpen: function () { return !panel.hidden; },
-        facts: function () {
-          return {
+        isOpen: () => !panel.hidden,
+        facts: () => ({
             nodes: svg.querySelectorAll('[data-node-id]').length,
             relationships: relationshipCount()
-          };
-        }
+          })
       };
     })();
 
@@ -13735,7 +13637,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
          Escape -> clear temporary trace/focus/view first, then exit presentation
        Ignored when focus is inside an input/textarea/contenteditable.
        ============================================================ */
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.defaultPrevented) return;
       var t = e.target;
