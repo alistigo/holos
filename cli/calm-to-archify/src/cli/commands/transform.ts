@@ -4,7 +4,7 @@ import { Command, Option } from "clipanion";
 import { type CalmDocument, transformCalmToArchify } from "../lib/calm-to-archify.js";
 
 export class TransformCommand extends Command {
-  static override paths = [Command.Default, ["transform"]];
+  static override paths = [["transform"]];
 
   static override usage = Command.Usage({
     description: "Transform a CALM architecture JSON file into archify diagram JSON",

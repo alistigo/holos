@@ -3,8 +3,8 @@ import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import starlight from "@astrojs/starlight";
-import { defineConfig } from "astro/config";
 import type { AstroIntegration } from "astro";
+import { defineConfig } from "astro/config";
 
 function archifyStaticFiles(): AstroIntegration {
   return {

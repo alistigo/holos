@@ -41,6 +41,6 @@
     "typeid-js": "^1.2.0"
   },
   "devDependencies": {
-    "@alistigo/calm-archify": "workspace:*"
+    "@alistigo/calm-to-archify": "workspace:*"
   }
 }

@@ -37,9 +37,9 @@
     },
     "arch-archify": {
       "executor": "nx:run-commands",
-      "dependsOn": [{ "projects": ["calm-archify"], "target": "build" }],
+      "dependsOn": [{ "projects": ["calm-to-archify"], "target": "build" }],
       "options": {
-        "command": "pnpm calm-archify artifact-list.arch.json",
+        "command": "pnpm calm-to-archify build artifact-list.arch.json",
         "cwd": "packages/list-domain"
       },
       "inputs": ["{projectRoot}/artifact-list.arch.json"],
