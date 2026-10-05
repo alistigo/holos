@@ -38,7 +38,9 @@
       "!.claude",
       "!ai",
       "!vendor",
-      "!.worktrees"
+      "!.worktrees",
+      "!**/.archify-out",
+      "!**/public/archify"
     ]
   },
   "overrides": [
