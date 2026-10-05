@@ -7,6 +7,10 @@
   "targets": {
     "dev": {
       "executor": "nx:run-commands",
+      "dependsOn": [
+        { "projects": ["architecture"], "target": "build" },
+        { "projects": ["list-domain"], "target": "arch-archify" }
+      ],
       "options": {
         "command": "astro dev --host 0.0.0.0",
         "cwd": "websites/alistigo"
@@ -14,6 +18,10 @@
     },
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": [
+        { "projects": ["architecture"], "target": "build" },
+        { "projects": ["list-domain"], "target": "arch-archify" }
+      ],
       "outputs": ["{projectRoot}/dist"],
       "options": {
         "command": "astro build",

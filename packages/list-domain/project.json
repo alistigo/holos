@@ -35,10 +35,23 @@
         "cwd": "packages/list-domain"
       }
     },
+    "arch-archify": {
+      "executor": "nx:run-commands",
+      "dependsOn": [{ "projects": ["calm-archify"], "target": "build" }],
+      "options": {
+        "command": "pnpm calm-archify artifact-list.arch.json",
+        "cwd": "packages/list-domain"
+      },
+      "inputs": ["{projectRoot}/artifact-list.arch.json"],
+      "outputs": [
+        "{projectRoot}/artifact-list.archify.json",
+        "{projectRoot}/artifact-list.archify.html"
+      ]
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -rf dist",
+        "command": "rm -rf dist && rm -f artifact-list.archify.html artifact-list.archify.json",
         "cwd": "packages/list-domain"
       }
     }

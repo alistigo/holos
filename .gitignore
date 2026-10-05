@@ -154,6 +154,13 @@ vite.config.ts.timestamp-*
 # Archify intermediate build output
 **/.archify-out
 
+# Archify generated files (built artefacts, not source)
+packages/architecture/systems/*.archify.json
+packages/architecture/systems/*.archify.html
+packages/list-domain/*.archify.json
+packages/list-domain/*.archify.html
+websites/alistigo/public/archify/
+
 # Rust
 **/target/
 
