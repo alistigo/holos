@@ -59,6 +59,7 @@ export interface ArchifyDocument {
   connections: ArchifyConnection[];
 }
 
+// fallow-ignore-next-line complexity
 function mapNodeType(nodeType: string, name: string): string {
   const lower = name.toLowerCase();
   switch (nodeType) {
@@ -96,6 +97,7 @@ function firstSentence(text: string): string {
   return text.slice(0, dot + 1);
 }
 
+// fallow-ignore-next-line complexity
 export function transformCalmToArchify(calm: CalmDocument, outputPath: string): ArchifyDocument {
   const nodeIds = calm.nodes.map((n) => n["unique-id"]);
 

@@ -35,6 +35,7 @@ export class TransformCommand extends Command {
     required: true,
   });
 
+  // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const inputPath = resolve(process.cwd(), this.inputFile);
     const outputPath = resolve(process.cwd(), this.output);

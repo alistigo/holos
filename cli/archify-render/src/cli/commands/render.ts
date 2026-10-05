@@ -46,6 +46,7 @@ export class RenderCommand extends Command {
     description: "Diagram type: architecture, workflow, sequence, dataflow, lifecycle",
   });
 
+  // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const inputPath = path.resolve(process.cwd(), this.inputFile);
 

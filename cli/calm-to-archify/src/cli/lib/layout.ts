@@ -40,6 +40,7 @@ function layoutRow(
   return result;
 }
 
+// fallow-ignore-next-line complexity
 export function computeLayout(input: LayoutInput): Map<string, NodePosition> {
   const { nodeIds, composedOfSets, deployedInSets } = input;
 
