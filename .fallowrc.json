@@ -60,7 +60,6 @@
     "skills",
     "@finos/calm-cli",
     "@finos/calm-schema",
-    "@alistigo/calm-archify",
     "@alistigo/archify-render",
     "@alistigo/calm-to-archify",
     "@alistigo/artifact-list",

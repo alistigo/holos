@@ -34,14 +34,12 @@
     },
     "build": {
       "executor": "nx:run-commands",
-      "dependsOn": [{ "projects": ["calm-archify"], "target": "build" }],
+      "dependsOn": [{ "projects": ["calm-to-archify"], "target": "build" }],
       "options": {
-        "command": "pnpm calm-archify systems/*.arch.json",
+        "command": "pnpm calm-to-archify build systems/*.arch.json",
         "cwd": "packages/architecture"
       },
-      "inputs": [
-        "{projectRoot}/systems/*.arch.json"
-      ],
+      "inputs": ["{projectRoot}/systems/*.arch.json"],
       "outputs": ["{projectRoot}/systems"]
     },
     "clean": {

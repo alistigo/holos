@@ -13,7 +13,7 @@
   },
   "private": false,
   "type": "module",
-  "description": "Transform CALM architecture JSON into archify diagram JSON",
+  "description": "Convert CALM architecture JSON to archify HTML diagrams",
   "bin": {
     "calm-to-archify": "./dist/cli.js"
   },
@@ -27,6 +27,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@alistigo/archify-render": "workspace:*",
     "clipanion": "4.0.0-rc.4"
   },
   "devDependencies": {
