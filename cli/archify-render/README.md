@@ -15,7 +15,7 @@ pnpm add -D @alistigo/archify-render
 npm install -g @alistigo/archify-render
 ```
 
-Requires Node.js ≥ 18. The `archify` package must also be present in the workspace (it is a peer dependency resolved at runtime).
+Requires Node.js ≥ 18. The `archify` renderer is bundled as a dependency and installed automatically.
 
 ## Usage
 

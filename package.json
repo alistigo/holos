@@ -55,7 +55,6 @@
     "@nx/js": "22.5.4",
     "@nx/workspace": "22.5.4",
     "@types/bun": "^1.2.0",
-    "archify": "github:tt-a1i/archify",
     "dependency-cruiser": "^17.4.0",
     "fallow": "^2.80.0",
     "lefthook": "^2.1.8",
