@@ -32,24 +32,22 @@
       ],
       "outputs": ["{projectRoot}/.calm-docs"]
     },
-    "arch-archify": {
+    "build": {
       "executor": "nx:run-commands",
-      "dependsOn": [{ "projects": ["calm-to-archify", "archify-render"], "target": "build" }],
+      "dependsOn": [{ "projects": ["calm-archify"], "target": "build" }],
       "options": {
-        "command": "bash scripts/archify.sh",
+        "command": "pnpm calm-archify systems/*.arch.json",
         "cwd": "packages/architecture"
       },
       "inputs": [
-        "{projectRoot}/systems/*.arch.json",
-        "{workspaceRoot}/packages/list-domain/artifact-list.arch.json",
-        "{projectRoot}/scripts/archify.sh"
+        "{projectRoot}/systems/*.arch.json"
       ],
-      "outputs": ["{projectRoot}/.archify-out", "{workspaceRoot}/websites/alistigo/public/archify"]
+      "outputs": ["{projectRoot}/systems"]
     },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -rf .calm-out .calm-docs .archify-out",
+        "command": "rm -rf .calm-out .calm-docs && rm -f systems/*.archify.html systems/*.archify.json",
         "cwd": "packages/architecture"
       }
     }

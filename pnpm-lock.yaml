@@ -162,6 +162,22 @@ importers:
         specifier: ^22.0.0
         version: 22.19.17
 
+  cli/calm-archify:
+    dependencies:
+      '@alistigo/archify-render':
+        specifier: workspace:*
+        version: link:../archify-render
+      '@alistigo/calm-to-archify':
+        specifier: workspace:*
+        version: link:../calm-to-archify
+      clipanion:
+        specifier: 4.0.0-rc.4
+        version: 4.0.0-rc.4(typanion@3.14.0)
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.17
+
   cli/calm-to-archify:
     dependencies:
       clipanion:
@@ -236,12 +252,9 @@ importers:
 
   packages/architecture:
     devDependencies:
-      '@alistigo/archify-render':
+      '@alistigo/calm-archify':
         specifier: workspace:*
-        version: link:../../cli/archify-render
-      '@alistigo/calm-to-archify':
-        specifier: workspace:*
-        version: link:../../cli/calm-to-archify
+        version: link:../../cli/calm-archify
       '@finos/calm-cli':
         specifier: ^1.58.0
         version: 1.58.0(@types/json-schema@7.0.15)(@types/node@25.5.2)(tslib@2.8.1)(typescript@5.9.3)
@@ -739,6 +752,10 @@ importers:
       typeid-js:
         specifier: ^1.2.0
         version: 1.2.0
+    devDependencies:
+      '@alistigo/calm-archify':
+        specifier: workspace:*
+        version: link:../../cli/calm-archify
 
   packages/list-features:
     devDependencies:

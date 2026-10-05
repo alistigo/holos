@@ -1,6 +1,38 @@
+import { copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { createRequire } from "node:module";
 import os from "node:os";
+import path from "node:path";
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
+import type { AstroIntegration } from "astro";
+
+function archifyStaticFiles(): AstroIntegration {
+  return {
+    name: "archify-static-files",
+    hooks: {
+      "astro:config:setup": ({ config }) => {
+        const req = createRequire(import.meta.url);
+        const destDir = new URL("public/archify/", config.root);
+        mkdirSync(destDir, { recursive: true });
+
+        function copyArchifyFrom(sourceDir: string): void {
+          if (!existsSync(sourceDir)) return;
+          for (const file of readdirSync(sourceDir)) {
+            if (file.endsWith(".archify.html")) {
+              copyFileSync(path.join(sourceDir, file), new URL(file, destDir).pathname);
+            }
+          }
+        }
+
+        const archPkg = req.resolve("@alistigo/architecture/package.json");
+        copyArchifyFrom(path.join(path.dirname(archPkg), "systems"));
+
+        const listPkg = req.resolve("@alistigo/list-domain/package.json");
+        copyArchifyFrom(path.dirname(listPkg));
+      },
+    },
+  };
+}
 
 export default defineConfig({
   site: "https://www.alistigo.com",
@@ -8,6 +40,7 @@ export default defineConfig({
     allowedHosts: [os.hostname(), `${os.hostname()}.local`],
   },
   integrations: [
+    archifyStaticFiles(),
     starlight({
       title: "Alistigo",
       logo: {
