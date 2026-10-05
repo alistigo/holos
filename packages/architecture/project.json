@@ -34,9 +34,7 @@
     },
     "arch-archify": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        { "projects": ["calm-to-archify", "archify-render"], "target": "build" }
-      ],
+      "dependsOn": [{ "projects": ["calm-to-archify", "archify-render"], "target": "build" }],
       "options": {
         "command": "bash scripts/archify.sh",
         "cwd": "packages/architecture"
@@ -46,10 +44,7 @@
         "{workspaceRoot}/packages/list-domain/artifact-list.arch.json",
         "{projectRoot}/scripts/archify.sh"
       ],
-      "outputs": [
-        "{projectRoot}/.archify-out",
-        "{workspaceRoot}/websites/alistigo/public/archify"
-      ]
+      "outputs": ["{projectRoot}/.archify-out", "{workspaceRoot}/websites/alistigo/public/archify"]
     },
     "clean": {
       "executor": "nx:run-commands",
