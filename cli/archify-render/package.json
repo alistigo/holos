@@ -28,6 +28,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "archify": "github:tt-a1i/archify",
     "clipanion": "4.0.0-rc.4"
   },
   "devDependencies": {
