@@ -40,7 +40,9 @@
       "!vendor",
       "!.worktrees",
       "!**/.archify-out",
-      "!**/public/archify"
+      "!**/public/archify",
+      "!**/*.archify.html",
+      "!**/*.archify.json"
     ]
   },
   "overrides": [
