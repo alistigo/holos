@@ -56,6 +56,12 @@
     "circular-dependencies": "error"
   },
   "ignoreDependencies": [
+    "archify",
+    "skills",
+    "@finos/calm-cli",
+    "@finos/calm-schema",
+    "@alistigo/archify-render",
+    "@alistigo/calm-to-archify",
     "@alistigo/artifact-list",
     "@alistigo/artifact-storage-explorer",
     "@alistigo/artifact-claude-capabilities-demo",
