@@ -34,6 +34,7 @@
     "README.md"
   ],
   "exports": {
+    "./package.json": "./package.json",
     "./patterns/*": "./patterns/*",
     "./systems/*": "./systems/*",
     "./docs/*": "./docs/*",
