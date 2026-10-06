@@ -2,6 +2,14 @@ pre-commit:
   commands:
     install-deps:
       run: if git diff --cached --name-only | grep -q 'package\.json'; then pnpm install && git add pnpm-lock.yaml; fi
+    lint:
+      run: pnpm run qa:lint || (pnpm run format && echo "Auto-fix applied — review changes, commit, and push again." && exit 1)
+    arch-check:
+      run: pnpm run qa:arch-check
+    typecheck:
+      run: pnpm run build:typecheck
+    build:
+      run: pnpm run build
 
 pre-push:
   files: echo "lefthook.yml"
@@ -16,6 +24,10 @@ pre-push:
       run: pnpm run qa:artifact-sandbox-check
     typecheck:
       run: pnpm run build:typecheck
+    build:
+      run: pnpm run build
+    test:
+      run: pnpm test
 
 post-merge:
   commands:
