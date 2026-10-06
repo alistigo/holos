@@ -40,6 +40,13 @@ EOF
 
 systemctl --user daemon-reload
 systemctl --user enable "$SERVICE_NAME"
-loginctl enable-linger "$USER" 2>/dev/null || echo "(Note: 'loginctl enable-linger' skipped — run with sudo if you want boot-without-login)"
+if ! loginctl enable-linger "$USER" 2>/dev/null; then
+  echo ""
+  echo "WARNING: ACTION REQUIRED — service will NOT start at boot until you run:"
+  echo ""
+  echo "    sudo loginctl enable-linger $USER"
+  echo ""
+  echo "Run this once on the machine, then reboot to verify."
+fi
 echo "Service installed at: ${SERVICE_FILE}"
 echo "Start now:  systemctl --user start ${SERVICE_NAME}"
