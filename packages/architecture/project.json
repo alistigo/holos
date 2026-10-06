@@ -36,7 +36,7 @@
       "executor": "nx:run-commands",
       "dependsOn": [{ "projects": ["calm-to-archify"], "target": "build" }],
       "options": {
-        "command": "pnpm calm-to-archify build systems/*.arch.json",
+        "command": "bun ../../cli/calm-to-archify/dist/cli.js build systems/*.arch.json",
         "cwd": "packages/architecture"
       },
       "inputs": ["{projectRoot}/systems/*.arch.json"],
