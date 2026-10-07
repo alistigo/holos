@@ -34,7 +34,12 @@
         "command": "vite build --config vite.config.umd.ts",
         "cwd": "packages/artifact-manager"
       },
-      "dependsOn": [{ "projects": ["alistigo-artifact-config-format"], "target": "build" }]
+      "dependsOn": [
+        {
+          "projects": ["artifact-config-format"],
+          "target": "build"
+        }
+      ]
     },
     "test": {
       "executor": "nx:run-commands",
@@ -42,7 +47,12 @@
         "command": "bun test",
         "cwd": "packages/artifact-manager"
       },
-      "dependsOn": [{ "projects": ["alistigo-artifact-config-format"], "target": "build" }]
+      "dependsOn": [
+        {
+          "projects": ["artifact-config-format"],
+          "target": "build"
+        }
+      ]
     },
     "clean": {
       "executor": "nx:run-commands",
