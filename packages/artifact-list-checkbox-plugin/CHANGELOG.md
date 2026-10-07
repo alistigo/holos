@@ -1,3 +1,10 @@
+## 0.3.2 (2026-10-07)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.2
+- Updated list-document to 0.5.2
+
 ## 0.3.1 (2026-10-04)
 
 ### 🧱 Updated Dependencies

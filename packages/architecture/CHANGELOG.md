@@ -1,3 +1,24 @@
+## 1.2.1 (2026-10-07)
+
+### 🚀 Features
+
+- **archify:** extract pipeline into cli/calm-archify + each package owns its build ([ffc3bbe](https://github.com/alistigo/holos/commit/ffc3bbe))
+- **archify:** add CALM → archify interactive diagram pipeline ([5e397c7](https://github.com/alistigo/holos/commit/5e397c7))
+
+### 🩹 Fixes
+
+- **exports:** expose ./package.json subpath in architecture and list-domain ([ca0a7e1](https://github.com/alistigo/holos/commit/ca0a7e1))
+- **ci:** invoke calm-to-archify via bun direct path, not pnpm bin ([40801fd](https://github.com/alistigo/holos/commit/40801fd))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.2.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.2.0 (2026-10-04)
 
 ### 🚀 Features
