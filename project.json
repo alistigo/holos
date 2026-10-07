@@ -32,7 +32,7 @@
         "command": "true"
       }
     },
-    "build:deploy": {
+    "build:github-pages": {
       "executor": "nx:noop",
       "dependsOn": [
         { "projects": ["alistigo-website"], "target": "build" },
