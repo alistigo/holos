@@ -1,3 +1,14 @@
+## 0.4.3 (2026-10-07)
+
+### 🩹 Fixes
+
+- **test:** prevent stale Vite dev server orphaning port 5173 ([ecbacca](https://github.com/alistigo/holos/commit/ecbacca))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.2 (2026-10-07)
 
 ### 🧱 Updated Dependencies
