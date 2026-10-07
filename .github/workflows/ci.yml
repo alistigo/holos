@@ -77,20 +77,23 @@ jobs:
       - name: Derive nx affected base/head
         uses: nrwl/nx-set-shas@v4
 
-      # Detect whether any alistigo package is in the affected set.
-      # Playwright browser setup is only needed when the alistigo integration
-      # tests will actually run.
-      - name: Detect alistigo-affected packages
-        id: alistigo-affected
+      # Detect whether list-features-runner-playwright is in the affected set.
+      # Playwright browser setup is only needed when its integration tests will run.
+      - name: Detect affected packages
+        id: detect-affected
         run: |
-          AFFECTED=$(pnpm exec nx show projects --affected 2>/dev/null | grep -i "alistigo" | head -1 || true)
-          echo "affected=$([ -n "$AFFECTED" ] && echo 'true' || echo 'false')" >> "$GITHUB_OUTPUT"
+          AFFECTED_LIST=$(pnpm exec nx show projects --affected 2>/dev/null || true)
+          echo "Affected packages:"
+          echo "$AFFECTED_LIST"
+          REQUIRE_PLAYWRIGHT=$(echo "$AFFECTED_LIST" | grep -q "playwright" && echo 'true' || echo 'false')
+          echo "REQUIRE_PLAYWRIGHT=$REQUIRE_PLAYWRIGHT"
+          echo "require_playwright=$REQUIRE_PLAYWRIGHT" >> "$GITHUB_OUTPUT"
 
       # Playwright ships browser binaries separately from the npm package.
       # Cache on the lockfile hash — when playwright's version moves in
       # pnpm-lock.yaml, the cache key invalidates and we redownload.
       - name: Cache Playwright browsers
-        if: steps.alistigo-affected.outputs.affected == 'true'
+        if: steps.detect-affected.outputs.require_playwright == 'true'
         uses: actions/cache@v4
         id: playwright-cache
         with:
@@ -98,13 +101,13 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browsers
-        if: steps.alistigo-affected.outputs.affected == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        if: steps.detect-affected.outputs.require_playwright == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm playwright:install
 
       # OS-level deps (libnss, libatk, fonts, …) live in /usr/lib, not in
       # the cached browser dir — install them every run.
       - name: Install Playwright system deps
-        if: steps.alistigo-affected.outputs.affected == 'true'
+        if: steps.detect-affected.outputs.require_playwright == 'true'
         run: pnpm --filter @alistigo/list-features-runner-playwright exec playwright install-deps chromium
 
       # Order matters: cheap → expensive. A typecheck fail short-circuits
