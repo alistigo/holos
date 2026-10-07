@@ -80,6 +80,7 @@ LinkedIn Skills: [vendoring pattern gap](feedback_vendor_symlink_gap.md) discove
 - [Run biome fix before push](feedback_biome_before_push.md) — `pnpm biome check --write .` before every commit/push; stage any auto-fixed files in the same commit
 - [Fallow CI vs local version gap](feedback_fallow_ci_vs_local.md) — CI installs latest `^2.x.x` (not local `2.80.0`); always install that exact version and use `--base <merge-base>` to reproduce CI findings before writing a fix
 - [Fallow suppress strategy](feedback_fallow_suppress_strategy.md) — use `dynamicallyLoaded` in config for framework-coupled classes (Playwright World/Page, Clipanion Command); inline `// fallow-ignore-next-line` only for per-function CRAP/complexity where the ignore belongs right next to the reason
+- [Workspace bin invocation](feedback_workspace_bin_invocation.md) — never use `pnpm <cli-bin>` in Nx project.json commands for workspace CLIs; use `bun ../../path/to/dist/cli.js` directly (pnpm bin symlinks require dist/ at install time, missing in CI)
 
 ## Active Projects
 
