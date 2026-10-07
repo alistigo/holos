@@ -1,0 +1,16 @@
+{
+  "name": "@alistigo/npm-housekeeping",
+  "version": "0.1.0",
+  "description": "Audit and deprecate stale @alistigo npm packages that no longer exist in the monorepo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "clipanion": "4.0.0-rc.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}
