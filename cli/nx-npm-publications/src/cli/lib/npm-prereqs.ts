@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { isNxWorkspace, workspaceRoot } from "./list-local-packages.js";
 
 export type CheckStatus = "ok" | "warn" | "fail" | "skip";
 
@@ -39,6 +40,19 @@ function check(
   fix: string[] = [],
 ): CheckResult {
   return { title, status, detail, fix };
+}
+
+export function checkNxWorkspace(): CheckResult {
+  if (isNxWorkspace()) return check("Nx workspace", "ok", workspaceRoot);
+  return check(
+    "Nx workspace",
+    "fail",
+    `no nx.json found in ${process.cwd()} or any parent directory`,
+    [
+      "This tool reads your packages from the Nx project graph. Run it from inside your",
+      "Nx monorepo, and install it there: `npm install -D @alistigo/nx-npm-publications`.",
+    ],
+  );
 }
 
 export function checkNpmInstalled(): CheckResult {

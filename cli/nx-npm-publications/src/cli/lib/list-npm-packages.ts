@@ -16,10 +16,12 @@ async function getJson<T>(url: string): Promise<T> {
 
 // The search API (/-/v1/search?text=scope:x) doesn't reliably index scoped
 // packages, so list them from the org endpoint, which is public and complete.
+// For a user (not org) scope, that endpoint also returns the user's unscoped
+// packages, so keep only names inside the scope.
 async function listOrgPackageNames(scope: string): Promise<string[]> {
-  const org = scope.replace(/^@/, "");
+  const org = scope.replace(/^@/, "").replace(/\/$/, "");
   const perms = await getJson<Record<string, string>>(`${REGISTRY}/-/org/${org}/package`);
-  return Object.keys(perms);
+  return Object.keys(perms).filter((name) => name.startsWith(`@${org}/`));
 }
 
 async function fetchLatestVersion(name: string): Promise<string | null> {

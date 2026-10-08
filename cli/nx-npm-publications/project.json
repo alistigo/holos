@@ -1,38 +1,38 @@
 {
-  "name": "npm-housekeeping",
+  "name": "nx-npm-publications",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "cli/npm-housekeeping/src",
+  "sourceRoot": "cli/nx-npm-publications/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "cli/npm-housekeeping/dist",
-        "tsConfig": "cli/npm-housekeeping/tsconfig.build.json",
-        "main": "cli/npm-housekeeping/src/cli.ts",
-        "rootDir": "cli/npm-housekeeping/src"
+        "outputPath": "cli/nx-npm-publications/dist",
+        "tsConfig": "cli/nx-npm-publications/tsconfig.build.json",
+        "main": "cli/nx-npm-publications/src/cli.ts",
+        "rootDir": "cli/nx-npm-publications/src"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc -p tsconfig.json --noEmit",
-        "cwd": "cli/npm-housekeeping"
+        "cwd": "cli/nx-npm-publications"
       }
     },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "biome check .",
-        "cwd": "cli/npm-housekeeping"
+        "cwd": "cli/nx-npm-publications"
       }
     },
     "run": {
       "executor": "nx:run-commands",
       "options": {
         "command": "bun src/cli.ts",
-        "cwd": "cli/npm-housekeeping"
+        "cwd": "cli/nx-npm-publications"
       }
     }
   }

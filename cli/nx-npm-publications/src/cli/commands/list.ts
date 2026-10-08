@@ -1,5 +1,6 @@
 import { Command, Option } from "clipanion";
 import {
+  assertNxWorkspace,
   type LocalPackage,
   listLocalPackageDetails,
   workspaceRoot,
@@ -83,11 +84,17 @@ export class ListCommand extends Command {
       private. Pass \`--no-private\` to hide private packages.
     `,
     examples: [
-      ["Compare npm and the monorepo side by side", "npm-housekeeping list --scope @alistigo"],
-      ["List packages published on npm", "npm-housekeeping list --scope @alistigo --source remote"],
-      ["List packages in the monorepo", "npm-housekeeping list --scope @alistigo --source local"],
-      ["List every package in the monorepo, any scope", "npm-housekeeping list --source local"],
-      ["Hide private packages", "npm-housekeeping list --scope @alistigo --no-private"],
+      ["Compare npm and the monorepo side by side", "nx-npm-publications list --scope @alistigo"],
+      [
+        "List packages published on npm",
+        "nx-npm-publications list --scope @alistigo --source remote",
+      ],
+      [
+        "List packages in the monorepo",
+        "nx-npm-publications list --scope @alistigo --source local",
+      ],
+      ["List every package in the monorepo, any scope", "nx-npm-publications list --source local"],
+      ["Hide private packages", "nx-npm-publications list --scope @alistigo --no-private"],
     ],
   });
 
@@ -131,6 +138,7 @@ export class ListCommand extends Command {
 
     let local: Map<string, LocalPackage> | null = null;
     if (source !== "remote") {
+      assertNxWorkspace();
       this.context.stdout.write(`Scanning Nx workspace at ${workspaceRoot}...\n`);
       const packages = await listLocalPackageDetails(scope, { includePrivate: this.private });
       local = new Map(packages.map((p) => [p.name, p]));

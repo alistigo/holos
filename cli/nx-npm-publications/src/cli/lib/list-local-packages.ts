@@ -1,8 +1,22 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { createProjectGraphAsync, workspaceRoot } from "@nx/devkit";
+import { UsageError } from "clipanion";
 
 export { workspaceRoot };
+
+/** True when the current directory is inside an Nx workspace (an nx.json was found). */
+export function isNxWorkspace(): boolean {
+  return existsSync(path.join(workspaceRoot, "nx.json"));
+}
+
+/** Throws a user-facing error when not run from inside an Nx workspace. */
+export function assertNxWorkspace(): void {
+  if (isNxWorkspace()) return;
+  throw new UsageError(
+    `nx-npm-publications requires an Nx workspace, but no nx.json was found in ${process.cwd()} or any parent directory. Run it from inside your Nx monorepo.`,
+  );
+}
 
 export interface LocalPackage {
   name: string;
@@ -49,6 +63,7 @@ export async function listLocalPackageDetails(
   scope: string | undefined,
   { includePrivate = false }: { includePrivate?: boolean } = {},
 ): Promise<LocalPackage[]> {
+  assertNxWorkspace();
   const prefix = scope === undefined ? null : scope.endsWith("/") ? scope : `${scope}/`;
   const graph = await createProjectGraphAsync({ exitOnError: false });
 

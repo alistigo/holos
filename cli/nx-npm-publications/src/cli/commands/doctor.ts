@@ -6,6 +6,7 @@ import {
   type CheckStatus,
   checkAuth,
   checkNpmInstalled,
+  checkNxWorkspace,
   checkRegistry,
   checkTwoFactor,
   checkWriteAccess,
@@ -25,6 +26,7 @@ export class DoctorCommand extends Command {
     details: `
       Verifies, in order:
 
+      - you are inside an Nx workspace (an nx.json is found);
       - the npm CLI is installed and points at the public registry;
       - you are authenticated (\`npm whoami\`), telling apart missing credentials
         from a rejected or expired token;
@@ -36,7 +38,7 @@ export class DoctorCommand extends Command {
       Each failing or uncertain check prints the steps to fix it. Exits 1 when a
       check fails, 0 otherwise (warnings do not fail).
     `,
-    examples: [["Check before deprecating", "npm-housekeeping doctor --scope @alistigo"]],
+    examples: [["Check before deprecating", "nx-npm-publications doctor --scope @alistigo"]],
   });
 
   scope = Option.String("--scope", {
@@ -71,6 +73,10 @@ export class DoctorCommand extends Command {
       this.print(result);
     };
 
+    const nxCheck = checkNxWorkspace();
+    run(nxCheck);
+    if (nxCheck.status === "fail") return 1;
+
     const npmCheck = checkNpmInstalled();
     run(npmCheck);
     if (npmCheck.status === "fail") return 1;
@@ -97,7 +103,7 @@ export class DoctorCommand extends Command {
     const warned = results.filter((r) => r.status === "warn").length;
     this.context.stdout.write(
       failed > 0
-        ? `\n${failed} check(s) failed. Fix them before running \`npm-housekeeping deprecate\`.\n`
+        ? `\n${failed} check(s) failed. Fix them before running \`nx-npm-publications deprecate\`.\n`
         : `\nReady to deprecate${warned > 0 ? ` (${warned} warning(s), see above)` : ""}.\n`,
     );
     return failed > 0 ? 1 : 0;
