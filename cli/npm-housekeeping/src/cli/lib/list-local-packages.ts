@@ -7,6 +7,8 @@ export { workspaceRoot };
 export interface LocalPackage {
   name: string;
   version: string | null;
+  /** True when package.json has `"private": true`. */
+  private: boolean;
 }
 
 interface PackageJson {
@@ -24,34 +26,41 @@ function readPackageJson(pkgJsonPath: string): PackageJson | null {
   }
 }
 
-/** Publishable package under `prefix`: has a name in scope and is not `"private": true`. */
-function toPublishable(pkg: PackageJson | null, prefix: string): LocalPackage | null {
+function toLocalPackage(pkg: PackageJson | null, prefix: string): LocalPackage | null {
   if (typeof pkg?.name !== "string" || !pkg.name.startsWith(prefix)) return null;
-  if (pkg.private === true) return null;
-  return { name: pkg.name, version: typeof pkg.version === "string" ? pkg.version : null };
+  return {
+    name: pkg.name,
+    version: typeof pkg.version === "string" ? pkg.version : null,
+    private: pkg.private === true,
+  };
 }
 
 /**
- * Lists publishable packages in the Nx workspace for `scope`.
+ * Lists packages in the Nx workspace for `scope`. Private packages
+ * (`"private": true`) are excluded unless `includePrivate` is set.
  *
  * Project locations come from the Nx project graph, so any folder layout Nx
  * knows about is covered. The workspace root is resolved by Nx (nearest
  * nx.json above the current directory, or NX_WORKSPACE_ROOT_PATH).
  */
-export async function listLocalPackageDetails(scope: string): Promise<LocalPackage[]> {
+export async function listLocalPackageDetails(
+  scope: string,
+  { includePrivate = false }: { includePrivate?: boolean } = {},
+): Promise<LocalPackage[]> {
   const prefix = scope.endsWith("/") ? scope : `${scope}/`;
   const graph = await createProjectGraphAsync({ exitOnError: false });
 
   const packages = new Map<string, LocalPackage>();
   for (const node of Object.values(graph.nodes)) {
     const pkgJsonPath = path.join(workspaceRoot, node.data.root, "package.json");
-    const pkg = toPublishable(readPackageJson(pkgJsonPath), prefix);
-    if (pkg) packages.set(pkg.name, pkg);
+    const pkg = toLocalPackage(readPackageJson(pkgJsonPath), prefix);
+    if (pkg && (includePrivate || !pkg.private)) packages.set(pkg.name, pkg);
   }
 
   return [...packages.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/** Names of the publishable (non-private) packages in the workspace for `scope`. */
 export async function listLocalPackages(scope: string): Promise<Set<string>> {
   return new Set((await listLocalPackageDetails(scope)).map((p) => p.name));
 }
