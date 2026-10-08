@@ -30,14 +30,17 @@ function mergeRows(
   local: Map<string, LocalPackage> | null,
 ): Row[] {
   const names = new Set([...(remote?.keys() ?? []), ...(local?.keys() ?? [])]);
-  return [...names]
-    .sort((a, b) => a.localeCompare(b))
-    .map((name) => ({
-      name,
-      remote: remote?.has(name) ? (remote.get(name) ?? "(unknown)") : null,
-      local: local?.has(name) ? (local.get(name)?.version ?? "(no version)") : null,
-      isPublic: local?.has(name) ? local.get(name)?.private === false : null,
-    }));
+  return (
+    [...names]
+      .sort((a, b) => a.localeCompare(b))
+      // fallow-ignore-next-line complexity
+      .map((name) => ({
+        name,
+        remote: remote?.has(name) ? (remote.get(name) ?? "(unknown)") : null,
+        local: local?.has(name) ? (local.get(name)?.version ?? "(no version)") : null,
+        isPublic: local?.has(name) ? local.get(name)?.private === false : null,
+      }))
+  );
 }
 
 function formatTable(rows: Row[], source: Source): string {

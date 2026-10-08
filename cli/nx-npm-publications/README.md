@@ -159,7 +159,7 @@ nx-npm-publications doctor --scope @myorg
 | Registry | npm points at `https://registry.npmjs.org/` |
 | Authentication | `npm whoami` succeeds. A missing login and a rejected token are reported differently. |
 | Write access | Your npm user is listed with write access on every stale package (npm's public collaborators list). Your token must also allow writes: Read and write on the scope. |
-| Two-factor auth | Whether npm will ask for a one-time code on each deprecation |
+| Two-factor auth | Whether npm will ask for a one-time code on each deprecation. Granular access tokens can't read your npm profile, so with one this shows as a warning: the mode is unknown. |
 
 ### `help`
 
