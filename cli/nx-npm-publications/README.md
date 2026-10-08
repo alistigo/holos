@@ -158,7 +158,7 @@ nx-npm-publications doctor --scope @myorg
 | npm CLI | `npm` is installed |
 | Registry | npm points at `https://registry.npmjs.org/` |
 | Authentication | `npm whoami` succeeds. A missing login and a rejected token are reported differently. |
-| Write access | You have read-write access to every stale package (`npm access list packages`) |
+| Write access | Your npm user is listed with write access on every stale package (npm's public collaborators list). Your token must also allow writes: Read and write on the scope. |
 | Two-factor auth | Whether npm will ask for a one-time code on each deprecation |
 
 ### `help`

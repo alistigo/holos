@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { isNxWorkspace, workspaceRoot } from "./list-local-packages.js";
+import { fetchCollaborators } from "./list-npm-packages.js";
 
 export type CheckStatus = "ok" | "warn" | "fail" | "skip";
 
@@ -125,38 +126,47 @@ export function checkAuth(): { result: CheckResult; user: string | null } {
   };
 }
 
-/** Checks the current user has read-write access to every package in `targets`. */
-export function checkWriteAccess(targets: string[], scope: string): CheckResult {
+/** Checks `user` is listed with write access on every package in `targets`. */
+export async function checkWriteAccess(
+  targets: string[],
+  scope: string,
+  user: string,
+): Promise<CheckResult> {
   const title = `Write access (${targets.length} package(s))`;
-  const run = npm(["access", "list", "packages", "--json"]);
-  if (!run.ok) {
+  const results = await Promise.allSettled(targets.map((name) => fetchCollaborators(name)));
+
+  const missing: string[] = [];
+  const unknown: string[] = [];
+  results.forEach((result, i) => {
+    const name = targets[i] ?? "";
+    if (result.status === "rejected") unknown.push(name);
+    else if (result.value[user] !== "write") missing.push(name);
+  });
+
+  if (missing.length > 0) {
+    return check(
+      title,
+      "fail",
+      `${user} has no write access to ${missing.length} package(s): ${missing.join(", ")}`,
+      [
+        `Ask an owner of the ${scope} org to add you to a team with read-write access to these`,
+        "packages (npmjs.com → org → Teams → Packages), or to run the deprecation themselves.",
+      ],
+    );
+  }
+  if (unknown.length > 0) {
     return check(
       title,
       "warn",
-      `could not list your package access (${run.code ?? "unknown error"})`,
-      ["Run `npm access list packages` to see the error."],
+      `could not read the collaborators of ${unknown.length} package(s): ${unknown.join(", ")}`,
+      ["Check them with `npm access list collaborators <package>`."],
     );
   }
-
-  let access: Record<string, string>;
-  try {
-    access = JSON.parse(run.stdout || "{}") as Record<string, string>;
-  } catch {
-    return check(title, "warn", "unexpected output from `npm access list packages`");
-  }
-
-  const missing = targets.filter((name) => access[name] !== "read-write");
-  if (missing.length === 0) return check(title, "ok", "read-write on every package");
   return check(
     title,
-    "fail",
-    `no read-write access to ${missing.length} package(s): ${missing.join(", ")}`,
-    [
-      `Ask an owner of the ${scope} org to add you to a team with read-write access to these`,
-      "packages (npmjs.com → org → Teams → Packages), or to run the deprecation themselves.",
-      "If you authenticate with a granular token, make sure its Packages and scopes",
-      `permission is Read and write on ${scope} (or on these packages).`,
-    ],
+    "ok",
+    `${user} can write all ${targets.length} package(s) (your token must also allow writes)`,
+    [],
   );
 }
 
@@ -166,7 +176,9 @@ export function checkTwoFactor(): CheckResult {
     return check(
       "Two-factor auth",
       "warn",
-      "could not read your npm profile (granular tokens may not be allowed to)",
+      run.code === "E403" || run.code === "E401"
+        ? "this token can't read your npm profile (normal for granular access tokens), so the 2FA mode is unknown"
+        : `could not read your npm profile (${run.code ?? "unknown error"}), so the 2FA mode is unknown`,
       [
         "If your account requires 2FA for writes, either be ready to type a one-time code",
         "for each package, or use a granular token with “Bypass two-factor authentication”.",
