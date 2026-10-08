@@ -26,8 +26,9 @@ function readPackageJson(pkgJsonPath: string): PackageJson | null {
   }
 }
 
-function toLocalPackage(pkg: PackageJson | null, prefix: string): LocalPackage | null {
-  if (typeof pkg?.name !== "string" || !pkg.name.startsWith(prefix)) return null;
+function toLocalPackage(pkg: PackageJson | null, prefix: string | null): LocalPackage | null {
+  if (typeof pkg?.name !== "string") return null;
+  if (prefix !== null && !pkg.name.startsWith(prefix)) return null;
   return {
     name: pkg.name,
     version: typeof pkg.version === "string" ? pkg.version : null,
@@ -36,7 +37,8 @@ function toLocalPackage(pkg: PackageJson | null, prefix: string): LocalPackage |
 }
 
 /**
- * Lists packages in the Nx workspace for `scope`. Private packages
+ * Lists packages in the Nx workspace for `scope` (every named package when
+ * `scope` is undefined). Private packages
  * (`"private": true`) are excluded unless `includePrivate` is set.
  *
  * Project locations come from the Nx project graph, so any folder layout Nx
@@ -44,10 +46,10 @@ function toLocalPackage(pkg: PackageJson | null, prefix: string): LocalPackage |
  * nx.json above the current directory, or NX_WORKSPACE_ROOT_PATH).
  */
 export async function listLocalPackageDetails(
-  scope: string,
+  scope: string | undefined,
   { includePrivate = false }: { includePrivate?: boolean } = {},
 ): Promise<LocalPackage[]> {
-  const prefix = scope.endsWith("/") ? scope : `${scope}/`;
+  const prefix = scope === undefined ? null : scope.endsWith("/") ? scope : `${scope}/`;
   const graph = await createProjectGraphAsync({ exitOnError: false });
 
   const packages = new Map<string, LocalPackage>();

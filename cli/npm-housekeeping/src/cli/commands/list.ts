@@ -67,6 +67,9 @@ export class ListCommand extends Command {
     description: "List packages under the given scope on npm and/or in the monorepo",
     details: `
       Lists packages for the given scope with their versions, sorted by name.
+      \`--scope\` is required when npm is queried (\`all\` or \`remote\`); with
+      \`--source local\` it is optional, and omitting it lists every package in
+      the workspace.
 
       \`--source all\` (default) merges npm and the monorepo side by side,
       showing ${ABSENT} where a package is missing on one side. \`--source remote\`
@@ -83,13 +86,13 @@ export class ListCommand extends Command {
       ["Compare npm and the monorepo side by side", "npm-housekeeping list --scope @alistigo"],
       ["List packages published on npm", "npm-housekeeping list --scope @alistigo --source remote"],
       ["List packages in the monorepo", "npm-housekeeping list --scope @alistigo --source local"],
+      ["List every package in the monorepo, any scope", "npm-housekeeping list --source local"],
       ["Hide private packages", "npm-housekeeping list --scope @alistigo --no-private"],
     ],
   });
 
   scope = Option.String("--scope", {
-    required: true,
-    description: "npm organisation scope to list, e.g. @alistigo",
+    description: "npm organisation scope to list, e.g. @alistigo (required unless --source local)",
   });
 
   source = Option.String("--source", "all", {
@@ -109,24 +112,33 @@ export class ListCommand extends Command {
       return 1;
     }
     const source = this.source;
+    const scope = this.scope;
+    const label = scope ?? "all scopes";
+
+    if (source !== "local" && scope === undefined) {
+      this.context.stderr.write(
+        `--scope is required with --source ${source} (npm is queried by scope).\n`,
+      );
+      return 1;
+    }
 
     let remote: Map<string, string | null> | null = null;
-    if (source !== "local") {
-      this.context.stdout.write(`Fetching packages for ${this.scope} from npm...\n`);
-      const packages = await listNpmPackageDetails(this.scope);
+    if (source !== "local" && scope !== undefined) {
+      this.context.stdout.write(`Fetching packages for ${scope} from npm...\n`);
+      const packages = await listNpmPackageDetails(scope);
       remote = new Map(packages.map((p) => [p.name, p.version]));
     }
 
     let local: Map<string, LocalPackage> | null = null;
     if (source !== "remote") {
       this.context.stdout.write(`Scanning Nx workspace at ${workspaceRoot}...\n`);
-      const packages = await listLocalPackageDetails(this.scope, { includePrivate: this.private });
+      const packages = await listLocalPackageDetails(scope, { includePrivate: this.private });
       local = new Map(packages.map((p) => [p.name, p]));
     }
 
     const rows = mergeRows(remote, local);
     if (rows.length === 0) {
-      this.context.stdout.write(`No packages found for ${this.scope}.\n`);
+      this.context.stdout.write(`No packages found for ${label}.\n`);
       return 0;
     }
 
