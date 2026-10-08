@@ -20,7 +20,7 @@ export class HelpCommand extends Command {
 
     this.context.stdout.write(this.cli.usage());
     this.context.stdout.write(
-      "Or run `npm-housekeeping help <command>`. With no command, `check` runs by default.\n",
+      "Or run `npm-housekeeping help <command>`. With no command, `check` runs by default (it still needs --scope).\n",
     );
     return 0;
   }
