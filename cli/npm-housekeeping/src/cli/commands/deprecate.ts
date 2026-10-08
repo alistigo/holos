@@ -3,8 +3,9 @@ import { Command, Option } from "clipanion";
 import { listLocalPackages } from "../lib/list-local-packages.js";
 import { listNpmPackages } from "../lib/list-npm-packages.js";
 
-const DEFAULT_MESSAGE =
-  "This package has been renamed or removed. Check the @alistigo scope on npm for the current packages.";
+function defaultMessage(scope: string): string {
+  return `This package has been renamed or removed. Check the ${scope} scope on npm for the current packages.`;
+}
 
 function deprecatePackage(name: string, message: string): boolean {
   const result = spawnSync("npm", ["deprecate", `${name}@*`, message], {
@@ -45,21 +46,26 @@ export class DeprecateCommand extends Command {
       configure your .npmrc accordingly.
     `,
     examples: [
-      ["Dry-run to preview what would be deprecated", "npm-housekeeping deprecate --dry-run"],
-      ["Deprecate all stale packages", "npm-housekeeping deprecate"],
+      [
+        "Dry-run to preview what would be deprecated",
+        "npm-housekeeping deprecate --scope @alistigo --dry-run",
+      ],
+      ["Deprecate all stale packages", "npm-housekeeping deprecate --scope @alistigo"],
       [
         "Custom deprecation message",
-        'npm-housekeeping deprecate --message "Renamed to @alistigo/new-name"',
+        `npm-housekeeping deprecate --scope @alistigo --message "Renamed to @alistigo/new-name"`,
       ],
     ],
   });
 
-  scope = Option.String("--scope", "@alistigo", {
-    description: "npm organisation scope to audit (default: @alistigo)",
+  scope = Option.String("--scope", {
+    required: true,
+    description: "npm organisation scope to audit, e.g. @alistigo",
   });
 
-  message = Option.String("--message,-m", DEFAULT_MESSAGE, {
-    description: "Deprecation message to set on each stale package",
+  message = Option.String("--message,-m", {
+    description:
+      "Deprecation message to set on each stale package (default: points users to the scope on npm)",
   });
 
   dryRun = Option.Boolean("--dry-run", false, {
@@ -76,6 +82,7 @@ export class DeprecateCommand extends Command {
     ]);
 
     const stale = npmPackages.filter((n) => !localPackages.has(n));
+    const message = this.message ?? defaultMessage(this.scope);
 
     if (stale.length === 0) {
       this.context.stdout.write("Nothing to deprecate.\n");
@@ -90,13 +97,13 @@ export class DeprecateCommand extends Command {
     if (this.dryRun) {
       this.context.stdout.write("\n[dry-run] Would run:\n\n");
       for (const name of stale) {
-        this.context.stdout.write(`  npm deprecate "${name}@*" "${this.message}"\n`);
+        this.context.stdout.write(`  npm deprecate "${name}@*" "${message}"\n`);
       }
       return 0;
     }
 
     this.context.stdout.write("\nDeprecating...\n\n");
-    const failures = runDeprecations(stale, this.message, this.context.stdout, this.context.stderr);
+    const failures = runDeprecations(stale, message, this.context.stdout, this.context.stderr);
 
     if (failures > 0) {
       this.context.stderr.write(`\n${failures} package(s) failed to deprecate.\n`);

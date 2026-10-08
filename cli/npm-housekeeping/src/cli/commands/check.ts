@@ -15,14 +15,12 @@ export class CheckCommand extends Command {
       Exits 0 when no stale packages are found, exits 1 when stale packages exist
       (useful in CI checks).
     `,
-    examples: [
-      ["Check the default @alistigo scope", "npm-housekeeping check"],
-      ["Check a different scope", "npm-housekeeping check --scope @myorg"],
-    ],
+    examples: [["Check the @alistigo scope", "npm-housekeeping check --scope @alistigo"]],
   });
 
-  scope = Option.String("--scope", "@alistigo", {
-    description: "npm organisation scope to audit (default: @alistigo)",
+  scope = Option.String("--scope", {
+    required: true,
+    description: "npm organisation scope to audit, e.g. @alistigo",
   });
 
   async execute(): Promise<number> {

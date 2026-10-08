@@ -67,15 +67,15 @@ export class ListCommand extends Command {
       containing pnpm-workspace.yaml), regardless of the current directory.
     `,
     examples: [
-      ["Compare npm and the monorepo side by side", "npm-housekeeping list"],
-      ["List packages published on npm", "npm-housekeeping list --source remote"],
-      ["List packages in the monorepo", "npm-housekeeping list --source local"],
-      ["List a different scope", "npm-housekeeping list --scope @myorg"],
+      ["Compare npm and the monorepo side by side", "npm-housekeeping list --scope @alistigo"],
+      ["List packages published on npm", "npm-housekeeping list --scope @alistigo --source remote"],
+      ["List packages in the monorepo", "npm-housekeeping list --scope @alistigo --source local"],
     ],
   });
 
-  scope = Option.String("--scope", "@alistigo", {
-    description: "npm organisation scope to list (default: @alistigo)",
+  scope = Option.String("--scope", {
+    required: true,
+    description: "npm organisation scope to list, e.g. @alistigo",
   });
 
   source = Option.String("--source", "all", {
