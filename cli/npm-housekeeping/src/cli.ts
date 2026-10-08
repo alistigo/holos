@@ -2,6 +2,7 @@
 import { Builtins, Cli } from "clipanion";
 import { CheckCommand } from "./cli/commands/check.js";
 import { DeprecateCommand } from "./cli/commands/deprecate.js";
+import { DoctorCommand } from "./cli/commands/doctor.js";
 import { HelpCommand } from "./cli/commands/help.js";
 import { ListCommand } from "./cli/commands/list.js";
 
@@ -13,6 +14,7 @@ const cli = new Cli({
 
 cli.register(CheckCommand);
 cli.register(DeprecateCommand);
+cli.register(DoctorCommand);
 cli.register(ListCommand);
 cli.register(HelpCommand);
 cli.register(Builtins.VersionCommand);
