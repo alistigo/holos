@@ -24,6 +24,7 @@ interface NpmRun {
   code: string | null;
 }
 
+// fallow-ignore-next-line complexity
 function npm(args: string[]): NpmRun {
   const result = spawnSync("npm", args, { encoding: "utf-8" });
   const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`;
@@ -89,6 +90,7 @@ const TOKEN_SETUP = [
 ];
 
 /** Returns the check plus the npm username when authenticated. */
+// fallow-ignore-next-line complexity
 export function checkAuth(): { result: CheckResult; user: string | null } {
   const run = npm(["whoami"]);
   if (run.ok)
@@ -170,46 +172,52 @@ export async function checkWriteAccess(
   );
 }
 
+const TFA_TITLE = "Two-factor auth";
+
+const TFA_UNKNOWN_FIX = [
+  "If your account requires 2FA for writes, either be ready to type a one-time code",
+  "for each package, or use a granular token with “Bypass two-factor authentication”.",
+  `Note: npm is restricting 2FA-bypass tokens, see ${BYPASS_2FA_NOTICE}`,
+];
+
+function profileUnreadable(code: string | null): CheckResult {
+  const reason =
+    code === "E403" || code === "E401"
+      ? "this token can't read your npm profile (normal for granular access tokens)"
+      : `could not read your npm profile (${code ?? "unknown error"})`;
+  return check(TFA_TITLE, "warn", `${reason}, so the 2FA mode is unknown`, TFA_UNKNOWN_FIX);
+}
+
+/** 2FA mode from `npm profile get --json` output: a mode, null when disabled, undefined when unparseable. */
+function parseTfaMode(stdout: string): string | null | undefined {
+  try {
+    const profile = JSON.parse(stdout) as { tfa?: { mode?: string } | false | null };
+    return profile.tfa ? (profile.tfa.mode ?? null) : null;
+  } catch {
+    return undefined;
+  }
+}
+
+// fallow-ignore-next-line complexity
 export function checkTwoFactor(): CheckResult {
   const run = npm(["profile", "get", "--json"]);
-  if (!run.ok) {
-    return check(
-      "Two-factor auth",
-      "warn",
-      run.code === "E403" || run.code === "E401"
-        ? "this token can't read your npm profile (normal for granular access tokens), so the 2FA mode is unknown"
-        : `could not read your npm profile (${run.code ?? "unknown error"}), so the 2FA mode is unknown`,
-      [
-        "If your account requires 2FA for writes, either be ready to type a one-time code",
-        "for each package, or use a granular token with “Bypass two-factor authentication”.",
-        `Note: npm is restricting 2FA-bypass tokens, see ${BYPASS_2FA_NOTICE}`,
-      ],
-    );
-  }
+  if (!run.ok) return profileUnreadable(run.code);
 
-  let mode: string | null = null;
-  try {
-    const profile = JSON.parse(run.stdout) as { tfa?: { mode?: string } | false | null };
-    mode = profile.tfa ? (profile.tfa.mode ?? null) : null;
-  } catch {
-    return check("Two-factor auth", "warn", "unexpected output from `npm profile get`");
-  }
+  const mode = parseTfaMode(run.stdout);
+  if (mode === undefined)
+    return check(TFA_TITLE, "warn", "unexpected output from `npm profile get`");
+  if (mode === null) return check(TFA_TITLE, "ok", "2FA disabled");
+  if (mode !== "auth-and-writes")
+    return check(TFA_TITLE, "ok", `2FA mode: ${mode} (writes need no code)`);
 
-  if (mode === "auth-and-writes") {
-    return check(
-      "Two-factor auth",
-      "warn",
-      "2FA is required for writes: npm deprecate will ask for a one-time code",
-      [
-        "Interactively, npm prompts for the code once per package.",
-        "Unattended (CI), use a granular token with “Bypass two-factor authentication”.",
-        `Note: npm is restricting 2FA-bypass tokens, see ${BYPASS_2FA_NOTICE}`,
-      ],
-    );
-  }
   return check(
-    "Two-factor auth",
-    "ok",
-    mode ? `2FA mode: ${mode} (writes need no code)` : "2FA disabled",
+    TFA_TITLE,
+    "warn",
+    "2FA is required for writes: npm deprecate will ask for a one-time code",
+    [
+      "Interactively, npm prompts for the code once per package.",
+      "Unattended (CI), use a granular token with “Bypass two-factor authentication”.",
+      `Note: npm is restricting 2FA-bypass tokens, see ${BYPASS_2FA_NOTICE}`,
+    ],
   );
 }

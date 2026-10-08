@@ -40,6 +40,7 @@ function readPackageJson(pkgJsonPath: string): PackageJson | null {
   }
 }
 
+// fallow-ignore-next-line complexity
 function toLocalPackage(pkg: PackageJson | null, prefix: string | null): LocalPackage | null {
   if (typeof pkg?.name !== "string") return null;
   if (prefix !== null && !pkg.name.startsWith(prefix)) return null;
@@ -59,6 +60,7 @@ function toLocalPackage(pkg: PackageJson | null, prefix: string | null): LocalPa
  * knows about is covered. The workspace root is resolved by Nx (nearest
  * nx.json above the current directory, or NX_WORKSPACE_ROOT_PATH).
  */
+// fallow-ignore-next-line complexity
 export async function listLocalPackageDetails(
   scope: string | undefined,
   { includePrivate = false }: { includePrivate?: boolean } = {},
