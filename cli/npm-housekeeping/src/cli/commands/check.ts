@@ -1,5 +1,5 @@
 import { Command, Option } from "clipanion";
-import { findRepoRoot, listLocalPackages } from "../lib/list-local-packages.js";
+import { listLocalPackages } from "../lib/list-local-packages.js";
 import { listNpmPackages } from "../lib/list-npm-packages.js";
 
 export class CheckCommand extends Command {
@@ -12,8 +12,8 @@ export class CheckCommand extends Command {
       them against the packages currently present in the monorepo. Packages found
       on npm but missing locally are considered stale candidates for deprecation.
 
-      Local packages are discovered from the repo root (the nearest directory
-      containing pnpm-workspace.yaml), regardless of the current directory.
+      Local packages are the Nx projects in the workspace (root found via nx.json)
+      whose package.json is in scope and not "private": true.
 
       Exits 0 by default. Pass \`--fail-on-stale\` to exit 1 when stale packages
       exist (useful in CI checks).
@@ -39,8 +39,10 @@ export class CheckCommand extends Command {
   async execute(): Promise<number> {
     this.context.stdout.write(`Fetching packages for ${this.scope} from npm...\n`);
 
-    const localPackages = listLocalPackages(findRepoRoot(process.cwd()), this.scope);
-    const npmPackages = await listNpmPackages(this.scope);
+    const [npmPackages, localPackages] = await Promise.all([
+      listNpmPackages(this.scope),
+      listLocalPackages(this.scope),
+    ]);
 
     const stale = npmPackages.filter((n) => !localPackages.has(n));
 

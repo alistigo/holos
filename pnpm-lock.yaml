@@ -239,6 +239,9 @@ importers:
 
   cli/npm-housekeeping:
     dependencies:
+      '@nx/devkit':
+        specifier: 22.5.4
+        version: 22.5.4(nx@22.5.4)
       clipanion:
         specifier: 4.0.0-rc.4
         version: 4.0.0-rc.4(typanion@3.14.0)

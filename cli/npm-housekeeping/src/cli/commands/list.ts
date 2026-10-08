@@ -1,5 +1,5 @@
 import { Command, Option } from "clipanion";
-import { findRepoRoot, listLocalPackageDetails } from "../lib/list-local-packages.js";
+import { listLocalPackageDetails, workspaceRoot } from "../lib/list-local-packages.js";
 import { listNpmPackageDetails } from "../lib/list-npm-packages.js";
 
 const SOURCES = ["remote", "local", "all"] as const;
@@ -63,8 +63,8 @@ export class ListCommand extends Command {
       version. \`--source local\` lists only packages found in the monorepo with
       their package.json version.
 
-      Local packages are discovered from the repo root (the nearest directory
-      containing pnpm-workspace.yaml), regardless of the current directory.
+      Local packages are the Nx projects in the workspace (root found via nx.json)
+      whose package.json is in scope and not "private": true.
     `,
     examples: [
       ["Compare npm and the monorepo side by side", "npm-housekeeping list --scope @alistigo"],
@@ -101,9 +101,8 @@ export class ListCommand extends Command {
 
     let local: Map<string, string | null> | null = null;
     if (source !== "remote") {
-      const root = findRepoRoot(process.cwd());
-      this.context.stdout.write(`Scanning monorepo at ${root}...\n`);
-      const packages = listLocalPackageDetails(root, this.scope);
+      this.context.stdout.write(`Scanning Nx workspace at ${workspaceRoot}...\n`);
+      const packages = await listLocalPackageDetails(this.scope);
       local = new Map(packages.map((p) => [p.name, p.version]));
     }
 
