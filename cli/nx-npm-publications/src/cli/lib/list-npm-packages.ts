@@ -45,3 +45,13 @@ export async function listNpmPackageDetails(scope: string): Promise<NpmPackage[]
 export async function listNpmPackages(scope: string): Promise<string[]> {
   return listOrgPackageNames(scope);
 }
+
+/**
+ * Users with access to `name` and their level ("write" or "read"). Public
+ * endpoint: works without a token, so token restrictions can't block it.
+ */
+export async function fetchCollaborators(name: string): Promise<Record<string, string>> {
+  return getJson<Record<string, string>>(
+    `${REGISTRY}/-/package/${name.replace("/", "%2F")}/collaborators`,
+  );
+}

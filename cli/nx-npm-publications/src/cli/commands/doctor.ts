@@ -94,7 +94,7 @@ export class DoctorCommand extends Command {
       run(
         targets.length === 0
           ? skipped("Write access", "no stale packages to deprecate")
-          : checkWriteAccess(targets, this.scope),
+          : await checkWriteAccess(targets, this.scope, user),
       );
       run(checkTwoFactor());
     }
