@@ -1,5 +1,5 @@
 import { Command, Option } from "clipanion";
-import { listLocalPackages } from "../lib/list-local-packages.js";
+import { findRepoRoot, listLocalPackages } from "../lib/list-local-packages.js";
 import { listNpmPackages } from "../lib/list-npm-packages.js";
 
 export class CheckCommand extends Command {
@@ -12,10 +12,19 @@ export class CheckCommand extends Command {
       them against the packages currently present in the monorepo. Packages found
       on npm but missing locally are considered stale candidates for deprecation.
 
-      Exits 0 when no stale packages are found, exits 1 when stale packages exist
-      (useful in CI checks).
+      Local packages are discovered from the repo root (the nearest directory
+      containing pnpm-workspace.yaml), regardless of the current directory.
+
+      Exits 0 by default. Pass \`--fail-on-stale\` to exit 1 when stale packages
+      exist (useful in CI checks).
     `,
-    examples: [["Check the @alistigo scope", "npm-housekeeping check --scope @alistigo"]],
+    examples: [
+      ["Check the @alistigo scope", "npm-housekeeping check --scope @alistigo"],
+      [
+        "Fail when stale packages exist (CI)",
+        "npm-housekeeping check --scope @alistigo --fail-on-stale",
+      ],
+    ],
   });
 
   scope = Option.String("--scope", {
@@ -23,13 +32,15 @@ export class CheckCommand extends Command {
     description: "npm organisation scope to audit, e.g. @alistigo",
   });
 
+  failOnStale = Option.Boolean("--fail-on-stale", false, {
+    description: "Exit 1 when stale packages are found (for CI)",
+  });
+
   async execute(): Promise<number> {
     this.context.stdout.write(`Fetching packages for ${this.scope} from npm...\n`);
 
-    const [npmPackages, localPackages] = await Promise.all([
-      listNpmPackages(this.scope),
-      Promise.resolve(listLocalPackages(process.cwd(), this.scope)),
-    ]);
+    const localPackages = listLocalPackages(findRepoRoot(process.cwd()), this.scope);
+    const npmPackages = await listNpmPackages(this.scope);
 
     const stale = npmPackages.filter((n) => !localPackages.has(n));
 
@@ -46,7 +57,9 @@ export class CheckCommand extends Command {
     for (const name of stale) {
       this.context.stdout.write(`  - ${name}\n`);
     }
-    this.context.stdout.write("\nRun `npm-housekeeping deprecate` to deprecate them.\n");
-    return 1;
+    this.context.stdout.write(
+      `\nRun \`npm-housekeeping deprecate --scope ${this.scope}\` to deprecate them.\n`,
+    );
+    return this.failOnStale ? 1 : 0;
   }
 }

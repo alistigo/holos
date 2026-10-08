@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { Command, Option } from "clipanion";
-import { listLocalPackages } from "../lib/list-local-packages.js";
+import { findRepoRoot, listLocalPackages } from "../lib/list-local-packages.js";
 import { listNpmPackages } from "../lib/list-npm-packages.js";
 
 function defaultMessage(scope: string): string {
@@ -76,10 +76,8 @@ export class DeprecateCommand extends Command {
   async execute(): Promise<number> {
     this.context.stdout.write(`Fetching packages for ${this.scope} from npm...\n`);
 
-    const [npmPackages, localPackages] = await Promise.all([
-      listNpmPackages(this.scope),
-      Promise.resolve(listLocalPackages(process.cwd(), this.scope)),
-    ]);
+    const localPackages = listLocalPackages(findRepoRoot(process.cwd()), this.scope);
+    const npmPackages = await listNpmPackages(this.scope);
 
     const stale = npmPackages.filter((n) => !localPackages.has(n));
     const message = this.message ?? defaultMessage(this.scope);
