@@ -51,8 +51,8 @@ export class DeprecateCommand extends Command {
       3. Runs \`npm deprecate\` on the selected packages, or prints the commands
          with \`--dry-run\`.
 
-      Requires npm authentication. Run \`npm login\` first, or set NPM_TOKEN and
-      configure your .npmrc accordingly.
+      Requires npm authentication with write access to the packages. Run
+      \`npm-housekeeping doctor --scope <scope>\` to check this and see how to fix it.
     `,
     examples: [
       ["Pick packages to deprecate interactively", "npm-housekeeping deprecate --scope @alistigo"],
