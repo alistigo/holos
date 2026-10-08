@@ -1,33 +1,45 @@
-interface NpmSearchObject {
-  package: { name: string; version: string };
+const REGISTRY = "https://registry.npmjs.org";
+
+export interface NpmPackage {
+  name: string;
+  /** Latest published version, or null when the dist-tags lookup fails (e.g. unpublished). */
+  version: string | null;
 }
 
-interface NpmSearchResult {
-  objects: NpmSearchObject[];
-  total: number;
-}
-
-async function fetchPage(bare: string, from: number): Promise<NpmSearchResult> {
-  const url = `https://registry.npmjs.org/-/v1/search?text=scope:${bare}&size=250&from=${from}`;
+async function getJson<T>(url: string): Promise<T> {
   const resp = await fetch(url);
   if (!resp.ok) {
-    throw new Error(`npm registry error: ${resp.status} ${resp.statusText}`);
+    throw new Error(`npm registry error: ${resp.status} ${resp.statusText} (${url})`);
   }
-  return (await resp.json()) as NpmSearchResult;
+  return (await resp.json()) as T;
 }
 
-// fallow-ignore-next-line complexity
-export async function listNpmPackages(scope: string): Promise<string[]> {
-  const bare = scope.replace(/^@/, "");
-  const names: string[] = [];
-  let from = 0;
+// The search API (/-/v1/search?text=scope:x) doesn't reliably index scoped
+// packages, so list them from the org endpoint, which is public and complete.
+async function listOrgPackageNames(scope: string): Promise<string[]> {
+  const org = scope.replace(/^@/, "");
+  const perms = await getJson<Record<string, string>>(`${REGISTRY}/-/org/${org}/package`);
+  return Object.keys(perms);
+}
 
-  while (true) {
-    const data = await fetchPage(bare, from);
-    for (const obj of data.objects) names.push(obj.package.name);
-    from += data.objects.length;
-    if (from >= data.total || data.objects.length === 0) break;
+async function fetchLatestVersion(name: string): Promise<string | null> {
+  try {
+    const tags = await getJson<{ latest?: string }>(
+      `${REGISTRY}/-/package/${name.replace("/", "%2F")}/dist-tags`,
+    );
+    return tags.latest ?? null;
+  } catch {
+    return null;
   }
+}
 
-  return names;
+export async function listNpmPackageDetails(scope: string): Promise<NpmPackage[]> {
+  const names = await listOrgPackageNames(scope);
+  return Promise.all(
+    names.map(async (name) => ({ name, version: await fetchLatestVersion(name) })),
+  );
+}
+
+export async function listNpmPackages(scope: string): Promise<string[]> {
+  return listOrgPackageNames(scope);
 }
