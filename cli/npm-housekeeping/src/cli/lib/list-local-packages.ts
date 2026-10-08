@@ -1,69 +1,57 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { createProjectGraphAsync, workspaceRoot } from "@nx/devkit";
 
-const SEARCH_DIRS = ["packages", "cli", "apps", "websites"];
+export { workspaceRoot };
 
 export interface LocalPackage {
   name: string;
   version: string | null;
-  private: boolean;
 }
 
-function readPackage(pkgJsonPath: string): LocalPackage | null {
+interface PackageJson {
+  name?: unknown;
+  version?: unknown;
+  private?: unknown;
+}
+
+function readPackageJson(pkgJsonPath: string): PackageJson | null {
+  if (!existsSync(pkgJsonPath)) return null;
   try {
-    const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf-8")) as {
-      name?: string;
-      version?: string;
-      private?: boolean;
-    };
-    if (typeof pkg.name !== "string") return null;
-    return {
-      name: pkg.name,
-      version: typeof pkg.version === "string" ? pkg.version : null,
-      private: pkg.private === true,
-    };
+    return JSON.parse(readFileSync(pkgJsonPath, "utf-8")) as PackageJson;
   } catch {
     return null;
   }
 }
 
-// fallow-ignore-next-line complexity
-function collectFromDir(dirPath: string, prefix: string): LocalPackage[] {
-  const packages: LocalPackage[] = [];
-  for (const entry of readdirSync(dirPath, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const pkgJsonPath = path.join(dirPath, entry.name, "package.json");
-    if (!existsSync(pkgJsonPath)) continue;
-    const pkg = readPackage(pkgJsonPath);
-    if (pkg?.name.startsWith(prefix)) packages.push(pkg);
-  }
-  return packages;
+/** Publishable package under `prefix`: has a name in scope and is not `"private": true`. */
+function toPublishable(pkg: PackageJson | null, prefix: string): LocalPackage | null {
+  if (typeof pkg?.name !== "string" || !pkg.name.startsWith(prefix)) return null;
+  if (pkg.private === true) return null;
+  return { name: pkg.name, version: typeof pkg.version === "string" ? pkg.version : null };
 }
 
-/** Walks up from `start` to the directory holding pnpm-workspace.yaml; falls back to `start`. */
-export function findRepoRoot(start: string): string {
-  let dir = path.resolve(start);
-  while (!existsSync(path.join(dir, "pnpm-workspace.yaml"))) {
-    const parent = path.dirname(dir);
-    if (parent === dir) return start;
-    dir = parent;
-  }
-  return dir;
-}
-
-export function listLocalPackageDetails(repoRoot: string, scope: string): LocalPackage[] {
+/**
+ * Lists publishable packages in the Nx workspace for `scope`.
+ *
+ * Project locations come from the Nx project graph, so any folder layout Nx
+ * knows about is covered. The workspace root is resolved by Nx (nearest
+ * nx.json above the current directory, or NX_WORKSPACE_ROOT_PATH).
+ */
+export async function listLocalPackageDetails(scope: string): Promise<LocalPackage[]> {
   const prefix = scope.endsWith("/") ? scope : `${scope}/`;
-  const packages: LocalPackage[] = [];
+  const graph = await createProjectGraphAsync({ exitOnError: false });
 
-  for (const dir of SEARCH_DIRS) {
-    const dirPath = path.join(repoRoot, dir);
-    if (!existsSync(dirPath)) continue;
-    packages.push(...collectFromDir(dirPath, prefix));
+  const packages = new Map<string, LocalPackage>();
+  for (const node of Object.values(graph.nodes)) {
+    const pkgJsonPath = path.join(workspaceRoot, node.data.root, "package.json");
+    const pkg = toPublishable(readPackageJson(pkgJsonPath), prefix);
+    if (pkg) packages.set(pkg.name, pkg);
   }
 
-  return packages;
+  return [...packages.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function listLocalPackages(repoRoot: string, scope: string): Set<string> {
-  return new Set(listLocalPackageDetails(repoRoot, scope).map((p) => p.name));
+export async function listLocalPackages(scope: string): Promise<Set<string>> {
+  return new Set((await listLocalPackageDetails(scope)).map((p) => p.name));
 }
