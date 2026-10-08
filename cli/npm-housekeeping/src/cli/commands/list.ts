@@ -57,18 +57,19 @@ export class ListCommand extends Command {
     details: `
       Lists packages for the given scope with their versions, sorted by name.
 
-      \`--source remote\` (default) lists packages published to the npm registry
-      with their latest version. \`--source local\` lists packages found in the
-      monorepo with their package.json version. \`--source all\` merges both,
-      showing ${ABSENT} where a package is missing on one side.
+      \`--source all\` (default) merges npm and the monorepo side by side,
+      showing ${ABSENT} where a package is missing on one side. \`--source remote\`
+      lists only packages published to the npm registry with their latest
+      version. \`--source local\` lists only packages found in the monorepo with
+      their package.json version.
 
       Local packages are discovered from the repo root (the nearest directory
       containing pnpm-workspace.yaml), regardless of the current directory.
     `,
     examples: [
-      ["List packages published on npm", "npm-housekeeping list"],
+      ["Compare npm and the monorepo side by side", "npm-housekeeping list"],
+      ["List packages published on npm", "npm-housekeeping list --source remote"],
       ["List packages in the monorepo", "npm-housekeeping list --source local"],
-      ["Compare npm and the monorepo side by side", "npm-housekeeping list --source all"],
       ["List a different scope", "npm-housekeeping list --scope @myorg"],
     ],
   });
@@ -77,8 +78,8 @@ export class ListCommand extends Command {
     description: "npm organisation scope to list (default: @alistigo)",
   });
 
-  source = Option.String("--source", "remote", {
-    description: "Where to list packages from: remote (npm), local (monorepo), or all",
+  source = Option.String("--source", "all", {
+    description: "Where to list packages from: all (default), remote (npm), or local (monorepo)",
   });
 
   // fallow-ignore-next-line complexity
