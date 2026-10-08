@@ -52,21 +52,24 @@ export class DeprecateCommand extends Command {
          with \`--dry-run\`.
 
       Requires npm authentication with write access to the packages. Run
-      \`npm-housekeeping doctor --scope <scope>\` to check this and see how to fix it.
+      \`nx-npm-publications doctor --scope <scope>\` to check this and see how to fix it.
     `,
     examples: [
-      ["Pick packages to deprecate interactively", "npm-housekeeping deprecate --scope @alistigo"],
+      [
+        "Pick packages to deprecate interactively",
+        "nx-npm-publications deprecate --scope @alistigo",
+      ],
       [
         "Preview the commands for the packages you pick",
-        "npm-housekeeping deprecate --scope @alistigo --dry-run",
+        "nx-npm-publications deprecate --scope @alistigo --dry-run",
       ],
       [
         "Deprecate every stale package without prompting",
-        "npm-housekeeping deprecate --scope @alistigo --all",
+        "nx-npm-publications deprecate --scope @alistigo --all",
       ],
       [
         "Custom deprecation message",
-        `npm-housekeeping deprecate --scope @alistigo --message "Renamed to @alistigo/new-name"`,
+        `nx-npm-publications deprecate --scope @alistigo --message "Renamed to @alistigo/new-name"`,
       ],
     ],
   });

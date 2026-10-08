@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createRequire } from "node:module";
 import { Builtins, Cli } from "clipanion";
 import { CheckCommand } from "./cli/commands/check.js";
 import { DeprecateCommand } from "./cli/commands/deprecate.js";
@@ -6,10 +7,13 @@ import { DoctorCommand } from "./cli/commands/doctor.js";
 import { HelpCommand } from "./cli/commands/help.js";
 import { ListCommand } from "./cli/commands/list.js";
 
+// Resolves to the package root from both src/ (bun) and dist/ (node).
+const { version } = createRequire(import.meta.url)("../package.json") as { version: string };
+
 const cli = new Cli({
-  binaryLabel: "npm-housekeeping",
-  binaryName: "npm-housekeeping",
-  binaryVersion: "0.1.0",
+  binaryLabel: "nx-npm-publications",
+  binaryName: "nx-npm-publications",
+  binaryVersion: version,
 });
 
 cli.register(CheckCommand);

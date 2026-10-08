@@ -19,10 +19,10 @@ export class CheckCommand extends Command {
       exist (useful in CI checks).
     `,
     examples: [
-      ["Check the @alistigo scope", "npm-housekeeping check --scope @alistigo"],
+      ["Check the @alistigo scope", "nx-npm-publications check --scope @alistigo"],
       [
         "Fail when stale packages exist (CI)",
-        "npm-housekeeping check --scope @alistigo --fail-on-stale",
+        "nx-npm-publications check --scope @alistigo --fail-on-stale",
       ],
     ],
   });
@@ -60,7 +60,7 @@ export class CheckCommand extends Command {
       this.context.stdout.write(`  - ${name}\n`);
     }
     this.context.stdout.write(
-      `\nRun \`npm-housekeeping deprecate --scope ${this.scope}\` to deprecate them.\n`,
+      `\nRun \`nx-npm-publications deprecate --scope ${this.scope}\` to deprecate them.\n`,
     );
     return this.failOnStale ? 1 : 0;
   }
