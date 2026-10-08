@@ -3,7 +3,7 @@ import { listLocalPackages } from "../lib/list-local-packages.js";
 import { listNpmPackages } from "../lib/list-npm-packages.js";
 
 export class CheckCommand extends Command {
-  static override paths = [Command.Default, ["check"]];
+  static override paths = [["check"], Command.Default];
 
   static override usage = Command.Usage({
     description: "List packages published to npm that are no longer in the monorepo",
