@@ -1,5 +1,9 @@
 import { Command, Option } from "clipanion";
-import { listLocalPackageDetails, workspaceRoot } from "../lib/list-local-packages.js";
+import {
+  type LocalPackage,
+  listLocalPackageDetails,
+  workspaceRoot,
+} from "../lib/list-local-packages.js";
 import { listNpmPackageDetails } from "../lib/list-npm-packages.js";
 
 const SOURCES = ["remote", "local", "all"] as const;
@@ -9,9 +13,12 @@ interface Row {
   name: string;
   remote: string | null;
   local: string | null;
+  /** From the local package.json; null when the package is not in the monorepo. */
+  isPublic: boolean | null;
 }
 
 const ABSENT = "—";
+const CHECK = "✓";
 
 function isSource(value: string): value is Source {
   return (SOURCES as readonly string[]).includes(value);
@@ -19,7 +26,7 @@ function isSource(value: string): value is Source {
 
 function mergeRows(
   remote: Map<string, string | null> | null,
-  local: Map<string, string | null> | null,
+  local: Map<string, LocalPackage> | null,
 ): Row[] {
   const names = new Set([...(remote?.keys() ?? []), ...(local?.keys() ?? [])]);
   return [...names]
@@ -27,7 +34,8 @@ function mergeRows(
     .map((name) => ({
       name,
       remote: remote?.has(name) ? (remote.get(name) ?? "(unknown)") : null,
-      local: local?.has(name) ? (local.get(name) ?? "(no version)") : null,
+      local: local?.has(name) ? (local.get(name)?.version ?? "(no version)") : null,
+      isPublic: local?.has(name) ? local.get(name)?.private === false : null,
     }));
 }
 
@@ -36,7 +44,10 @@ function formatTable(rows: Row[], source: Source): string {
     { header: "package", get: (r) => r.name },
   ];
   if (source !== "local") columns.push({ header: "npm", get: (r) => r.remote ?? ABSENT });
-  if (source !== "remote") columns.push({ header: "local", get: (r) => r.local ?? ABSENT });
+  if (source !== "remote") {
+    columns.push({ header: "local", get: (r) => r.local ?? ABSENT });
+    columns.push({ header: "public", get: (r) => (r.isPublic ? CHECK : "") });
+  }
 
   const widths = columns.map((c) => Math.max(c.header.length, ...rows.map((r) => c.get(r).length)));
   const line = (cells: string[]) =>
@@ -64,12 +75,15 @@ export class ListCommand extends Command {
       their package.json version.
 
       Local packages are the Nx projects in the workspace (root found via nx.json)
-      whose package.json is in scope and not "private": true.
+      whose package.json name is in scope. Private packages ("private": true) are
+      shown by default; the \`public\` column has ${CHECK} for packages that are not
+      private. Pass \`--no-private\` to hide private packages.
     `,
     examples: [
       ["Compare npm and the monorepo side by side", "npm-housekeeping list --scope @alistigo"],
       ["List packages published on npm", "npm-housekeeping list --scope @alistigo --source remote"],
       ["List packages in the monorepo", "npm-housekeeping list --scope @alistigo --source local"],
+      ["Hide private packages", "npm-housekeeping list --scope @alistigo --no-private"],
     ],
   });
 
@@ -80,6 +94,10 @@ export class ListCommand extends Command {
 
   source = Option.String("--source", "all", {
     description: "Where to list packages from: all (default), remote (npm), or local (monorepo)",
+  });
+
+  private = Option.Boolean("--private", true, {
+    description: "Include private monorepo packages (default: true; use --no-private to hide them)",
   });
 
   // fallow-ignore-next-line complexity
@@ -99,11 +117,11 @@ export class ListCommand extends Command {
       remote = new Map(packages.map((p) => [p.name, p.version]));
     }
 
-    let local: Map<string, string | null> | null = null;
+    let local: Map<string, LocalPackage> | null = null;
     if (source !== "remote") {
       this.context.stdout.write(`Scanning Nx workspace at ${workspaceRoot}...\n`);
-      const packages = await listLocalPackageDetails(this.scope);
-      local = new Map(packages.map((p) => [p.name, p.version]));
+      const packages = await listLocalPackageDetails(this.scope, { includePrivate: this.private });
+      local = new Map(packages.map((p) => [p.name, p]));
     }
 
     const rows = mergeRows(remote, local);
