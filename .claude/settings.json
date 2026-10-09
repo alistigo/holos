@@ -3,15 +3,24 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "bash .agents/hooks/session-start.sh" },
-          { "type": "command", "command": "bash .agents/hooks/superpowers-session-start.sh" }
+          {
+            "type": "command",
+            "command": "bash .agents/hooks/session-start.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash .agents/hooks/superpowers-session-start.sh"
+          }
         ]
       }
     ]
   },
   "extraKnownMarketplaces": {
     "nx-claude-plugins": {
-      "source": { "source": "github", "repo": "nrwl/nx-ai-agents-config" }
+      "source": {
+        "source": "github",
+        "repo": "nrwl/nx-ai-agents-config"
+      }
     }
   },
   "enabledPlugins": {
