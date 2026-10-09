@@ -6,10 +6,6 @@
           {
             "type": "command",
             "command": "bash .agents/hooks/session-start.sh"
-          },
-          {
-            "type": "command",
-            "command": "bash .agents/hooks/superpowers-session-start.sh"
           }
         ]
       }

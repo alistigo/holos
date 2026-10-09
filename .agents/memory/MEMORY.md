@@ -41,19 +41,15 @@ Note: `.claude/skills` and `.claude/commands` are symlinks to `.agents/` — no 
 
 ## Claude Enhancement Tools
 
-Four tools installed as git submodules in `vendor/`, skills symlinked into `.agents/skills/`:
+One tool installed as a git submodule in `vendor/`, skills symlinked into `.agents/skills/`:
 
 | Tool | Skills |
 |------|--------|
-| **Caveman** (`vendor/caveman`) | `caveman`, `caveman-stats`, `caveman-commit`, `caveman-compress` |
-| **Superpowers** (`vendor/superpowers`) | `writing-plans`, `executing-plans`, `subagent-driven-development`, `test-driven-development`, `systematic-debugging`, `using-git-worktrees`, `dispatching-parallel-agents`, `finishing-a-development-branch`, `requesting-code-review`, `receiving-code-review`, `verification-before-completion` |
-| **CCPM** (`vendor/ccpm`) | `ccpm` |
 | **LinkedIn Skills** (`vendor/linkedin-skills`) | `linkedin-post-writer`, `linkedin-humanizer`, `linkedin-hook-extractor`, `linkedin-content-planner`, `linkedin-profile-optimizer`, `linkedin-employee-advocacy`, `linkedin-comment-drafter`, `linkedin-reply-handler`, `linkedin-engager-analytics`, `linkedin-thread-monitor` |
 
-Caveman flag: `~/.claude/.caveman-active` (user-level, not repo-tracked — recreate with `/caveman` after fresh machine setup).
-CCPM needs authenticated `gh` CLI — run `gh auth login` if CCPM commands fail.
-PRDs: `.agents/prds/`. Epics: `.agents/epics/`. Both symlinked from `.claude/prds` and `.claude/epics`.
-LinkedIn Skills: [vendoring pattern gap](feedback_vendor_symlink_gap.md) discovered 2026-07-03 — do it properly here (real submodule + real symlinks), unlike the other three. Its `linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-reply-handler` have a Publora auto-post path — never invoke it, draft only (see [[project_communication_linkedin_skills]]).
+LinkedIn Skills: `linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-reply-handler` have a Publora auto-post path — never invoke it, draft only (see [[project_communication_linkedin_skills]]).
+
+**Spec-kit** (local skills `speckit-*`) replaces CCPM for spec-driven project management. PRDs: `.agents/prds/`. Epics: `.agents/epics/`.
 
 ## ESPHome
 

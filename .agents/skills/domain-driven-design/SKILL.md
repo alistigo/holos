@@ -1,11 +1,11 @@
-## CCPM Integration
+## Spec-Kit Integration
 
-**When to invoke:** Immediately after a PRD is approved and before any technical epic is written.
+**When to invoke:** After a spec is approved (via `speckit-specify`) and before implementation planning.
 
-In the CCPM workflow:
-1. PRD written and approved
+In the spec-kit workflow:
+1. Spec written and approved (`speckit-specify`)
 2. **← Run this skill here** — produce `projects/<name>/domain-model.md`
-3. Technical epics reference `domain-model.md` for naming and structure
+3. Implementation plan (`speckit-plan`) references `domain-model.md` for naming and structure
 
 **Trigger phrase:** "model the domain for <name>" or "DDD modeling for <name>"
 
@@ -20,7 +20,7 @@ In the CCPM workflow:
 ---
 
 <!-- SOURCE: https://github.com/booklib-ai/booklib/blob/main/skills/domain-driven-design/SKILL.md -->
-<!-- REASON: Copied (not submoduled) so we can freely extend it with CCPM integration and project-specific conventions. -->
+<!-- REASON: Copied (not submoduled) so we can freely extend it with spec-kit integration and project-specific conventions. -->
 <!-- COPIED: 2026-05-13 -->
 
 ---

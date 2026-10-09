@@ -160,22 +160,13 @@ if ! command -v docker &>/dev/null; then
 fi
 
 # ── 6. Claude tools (git submodules) ─────────────────────────────────────────
-info "Initialising Claude tool submodules (caveman, superpowers, ccpm)..."
+info "Initialising Claude tool submodules..."
 git -C "$REPO_ROOT" submodule update --init --recursive
 info "Submodules ready."
 
-# Caveman: enable token compression by default
-mkdir -p "$HOME/.claude"
-if [ ! -f "$HOME/.claude/.caveman-active" ]; then
-  touch "$HOME/.claude/.caveman-active"
-  info "Caveman compression enabled (~/.claude/.caveman-active created)."
-else
-  info "Caveman already active — skipping."
-fi
-
-# CCPM requires an authenticated gh CLI
+# GitHub CLI — needed for gh-based workflows
 if ! command -v gh &>/dev/null; then
-  warn "GitHub CLI (gh) not found — CCPM project management will not work."
+  warn "GitHub CLI (gh) not found."
   echo "  Install: https://cli.github.com/"
 elif ! gh auth status &>/dev/null 2>&1; then
   warn "gh is not authenticated. Run: gh auth login"
