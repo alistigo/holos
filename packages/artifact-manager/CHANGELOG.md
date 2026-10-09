@@ -1,3 +1,9 @@
+## 0.4.3 (2026-10-09)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-format to 0.3.3
+
 ## 0.4.2 (2026-10-07)
 
 ### 🧱 Updated Dependencies

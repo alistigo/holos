@@ -1,3 +1,20 @@
+## 0.5.3 (2026-10-09)
+
+### 🩹 Fixes
+
+- **list-document:** add dependsOn ^build to test:unit to prevent race with workspace dep builds ([84dbc2d](https://github.com/alistigo/holos/commit/84dbc2d))
+
+### 🧱 Updated Dependencies
+
+- Updated core-document to 0.3.3
+- Updated list-domain to 0.4.3
+- Updated logger to 0.4.3
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.5.2 (2026-10-07)
 
 ### 🧱 Updated Dependencies

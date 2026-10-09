@@ -1,3 +1,13 @@
+## 0.5.3 (2026-10-09)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-list-checkbox-plugin to 0.3.3
+- Updated artifact-plugin-api to 0.6.3
+- Updated list-document to 0.5.3
+- Updated list-domain to 0.4.3
+- Updated logger to 0.4.3
+
 ## 0.5.2 (2026-10-07)
 
 ### 🧱 Updated Dependencies
