@@ -9,8 +9,4 @@ if [ -n "$CLAUDE_ENV_FILE" ]; then
   eval "$(mise env -s bash 2>/dev/null)"
   env >> "$CLAUDE_ENV_FILE"
 
-  # Caveman: signal compression mode when the user has enabled the flag
-  if [ -f "$HOME/.claude/.caveman-active" ]; then
-    printf 'CAVEMAN_ACTIVE=1\n' >> "$CLAUDE_ENV_FILE"
-  fi
 fi

@@ -103,35 +103,11 @@ When creating a new command, add it to `.agents/commands/<command-name>/<command
 
 ## Claude Enhancement Tools
 
-Four tools live as git submodules in `vendor/` and are symlinked into `.agents/skills/`:
+One tool lives as a git submodule in `vendor/` with skills symlinked into `.agents/skills/`:
 
 | Tool | Purpose | Source |
 |------|---------|--------|
-| **Caveman** | Token compression — ~65% output token reduction via terse responses | `vendor/caveman` |
-| **Superpowers** | Structured dev methodology — Design→Plan→Execute→Test→Complete | `vendor/superpowers` |
-| **CCPM** | Spec-driven project management — PRD → Epic → GitHub Issues → Code | `vendor/ccpm` |
 | **LinkedIn Skills** | 10 tested LinkedIn skills — post drafting, humanizing/auditing, hook extraction, profile/content tooling | `vendor/linkedin-skills` |
-
-### Caveman
-
-Caveman compresses Claude's output to save tokens. Toggle it with `/caveman` in a session. The user-level flag lives at `~/.claude/.caveman-active` (not repo-tracked — re-create with `/caveman` on a fresh machine). Stats: `/caveman-stats`. Compress a memory file: `/caveman-compress`.
-
-### Superpowers
-
-Superpowers injects a structured workflow at session start via `.agents/hooks/superpowers-session-start.sh`. It enforces: always write a plan before touching code, use TDD, dispatch parallel agents for independent tasks, and verify before declaring completion. Skills auto-trigger on context — no explicit invocation needed.
-
-### CCPM
-
-CCPM manages the full delivery lifecycle. PRDs go in `.agents/prds/`, epics in `.agents/epics/`, and GitHub Issues are the source of truth for task tracking.
-
-**Workflow:**
-1. "I want to build X" → Claude writes a PRD in `.agents/prds/`
-2. Approve PRD → Claude creates an epic with numbered tasks in `.agents/epics/`
-3. Approve epic → Claude creates GitHub Issues via `gh issue create`
-4. Work proceeds issue-by-issue; each issue commit references `Issue #N`
-5. `/standup`, `/status`, `/next` for progress tracking
-
-**Every project in `projects/` should have a corresponding CCPM epic and GitHub issues.**
 
 ### LinkedIn Skills
 
@@ -140,12 +116,13 @@ CCPM manages the full delivery lifecycle. PRDs go in `.agents/prds/`, epics in `
 ### Updating Tools
 
 ```sh
-git submodule update --remote vendor/caveman
-git submodule update --remote vendor/superpowers
-git submodule update --remote vendor/ccpm
 git submodule update --remote vendor/linkedin-skills
 git add vendor/ && git commit -m "chore(vendor): update claude tool submodules"
 ```
+
+### Spec-Kit (replaces CCPM)
+
+Spec-driven project management is handled by **spec-kit** (installed as a local skill set under `.agents/skills/speckit-*/`). PRDs go in `.agents/prds/`, epics in `.agents/epics/`.
 
 ## Git Conventions
 
