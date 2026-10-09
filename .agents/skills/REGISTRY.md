@@ -56,6 +56,16 @@ What to say or do to activate each skill. Claude should invoke the skill before 
 | `linkedin-reply-handler` | reply to this comment | "Reply to this comment thread" |
 | `linkedin-engager-analytics` | who liked my post, engagers report | "Who engaged with my last post?" |
 | `linkedin-thread-monitor` | threads needing follow-up, author replied | "Which of my comments got replies?" |
+| `speckit-specify` | spec, specification, requirements, feature spec | "Write a spec for X" |
+| `speckit-plan` | plan, implementation plan, from spec | "Create a plan from the spec" |
+| `speckit-tasks` | tasks, task list, break down, actionable | "Generate tasks from the plan" |
+| `speckit-implement` | implement, execute task, coding task | "Implement task 3" |
+| `speckit-constitution` | constitution, principles, project norms | "Set up project principles" |
+| `speckit-converge` | converge, remaining work, what's left, codebase audit | "What work is still remaining?" |
+| `speckit-clarify` | clarify, de-risk, ambiguous requirements | "Clarify this spec before planning" |
+| `speckit-analyze` | analyze, cross-artifact, consistency, alignment | "Check the spec/plan/tasks are aligned" |
+| `speckit-checklist` | checklist, validate requirements, completeness | "Validate the spec is complete" |
+| `speckit-taskstoissues` | GitHub issues, sync tasks, tasks to issues | "Create GitHub issues from the task list" |
 
 ---
 
@@ -131,6 +141,35 @@ here, so they fall back to manual paste.
 currently plain copied files on disk rather than live symlinks into a checked-out
 `vendor/` submodule — a pre-existing gap found while wiring this one up, not fixed
 here.)*
+
+---
+
+## Installed via specify-cli (spec-kit)
+
+Installed by `specify init . --integration claude` from https://github.com/github/spec-kit.
+Upgrade with: `mise exec uv -- uv tool install --upgrade specify-cli && specify upgrade`.
+
+Core workflow (Spec-Driven Development):
+
+| Skill | Purpose |
+|-------|---------|
+| `speckit-constitution` | Establish project principles and norms |
+| `speckit-specify` | Create a feature spec (`spec.md`) from a description |
+| `speckit-plan` | Create an implementation plan (`plan.md`) from the spec |
+| `speckit-tasks` | Generate an actionable task list (`tasks.md`) from plan + spec |
+| `speckit-implement` | Execute a task from `tasks.md` |
+| `speckit-converge` | Audit the codebase and append remaining work as tasks |
+
+Enhancement skills (optional, run between core steps):
+
+| Skill | Purpose |
+|-------|---------|
+| `speckit-clarify` | Ask structured questions to de-risk ambiguous areas (before `/speckit-plan`) |
+| `speckit-analyze` | Cross-artifact consistency report (after `/speckit-tasks`, before `/speckit-implement`) |
+| `speckit-checklist` | Validate requirements completeness and clarity (after `/speckit-plan`) |
+| `speckit-taskstoissues` | Create GitHub issues from the generated task list |
+
+Project state lives in `.specify/` (committed). Per-feature specs/plans go in `specs/<feature>/`.
 
 ---
 

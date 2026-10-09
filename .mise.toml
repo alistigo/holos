@@ -4,6 +4,7 @@ bun = "latest"
 python = "3.12"
 rust = "stable"
 pnpm = "10.7.0"
+uv = "latest"
 
 [tasks.setup]
 description = "Bootstrap the repo on a fresh machine"
