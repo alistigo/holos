@@ -44,6 +44,7 @@ export interface ArchifyConnection {
   id: string;
   from: string;
   to: string;
+  via?: [number, number][];
 }
 
 export interface ArchifyDocument {
@@ -167,6 +168,40 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
   };
 
   const positions = computeLayout(layoutInput);
+
+  // For cross-column connections spanning 3+ rows the auto-router creates an S-shaped path
+  // that cuts through intermediate nodes. Route these via the right outer margin instead,
+  // approaching the destination through the row gap above/below it to avoid same-row siblings.
+  const VIA_X = 590; // outside the 2-column grid (rightmost component edge = 310+240 = 550)
+  const COMP_H = 55;
+  const ROW_GAP = 40;
+  const ROW_HEIGHT = COMP_H + ROW_GAP;
+  const COL_BOUNDARY = 290; // midpoint between col0 right-edge(270) and col1 left-edge(310)
+  for (const conn of connections) {
+    const src = positions.get(conn.from);
+    const dst = positions.get(conn.to);
+    if (!src || !dst) continue;
+    const srcCol = src.x > COL_BOUNDARY ? 1 : 0;
+    const dstCol = dst.x > COL_BOUNDARY ? 1 : 0;
+    // Only col1→col0 connections need the right-margin detour; col0→col1 routes cleanly
+    // through the inter-column gap at x≈290 and adding via there would cross same-row col1 nodes.
+    if (srcCol !== 1 || dstCol !== 0) continue;
+    const srcCenterY = src.y + src.h / 2;
+    const dstCenterY = dst.y + dst.h / 2;
+    if (Math.abs(srcCenterY - dstCenterY) > 3 * ROW_HEIGHT) {
+      const dstCenterX = dst.x + dst.w / 2;
+      // Approach the destination through the row gap to avoid its same-row sibling in the other column
+      const gapY =
+        dstCenterY > srcCenterY
+          ? dst.y - ROW_GAP / 2 // dest below: enter gap above dest row
+          : dst.y + dst.h + ROW_GAP / 2; // dest above: enter gap below dest row
+      conn.via = [
+        [VIA_X, srcCenterY],
+        [VIA_X, gapY],
+        [dstCenterX, gapY],
+      ];
+    }
+  }
 
   const components: ArchifyComponent[] = calm.nodes.map((node) => {
     const pos = positions.get(node["unique-id"]) ?? { x: 0, y: 0, w: 140, h: 55 };

@@ -1,0 +1,580 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "module-types-alistigo-artifact",
+  "name": "Module types in an alistigo artifact",
+  "description": "Conceptual model of the canonical module types that compose any alistigo artifact and their dependency relationships. Uses the list artifact (@alistigo/artifact-list) as the canonical example. Not a deployment or runtime view — this is the package/module dependency graph every artifact author should follow.",
+  "metadata": [
+    {
+      "version": "0.1.0",
+      "kind": "concept",
+      "canonical-implementation": "@alistigo/artifact-list",
+      "note": "Substitute list-* with the artifact-specific name (e.g. kanban-*, note-*). Platform modules (core-document, artifact-core, artifact-core-components-react, plugin-api, storage, logger) are shared across all artifacts unchanged."
+    }
+  ],
+  "nodes": [
+    {
+      "unique-id": "domain",
+      "node-type": "system",
+      "name": "Domain Module",
+      "description": "Pure, framework-free DDD domain model for a specific artifact. Has ZERO dependencies on other alistigo modules or packages — no UI, no IO, no DOM, no global state. Contains: value objects (VOs), TypeScript type definitions of VOs, aggregates, commands, entities, errors, domain events, and repository interfaces (e.g. ListRepository). Can also contain markdown documentation and CALM files (non-code). Defines the vocabulary and core business rules of the artifact. Must be fully unit-tested. Canonical example: list-domain.",
+      "interfaces": [
+        {
+          "unique-id": "domain-aggregates-api",
+          "description": "Aggregate roots, domain commands, domain events, and repository interfaces. The Document module applies commands via aggregates, reads the resulting event log for serialisation, and implements the repository contract through the storage adapter chain."
+        },
+        {
+          "unique-id": "domain-plugin-extension-api",
+          "description": "Optional extension points exposed to domain-specific plugins. Allows plugins to augment domain behaviour (e.g. adding checkbox metadata to list elements) without the domain depending on any plugin."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "list-domain",
+          "layer": "Domain (DDD)",
+          "testing": "fully unit-tested",
+          "isolation": "zero project-internal imports — no UI, no IO, no DOM, no global state"
+        }
+      ]
+    },
+    {
+      "unique-id": "core-document",
+      "node-type": "service",
+      "name": "@alistigo/core-document",
+      "description": "Shared infrastructure for the Document module, common to all alistigo artifacts. Provides base types, helpers, and conventions for building document layers: event-sourcing support, the AlistigoDocument base type, and JSON-LD namespace utilities. Consumed by every artifact's Document module.",
+      "interfaces": [
+        {
+          "unique-id": "core-document-api",
+          "description": "Base types and helpers re-used by every artifact Document module: AlistigoDocument base type, event-sourcing utilities, JSON-LD namespace helpers."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/core-document",
+          "layer": "Document (DDD)",
+          "scope": "shared platform — one package used by all artifact Document modules"
+        }
+      ]
+    },
+    {
+      "unique-id": "document",
+      "node-type": "system",
+      "name": "Document Module",
+      "description": "Owns the artifact's data model and application service. Depends on the sibling Domain module and on @alistigo/core-document. Provides: event-sourced projections, the application service exposing all possible document actions, serializer/deserializer to/from JSON (including format variants such as list-markdown), a validation function for document integrity, and all public types. Re-exports the Domain module so downstream consumers (UI, Artifact) need only depend on Document — no direct Domain dependency required downstream. Canonical example: list-document.",
+      "interfaces": [
+        {
+          "unique-id": "document-application-service",
+          "description": "Application service exposing all document actions (createList, addListElement, deleteListElement, exportListDocument …). Called by the UI layer in response to user interactions and by the Artifact during startup."
+        },
+        {
+          "unique-id": "document-serialization",
+          "description": "serialize() / deserialize() converting between domain aggregates and a storable JSON string. Also exposes format-specific deserializers (e.g. list-markdown for importing from Markdown)."
+        },
+        {
+          "unique-id": "document-validation",
+          "description": "validate(raw): ValidationResult — checks structural and business-rule validity of a raw document payload before deserialisation."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "list-document",
+          "layer": "Document (DDD)",
+          "re-exports": "domain module — consumers of document do not need a direct domain dependency",
+          "storage-format": "JSON (default), JSON-LD variants"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact",
+      "node-type": "system",
+      "name": "Artifact Module",
+      "description": "The artifact orchestrator — the top-level npm package that brings everything together. Composes the Document and UI modules, wires in the shared platform (artifact-core, artifact-core-components-react, storage, logger), and sequences the startup lifecycle. Plugin injection happens here: the Artifact resolves and activates both Generic and Domain-Specific plugins at runtime via the PluginRuntime. Neither Domain, Document, nor UI know about plugins; instead they expose API hooks that the Artifact uses to inject plugin behaviour. Canonical example: @alistigo/artifact-list.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-mount-api",
+          "description": "mount(container, options) — bootstraps the artifact, reads config, resolves the active storage plugin, initialises the PluginRuntime, and renders the React UI tree."
+        },
+        {
+          "unique-id": "artifact-plugin-injection",
+          "description": "Plugin registration point. Accepts an array of AlistigoPlugin instances (both Generic and Domain-Specific). Plugins are injected here at startup — Domain, Document, and UI are unaware of them."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "@alistigo/artifact-list",
+          "layer": "Application",
+          "distribution": "self-contained UMD bundle — React, Lingui, and all Alistigo layers bundled in",
+          "note": "Domain, Document, and UI are unaware of plugins; the Artifact is the sole plugin injection site."
+        }
+      ]
+    },
+    {
+      "unique-id": "skill",
+      "node-type": "data-asset",
+      "name": "Skill Module",
+      "description": "A complementary npm package published alongside the artifact. Contains a SKILL.md capability definition consumed by the Claude agent skill platform, reference documentation, and optionally a JSON schema for the artifact config format. Enables AI agents and chat interfaces to create and configure the artifact through a structured, versioned capability contract. Has no code dependencies — it is purely a documentation/metadata asset. Canonical example: @alistigo/artifact-list-skill.",
+      "interfaces": [
+        {
+          "unique-id": "skill-definition",
+          "description": "SKILL.md — the agent capability definition. Describes how an AI should generate, configure, and interact with the artifact. References the artifact config JSON schema for config-driven artifact creation."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "@alistigo/artifact-list-skill",
+          "dependencies": "none — purely a documentation/metadata asset",
+          "consumed-by": "Claude agents and AI chat interfaces, loaded on demand from the npm CDN"
+        }
+      ]
+    },
+    {
+      "unique-id": "ui",
+      "node-type": "service",
+      "name": "UI Module",
+      "description": "Presentation layer for a specific artifact. Contains React components that display and interact with the Document module. Every component has a Storybook story and can be reviewed independently. Depends on the Document module (and transitively the Domain via Document's re-exports — no direct Domain dependency). The canonical technology is React, but this is a preference not a hard requirement. Canonical example: @alistigo/list-components-react.",
+      "interfaces": [
+        {
+          "unique-id": "ui-components",
+          "description": "Exported React components mounted by the Artifact module. Components dispatch Document application-service commands in response to user interactions and consume projections. Also expose plugin UI slots: renderListElementLeading, renderStatusBadge, renderMenuContent."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "@alistigo/list-components-react",
+          "layer": "Presentation (DDD)",
+          "technology": "React (preferred, not a hard requirement)",
+          "storybook": "every component has a Storybook story and can be reviewed independently"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact-core",
+      "node-type": "service",
+      "name": "@alistigo/artifact-core",
+      "description": "Shared artifact lifecycle management used by every Artifact module. Provides the startup phase state machine (loading → ready → mounted → error), the useStartArtifact hook, and config parsing utilities.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-core-lifecycle",
+          "description": "useStartArtifact hook and startup phase enum. Drives the artifact from initial config injection through to fully mounted state, with error handling at each phase."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-core",
+          "layer": "Platform",
+          "scope": "shared — used by every Artifact module unchanged"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact-core-components-react",
+      "node-type": "service",
+      "name": "Core React Components",
+      "description": "Shared React UI components used by every Artifact module regardless of artifact type: LoadingScreen, ErrorScreen, ArtifactContextMenuContainer (renders plugin-provided context-menu slots), PluginList.",
+      "interfaces": [
+        {
+          "unique-id": "shared-ui-components",
+          "description": "LoadingScreen, ErrorScreen, ArtifactContextMenuContainer, PluginList — common chrome components mounted by every Artifact module."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-core-components-react",
+          "layer": "Platform",
+          "scope": "shared — used by every Artifact module unchanged"
+        }
+      ]
+    },
+    {
+      "unique-id": "plugin-api",
+      "node-type": "service",
+      "name": "@alistigo/artifact-plugin-api",
+      "description": "The generic alistigo plugin contract. Defines AlistigoPlugin (setup, beforeMount, mounted, destroy, wrapRoot lifecycle hooks), PluginRuntime factory (createPluginRuntime), KeyValueStore interface (get/set/del/list), and the typed in-process plugin event bus (createPluginBus). All plugins — generic and domain-specific — must implement AlistigoPlugin. The Document module consumes KeyValueStore for storage-agnostic persistence.",
+      "interfaces": [
+        {
+          "unique-id": "plugin-contract",
+          "description": "AlistigoPlugin interface: setup(), beforeMount(), mounted(), destroy(), wrapRoot(). Implemented by every plugin and invoked by the Artifact's PluginRuntime."
+        },
+        {
+          "unique-id": "kv-store-contract",
+          "description": "KeyValueStore interface: get/set/del/list. Consumed by the Document layer for storage-agnostic persistence. Implemented by storage plugins."
+        },
+        {
+          "unique-id": "plugin-bus-contract",
+          "description": "createPluginBus() — typed in-process pub/sub event bus (on/emit). Events: widget:displayed, error:uncaught, user:changed."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/artifact-plugin-api",
+          "layer": "Platform",
+          "scope": "shared — all plugins and the Artifact depend on this package"
+        }
+      ]
+    },
+    {
+      "unique-id": "storage",
+      "node-type": "service",
+      "name": "Storage Module",
+      "description": "Core alistigo storage service. Exposes a KeyValueStore-compatible API (contract defined in @alistigo/artifact-plugin-api) consumed directly by the Artifact module. Acts as an abstraction over concrete storage backends (cloud KV via the Claude iframe bridge, browser localStorage). The Artifact wires the active storage instance into the Document layer for persistence.",
+      "interfaces": [
+        {
+          "unique-id": "storage-api",
+          "description": "KeyValueStore API: get/set/del/list. Backed by a concrete storage implementation resolved at runtime (cloud KV preferred, localStorage fallback)."
+        }
+      ],
+      "metadata": [
+        {
+          "layer": "Platform",
+          "consumed-by": "Artifact directly — wired into the Document layer at startup"
+        }
+      ]
+    },
+    {
+      "unique-id": "logger",
+      "node-type": "service",
+      "name": "Logger Module",
+      "description": "Core structured logger for alistigo. Provides a Pino-based logger instance used directly by the Artifact module for structured, leveled output.",
+      "interfaces": [
+        {
+          "unique-id": "logger-api",
+          "description": "Structured logger API: info(), warn(), error(), debug() with log-level control."
+        }
+      ],
+      "metadata": [
+        {
+          "npm-package": "@alistigo/logger",
+          "layer": "Platform",
+          "implementation": "Pino"
+        }
+      ]
+    },
+    {
+      "unique-id": "plugin-generic",
+      "node-type": "service",
+      "name": "Generic Plugin",
+      "description": "A plugin that depends only on @alistigo/artifact-plugin-api. Has no knowledge of any specific artifact's domain. Implements the AlistigoPlugin lifecycle contract and can provide cross-cutting behaviour applicable to any artifact (user identity, analytics, storage backends). Canonical example: @alistigo/artifact-user-plugin.",
+      "interfaces": [
+        {
+          "unique-id": "generic-plugin-lifecycle",
+          "description": "Implements AlistigoPlugin: setup(), beforeMount(), mounted(), destroy(), wrapRoot(). May also emit events on the plugin bus. Contains no domain knowledge."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "@alistigo/artifact-user-plugin",
+          "plugin-type": "generic",
+          "dependency-constraint": "only @alistigo/artifact-plugin-api — no domain knowledge"
+        }
+      ]
+    },
+    {
+      "unique-id": "plugin-domain-specific",
+      "node-type": "service",
+      "name": "Domain-Specific Plugin",
+      "description": "A plugin that depends on both @alistigo/artifact-plugin-api and a specific artifact's Domain module. Knows the domain's plugin extension API and can augment domain behaviour, add domain-aware UI slots, or extend the domain model. Canonical example: @alistigo/artifact-list-checkbox-plugin (depends on list-domain + @alistigo/artifact-plugin-api).",
+      "interfaces": [
+        {
+          "unique-id": "domain-plugin-lifecycle",
+          "description": "Implements AlistigoPlugin lifecycle. Uses the domain's plugin extension API to register domain-aware behaviour (e.g. checkbox checked-state stored on list elements via alistigo:metadatas)."
+        }
+      ],
+      "metadata": [
+        {
+          "example-package": "@alistigo/artifact-list-checkbox-plugin",
+          "plugin-type": "domain-specific",
+          "dependency-constraint": "@alistigo/artifact-plugin-api + the artifact's domain module"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "document-uses-domain",
+      "description": "Applies commands to domain aggregates, reads the resulting event log for serialisation, and builds read-model projections from domain events via",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "domain",
+            "interfaces": ["domain-aggregates-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-uses-core-document",
+      "description": "Relies on the shared alistigo document infrastructure for base types, event-sourcing helpers, and JSON-LD utilities provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "core-document",
+            "interfaces": ["core-document-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "ui-uses-document",
+      "description": "Dispatches document commands in response to user interactions and consumes projections from; Domain types are accessed via Document's re-exports — no direct Domain dependency in UI",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": ["document-application-service"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-document",
+      "description": "Initialises and wires up the Document layer during startup, providing the active storage KeyValueStore so the Document can persist data via",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-mount-api"]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": ["document-application-service"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-ui",
+      "description": "Mounts the UI component tree into the host DOM container provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-mount-api"]
+          },
+          "destination": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-artifact-core",
+      "description": "Uses the shared lifecycle hook to sequence the loading → ready → mounted → error startup phases provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-mount-api"]
+          },
+          "destination": {
+            "node": "artifact-core",
+            "interfaces": ["artifact-core-lifecycle"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-artifact-core-components",
+      "description": "Renders shared chrome components (LoadingScreen, ErrorScreen, ArtifactContextMenuContainer) during startup and error states provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-mount-api"]
+          },
+          "destination": {
+            "node": "artifact-core-components-react",
+            "interfaces": ["shared-ui-components"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-storage",
+      "description": "Resolves the active storage backend at startup and passes its KeyValueStore API to the Document layer for persistence via",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-mount-api"]
+          },
+          "destination": {
+            "node": "storage",
+            "interfaces": ["storage-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-logger",
+      "description": "Uses the shared structured logger for runtime logging provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-mount-api"]
+          },
+          "destination": {
+            "node": "logger",
+            "interfaces": ["logger-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-injects-generic-plugin",
+      "description": "Resolves and activates generic plugins at startup via the PluginRuntime — plugins are injected here; neither Document nor UI are aware of",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-plugin-injection"]
+          },
+          "destination": {
+            "node": "plugin-generic",
+            "interfaces": ["generic-plugin-lifecycle"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-injects-domain-plugin",
+      "description": "Resolves and activates domain-specific plugins at startup via the PluginRuntime — plugins are injected here; neither Document nor UI are aware of",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": ["artifact-plugin-injection"]
+          },
+          "destination": {
+            "node": "plugin-domain-specific",
+            "interfaces": ["domain-plugin-lifecycle"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "plugin-generic-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin lifecycle contract and uses the KeyValueStore and plugin bus APIs provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-generic",
+            "interfaces": ["generic-plugin-lifecycle"]
+          },
+          "destination": {
+            "node": "plugin-api",
+            "interfaces": ["plugin-contract"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "plugin-domain-specific-uses-plugin-api",
+      "description": "Implements the AlistigoPlugin lifecycle contract provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-domain-specific",
+            "interfaces": ["domain-plugin-lifecycle"]
+          },
+          "destination": {
+            "node": "plugin-api",
+            "interfaces": ["plugin-contract"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "plugin-domain-specific-uses-domain",
+      "description": "Uses the domain's plugin extension API to register domain-aware behaviour and augment domain operations defined in",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "plugin-domain-specific",
+            "interfaces": ["domain-plugin-lifecycle"]
+          },
+          "destination": {
+            "node": "domain",
+            "interfaces": ["domain-plugin-extension-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "skill-for-artifact",
+      "description": "Defines the Claude agent capability contract for the artifact — enables AI agents to generate and configure artifact instances through a structured, versioned capability contract without knowing the artifact's internal implementation",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "skill",
+            "interfaces": ["skill-definition"]
+          },
+          "destination": {
+            "node": "artifact"
+          }
+        }
+      }
+    }
+  ],
+  "flows": [
+    {
+      "unique-id": "module-dependency-layering-flow",
+      "name": "Module dependency layering",
+      "description": "The order in which modules must be built and how dependencies flow upward through the layers — Domain at the base with zero alistigo dependencies, Document on top of Domain, UI on top of Document, Artifact at the top composing everything. Platform modules (core-document, artifact-core, artifact-core-components-react, plugin-api, storage, logger) are independent shared services used at various levels. Plugins sit at the outer ring: Generic plugins depend only on plugin-api; Domain-Specific plugins depend on plugin-api plus the Domain.",
+      "transitions": [
+        {
+          "relationship-unique-id": "document-uses-domain",
+          "sequence-number": 1,
+          "description": "Domain is built first — it has zero alistigo dependencies and defines the core vocabulary.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "document-uses-core-document",
+          "sequence-number": 2,
+          "description": "Document depends on Domain and core-document; both must be built before Document.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "ui-uses-document",
+          "sequence-number": 3,
+          "description": "UI depends on Document (and transitively Domain via Document's re-exports).",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "artifact-uses-document",
+          "sequence-number": 4,
+          "description": "Artifact depends on Document, UI, and all platform modules — it is the final layer in the core stack.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "artifact-injects-generic-plugin",
+          "sequence-number": 5,
+          "description": "Generic plugins depend only on plugin-api and are composed into the Artifact at the outer ring.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "plugin-domain-specific-uses-domain",
+          "sequence-number": 6,
+          "description": "Domain-Specific plugins depend on both plugin-api and Domain — they sit at the same outer ring as Generic plugins but with an additional Domain dependency.",
+          "direction": "source-to-destination"
+        }
+      ],
+      "metadata": [
+        {
+          "trigger": "build pipeline or module authoring",
+          "outcome": "correct build order: domain → (document + core-document) → ui → artifact, with plugins (generic and domain-specific) composed into the artifact at the outer ring"
+        }
+      ]
+    }
+  ]
+}
