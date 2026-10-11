@@ -1,0 +1,328 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "module-types-alistigo-artifact",
+  "name": "Module types in an alistigo artifact",
+  "description": "Conceptual model of the canonical module types that compose any alistigo artifact and their dependency relationships. Uses the list artifact (@alistigo/artifact-list) as the canonical example. Not a deployment or runtime view — this is the package/module dependency graph every artifact author should follow.",
+  "metadata": [
+    {
+      "version": "0.1.0",
+      "kind": "concept",
+      "note": "Substitute list-* with the artifact-specific name (e.g. kanban-*, note-*). Platform modules (core-document, artifact-core, artifact-core-components-react, plugin-api, storage, logger) are shared across all artifacts unchanged."
+    }
+  ],
+  "nodes": [
+    {
+      "unique-id": "domain",
+      "node-type": "module",
+      "name": "Domain",
+      "description": "Pure, framework-free DDD domain model for a specific artifact. Has ZERO dependencies on other alistigo modules or packages — no UI, no IO, no DOM, no global state. Contains: value objects (VOs), TypeScript type definitions of VOs, aggregates, commands, entities, errors, domain events, and repository interfaces (e.g. ListRepository). Can also contain markdown documentation and CALM files (non-code). Defines the vocabulary and core business rules of the artifact. Must be fully unit-tested. Canonical example: list-domain.",
+      "interfaces": [
+        {
+          "unique-id": "domain-api",
+          "description": "Aggregate roots, domain commands, domain events, and repository interfaces. The Document module applies commands via aggregates, reads the resulting event log for serialisation, and implements the repository contract through the storage adapter chain."
+        },
+        {
+          "unique-id": "domain-plugin-api",
+          "description": "Optional extension points exposed to domain-specific plugins. Allows plugins to augment domain behaviour (e.g. adding checkbox metadata to list elements) without the domain depending on any plugin."
+        }
+      ],
+      "metadata": [
+        {
+          "core-npm-package": null,
+          "layer": "domain",
+          "testing": "fully unit-tested",
+          "isolation": "zero project-internal imports — no UI, no IO, no DOM, no global state"
+        }
+      ]
+    },
+    {
+      "unique-id": "document",
+      "node-type": "module",
+      "name": "Document",
+      "description": "Owns the artifact's data model and application service. Depends on the sibling Domain module and on @alistigo/core-document. Provides: event-sourced projections, the application service exposing all possible document actions, serializer/deserializer to/from JSON (including format variants such as list-markdown), a validation function for document integrity, and all public types. Re-exports the Domain module so downstream consumers (UI, Artifact) need only depend on Document — no direct Domain dependency required downstream. Canonical example: list-document.",
+      "interfaces": [
+        {
+          "unique-id": "document-api",
+          "description": "Base types and helpers re-used by every artifact Document module: AlistigoDocument base type, event-sourcing utilities, JSON-LD namespace helpers."
+        }
+      ],
+      "metadata": [
+        {
+          "core-npm-package": "@alistigo/core-document",
+          "layer": "document",
+          "scope": "shared platform — one package used by all artifact Document modules"
+        }
+      ]
+    },
+    {
+      "unique-id": "artifact",
+      "node-type": "artifact",
+      "name": "Artifact",
+      "description": "The artifact orchestrator — the top-level npm package that brings everything together. Composes the Document and UI modules, wires in the shared platform (artifact-core, artifact-core-components-react, storage, logger), and sequences the startup lifecycle. Plugin injection happens here: the Artifact resolves and activates both Generic and Domain-Specific plugins at runtime via the PluginRuntime. Neither Domain, Document, nor UI know about plugins; instead they expose API hooks that the Artifact uses to inject plugin behaviour. Canonical example: @alistigo/artifact-list.",
+      "interfaces": [
+        {
+          "unique-id": "artifact-core",
+          "description": ""
+        },
+        {
+          "unique-id": "artifact-plugin-api",
+          "description": "Plugin registration point. Accepts an array of AlistigoPlugin instances (both Generic and Domain-Specific). Plugins are injected here at startup — Domain, Document, and UI are unaware of them."
+        },
+        {
+          "unique-id": "artifact-ui",
+          "description": "UI of the artifact."
+        },
+      ],
+      "metadata": [
+        {
+          "layer": "application",
+          "distribution": "self-contained UMD bundle — React, Lingui, and all Alistigo layers bundled in",
+          "note": "Domain, Document, and UI are unaware of plugins; the Artifact is the sole plugin injection site."
+        }
+      ]
+    },
+    {
+      "unique-id": "skill",
+      "node-type": "skill",
+      "name": "Skill",
+      "description": "A complementary npm package published alongside the artifact. Contains a SKILL.md capability definition consumed by the Claude agent skill platform, reference documentation, and optionally a JSON schema for the artifact config format. Enables AI agents and chat interfaces to create and configure the artifact through a structured, versioned capability contract. Has no code dependencies — it is purely a documentation/metadata asset. Canonical example: @alistigo/artifact-list-skill.",
+      "interfaces": [
+        {
+          "unique-id": "skill-definition",
+          "description": "SKILL.md — the agent capability definition. Describes how an AI should generate, configure, and interact with the artifact. References the artifact config JSON schema for config-driven artifact creation."
+        }
+      ],
+      "metadata": [
+        {
+          "dependencies": "none — purely a documentation/metadata asset",
+          "consumed-by": "Claude agents and AI chat interfaces, loaded on demand from the npm CDN"
+        }
+      ]
+    },
+    {
+      "unique-id": "ui",
+      "node-type": "module",
+      "name": "UI",
+      "description": "Presentation layer for a specific artifact. Contains React components that display and interact with the Document module. Every component has a Storybook story and can be reviewed independently. Depends on the Document module (and transitively the Domain via Document's re-exports — no direct Domain dependency). The canonical technology is React, but this is a preference not a hard requirement. Canonical example: @alistigo/list-components-react.",
+      "interfaces": [
+        {
+          "unique-id": "ui-components",
+          "description": "Exported React components mounted by the Artifact module. Components dispatch Document application-service commands in response to user interactions and consume projections. Also expose plugin UI slots: renderListElementLeading, renderStatusBadge, renderMenuContent."
+        }
+      ],
+      "metadata": [
+        {
+          "layer": "presentation",
+          "technology": "React (preferred, not a hard requirement)",
+          "storybook": "every component has a Storybook story and can be reviewed independently"
+        }
+      ]
+    },
+    {
+      "unique-id": "storage",
+      "node-type": "module",
+      "name": "Storage",
+      "description": "Core alistigo storage service. Exposes a KeyValueStore-compatible API (contract defined in @alistigo/artifact-plugin-api) consumed directly by the Artifact module. Acts as an abstraction over concrete storage backends (cloud KV via the Claude iframe bridge, browser localStorage). The Artifact wires the active storage instance into the Document layer for persistence.",
+      "interfaces": [
+        {
+          "unique-id": "storage-api",
+          "description": "KeyValueStore API: get/set/del/list. Backed by a concrete storage implementation resolved at runtime (cloud KV preferred, localStorage fallback)."
+        }
+      ],
+      "metadata": [
+        {
+          "layer": "Platform",
+          "consumed-by": "Artifact directly — wired into the Document layer at startup"
+        }
+      ]
+    },
+    {
+      "unique-id": "logger",
+      "node-type": "module",
+      "name": "Logger",
+      "description": "Core structured logger for alistigo. Provides a Pino-based logger instance used directly by the Artifact module for structured, leveled output.",
+      "interfaces": [
+        {
+          "unique-id": "logger-api",
+          "description": "Structured logger API: info(), warn(), error(), debug() with log-level control."
+        }
+      ],
+      "metadata": [
+        {
+          "core-npm-package": "@alistigo/logger",
+          "layer": "Platform",
+          "implementation": "Pino"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "document-uses-domain",
+      "description": "Applies commands to domain aggregates, reads the resulting event log for serialisation, and builds read-model projections from domain events via",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "domain",
+            "interfaces": [
+              "domain-api"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "ui-uses-document",
+      "description": "Dispatches document commands in response to user interactions and consumes projections from; Domain types are accessed via Document's re-exports — no direct Domain dependency in UI",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ui",
+            "interfaces": [
+              "ui-components"
+            ]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": [
+              "document-api"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-document",
+      "description": "Initialises and wires up the Document layer during startup, providing the active storage KeyValueStore so the Document can persist data via",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": [
+              "artifact-core"
+            ]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": [
+              "document-api"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-ui",
+      "description": "Mounts the UI component tree into the host DOM container provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": [
+              "artifact-ui"
+            ]
+          },
+          "destination": {
+            "node": "ui",
+            "interfaces": [
+              "ui-components"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-storage",
+      "description": "Resolves the active storage backend at startup and passes its KeyValueStore API to the Document layer for persistence via",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": [
+              "artifact-core"
+            ]
+          },
+          "destination": {
+            "node": "storage",
+            "interfaces": [
+              "storage-api"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-uses-logger",
+      "description": "Uses the shared structured logger for runtime logging provided by",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "artifact",
+            "interfaces": [
+              "artifact-core"
+            ]
+          },
+          "destination": {
+            "node": "logger",
+            "interfaces": [
+              "logger-api"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "skill-for-artifact",
+      "description": "Defines the Claude agent capability contract for the artifact — enables AI agents to generate and configure artifact instances through a structured, versioned capability contract without knowing the artifact's internal implementation",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "skill",
+            "interfaces": [
+              "skill-definition"
+            ]
+          },
+          "destination": {
+            "node": "artifact"
+          }
+        }
+      }
+    }
+  ],
+  "flows": [
+    {
+      "unique-id": "module-dependency-layering-flow",
+      "name": "Module dependency layering",
+      "description": "The order in which modules must be built and how dependencies flow upward through the layers — Domain at the base with zero alistigo dependencies, Document on top of Domain, UI on top of Document, Artifact at the top composing everything. Platform modules (core-document, artifact-core, artifact-core-components-react, plugin-api, storage, logger) are independent shared services used at various levels. Plugins sit at the outer ring: Generic plugins depend only on plugin-api; Domain-Specific plugins depend on plugin-api plus the Domain.",
+      "transitions": [
+        {
+          "relationship-unique-id": "document-uses-domain",
+          "sequence-number": 1,
+          "description": "Domain is built first — it has zero alistigo dependencies and defines the core vocabulary.",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "ui-uses-document",
+          "sequence-number": 2,
+          "description": "UI depends on Document (and transitively Domain via Document's re-exports).",
+          "direction": "source-to-destination"
+        },
+        {
+          "relationship-unique-id": "artifact-uses-document",
+          "sequence-number": 3,
+          "description": "Artifact depends on Document, UI, and all platform modules — it is the final layer in the core stack.",
+          "direction": "source-to-destination"
+        },
+      ],
+      "metadata": [
+        {
+          "trigger": "build pipeline or module authoring",
+          "outcome": "correct build order: domain → (document + core-document) → ui → artifact, with plugins (generic and domain-specific) composed into the artifact at the outer ring"
+        }
+      ]
+    }
+  ]
+}
