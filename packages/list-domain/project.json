@@ -39,10 +39,10 @@
       "executor": "nx:run-commands",
       "dependsOn": [{ "projects": ["calm-to-archify"], "target": "build" }],
       "options": {
-        "command": "bun ../../cli/calm-to-archify/dist/cli.js build artifact-list.arch.json",
+        "command": "bun ../../cli/calm-to-archify/dist/cli.js build artifact-list.arch.calm.json",
         "cwd": "packages/list-domain"
       },
-      "inputs": ["{projectRoot}/artifact-list.arch.json"],
+      "inputs": ["{projectRoot}/artifact-list.arch.calm.json"],
       "outputs": [
         "{projectRoot}/artifact-list.archify.json",
         "{projectRoot}/artifact-list.archify.html"

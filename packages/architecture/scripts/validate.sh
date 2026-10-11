@@ -17,7 +17,7 @@ shopt -s nullglob
 status=0
 
 # --- Validate systems (concrete architectures) ---
-arch_files=(systems/*.arch.json)
+arch_files=(systems/*.arch.calm.json)
 if (( ${#arch_files[@]} == 0 )); then
   echo "ERROR: no CALM architecture files found in systems/"
   exit 1
@@ -31,7 +31,7 @@ for f in "${arch_files[@]}"; do
 done
 
 # --- Validate patterns (JSON-Schema CALM patterns) ---
-pattern_files=(patterns/*.pattern.json)
+pattern_files=(patterns/*.pattern.calm.json)
 for f in "${pattern_files[@]}"; do
   echo "Validating pattern $f"
   if ! pnpm calm validate -p "$f" --strict -f pretty; then
@@ -41,8 +41,8 @@ done
 
 # --- Validate artifact implementations against the base pattern ---
 # Each implementation lives in its own package under ../../packages/<name>/.
-impl_files=(../../packages/list-domain/artifact-list.arch.json)
-pattern="patterns/alistigo-artifact.pattern.json"
+impl_files=(../../packages/list-domain/artifact-list.arch.calm.json)
+pattern="patterns/alistigo-artifact.pattern.calm.json"
 
 for f in "${impl_files[@]}"; do
   echo "Validating implementation $f (standalone)"

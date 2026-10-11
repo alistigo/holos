@@ -7,7 +7,7 @@
 #
 # Output: .calm-docs/<unique-id>/
 #
-# Note: only .arch.json files are docified — .pattern.json files are JSON-Schema
+# Note: only .arch.calm.json files are docified — .pattern.calm.json files are JSON-Schema
 # documents, not CALM architecture instances, and calm docify expects the latter.
 
 set -euo pipefail
@@ -16,9 +16,9 @@ OUTPUT_ROOT=".calm-docs"
 
 shopt -s nullglob
 # Architecture files in this package
-arch_files=(systems/*.arch.json)
+arch_files=(systems/*.arch.calm.json)
 # Architecture files in other packages that implement the alistigo-artifact pattern
-extra_arch_files=(../../packages/list-domain/artifact-list.arch.json)
+extra_arch_files=(../../packages/list-domain/artifact-list.arch.calm.json)
 
 all_files=("${arch_files[@]}" "${extra_arch_files[@]}")
 

@@ -15,23 +15,23 @@ export class BuildCommand extends Command {
   static override paths = [Command.Default, ["build"]];
 
   static override usage = Command.Usage({
-    description: "Run the full CALM → archify HTML pipeline for one or more .arch.json files",
+    description: "Run the full CALM → archify HTML pipeline for one or more .arch.calm.json files",
     details: `
-      Reads each CALM .arch.json file, transforms it to archify JSON-IR, then
+      Reads each CALM .arch.calm.json file, transforms it to archify JSON-IR, then
       renders a standalone interactive HTML file using the archify renderer.
 
       By default each output is written next to its source file.
       Use --output-dir to redirect all outputs to a specific directory.
 
       Pattern files (.pattern.json) are JSON Schema documents and are not
-      supported — only CALM architecture instances (.arch.json) are accepted.
+      supported — only CALM architecture instances (.arch.calm.json) are accepted.
     `,
     examples: [
-      ["Process all architecture files", "calm-to-archify build systems/*.arch.json"],
-      ["Process a single file", "calm-to-archify build path/to/my.arch.json"],
+      ["Process all architecture files", "calm-to-archify build systems/*.arch.calm.json"],
+      ["Process a single file", "calm-to-archify build path/to/my.arch.calm.json"],
       [
         "Output to a specific directory",
-        "calm-to-archify build systems/*.arch.json --output-dir .archify-out",
+        "calm-to-archify build systems/*.arch.calm.json --output-dir .archify-out",
       ],
     ],
   });
