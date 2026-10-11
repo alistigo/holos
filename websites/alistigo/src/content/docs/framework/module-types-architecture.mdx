@@ -1,0 +1,92 @@
+---
+title: Artifact Module Types
+description: Conceptual model of the canonical npm packages inside any Alistigo artifact — their roles, layer assignments, and dependency relationships.
+---
+
+import ArchifyDiagram from '../../../components/ArchifyDiagram.astro';
+
+Every Alistigo artifact is composed from the same set of module types.
+This page describes each type, which layer it belongs to, and how they depend on one another.
+The list artifact (`@alistigo/artifact-list`) is used as the canonical example.
+This is a **conceptual/package dependency view**, not a runtime or deployment view.
+
+The CALM source for this diagram lives at
+`packages/architecture/systems/module-types-alistigo-artifact.arch.json`
+and is validated in CI.
+
+## Architecture Diagram
+
+<ArchifyDiagram
+  src="/archify/module-types-alistigo-artifact.archify.html"
+  title="Alistigo Artifact — Module Types and Dependencies"
+  height="800px"
+/>
+
+## Module Reference
+
+### Artifact-specific modules
+
+These three modules are written fresh for every artifact (substitute `list-` with the artifact name).
+
+| Module | Layer | Role |
+|--------|-------|------|
+| **Domain Module** (`list-domain`) | Domain | Pure DDD model. Zero alistigo dependencies. Value objects, aggregates, commands, events, repository interfaces. |
+| **Document Module** (`list-document`) | Document | Event-sourced projections, `ApplicationService`, serializer/deserializer, validation. Re-exports domain so consumers don't need a direct domain dependency. |
+| **UI Module** (`@alistigo/list-components-react`) | Presentation | React components. Every component has a Storybook story. |
+
+### Platform modules
+
+These are **shared across all artifacts unchanged**.
+
+| Module | Role |
+|--------|------|
+| `@alistigo/core-document` | Base types and event-sourcing helpers used by every Document module |
+| `@alistigo/artifact-core` | Shared startup lifecycle (`useStartArtifact` hook, phase state machine) |
+| `@alistigo/artifact-core-components-react` | Shared chrome: `LoadingScreen`, `ErrorScreen`, `ArtifactContextMenuContainer` |
+| `@alistigo/artifact-plugin-api` | Generic plugin contract (`AlistigoPlugin`), `KeyValueStore`, `createPluginBus` |
+| Storage Module | `KeyValueStore`-compatible persistence layer, consumed by the Artifact directly |
+| Logger Module | Structured Pino logger, consumed by the Artifact directly |
+
+### Artifact orchestrator
+
+| Module | Role |
+|--------|------|
+| **Artifact Module** (`@alistigo/artifact-list`) | Top-level npm package. Composes Document + UI, wires in platform, sequences startup, injects plugins at runtime. Sole plugin injection site. |
+
+### Plugin types
+
+| Module | Depends on | Role |
+|--------|-----------|------|
+| **Generic Plugin** (`@alistigo/artifact-user-plugin`) | `plugin-api` only | Cross-cutting behaviour (identity, analytics, storage backends) applicable to any artifact |
+| **Domain-Specific Plugin** (`@alistigo/artifact-list-checkbox-plugin`) | `plugin-api` + `domain` | Knows the domain's extension API; adds domain-aware UI slots or augments domain behaviour |
+
+### Skill module
+
+| Module | Depends on | Role |
+|--------|-----------|------|
+| **Skill Module** (`@alistigo/artifact-list-skill`) | None | Published npm package with `SKILL.md` capability definition; consumed by Claude agents and AI chat interfaces |
+
+## Dependency Layering
+
+The order in which modules must be built follows the dependency graph:
+
+```
+domain                          (no alistigo deps)
+  └─ document (+ core-document) (depends on domain)
+       └─ ui                    (depends on document)
+            └─ artifact         (composes ui + document, adds platform + plugins)
+
+plugin-api                      (independent platform module)
+  ├─ plugin-generic             (depends on plugin-api only)
+  └─ plugin-domain-specific     (depends on plugin-api + domain)
+
+skill                           (no deps — documentation-only asset)
+```
+
+## Key Design Rules
+
+- **Domain stays pure** — the Domain module has zero alistigo imports; no UI, no IO, no global state.
+- **Document re-exports domain** — consumers of Document (`ui`, `artifact`) do not need a direct domain dependency.
+- **Artifact is the sole plugin injection site** — Domain, Document, and UI are unaware of plugins; they expose hooks that the Artifact uses to inject plugin behaviour.
+- **Platform modules are invariant** — `core-document`, `artifact-core`, `artifact-core-components-react`, `plugin-api`, storage, and logger are the same across every artifact.
+- **Skill has no code dependencies** — it is a documentation asset consumed at runtime from npm CDN by AI agents.
