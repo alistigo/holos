@@ -9,21 +9,21 @@ export class TransformCommand extends Command {
   static override usage = Command.Usage({
     description: "Transform a CALM architecture JSON file into archify diagram JSON",
     details: `
-      Reads a CALM .arch.json file and produces an archify JSON-IR file
+      Reads a CALM .arch.calm.json file and produces an archify JSON-IR file
       that can be rendered to interactive HTML using archify-render or
       'archify render architecture'.
 
       Pattern files (.pattern.json) are JSON Schema documents and are not
-      supported — only CALM architecture instances (.arch.json) are accepted.
+      supported — only CALM architecture instances (.arch.calm.json) are accepted.
     `,
     examples: [
       [
-        "Transform typical-alistigo-artifact.arch.json",
-        "calm-to-archify systems/typical-alistigo-artifact.arch.json --output .archify-out/typical-alistigo-artifact.archify.json",
+        "Transform typical-alistigo-artifact.arch.calm.json",
+        "calm-to-archify systems/typical-alistigo-artifact.arch.calm.json --output .archify-out/typical-alistigo-artifact.archify.json",
       ],
       [
         "Transform with explicit output path",
-        "calm-to-archify path/to/my.arch.json --output path/to/output.archify.json",
+        "calm-to-archify path/to/my.arch.calm.json --output path/to/output.archify.json",
       ],
     ],
   });
