@@ -73,6 +73,7 @@ export default defineConfig({
             { label: "Architecture", slug: "framework/architecture" },
             { label: "Artifact Pattern", slug: "framework/alistigo-artifact-pattern" },
             { label: "List Artifact Architecture", slug: "framework/artifact-architecture" },
+            { label: "Artifact Module Types", slug: "framework/module-types-architecture" },
             { label: "Layer Model", slug: "framework/layer-diagram" },
           ],
         },

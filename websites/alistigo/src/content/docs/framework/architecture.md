@@ -44,5 +44,7 @@ See [ADR 0027](/adrs/) for the full rationale behind adopting CALM.
 
 The CALM pattern that every artifact must implement is on the
 [Artifact Pattern](/framework/alistigo-artifact-pattern) page.
+The canonical module types every artifact is built from are on the
+[Artifact Module Types](/framework/module-types-architecture) page.
 The list artifact's concrete implementation is on the
 [List Artifact Architecture](/framework/artifact-architecture) page.
