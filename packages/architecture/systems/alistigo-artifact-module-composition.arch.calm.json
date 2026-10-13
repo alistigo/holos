@@ -66,6 +66,7 @@
       ],
       "metadata": [
         {
+          "core-npm-package": "@alistigo/artifact-core-components-react",
           "layer": "presentation",
           "technology": "React (preferred, not a hard requirement)",
           "storybook": "every component has a Storybook story"
@@ -93,6 +94,7 @@
       ],
       "metadata": [
         {
+          "core-npm-package": "@alistigo/artifact-core",
           "layer": "application",
           "distribution": "self-contained UMD bundle",
           "note": "Sole plugin injection site."
@@ -252,52 +254,14 @@
       }
     },
     {
-      "unique-id": "skill-for-artifact",
-      "description": "Defines the AI agent capability contract for the artifact.",
+      "unique-id": "artifact-composed-of-skill",
+      "description": "The artifact publishes a companion skill package as part of its package family.",
       "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "skill",
-            "interfaces": ["skill-definition"]
-          },
-          "destination": {
-            "node": "artifact"
-          }
+        "composed-of": {
+          "container": "artifact",
+          "nodes": ["skill"]
         }
       }
-    }
-  ],
-  "flows": [
-    {
-      "unique-id": "module-dependency-layering-flow",
-      "name": "Module dependency layering",
-      "description": "The order in which modules must be built: Domain at the base with zero alistigo dependencies, Document on top of Domain, UI on top of Document, Artifact at the top composing everything.",
-      "transitions": [
-        {
-          "relationship-unique-id": "document-uses-domain",
-          "sequence-number": 1,
-          "description": "Domain is built first — zero alistigo dependencies.",
-          "direction": "source-to-destination"
-        },
-        {
-          "relationship-unique-id": "ui-uses-document",
-          "sequence-number": 2,
-          "description": "UI depends on Document (and transitively Domain via re-exports).",
-          "direction": "source-to-destination"
-        },
-        {
-          "relationship-unique-id": "artifact-uses-document",
-          "sequence-number": 3,
-          "description": "Artifact is the final layer — composes Document, UI, and all platform modules.",
-          "direction": "source-to-destination"
-        }
-      ],
-      "metadata": [
-        {
-          "trigger": "build pipeline or module authoring",
-          "outcome": "correct build order: domain → document → ui → artifact, with storage/logger/skill composed at the outer ring"
-        }
-      ]
     }
   ]
 }
