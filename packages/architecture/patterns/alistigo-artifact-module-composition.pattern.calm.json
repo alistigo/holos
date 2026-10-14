@@ -1,0 +1,149 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "$id": "https://alistigo.com/architecture/patterns/alistigo-artifact-module-composition.pattern.json",
+  "title": "Alistigo Artifact Module Composition Pattern",
+  "description": "Validates the canonical module composition of any alistigo artifact. Enforces the alistigo node standard (ddd-layer enum, core-npm-package) on all module and system nodes via the alistigo-node-types standard.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "minItems": 7,
+      "prefixItems": [
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "domain" },
+                "node-type": { "const": "module" }
+              },
+              "required": ["ddd-layer"]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "document" },
+                "node-type": { "const": "module" }
+              },
+              "required": ["ddd-layer", "core-npm-package"]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "ui" },
+                "node-type": { "const": "module" }
+              },
+              "required": ["ddd-layer", "core-npm-package"]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "artifact" },
+                "node-type": { "const": "system" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "storage" },
+                "node-type": { "const": "module" }
+              },
+              "required": ["ddd-layer"]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "logger" },
+                "node-type": { "const": "module" }
+              },
+              "required": ["ddd-layer", "core-npm-package"]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            {
+              "type": "object",
+              "properties": {
+                "unique-id": { "const": "skill" },
+                "node-type": { "const": "skill" }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "relationships": {
+      "type": "array",
+      "minItems": 4,
+      "prefixItems": [
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "document-uses-domain" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "ui-uses-document" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "artifact-composed-of-modules" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "skill-for-artifact" }
+          },
+          "required": ["description"]
+        }
+      ]
+    }
+  },
+  "required": ["nodes", "relationships"]
+}

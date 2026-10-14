@@ -2,24 +2,19 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://alistigo.com/calm/extensions/alistigo-node-types",
   "title": "Alistigo Node Standard",
-  "description": "Alistigo's CALM Standard extending the core CALM node with alistigo-specific properties. Defines ddd-layer and core-npm-package as typed, validatable node properties. Custom node-type values (module, skill) are documented in $defs — CALM's node-type field accepts any string, so these are semantic definitions, not schema constraints.",
-  "allOf": [
-    { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
-    {
-      "type": "object",
-      "properties": {
-        "ddd-layer": {
-          "type": "string",
-          "description": "The DDD architectural layer this node belongs to. Required on module and system nodes.",
-          "enum": ["Presentation", "Application", "Domain", "Infrastructure"]
-        },
-        "core-npm-package": {
-          "type": "string",
-          "description": "The primary npm package that implements this node (e.g. @alistigo/core-document). Required on module and system nodes except the Domain module, which is a pure DDD domain with no framework dependency."
-        }
-      }
+  "description": "Pure CALM Standard defining alistigo-specific node properties. Composed with the CALM core node schema via allOf in patterns that reference it. Custom node-type values (module, skill, system) are documented in $defs — CALM's node-type field accepts any string.",
+  "type": "object",
+  "properties": {
+    "ddd-layer": {
+      "type": "string",
+      "description": "The DDD architectural layer this node belongs to. Required on module and system nodes.",
+      "enum": ["Presentation", "Application", "Domain", "Infrastructure"]
+    },
+    "core-npm-package": {
+      "type": "string",
+      "description": "The primary npm package that implements this node (e.g. @alistigo/core-document). Required on module and system nodes except the Domain module, which is a pure DDD domain with no framework dependency."
     }
-  ],
+  },
   "$defs": {
     "node-type-module": {
       "title": "module",
