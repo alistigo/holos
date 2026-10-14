@@ -7,7 +7,7 @@
     {
       "version": "0.1.0",
       "kind": "concept",
-      "calm-extension": "extensions/alistigo-node-types.calm-extension.json"
+      "x-alistigo-extension": "extensions/alistigo-node-types.calm-extension.json"
     }
   ],
   "nodes": [
@@ -28,9 +28,10 @@
       ],
       "metadata": [
         {
-          "layer": "domain",
+          "ddd-layer": "Domain",
           "testing": "fully unit-tested",
-          "isolation": "zero project-internal imports — no UI, no IO, no DOM, no global state"
+          "isolation": "zero project-internal imports — no UI, no IO, no DOM, no global state",
+          "note": "core-npm-package is intentionally absent — the Domain module is pure DDD with no framework dependency and no alistigo implementation package of its own"
         }
       ]
     },
@@ -48,7 +49,7 @@
       "metadata": [
         {
           "core-npm-package": "@alistigo/core-document",
-          "layer": "document",
+          "ddd-layer": "Application",
           "scope": "shared platform — one package used by all artifact Document modules"
         }
       ]
@@ -67,7 +68,7 @@
       "metadata": [
         {
           "core-npm-package": "@alistigo/artifact-core-components-react",
-          "layer": "presentation",
+          "ddd-layer": "Presentation",
           "technology": "React (preferred, not a hard requirement)",
           "storybook": "every component has a Storybook story"
         }
@@ -75,9 +76,9 @@
     },
     {
       "unique-id": "artifact",
-      "node-type": "module",
+      "node-type": "system",
       "name": "Artifact",
-      "description": "The artifact orchestrator — the top-level npm package. Composes Document and UI, wires in the shared platform modules, and sequences the startup lifecycle. Plugin injection happens here; Domain, Document, and UI are unaware of plugins.",
+      "description": "The deployed artifact application. Composes Domain, Document, UI, Storage, and Logger, wires them together, sequences the startup lifecycle, and injects plugins at startup. The sole plugin injection site.",
       "interfaces": [
         {
           "unique-id": "artifact-core",
@@ -95,7 +96,7 @@
       "metadata": [
         {
           "core-npm-package": "@alistigo/artifact-core",
-          "layer": "application",
+          "ddd-layer": "Application",
           "distribution": "self-contained UMD bundle",
           "note": "Sole plugin injection site."
         }
@@ -114,7 +115,7 @@
       ],
       "metadata": [
         {
-          "layer": "platform",
+          "ddd-layer": "Infrastructure",
           "consumed-by": "Artifact directly — wired into the Document layer at startup"
         }
       ]
@@ -133,7 +134,7 @@
       "metadata": [
         {
           "core-npm-package": "@alistigo/logger",
-          "layer": "platform",
+          "ddd-layer": "Infrastructure",
           "implementation": "Pino"
         }
       ]
@@ -190,76 +191,27 @@
       }
     },
     {
-      "unique-id": "artifact-uses-document",
-      "description": "Artifact initialises and wires up the Document layer at startup.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "artifact",
-            "interfaces": ["artifact-core"]
-          },
-          "destination": {
-            "node": "document",
-            "interfaces": ["document-api"]
-          }
-        }
-      }
-    },
-    {
-      "unique-id": "artifact-uses-ui",
-      "description": "Artifact mounts the UI component tree into the host DOM container.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "artifact",
-            "interfaces": ["artifact-ui"]
-          },
-          "destination": {
-            "node": "ui",
-            "interfaces": ["ui-components"]
-          }
-        }
-      }
-    },
-    {
-      "unique-id": "artifact-uses-storage",
-      "description": "Artifact resolves the active storage backend at startup and passes it to the Document layer.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "artifact",
-            "interfaces": ["artifact-core"]
-          },
-          "destination": {
-            "node": "storage",
-            "interfaces": ["storage-api"]
-          }
-        }
-      }
-    },
-    {
-      "unique-id": "artifact-uses-logger",
-      "description": "Artifact uses the shared structured logger for runtime logging.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "artifact",
-            "interfaces": ["artifact-core"]
-          },
-          "destination": {
-            "node": "logger",
-            "interfaces": ["logger-api"]
-          }
-        }
-      }
-    },
-    {
-      "unique-id": "artifact-composed-of-skill",
-      "description": "The artifact publishes a companion skill package as part of its package family.",
+      "unique-id": "artifact-composed-of-modules",
+      "description": "The artifact system is composed of the domain, document, UI, storage, and logger modules.",
       "relationship-type": {
         "composed-of": {
           "container": "artifact",
-          "nodes": ["skill"]
+          "nodes": ["domain", "document", "ui", "storage", "logger"]
+        }
+      }
+    },
+    {
+      "unique-id": "skill-for-artifact",
+      "description": "The skill package provides the AI agent capability definition for this artifact.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "skill",
+            "interfaces": ["skill-definition"]
+          },
+          "destination": {
+            "node": "artifact"
+          }
         }
       }
     }
