@@ -16,6 +16,7 @@
       "node-type": "module",
       "name": "Domain",
       "description": "Pure, framework-free DDD domain model. Zero dependencies on other alistigo modules. Contains value objects, aggregates, commands, entities, errors, domain events, and repository interfaces. Defines the vocabulary and business rules of the artifact.",
+      "ddd-layer": "Domain",
       "interfaces": [
         {
           "unique-id": "domain-api",
@@ -28,7 +29,6 @@
       ],
       "metadata": [
         {
-          "ddd-layer": "Domain",
           "testing": "fully unit-tested",
           "isolation": "zero project-internal imports — no UI, no IO, no DOM, no global state",
           "note": "core-npm-package is intentionally absent — the Domain module is pure DDD with no framework dependency and no alistigo implementation package of its own"
@@ -40,6 +40,8 @@
       "node-type": "module",
       "name": "Document",
       "description": "Owns the artifact's data model and application service. Provides event-sourced projections, the application service exposing all document actions, serializer/deserializer, and a validation function. Re-exports the Domain module so downstream consumers need only depend on Document.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/core-document",
       "interfaces": [
         {
           "unique-id": "document-api",
@@ -48,8 +50,6 @@
       ],
       "metadata": [
         {
-          "core-npm-package": "@alistigo/core-document",
-          "ddd-layer": "Application",
           "scope": "shared platform — one package used by all artifact Document modules"
         }
       ]
@@ -59,6 +59,8 @@
       "node-type": "module",
       "name": "UI",
       "description": "Presentation layer. Contains React components that display and interact with the Document module. Every component has a Storybook story. Depends on Document; domain types are accessed via Document's re-exports.",
+      "ddd-layer": "Presentation",
+      "core-npm-package": "@alistigo/artifact-core-components-react",
       "interfaces": [
         {
           "unique-id": "ui-components",
@@ -67,8 +69,6 @@
       ],
       "metadata": [
         {
-          "core-npm-package": "@alistigo/artifact-core-components-react",
-          "ddd-layer": "Presentation",
           "technology": "React (preferred, not a hard requirement)",
           "storybook": "every component has a Storybook story"
         }
@@ -79,6 +79,8 @@
       "node-type": "system",
       "name": "Artifact",
       "description": "The deployed artifact application. Composes Domain, Document, UI, Storage, and Logger, wires them together, sequences the startup lifecycle, and injects plugins at startup. The sole plugin injection site.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/artifact-core",
       "interfaces": [
         {
           "unique-id": "artifact-core",
@@ -95,8 +97,6 @@
       ],
       "metadata": [
         {
-          "core-npm-package": "@alistigo/artifact-core",
-          "ddd-layer": "Application",
           "distribution": "self-contained UMD bundle",
           "note": "Sole plugin injection site."
         }
@@ -107,6 +107,7 @@
       "node-type": "module",
       "name": "Storage",
       "description": "Core alistigo storage service. Exposes a KeyValueStore-compatible API consumed directly by the Artifact module. Abstracts over concrete storage backends.",
+      "ddd-layer": "Infrastructure",
       "interfaces": [
         {
           "unique-id": "storage-api",
@@ -115,7 +116,6 @@
       ],
       "metadata": [
         {
-          "ddd-layer": "Infrastructure",
           "consumed-by": "Artifact directly — wired into the Document layer at startup"
         }
       ]
@@ -125,6 +125,8 @@
       "node-type": "module",
       "name": "Logger",
       "description": "Core structured logger. Provides a Pino-based logger instance for structured, leveled output.",
+      "ddd-layer": "Infrastructure",
+      "core-npm-package": "@alistigo/logger",
       "interfaces": [
         {
           "unique-id": "logger-api",
@@ -133,8 +135,6 @@
       ],
       "metadata": [
         {
-          "core-npm-package": "@alistigo/logger",
-          "ddd-layer": "Infrastructure",
           "implementation": "Pino"
         }
       ]

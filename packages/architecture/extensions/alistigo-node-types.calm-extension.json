@@ -1,47 +1,37 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://alistigo.com/calm/extensions/alistigo-node-types",
-  "title": "Alistigo CALM node-type extension",
-  "description": "Alistigo's own extension to FINOS CALM v1.2. Defines the alistigo-specific node-type values and the metadata conventions that apply to each type. CALM's node-type field accepts any string; this schema gives precise semantics and documents expected metadata within the alistigo context.",
-  "definitions": {
-    "ddd-layer": {
-      "title": "ddd-layer",
-      "description": "The DDD architectural layer this node belongs to. Used as a metadata field on module and system nodes.",
-      "type": "string",
-      "enum": ["Presentation", "Application", "Domain", "Infrastructure"]
-    },
-    "module": {
+  "title": "Alistigo Node Standard",
+  "description": "Alistigo's CALM Standard extending the core CALM node with alistigo-specific properties. Defines ddd-layer and core-npm-package as typed, validatable node properties. Custom node-type values (module, skill) are documented in $defs — CALM's node-type field accepts any string, so these are semantic definitions, not schema constraints.",
+  "allOf": [
+    { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+    {
+      "type": "object",
+      "properties": {
+        "ddd-layer": {
+          "type": "string",
+          "description": "The DDD architectural layer this node belongs to. Required on module and system nodes.",
+          "enum": ["Presentation", "Application", "Domain", "Infrastructure"]
+        },
+        "core-npm-package": {
+          "type": "string",
+          "description": "The primary npm package that implements this node (e.g. @alistigo/core-document). Required on module and system nodes except the Domain module, which is a pure DDD domain with no framework dependency."
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "node-type-module": {
       "title": "module",
-      "description": "A cohesive unit of functionality with a clearly defined boundary and at least one public interface. Implemented by one or more npm packages. A module enforces encapsulation: consumers interact only through its declared interfaces. Examples: domain, document, ui, storage, logger.",
-      "metadata-conventions": {
-        "core-npm-package": {
-          "type": "string",
-          "description": "The primary npm package that implements this module (e.g. @alistigo/core-document). Required on all module nodes except the Domain module, which is a pure DDD domain with no framework dependency and therefore has no implementation package of its own."
-        },
-        "ddd-layer": {
-          "$ref": "#/definitions/ddd-layer",
-          "description": "Required on all module nodes. Identifies where in the DDD layering this module sits."
-        }
-      }
+      "description": "A cohesive unit of functionality with a clearly defined boundary and at least one public interface. Implemented by one or more npm packages. A module enforces encapsulation: consumers interact only through its declared interfaces. Examples: domain, document, ui, storage, logger. Expected standard properties: ddd-layer (required), core-npm-package (required except Domain)."
     },
-    "skill": {
+    "node-type-skill": {
       "title": "skill",
-      "description": "An AI agent capability definition node. A skill has no runtime code dependencies — it is a documentation and metadata asset (SKILL.md + optional JSON schema) that describes how an AI agent should generate, configure, and interact with an artifact. Published as an npm package and loaded on demand by AI chat interfaces and agent runtimes. No ddd-layer or core-npm-package fields apply to this node type.",
-      "metadata-conventions": {}
+      "description": "An AI agent capability definition node. A skill has no runtime code dependencies — it is a documentation and metadata asset (SKILL.md + optional JSON schema) that describes how an AI agent should generate, configure, and interact with an artifact. Published as an npm package and loaded on demand by AI chat interfaces and agent runtimes. ddd-layer and core-npm-package do not apply to this node type."
     },
-    "system": {
+    "node-type-system": {
       "title": "system",
-      "description": "A deployable or composable system that wires together multiple modules. In alistigo's context this is typically the Artifact node — the composition root that assembles domain, document, UI, storage, and logger modules and injects plugins at startup.",
-      "metadata-conventions": {
-        "core-npm-package": {
-          "type": "string",
-          "description": "Optional. The primary npm package that implements this system (e.g. @alistigo/artifact-core)."
-        },
-        "ddd-layer": {
-          "$ref": "#/definitions/ddd-layer",
-          "description": "Optional. The DDD layer this system primarily belongs to."
-        }
-      }
+      "description": "A deployable or composable system that wires together multiple modules. In alistigo's context this is typically the Artifact node — the composition root that assembles domain, document, UI, storage, and logger modules and injects plugins at startup. Expected standard properties: ddd-layer (optional), core-npm-package (optional)."
     }
   }
 }
