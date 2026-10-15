@@ -127,6 +127,12 @@
           "description": "SKILL.md — the agent capability definition. Describes how an AI should generate, configure, and interact with the artifact."
         }
       ]
+    },
+    {
+      "unique-id": "plugin-system",
+      "node-type": "plugin-system",
+      "name": "Plugin System",
+      "description": "Logical grouping of the plugin subsystem: Plugin Bus and its registered infrastructure plugins (Storage, Logger). The Application owns the Plugin Bus; plugins register into it at startup. This is a conceptual grouping node with no runtime package of its own."
     }
   ],
   "relationships": [
@@ -269,6 +275,16 @@
             "node": "plugin-bus",
             "interfaces": ["plugin-bus-api"]
           }
+        }
+      }
+    },
+    {
+      "unique-id": "plugin-system-composition",
+      "description": "Plugin System groups Plugin Bus and all infrastructure plugins into a single subsystem for visual and conceptual clarity.",
+      "relationship-type": {
+        "composed-of": {
+          "container": "plugin-system",
+          "nodes": ["plugin-bus", "storage-plugin", "logger-plugin"]
         }
       }
     }

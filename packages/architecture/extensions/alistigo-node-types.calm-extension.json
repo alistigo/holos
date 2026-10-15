@@ -35,6 +35,10 @@
     "node-type-plugin": {
       "title": "plugin",
       "description": "A self-contained extension that registers with the Plugin Bus at artifact startup. Implements the plugin contract defined by the Plugin Bus. Decoupled from the Application node — loaded via the bus rather than wired in directly. Examples: storage, logger. ddd-layer (optional, typically Infrastructure), core-npm-package (optional)."
+    },
+    "node-type-plugin-system": {
+      "title": "plugin-system",
+      "description": "Visual grouping container for the plugin subsystem. Groups the Plugin Bus with its registered infrastructure plugins (Storage, Logger) for diagram clarity. Has no runtime package of its own — it is a pure architectural grouping concept rendered as a boundary region in archify diagrams. No standard properties (ddd-layer, core-npm-package) apply."
     }
   }
 }
