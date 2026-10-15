@@ -26,7 +26,11 @@
     },
     "node-type-system": {
       "title": "system",
-      "description": "A deployable or composable system that wires together multiple modules. In alistigo's context this is typically the Artifact node — the composition root that assembles domain, document, UI, storage, and logger modules and injects plugins at startup. Expected standard properties: ddd-layer (optional), core-npm-package (optional)."
+      "description": "A deployable or composable system that wires together multiple modules. In alistigo's context this is typically the Artifact node — the composition root that assembles domain, document, UI, and the Plugin Bus, then loads plugins at startup. Expected standard properties: ddd-layer (optional), core-npm-package (optional)."
+    },
+    "node-type-plugin": {
+      "title": "plugin",
+      "description": "A self-contained extension that registers with the Plugin Bus at artifact startup. Implements the plugin contract defined by the Plugin Bus. Decoupled from the Application node — loaded via the bus rather than wired in directly. Examples: storage, logger. ddd-layer (optional, typically Infrastructure), core-npm-package (optional)."
     }
   }
 }
