@@ -109,6 +109,23 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
   );
   const nodeIds = calm.nodes.map((n) => n["unique-id"]);
 
+  // Pre-pass: record direct component members of each group node for boundary expansion
+  const groupComponents = new Map<string, string[]>();
+  for (const rel of calm.relationships) {
+    const rt = rel["relationship-type"];
+    if ("composed-of" in rt) {
+      const { container, nodes: children } = rt["composed-of"];
+      if (groupNodeIds.has(container)) {
+        groupComponents.set(
+          container,
+          children.filter((id) => !groupNodeIds.has(id)),
+        );
+      }
+    }
+  }
+  const expandGroups = (ids: string[]): string[] =>
+    ids.flatMap((id) => (groupNodeIds.has(id) ? (groupComponents.get(id) ?? []) : [id]));
+
   const composedOfSets: string[][] = [];
   const deployedInSets: string[][] = [];
   const boundaries: ArchifyBoundary[] = [];
@@ -132,8 +149,11 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
       const { container, nodes: children } = rt["composed-of"];
       const containerNode = calm.nodes.find((n) => n["unique-id"] === container);
       const label = containerNode?.name ?? container;
-      composedOfSets.push(children);
-      boundaries.push({ kind: "region", label, wraps: children });
+      const componentChildren = expandGroups(children);
+      if (!children.some((id) => groupNodeIds.has(id))) {
+        composedOfSets.push(componentChildren);
+      }
+      boundaries.push({ kind: "region", label, wraps: componentChildren });
       continue;
     }
 
