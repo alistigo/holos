@@ -130,7 +130,7 @@
     },
     {
       "unique-id": "plugin-system",
-      "node-type": "plugin-system",
+      "node-type": "group",
       "name": "Plugin System",
       "description": "Logical grouping of the plugin subsystem: Plugin Bus and its registered infrastructure plugins (Storage, Logger). The Application owns the Plugin Bus; plugins register into it at startup. This is a conceptual grouping node with no runtime package of its own."
     }
