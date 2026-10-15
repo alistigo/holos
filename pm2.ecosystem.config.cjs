@@ -28,5 +28,14 @@ module.exports = {
       autorestart: true,
       watch: false,
     },
+    {
+      name: "architecture",
+      script: "pnpm",
+      args: "exec nx run architecture:dev",
+      interpreter: "none",
+      cwd: root,
+      autorestart: true,
+      watch: false,
+    },
   ],
 };
