@@ -7,7 +7,7 @@
   "properties": {
     "nodes": {
       "type": "array",
-      "minItems": 9,
+      "minItems": 8,
       "prefixItems": [
         {
           "allOf": [
@@ -58,19 +58,6 @@
             {
               "type": "object",
               "properties": {
-                "unique-id": { "const": "artifact" },
-                "node-type": { "const": "system" }
-              }
-            }
-          ]
-        },
-        {
-          "allOf": [
-            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
-            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
-            {
-              "type": "object",
-              "properties": {
                 "unique-id": { "const": "application" },
                 "node-type": { "const": "system" }
               },
@@ -99,7 +86,7 @@
             {
               "type": "object",
               "properties": {
-                "unique-id": { "const": "storage" },
+                "unique-id": { "const": "storage-plugin" },
                 "node-type": { "const": "plugin" }
               },
               "required": ["ddd-layer"]
@@ -113,7 +100,7 @@
             {
               "type": "object",
               "properties": {
-                "unique-id": { "const": "logger" },
+                "unique-id": { "const": "logger-plugin" },
                 "node-type": { "const": "plugin" }
               },
               "required": ["ddd-layer", "core-npm-package"]
@@ -136,7 +123,7 @@
     },
     "relationships": {
       "type": "array",
-      "minItems": 10,
+      "minItems": 9,
       "prefixItems": [
         {
           "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
@@ -151,14 +138,6 @@
           "type": "object",
           "properties": {
             "unique-id": { "const": "ui-uses-document" }
-          },
-          "required": ["description"]
-        },
-        {
-          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
-          "type": "object",
-          "properties": {
-            "unique-id": { "const": "artifact-composed-of-modules" }
           },
           "required": ["description"]
         },
