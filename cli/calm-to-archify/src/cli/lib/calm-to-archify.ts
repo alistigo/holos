@@ -100,7 +100,7 @@ function firstSentence(text: string): string {
 
 // Node types whose nodes are pure visual grouping containers — rendered only as boundary
 // regions, not as individual component boxes. Add new group node-types here as needed.
-const GROUP_NODE_TYPES = new Set(["plugin-system"]);
+const GROUP_NODE_TYPES = new Set(["group"]);
 
 // fallow-ignore-next-line complexity
 export function transformCalmToArchify(calm: CalmDocument, outputPath: string): ArchifyDocument {
