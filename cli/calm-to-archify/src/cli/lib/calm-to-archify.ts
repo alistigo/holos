@@ -98,8 +98,15 @@ function firstSentence(text: string): string {
   return text.slice(0, dot + 1);
 }
 
+// Node types whose nodes are pure visual grouping containers — rendered only as boundary
+// regions, not as individual component boxes. Add new group node-types here as needed.
+const GROUP_NODE_TYPES = new Set(["plugin-system"]);
+
 // fallow-ignore-next-line complexity
 export function transformCalmToArchify(calm: CalmDocument, outputPath: string): ArchifyDocument {
+  const groupNodeIds = new Set(
+    calm.nodes.filter((n) => GROUP_NODE_TYPES.has(n["node-type"])).map((n) => n["unique-id"]),
+  );
   const nodeIds = calm.nodes.map((n) => n["unique-id"]);
 
   const composedOfSets: string[][] = [];
@@ -162,7 +169,7 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
   }
 
   const layoutInput: LayoutInput = {
-    nodeIds,
+    nodeIds: nodeIds.filter((id) => !groupNodeIds.has(id)),
     composedOfSets,
     deployedInSets,
   };
@@ -203,16 +210,18 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
     }
   }
 
-  const components: ArchifyComponent[] = calm.nodes.map((node) => {
-    const pos = positions.get(node["unique-id"]) ?? { x: 0, y: 0, w: 140, h: 55 };
-    return {
-      id: node["unique-id"],
-      type: mapNodeType(node["node-type"], node.name),
-      label: node.name,
-      pos: [pos.x, pos.y],
-      size: [pos.w, pos.h],
-    };
-  });
+  const components: ArchifyComponent[] = calm.nodes
+    .filter((node) => !groupNodeIds.has(node["unique-id"]))
+    .map((node) => {
+      const pos = positions.get(node["unique-id"]) ?? { x: 0, y: 0, w: 140, h: 55 };
+      return {
+        id: node["unique-id"],
+        type: mapNodeType(node["node-type"], node.name),
+        label: node.name,
+        pos: [pos.x, pos.y],
+        size: [pos.w, pos.h],
+      };
+    });
 
   const subtitle = calm.description ? firstSentence(calm.description) : undefined;
 
