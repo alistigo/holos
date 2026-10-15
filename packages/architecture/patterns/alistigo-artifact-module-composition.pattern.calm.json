@@ -7,7 +7,7 @@
   "properties": {
     "nodes": {
       "type": "array",
-      "minItems": 7,
+      "minItems": 8,
       "prefixItems": [
         {
           "allOf": [
@@ -71,6 +71,20 @@
             {
               "type": "object",
               "properties": {
+                "unique-id": { "const": "application" },
+                "node-type": { "const": "system" }
+              },
+              "required": ["ddd-layer", "core-npm-package"]
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/node" },
+            { "$ref": "https://alistigo.com/calm/extensions/alistigo-node-types" },
+            {
+              "type": "object",
+              "properties": {
                 "unique-id": { "const": "storage" },
                 "node-type": { "const": "module" }
               },
@@ -108,7 +122,7 @@
     },
     "relationships": {
       "type": "array",
-      "minItems": 4,
+      "minItems": 9,
       "prefixItems": [
         {
           "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
@@ -139,6 +153,46 @@
           "type": "object",
           "properties": {
             "unique-id": { "const": "skill-for-artifact" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "application-uses-ui" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "application-uses-document" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "application-uses-storage" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "application-uses-logger" }
+          },
+          "required": ["description"]
+        },
+        {
+          "$ref": "https://calm.finos.org/release/1.2/meta/core.json#/defs/relationship",
+          "type": "object",
+          "properties": {
+            "unique-id": { "const": "application-uses-domain" }
           },
           "required": ["description"]
         }

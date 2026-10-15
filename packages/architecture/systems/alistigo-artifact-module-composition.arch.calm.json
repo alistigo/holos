@@ -103,6 +103,25 @@
       ]
     },
     {
+      "unique-id": "application",
+      "node-type": "system",
+      "name": "Application",
+      "description": "Application layer within the Artifact system. Wires together the Domain, Document, UI, Storage, and Logger modules, sequences the startup lifecycle, and injects plugins. The top-level orchestration entry point inside the Artifact system.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/artifact-core",
+      "interfaces": [
+        {
+          "unique-id": "application-api",
+          "description": "Startup lifecycle (useStartArtifact hook, phase state machine) and plugin registration point."
+        }
+      ],
+      "metadata": [
+        {
+          "note": "Belongs to the artifact system — artifact composed-of application. Application is the sole plugin injection site."
+        }
+      ]
+    },
+    {
       "unique-id": "storage",
       "node-type": "module",
       "name": "Storage",
@@ -196,7 +215,7 @@
       "relationship-type": {
         "composed-of": {
           "container": "artifact",
-          "nodes": ["domain", "document", "ui", "storage", "logger"]
+          "nodes": ["domain", "document", "ui", "storage", "logger", "application"]
         }
       }
     },
@@ -211,6 +230,86 @@
           },
           "destination": {
             "node": "artifact"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-ui",
+      "description": "Application mounts UI components and exposes them as the artifact's rendered interface.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-document",
+      "description": "Application wires the Document module into the startup lifecycle and provides it to the UI layer.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": ["document-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-storage",
+      "description": "Application injects the Storage module into the Document layer at startup.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "storage",
+            "interfaces": ["storage-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-logger",
+      "description": "Application injects the Logger instance into all modules at startup.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "logger",
+            "interfaces": ["logger-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-domain",
+      "description": "Application has a direct dependency on the Domain module for startup validation and plugin hooks.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "domain",
+            "interfaces": ["domain-api"]
           }
         }
       }
