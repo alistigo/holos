@@ -13,6 +13,10 @@
     "core-npm-package": {
       "type": "string",
       "description": "The primary npm package that implements this node (e.g. @alistigo/core-document). Required on module and system nodes except the Domain module, which is a pure DDD domain with no framework dependency."
+    },
+    "default-plugin-package": {
+      "type": "string",
+      "description": "The default npm package that ships the built-in implementation of this plugin (e.g. @alistigo/local-storage-plugin). Optional on plugin nodes. Consumers may substitute their own implementation via the plugin bus."
     }
   },
   "$defs": {
