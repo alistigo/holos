@@ -42,6 +42,15 @@
       "inputs": ["{projectRoot}/systems/*.arch.calm.json"],
       "outputs": ["{projectRoot}/systems"]
     },
+    "dev": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "dependsOn": [{ "projects": ["calm-to-archify"], "target": "build" }],
+      "options": {
+        "command": "bun ../../cli/calm-to-archify/dist/cli.js watch systems/*.arch.calm.json",
+        "cwd": "packages/architecture"
+      }
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
