@@ -122,10 +122,24 @@
       ]
     },
     {
-      "unique-id": "storage",
+      "unique-id": "plugin-bus",
       "node-type": "module",
+      "name": "Plugin Bus",
+      "description": "Intermediary between the Application and plugins. Defines the plugin contract API that plugins (storage, logger, and future extensions) implement to register and communicate with the artifact. Application owns and initialises the plugin bus at startup.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/plugin-bus",
+      "interfaces": [
+        {
+          "unique-id": "plugin-bus-api",
+          "description": "Plugin contract API: registration hooks and event channels consumed by plugin implementations."
+        }
+      ]
+    },
+    {
+      "unique-id": "storage",
+      "node-type": "plugin",
       "name": "Storage",
-      "description": "Core alistigo storage service. Exposes a KeyValueStore-compatible API consumed directly by the Artifact module. Abstracts over concrete storage backends.",
+      "description": "Infrastructure plugin providing persistent key-value storage. Registers with the Plugin Bus at startup and exposes a KeyValueStore-compatible API. Abstracts over concrete storage backends.",
       "ddd-layer": "Infrastructure",
       "interfaces": [
         {
@@ -135,15 +149,15 @@
       ],
       "metadata": [
         {
-          "consumed-by": "Artifact directly — wired into the Document layer at startup"
+          "consumed-by": "Plugin Bus — registered as a plugin at startup, not wired directly by Application"
         }
       ]
     },
     {
       "unique-id": "logger",
-      "node-type": "module",
+      "node-type": "plugin",
       "name": "Logger",
-      "description": "Core structured logger. Provides a Pino-based logger instance for structured, leveled output.",
+      "description": "Infrastructure plugin providing structured logging. Registers with the Plugin Bus at startup and provides a Pino-based logger instance for structured, leveled output.",
       "ddd-layer": "Infrastructure",
       "core-npm-package": "@alistigo/logger",
       "interfaces": [
@@ -211,11 +225,11 @@
     },
     {
       "unique-id": "artifact-composed-of-modules",
-      "description": "The artifact system is composed of the domain, document, UI, storage, and logger modules.",
+      "description": "The artifact system is composed of the domain, document, UI, application, and plugin-bus modules. Storage and logger are plugins loaded at runtime via the plugin bus.",
       "relationship-type": {
         "composed-of": {
           "container": "artifact",
-          "nodes": ["domain", "document", "ui", "storage", "logger", "application"]
+          "nodes": ["domain", "document", "ui", "application", "plugin-bus"]
         }
       }
     },
@@ -267,38 +281,6 @@
       }
     },
     {
-      "unique-id": "application-uses-storage",
-      "description": "Application injects the Storage module into the Document layer at startup.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "application",
-            "interfaces": ["application-api"]
-          },
-          "destination": {
-            "node": "storage",
-            "interfaces": ["storage-api"]
-          }
-        }
-      }
-    },
-    {
-      "unique-id": "application-uses-logger",
-      "description": "Application injects the Logger instance into all modules at startup.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "application",
-            "interfaces": ["application-api"]
-          },
-          "destination": {
-            "node": "logger",
-            "interfaces": ["logger-api"]
-          }
-        }
-      }
-    },
-    {
       "unique-id": "application-uses-domain",
       "description": "Application has a direct dependency on the Domain module for startup validation and plugin hooks.",
       "relationship-type": {
@@ -310,6 +292,54 @@
           "destination": {
             "node": "domain",
             "interfaces": ["domain-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-plugin-bus",
+      "description": "Application owns and fully controls the plugin bus, initialising it at startup and wiring all registered plugins through it.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "storage-uses-plugin-bus",
+      "description": "Storage registers with the plugin bus to integrate with the artifact as an infrastructure plugin.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "storage",
+            "interfaces": ["storage-api"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "logger-uses-plugin-bus",
+      "description": "Logger registers with the plugin bus to integrate with the artifact as an infrastructure plugin.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "logger",
+            "interfaces": ["logger-api"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
           }
         }
       }
