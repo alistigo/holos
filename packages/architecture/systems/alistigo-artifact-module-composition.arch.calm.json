@@ -10,9 +10,23 @@
     {
       "x-archify": {
         "node-types": {
-          "module": { "component-type": "backend", "legend-label": "Module" },
-          "system": { "component-type": "frontend", "legend-label": "System" },
-          "plugin": { "component-type": "external", "legend-label": "Plugin" },
+          "module": {
+            "component-type": "backend",
+            "legend-label": "Module",
+            "sublabel": "core-npm-package",
+            "tag": "ddd-layer"
+          },
+          "system": {
+            "component-type": "frontend",
+            "legend-label": "System",
+            "sublabel": "core-npm-package",
+            "tag": "ddd-layer"
+          },
+          "plugin": {
+            "component-type": "external",
+            "legend-label": "Plugin",
+            "sublabel": "core-npm-package"
+          },
           "skill": { "component-type": "cloud", "legend-label": "Skill" }
         }
       }

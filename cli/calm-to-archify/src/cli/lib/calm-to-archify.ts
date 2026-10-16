@@ -6,6 +6,7 @@ export interface CalmNode {
   "node-type": string;
   name: string;
   description?: string;
+  [key: string]: unknown;
 }
 
 export interface CalmRelationship {
@@ -31,6 +32,8 @@ export interface ArchifyComponent {
   id: string;
   type: string;
   label: string;
+  sublabel?: string;
+  tag?: string;
   pos: [number, number];
   size: [number, number];
 }
@@ -65,6 +68,8 @@ export interface ArchifyDocument {
 interface ArchifyHint {
   "component-type": string;
   "legend-label"?: string;
+  sublabel?: string;
+  tag?: string;
 }
 
 function extractArchifyNodeTypes(calm: CalmDocument): Map<string, ArchifyHint> {
@@ -366,10 +371,21 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
     .filter((node) => !groupNodeIds.has(node["unique-id"]))
     .map((node) => {
       const pos = positions.get(node["unique-id"]) ?? { x: 0, y: 0, w: 140, h: 55 };
+      const hint = hintMap.get(node["node-type"]);
+      const sublabel =
+        hint?.["sublabel"] && typeof node[hint["sublabel"]] === "string"
+          ? (node[hint["sublabel"]] as string)
+          : undefined;
+      const tag =
+        hint?.["tag"] && typeof node[hint["tag"]] === "string"
+          ? (node[hint["tag"]] as string)
+          : undefined;
       return {
         id: node["unique-id"],
         type: mapNodeType(node["node-type"], node.name, hintMap),
         label: node.name,
+        ...(sublabel && { sublabel }),
+        ...(tag && { tag }),
         pos: [pos.x, pos.y],
         size: [pos.w, pos.h],
       };

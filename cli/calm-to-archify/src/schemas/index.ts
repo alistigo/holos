@@ -10,6 +10,8 @@ export type ComponentType =
 export interface NodeTypeHint {
   "component-type": ComponentType;
   "legend-label"?: string;
+  sublabel?: string;
+  tag?: string;
 }
 
 export interface XArchifyMetadata {
@@ -66,6 +68,16 @@ export const xArchifyMetadataSchema = {
           type: "string",
           description:
             "Human-readable label shown for this component-type in the diagram legend. Overrides the archify default label (e.g. 'Backend' can be overridden to 'Module').",
+        },
+        sublabel: {
+          type: "string",
+          description:
+            "Name of a CALM node property whose value will be shown as a secondary line below the node label in the diagram (e.g. 'core-npm-package'). Only rendered if the node has that property and its value is a string.",
+        },
+        tag: {
+          type: "string",
+          description:
+            "Name of a CALM node property whose value will be shown as a tag badge on the node (e.g. 'ddd-layer'). Only rendered if the node has that property and its value is a string.",
         },
       },
       required: ["component-type"],
