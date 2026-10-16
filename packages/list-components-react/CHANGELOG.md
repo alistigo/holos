@@ -1,3 +1,11 @@
+## 0.5.4 (2026-10-16)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-list-checkbox-plugin to 0.3.4
+- Updated list-document to 0.5.4
+- Updated list-domain to 0.4.4
+
 ## 0.5.3 (2026-10-09)
 
 ### 🧱 Updated Dependencies

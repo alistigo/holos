@@ -1,3 +1,29 @@
+## 1.3.0 (2026-10-16)
+
+### 🚀 Features
+
+- **calm-to-archify:** add sublabel/tag node mapping, diagram-types docs, and JSON schema export ([2b4fcdf](https://github.com/alistigo/holos/commit/2b4fcdf))
+- **calm-to-archify:** topology layout, x-archify metadata, schema export, and docs ([5cc7a4e](https://github.com/alistigo/holos/commit/5cc7a4e))
+- **architecture:** add Artifact group boundary to module composition ([b9c5a65](https://github.com/alistigo/holos/commit/b9c5a65))
+- **architecture:** add plugin-system group node to module composition ([c1cb0fb](https://github.com/alistigo/holos/commit/c1cb0fb))
+- **architecture:** add watch mode to calm-to-archify CLI and dev reload pipeline ([537a920](https://github.com/alistigo/holos/commit/537a920))
+- **architecture:** introduce plugin bus; storage and logger become plugins ([fc75baf](https://github.com/alistigo/holos/commit/fc75baf))
+- **architecture:** add Application system node to module composition model ([ae59f82](https://github.com/alistigo/holos/commit/ae59f82))
+- **architecture:** wire alistigo node standard to CALM validator via pattern ([0d0bee5](https://github.com/alistigo/holos/commit/0d0bee5))
+
+### 🩹 Fixes
+
+- **architecture:** correct CALM relationships in module composition model ([e1910b9](https://github.com/alistigo/holos/commit/e1910b9))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.2.2 (2026-10-09)
 
 ### 🧱 Updated Dependencies

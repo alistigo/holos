@@ -1,3 +1,11 @@
+## 0.4.5 (2026-10-16)
+
+### 🧱 Updated Dependencies
+
+- Updated list-components-react to 0.5.4
+- Updated artifact-list to 0.8.4
+- Updated list-document to 0.5.4
+
 ## 0.4.4 (2026-10-09)
 
 ### 🧱 Updated Dependencies
