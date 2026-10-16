@@ -7,9 +7,13 @@ const SECTION_Y_GAP = 70;
 const EXTERNAL_START_X = 30;
 const EXTERNAL_START_Y = 30;
 
+export interface GroupLayout {
+  layers: string[][];
+}
+
 export interface LayoutInput {
   nodeIds: string[];
-  composedOfSets: string[][];
+  composedOfSets: GroupLayout[];
   deployedInSets: string[][];
 }
 
@@ -45,7 +49,7 @@ export function computeLayout(input: LayoutInput): Map<string, NodePosition> {
   const { nodeIds, composedOfSets, deployedInSets } = input;
 
   // Nodes that appear in composed-of children (deepest level)
-  const composedChildren = new Set(composedOfSets.flat());
+  const composedChildren = new Set(composedOfSets.flatMap((g) => g.layers.flat()));
   // Nodes that appear in deployed-in children (middle level, not already composed children)
   const deployedChildren = new Set(deployedInSets.flat().filter((id) => !composedChildren.has(id)));
   // All nodes that are container targets (the "container" node itself, i.e. the node that wraps others)
@@ -73,18 +77,20 @@ export function computeLayout(input: LayoutInput): Map<string, NodePosition> {
     nextY += deployedRows * (COMP_H + ROW_GAP) + SECTION_Y_GAP;
   }
 
-  // Row 2+: composed children, laid out per composed-of group
+  // Row 2+: composed children, laid out per composed-of group, layer by layer
   const processedComposed = new Set<string>();
   for (const group of composedOfSets) {
-    const toLayout = group.filter((id) => !processedComposed.has(id));
-    if (toLayout.length === 0) continue;
-    const groupLayout = layoutRow(toLayout, EXTERNAL_START_X, nextY, COLS);
-    groupLayout.forEach((pos, id) => {
-      positions.set(id, pos);
-      processedComposed.add(id);
-    });
-    const groupRows = Math.ceil(toLayout.length / COLS);
-    nextY += groupRows * (COMP_H + ROW_GAP) + SECTION_Y_GAP;
+    for (const layer of group.layers) {
+      const toLayout = layer.filter((id) => !processedComposed.has(id));
+      if (toLayout.length === 0) continue;
+      const layerLayout = layoutRow(toLayout, EXTERNAL_START_X, nextY, COLS);
+      layerLayout.forEach((pos, id) => {
+        positions.set(id, pos);
+        processedComposed.add(id);
+      });
+      nextY += Math.ceil(toLayout.length / COLS) * (COMP_H + ROW_GAP);
+    }
+    nextY += SECTION_Y_GAP;
   }
 
   // Any remaining nodes not yet positioned

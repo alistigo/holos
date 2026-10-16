@@ -6,6 +6,16 @@
   "metadata": [
     {
       "x-alistigo-extension": "extensions/alistigo-node-types.calm-extension.json"
+    },
+    {
+      "x-archify": {
+        "node-types": {
+          "module": { "component-type": "backend", "legend-label": "Module" },
+          "system": { "component-type": "frontend", "legend-label": "System" },
+          "plugin": { "component-type": "external", "legend-label": "Plugin" },
+          "skill": { "component-type": "cloud", "legend-label": "Skill" }
+        }
+      }
     }
   ],
   "nodes": [

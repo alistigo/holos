@@ -17,8 +17,14 @@
   "bin": {
     "calm-to-archify": "./dist/cli.js"
   },
+  "exports": {
+    ".": "./dist/cli.js",
+    "./schemas": "./dist/schemas/index.js",
+    "./schemas/x-archify-metadata.schema.json": "./dist/schemas/x-archify-metadata.schema.json"
+  },
   "files": [
     "dist",
+    "docs",
     "README.md"
   ],
   "publishConfig": {
