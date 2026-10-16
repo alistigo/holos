@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alistigo.com/schemas/calm-to-archify/x-archify-metadata/1.0.0/schema.json",
+  "title": "x-archify CALM metadata entry",
+  "description": "Vendor-prefixed metadata entry added to a CALM architecture document's `metadata` array. Maps custom CALM node-types to archify rendering hints (component type and optional legend label).",
+  "type": "object",
+  "properties": {
+    "x-archify": {
+      "type": "object",
+      "description": "Archify rendering hints for custom CALM node-types.",
+      "properties": {
+        "node-types": {
+          "type": "object",
+          "description": "A map from CALM node-type identifiers to archify rendering hints. Each key is a node-type string (e.g. 'module', 'plugin'); the value controls how nodes of that type are visualised.",
+          "additionalProperties": {
+            "$ref": "#/$defs/NodeTypeHint"
+          }
+        }
+      },
+      "required": ["node-types"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["x-archify"],
+  "$defs": {
+    "NodeTypeHint": {
+      "type": "object",
+      "title": "Node-type hint",
+      "description": "Archify rendering hint for a single CALM node-type.",
+      "properties": {
+        "component-type": {
+          "type": "string",
+          "enum": [
+            "frontend",
+            "backend",
+            "database",
+            "cloud",
+            "security",
+            "messagebus",
+            "external"
+          ],
+          "description": "The archify component type that controls the icon and color of nodes of this type in the rendered diagram."
+        },
+        "legend-label": {
+          "type": "string",
+          "description": "Human-readable label shown for this component-type in the diagram legend. Overrides the archify default label (e.g. 'Backend' can be overridden to 'Module')."
+        }
+      },
+      "required": ["component-type"],
+      "additionalProperties": false
+    }
+  }
+}

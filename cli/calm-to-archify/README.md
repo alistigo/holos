@@ -66,6 +66,28 @@ calm-to-archify transform path/to/my.arch.json --output path/to/output.archify.j
 
 Accepts CALM architecture instances — files that contain `nodes` and `relationships` at the top level. Pattern files (`.pattern.json`) are JSON Schema documents and are not supported.
 
+## Customising node-type colors and legend labels
+
+If your CALM documents use custom node-types (from a CALM extension), add an `x-archify` entry to the document's `metadata` array to control how each type is rendered:
+
+```json
+{
+  "metadata": [
+    {
+      "x-archify": {
+        "node-types": {
+          "module": { "component-type": "backend",  "legend-label": "Module" },
+          "plugin": { "component-type": "external", "legend-label": "Plugin" },
+          "skill":  { "component-type": "cloud",    "legend-label": "Skill"  }
+        }
+      }
+    }
+  ]
+}
+```
+
+See [docs/x-archify-metadata.md](docs/x-archify-metadata.md) for the full reference — available component types, legend label overrides, fallback behaviour, and the exported TypeScript types and JSON Schema.
+
 ## About CALM
 
 [CALM (Common Architecture Language Model)](https://calm.finos.org/) is an open standard from [FINOS](https://www.finos.org/) for describing software architectures as machine-readable JSON. It lets you capture nodes (services, datastores, people) and the relationships between them in a way that can be validated, queried, and visualised automatically.

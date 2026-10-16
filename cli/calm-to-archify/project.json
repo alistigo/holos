@@ -12,7 +12,14 @@
         "outputPath": "cli/calm-to-archify/dist",
         "tsConfig": "cli/calm-to-archify/tsconfig.build.json",
         "main": "cli/calm-to-archify/src/cli.ts",
-        "rootDir": "cli/calm-to-archify/src"
+        "rootDir": "cli/calm-to-archify/src",
+        "assets": [
+          {
+            "input": "cli/calm-to-archify/src/schemas",
+            "glob": "*.json",
+            "output": "schemas"
+          }
+        ]
       }
     },
     "typecheck": {
