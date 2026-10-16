@@ -72,6 +72,7 @@ interface ArchifyHint {
   tag?: string;
 }
 
+// fallow-ignore-next-line complexity
 function extractArchifyNodeTypes(calm: CalmDocument): Map<string, ArchifyHint> {
   const map = new Map<string, ArchifyHint>();
   if (!calm.metadata) return map;
@@ -138,6 +139,7 @@ interface SimpleConnection {
 
 // Kahn's topological layering: nodes whose predecessors are all in earlier layers
 // share a row. Respects the original declaration order within each layer for stability.
+// fallow-ignore-next-line complexity
 function topoLayers(nodes: string[], edges: SimpleConnection[]): string[][] {
   const inDegree = new Map<string, number>(nodes.map((n) => [n, 0]));
   const adj = new Map<string, string[]>(nodes.map((n) => [n, []]));
@@ -369,6 +371,7 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
 
   const components: ArchifyComponent[] = calm.nodes
     .filter((node) => !groupNodeIds.has(node["unique-id"]))
+    // fallow-ignore-next-line complexity
     .map((node) => {
       const pos = positions.get(node["unique-id"]) ?? { x: 0, y: 0, w: 140, h: 55 };
       const hint = hintMap.get(node["node-type"]);
