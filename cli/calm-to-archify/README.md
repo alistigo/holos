@@ -86,7 +86,13 @@ If your CALM documents use custom node-types (from a CALM extension), add an `x-
 }
 ```
 
-See [docs/x-archify-metadata.md](docs/x-archify-metadata.md) for the full reference — available component types, legend label overrides, fallback behaviour, and the exported TypeScript types and JSON Schema.
+See [docs/x-archify-metadata.md](docs/x-archify-metadata.md) for the full reference — available component types, legend label overrides, node `sublabel` and `tag` mapping, fallback behaviour, and the exported TypeScript types and JSON Schema.
+
+## Diagram types and 1→N output
+
+archify supports 5 diagram types: `architecture`, `workflow`, `sequence`, `dataflow`, and `lifecycle`. `calm-to-archify` currently produces only `architecture` diagrams (1→1 mapping). Support for deriving additional diagram types (flows, lifecycles) from the same CALM file — producing multiple HTML outputs — is planned.
+
+See [docs/archify-diagram-types.md](docs/archify-diagram-types.md) for the full reference: all supported types, the planned 1→N output naming convention, and click panel customisation via `sources`.
 
 ## About CALM
 

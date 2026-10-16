@@ -51,9 +51,33 @@ Overrides the default legend label for a given `component-type`. Useful when you
 
 If multiple node-types map to the same `component-type`, the last `legend-label` wins. Leave it empty if the default label is acceptable.
 
+### `sublabel` (optional)
+
+The name of a CALM node property whose value will be displayed as a secondary line of text directly below the node label inside the diagram box.
+
+Use this to surface a key node attribute without opening the detail panel — for example the npm package name, the DDD layer, or a version string.
+
+The value is looked up on each individual node at transform time. If the node doesn't have that property, no sublabel is rendered for it.
+
+```json
+"module": { "component-type": "backend", "legend-label": "Module", "sublabel": "core-npm-package" }
+```
+
+With this hint, a `module` node that has `"core-npm-package": "@alistigo/core-document"` will render with `@alistigo/core-document` shown below its label in the diagram.
+
+### `tag` (optional)
+
+The name of a CALM node property whose value will be displayed as a badge/tag on the node (typically in a corner or below the sublabel, depending on the archify renderer).
+
+Use this for categorical metadata — for example the DDD layer (`Domain`, `Application`, `Infrastructure`).
+
+```json
+"module": { "component-type": "backend", "legend-label": "Module", "tag": "ddd-layer" }
+```
+
 ## Example
 
-This is the mapping used by alistigo artifact diagrams:
+This is the mapping used by alistigo artifact diagrams. Each module shows its `core-npm-package` as a sublabel and `ddd-layer` as a tag badge:
 
 ```json
 {
@@ -62,9 +86,9 @@ This is the mapping used by alistigo artifact diagrams:
     {
       "x-archify": {
         "node-types": {
-          "module": { "component-type": "backend",  "legend-label": "Module" },
-          "system": { "component-type": "frontend", "legend-label": "System" },
-          "plugin": { "component-type": "external", "legend-label": "Plugin" },
+          "module": { "component-type": "backend",  "legend-label": "Module", "sublabel": "core-npm-package", "tag": "ddd-layer" },
+          "system": { "component-type": "frontend", "legend-label": "System", "sublabel": "core-npm-package", "tag": "ddd-layer" },
+          "plugin": { "component-type": "external", "legend-label": "Plugin", "sublabel": "core-npm-package" },
           "skill":  { "component-type": "cloud",    "legend-label": "Skill"  }
         }
       }
