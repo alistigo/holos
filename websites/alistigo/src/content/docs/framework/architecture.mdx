@@ -1,0 +1,38 @@
+---
+title: Architecture
+description: Architecture of the Alistigo framework and its artifact packages.
+---
+
+import ArchifyDiagram from '../../../components/ArchifyDiagram.astro';
+
+## Module Composition
+
+Every artifact follows the same canonical module structure.
+
+<ArchifyDiagram
+  src="/archify/alistigo-artifact-module-composition.archify.html"
+  title="Artifact Module Composition"
+  height="750px"
+/>
+
+## Artifact Packages
+
+Every Alistigo artifact is published as a public npm package named `@alistigo/{name}-artifact`, where `{name}` is the domain name (e.g., `list`, `todo`).
+
+Following the architecture, the root artifact package inherits from `@alistigo/artifact-core` and ships as a family of companion packages:
+
+| Package | Inherits from |
+|---|---|
+| `@alistigo/{name}-artifact` | `@alistigo/artifact-core` |
+| `@alistigo/{name}-components-react` | `@alistigo/artifact-core-components-react` |
+| `@alistigo/{name}-document` | `@alistigo/core-document` |
+| `@alistigo/{name}-domain` | — |
+
+## Plugins
+
+A domain can optionally be extended with plugins. Plugins always carry the `-plugin` name suffix.
+
+A plugin can be domain-specific — in that case it inherits from `@alistigo/{name}-domain`:
+
+- `@alistigo/{name}-{plugin-name}-plugin` — generic domain plugin
+- `@alistigo/{name}-storage-plugin` — example of a storage plugin specific to a domain
