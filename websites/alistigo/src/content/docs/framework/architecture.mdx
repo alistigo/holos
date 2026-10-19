@@ -7,7 +7,7 @@ import ArchifyDiagram from '../../../components/ArchifyDiagram.astro';
 
 ## Module Composition
 
-Every artifact follows the same canonical module structure.
+Every artifact follows the same canonical module structure. The diagram below is generated from the [CALM architecture file](/calm/alistigo-artifact-module-composition.arch.calm.json) — the machine-readable source of truth for module boundaries, DDD layers, and dependency rules.
 
 <ArchifyDiagram
   src="/archify/alistigo-artifact-module-composition.archify.html"
@@ -17,13 +17,11 @@ Every artifact follows the same canonical module structure.
 
 ## Artifact Packages
 
-Every Alistigo artifact is published as a public npm package named `@alistigo/{name}-artifact`, where `{name}` is the domain name (e.g., `list`, `todo`).
-
-Following the architecture, the root artifact package inherits from `@alistigo/artifact-core` and ships as a family of companion packages:
+Every Alistigo artifact is published as a public npm package named `@alistigo/artifact-{name}`, where `{name}` is the domain name (e.g., `list`, `todo`).
 
 | Package | Inherits from |
 |---|---|
-| `@alistigo/{name}-artifact` | `@alistigo/artifact-core` |
+| `@alistigo/artifact-{name}` | `@alistigo/artifact-core` |
 | `@alistigo/{name}-components-react` | `@alistigo/artifact-core-components-react` |
 | `@alistigo/{name}-document` | `@alistigo/core-document` |
 | `@alistigo/{name}-domain` | — |
