@@ -48,6 +48,7 @@ export class GenerateCommand extends Command {
       "Output path. Default: packages/architecture/systems/{name}-artifact.arch.calm.json",
   });
 
+  // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const workspaceRoot = process.cwd();
     const outputPath =

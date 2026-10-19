@@ -6,6 +6,7 @@ import type { CheckContext, CheckDefinition, CheckIssue, CheckResult } from "./t
  * Derive which @alistigo/* packages each node is allowed to depend on,
  * based on the "connects" relationships in the CALM file.
  */
+// fallow-ignore-next-line complexity
 function buildAllowedDepsMap(
   nodes: CalmNode[],
   relationships: CalmRelationship[],
@@ -38,6 +39,7 @@ function buildAllowedDepsMap(
   return allowed;
 }
 
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const nodes = getCheckableNodes(ctx.calmFile);

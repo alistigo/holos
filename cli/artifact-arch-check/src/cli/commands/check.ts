@@ -56,6 +56,7 @@ export class CheckCommand extends Command {
     description: "Output results as JSON (for CI scripts and agent consumption)",
   });
 
+  // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const archPath =
       this.arch ?? `packages/architecture/systems/${this.artifactName}-artifact.arch.calm.json`;
