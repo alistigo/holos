@@ -1,0 +1,27 @@
+---
+title: Design Principles
+description: Core technical characteristics and guiding principles of the Alistigo framework.
+---
+
+## Key Technical Characteristics
+
+| Characteristic | Detail |
+|----------------|--------|
+| Browser-only | 100% in-browser; no backend required for core functionality |
+| Event-sourced + CQRS | Mutations are appended events; documents are derived projections |
+| Plugin system | Artifact capabilities are composed via plugins, not hardcoded |
+| iframe isolation | Artifacts run in sandboxed iframes; no host-page DOM access |
+| JSON-LD documents | Portable, machine-readable, schema.org-typed state |
+| CDN delivery | Bundles served from jsDelivr; no npm install needed at runtime |
+| Architecture as Code | CALM models define boundaries; dependency-cruiser validates in CI |
+
+## Core Principles
+
+| Principle | What it means |
+|-----------|---------------|
+| Event-sourced + CQRS | All mutations are appended events; projections are derived from `reduce(EventLog)`. |
+| Client-first | All state lives in the browser. APIs are an opt-in evolution, not a starting point. |
+| TDD via Gherkin | Behavior is specified in `.feature` files before code. |
+| DDD separation | Domain is independent of rendering. |
+| Semantic interop | Documents use schema.org. |
+| Architecture as Code | CALM models define every system boundary; CI validates compliance. |
