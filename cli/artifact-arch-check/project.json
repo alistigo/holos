@@ -1,0 +1,39 @@
+{
+  "name": "artifact-arch-check",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "cli/artifact-arch-check/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "cli/artifact-arch-check/dist",
+        "tsConfig": "cli/artifact-arch-check/tsconfig.build.json",
+        "main": "cli/artifact-arch-check/src/cli.ts",
+        "rootDir": "cli/artifact-arch-check/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "cli/artifact-arch-check"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "cli/artifact-arch-check"
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun src/cli.ts",
+        "cwd": "cli/artifact-arch-check"
+      }
+    }
+  }
+}

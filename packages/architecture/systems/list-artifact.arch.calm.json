@@ -1,0 +1,337 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "list-artifact-module-composition",
+  "name": "list artifact — module composition",
+  "description": "Module composition and dependency boundaries for the list artifact. Generated from the canonical alistigo-artifact-module-composition template.",
+  "metadata": [
+    {
+      "x-alistigo-extension": "extensions/alistigo-node-types.calm-extension.json"
+    },
+    {
+      "x-archify": {
+        "node-types": {
+          "module": {
+            "component-type": "backend",
+            "legend-label": "Module",
+            "sublabel": "core-npm-package",
+            "tag": "ddd-layer"
+          },
+          "system": {
+            "component-type": "frontend",
+            "legend-label": "System",
+            "sublabel": "core-npm-package",
+            "tag": "ddd-layer"
+          },
+          "plugin": {
+            "component-type": "external",
+            "legend-label": "Plugin",
+            "sublabel": "core-npm-package"
+          },
+          "skill": {
+            "component-type": "cloud",
+            "legend-label": "Skill"
+          }
+        }
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "unique-id": "domain",
+      "node-type": "module",
+      "name": "Domain",
+      "description": "Pure, framework-free DDD domain model. Zero dependencies on other alistigo modules. Contains value objects, aggregates, commands, entities, errors, domain events, and repository interfaces. Defines the vocabulary and business rules of the artifact.",
+      "ddd-layer": "Domain",
+      "interfaces": [
+        {
+          "unique-id": "domain-api",
+          "description": "Aggregate roots, domain commands, domain events, and repository interfaces."
+        },
+        {
+          "unique-id": "domain-plugin-api",
+          "description": "Optional extension points for domain-specific plugins. Allows plugins to augment domain behaviour without the domain depending on any plugin."
+        }
+      ],
+      "core-npm-package": "@alistigo/list-domain"
+    },
+    {
+      "unique-id": "document",
+      "node-type": "module",
+      "name": "Document",
+      "description": "Owns the artifact's data model and application service. Provides event-sourced projections, the application service exposing all document actions, serializer/deserializer, and a validation function. Re-exports the Domain module so downstream consumers need only depend on Document.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/list-document",
+      "interfaces": [
+        {
+          "unique-id": "document-api",
+          "description": "Application service, projections, serializer/deserializer, and domain re-exports."
+        }
+      ]
+    },
+    {
+      "unique-id": "ui",
+      "node-type": "module",
+      "name": "UI",
+      "description": "Presentation layer. Contains React components that display and interact with the Document module. Every component has a Storybook story. Depends on Document; domain types are accessed via Document's re-exports.",
+      "ddd-layer": "Presentation",
+      "core-npm-package": "@alistigo/list-components-react",
+      "interfaces": [
+        {
+          "unique-id": "ui-components",
+          "description": "Exported React components mounted by the Artifact module. Components dispatch Document application-service commands and consume projections. Expose plugin UI slots."
+        }
+      ]
+    },
+    {
+      "unique-id": "application",
+      "node-type": "module",
+      "name": "Application",
+      "description": "Entry point of the artifact. it orchestrates and wires together the different modules: Domain, Document, UI, and Plugin bus with all installed plugins (Storage, Logger, ui, etc ...).",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/artifact-list",
+      "interfaces": [
+        {
+          "unique-id": "application-api",
+          "description": "Startup lifecycle and orchestration entry point. Wires domain, document, UI, and plugin bus together."
+        },
+        {
+          "unique-id": "application-ui",
+          "description": "UI of the artifact."
+        }
+      ]
+    },
+    {
+      "unique-id": "plugin-bus",
+      "node-type": "module",
+      "name": "Plugin Bus",
+      "description": "Intermediary between the Application and plugins. Defines the plugin contract API that plugins (storage, logger, and future extensions) implement to register and communicate with the artifact. Application owns and initialises the plugin bus at startup.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/plugin-bus",
+      "interfaces": [
+        {
+          "unique-id": "plugin-bus-api",
+          "description": "Plugin contract API: registration hooks and event channels consumed by plugin implementations."
+        }
+      ]
+    },
+    {
+      "unique-id": "storage-plugin",
+      "node-type": "plugin",
+      "name": "Storage",
+      "description": "Infrastructure plugin providing persistent key-value storage. Registers with the Plugin Bus at startup and exposes a KeyValueStore-compatible API. Abstracts over concrete storage backends.",
+      "ddd-layer": "Infrastructure",
+      "core-npm-package": "@alistigo/storage-plugin-api",
+      "default-plugin-package": "@alistigo/local-storage-plugin",
+      "interfaces": [
+        {
+          "unique-id": "storage-plugin-api",
+          "description": "KeyValueStore API: get/set/del/list."
+        }
+      ]
+    },
+    {
+      "unique-id": "logger-plugin",
+      "node-type": "plugin",
+      "name": "Logger",
+      "description": "Infrastructure plugin providing structured logging. Registers with the Plugin Bus at startup and provides a logger instance for structured, leveled output.",
+      "ddd-layer": "Infrastructure",
+      "core-npm-package": "@alistigo/logger-plugin-api",
+      "default-plugin-package": "@alistigo/logger-plugin",
+      "interfaces": [
+        {
+          "unique-id": "logger-api",
+          "description": "Structured logger API: info(), warn(), error(), debug() with log-level control."
+        }
+      ]
+    },
+    {
+      "unique-id": "skill",
+      "node-type": "skill",
+      "name": "Skill",
+      "description": "A complementary npm package published alongside the artifact. Contains a SKILL.md capability definition consumed by AI agents, reference documentation, and an optional config JSON schema. Has no code dependencies.",
+      "interfaces": [
+        {
+          "unique-id": "skill-definition",
+          "description": "SKILL.md — the agent capability definition. Describes how an AI should generate, configure, and interact with the artifact."
+        }
+      ],
+      "core-npm-package": "@alistigo/artifact-list-skill"
+    },
+    {
+      "unique-id": "plugin-system",
+      "node-type": "group",
+      "name": "Plugin System",
+      "description": "Logical grouping of the plugin subsystem: Plugin Bus and its registered infrastructure plugins (Storage, Logger). The Application owns the Plugin Bus; plugins register into it at startup. This is a conceptual grouping node with no runtime package of its own."
+    },
+    {
+      "unique-id": "artifact",
+      "node-type": "group",
+      "name": "Artifact",
+      "description": "Top-level visual boundary grouping all runtime modules of an alistigo artifact: Domain, Document, UI, Application, and the Plugin System. The Skill package sits outside this boundary — it is a companion AI tooling package, not a runtime module."
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "document-uses-domain",
+      "description": "Document applies commands to domain aggregates and builds projections from domain events.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "domain",
+            "interfaces": ["domain-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "ui-uses-document",
+      "description": "UI dispatches document commands and consumes projections. Domain types are accessed via Document's re-exports.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": ["document-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "skill-for-artifact",
+      "description": "The skill package provides the AI agent capability definition for this artifact.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "skill",
+            "interfaces": ["skill-definition"]
+          },
+          "destination": {
+            "node": "application"
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-ui",
+      "description": "Application mounts UI components and exposes them as the artifact's rendered interface.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-document",
+      "description": "Application wires the Document module into the startup lifecycle and provides it to the UI layer.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "document",
+            "interfaces": ["document-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-domain",
+      "description": "Application has a direct dependency on the Domain module for startup validation and plugin hooks.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "domain",
+            "interfaces": ["domain-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-plugin-bus",
+      "description": "Application owns and fully controls the plugin bus, initialising it at startup and wiring all registered plugins through it.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "storage-uses-plugin-bus",
+      "description": "Storage registers with the plugin bus to integrate with the artifact as an infrastructure plugin.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "storage-plugin",
+            "interfaces": ["storage-plugin-api"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "logger-uses-plugin-bus",
+      "description": "Logger registers with the plugin bus to integrate with the artifact as an infrastructure plugin.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "logger-plugin",
+            "interfaces": ["logger-api"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "plugin-system-composition",
+      "description": "Plugin System groups Plugin Bus and all infrastructure plugins into a single subsystem for visual and conceptual clarity.",
+      "relationship-type": {
+        "composed-of": {
+          "container": "plugin-system",
+          "nodes": ["plugin-bus", "storage-plugin", "logger-plugin"]
+        }
+      }
+    },
+    {
+      "unique-id": "artifact-composition",
+      "description": "Artifact boundary encompasses all runtime modules: Application, Document, UI, Domain, and the Plugin System (Plugin Bus + plugins). Skill sits outside — it is a companion AI tooling package.",
+      "relationship-type": {
+        "composed-of": {
+          "container": "artifact",
+          "nodes": ["domain", "document", "ui", "application", "plugin-system"]
+        }
+      }
+    }
+  ]
+}

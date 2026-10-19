@@ -80,7 +80,7 @@
     },
     {
       "unique-id": "application",
-      "node-type": "system",
+      "node-type": "module",
       "name": "Application",
       "description": "Entry point of the artifact. it orchestrates and wires together the different modules: Domain, Document, UI, and Plugin bus with all installed plugins (Storage, Logger, ui, etc ...).",
       "ddd-layer": "Application",

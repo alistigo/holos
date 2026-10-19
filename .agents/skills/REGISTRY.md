@@ -29,6 +29,7 @@ What to say or do to activate each skill. Claude should invoke the skill before 
 | `shadcn` | shadcn, shadcn/ui, component, Radix | "Add a shadcn Button to this page" |
 | `ts-cli` | CLI, Clipanion, Ink, terminal, command | "Build a CLI tool for X" |
 | `fallow` | dead code, unused, circular dep, clean up, health | "Find unused exports in the codebase" |
+| `artifact-arch-check` | arch check, architecture conformance, boundaries, alistigo-metadata, generate CALM | "Check the list artifact against the architecture" |
 | `linkedin-post-writer` | write LinkedIn post, hook, draft a post | "Draft a LinkedIn post about X" |
 | `linkedin-humanizer` | humanize, de-AI, audit before posting | "Is this post ready to publish?" |
 | `linkedin-hook-extractor` | reverse-engineer hook, viral post formula | "Why did this post go viral?" |
@@ -138,3 +139,4 @@ Skills written from scratch for this monorepo's specific tooling and conventions
 | `react-component` | React component patterns for this repo |
 | `shadcn` | shadcn/ui component management — add, fix, style, compose |
 | `ts-cli` | TypeScript CLI tools using Clipanion + Ink |
+| `artifact-arch-check` | Artifact architecture conformance — generate CALM files, run checks, fix boundary violations |
