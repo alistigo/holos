@@ -97,7 +97,10 @@ export default defineConfig({
         },
         {
           label: "Framework",
-          items: [{ label: "Architecture", slug: "framework/architecture" }],
+          items: [
+            { label: "Architecture", slug: "framework/architecture" },
+            { label: "Design Principles", slug: "framework/design-principles" },
+          ],
         },
         {
           label: "Artifacts",

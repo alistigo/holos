@@ -3,6 +3,7 @@
 Alistigo is a framework and collection of embeddable AI artifacts — a shared set of libraries and
 conventions that let developers build any artifact (list, kanban, table, form, timeline…)
 with a consistent quality floor, running 100% in the browser without a backend.
+
 The **list artifact** (`@alistigo/artifact-list`) is the reference implementation.
 
 ## The Problem
@@ -25,46 +26,23 @@ rendering, interaction, and persistence. The AI stays in its lane (data and inte
 
 Alistigo started as a single-purpose list app. The scope expanded: Alistigo is now a **framework
 for AI artifacts** — a shared set of libraries (`artifact-core`, `artifact-plugin-api`,
-`artifact-manager`, …) that any artifact type plugs into. The list artifact became the
+, …) that any artifact type plugs into. The list artifact became the
 reference implementation, not the product.
-
-A second artifact type (kanban, table, form…) requires only depending on
-`@alistigo/artifact-core` and `@alistigo/artifact-core-components-react` — zero
-scaffolding copied from the list.
 
 ## How It Works
 
-1. An AI or host page provides a **config document**
-   (`{ "app": "@alistigo/artifact-list", "lang": "en" }`)
-2. The **artifact manager** (`@alistigo/artifact-manager`) reads the config, resolves the
-   artifact bundle URL from jsDelivr, and boots it in an iframe
-3. The **artifact** renders a rich interactive widget from a **state document** (JSON-LD,
-   schema.org types)
-4. All mutations are appended events; the document is a derived projection — deterministic
-   and round-trippable
+Say a user asks their AI assistant: *"Write me a todo list."*
 
-## Key Technical Characteristics
+1. The AI has `artifact-list-skill` installed in its environment — a short skill file that
+   teaches it about `@alistigo/artifact-list` and how to invoke it.
+2. The AI writes a tiny HTML artifact. Because the request is a list, the skill tells it to
+   load `@alistigo/artifact-list` from jsDelivr — no bundler, no backend, one `<script>` tag.
+3. The AI writes the todo items as plain markdown inside a `<script type="text/markdown">`
+   tag. The artifact picks that up and renders a fully interactive todo list.
+4. Done. A handful of tokens. A small, shareable HTML file. Full todo features — check off,
+   reorder, persist — out of the box.
 
-| Characteristic | Detail |
-|----------------|--------|
-| Browser-only | 100% in-browser; no backend required for core functionality |
-| Event-sourced + CQRS | Mutations are appended events; documents are derived projections |
-| Plugin system | Artifact capabilities are composed via plugins, not hardcoded |
-| iframe isolation | Artifacts run in sandboxed iframes; no host-page DOM access |
-| JSON-LD documents | Portable, machine-readable, schema.org-typed state |
-| CDN delivery | Bundles served from jsDelivr; no npm install needed at runtime |
-| Architecture as Code | CALM models define boundaries; dependency-cruiser validates in CI |
+The AI described *content*, not an app. Alistigo handled the rest.
 
 See [`architecture.md`](architecture.md) for the full set of load-bearing constraints and
 the [`framework/`](framework/README.md) docs for the four-tier architecture diagram.
-
-## Core Principles
-
-| Principle | What it means |
-|-----------|---------------|
-| Event-sourced + CQRS | All mutations are appended events; projections are derived from `reduce(EventLog)`. Source of truth = event log, not the document. |
-| Client-first | All state lives in the browser. APIs are an opt-in evolution, not a starting point. |
-| TDD via Gherkin | Behavior is specified in `.feature` files before code. A runner validates the app against them. |
-| DDD separation | Domain (entities, events, commands) is independent of rendering. The widget is one projection consumer; sync, undo, audit are others. |
-| Semantic interop | Documents use schema.org so other tools (search engines, agents, importers) understand them. |
-| Architecture as Code | CALM models define every system boundary; CI validates compliance. |
