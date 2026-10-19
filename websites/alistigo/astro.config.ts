@@ -114,10 +114,6 @@ export default defineConfig({
           label: "Architecture Decisions",
           items: [{ label: "All ADRs", link: "/adrs/" }],
         },
-        {
-          label: "Playground",
-          items: [{ label: "Open Playground", slug: "playground" }],
-        },
       ],
     }),
   ],
