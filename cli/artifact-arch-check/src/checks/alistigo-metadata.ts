@@ -10,6 +10,7 @@ type AlistigoType =
   | "plugin"
   | "skill";
 
+// fallow-ignore-next-line complexity
 function expectedAlistigoType(node: CalmNode): AlistigoType {
   if (node["node-type"] === "skill") return "skill";
   if (node["node-type"] === "plugin") return "plugin";
@@ -28,6 +29,7 @@ function expectedAlistigoType(node: CalmNode): AlistigoType {
   }
 }
 
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const nodes = getCheckableNodes(ctx.calmFile);

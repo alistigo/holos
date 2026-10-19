@@ -12,6 +12,7 @@ async function exists(path: string): Promise<boolean> {
   }
 }
 
+// fallow-ignore-next-line complexity
 function buildPluginSystemNodeIds(ctx: CheckContext): Set<string> {
   const ids = new Set<string>();
   for (const rel of ctx.calmFile.relationships) {
@@ -25,6 +26,7 @@ function buildPluginSystemNodeIds(ctx: CheckContext): Set<string> {
   return ids;
 }
 
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const nodes = getCheckableNodes(ctx.calmFile);

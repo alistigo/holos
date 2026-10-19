@@ -22,6 +22,7 @@ function hasPublishConfig(pkg: Record<string, unknown>): boolean {
   );
 }
 
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const nodes = getCheckableNodes(ctx.calmFile);

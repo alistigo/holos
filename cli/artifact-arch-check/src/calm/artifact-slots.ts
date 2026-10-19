@@ -15,7 +15,7 @@ const ARTIFACT_SLOTS: Record<string, (name: string) => string> = {
   skill: (name) => `@alistigo/artifact-${name}-skill`,
 };
 
-export function applyArtifactSlots(template: CalmArchFile, artifactName: string): CalmArchFile {
+function applyArtifactSlots(template: CalmArchFile, artifactName: string): CalmArchFile {
   const nodes: CalmNode[] = template.nodes.map((node) => {
     const factory = ARTIFACT_SLOTS[node["unique-id"]];
     if (factory === undefined) return node;
