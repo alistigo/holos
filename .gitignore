@@ -160,6 +160,7 @@ packages/architecture/systems/*.archify.html
 packages/list-domain/*.archify.json
 packages/list-domain/*.archify.html
 websites/alistigo/public/archify/
+websites/alistigo/public/calm/
 
 # Rust
 **/target/
