@@ -1,0 +1,230 @@
+---
+title: artifact-arch-check
+description: CLI tool that validates artifact packages against their CALM architecture file — the single source of truth for module structure and dependency rules.
+---
+
+## Overview
+
+`artifact-arch-check` treats the CALM architecture file as the single source of truth for every artifact and verifies that the workspace packages conform to it. It catches four classes of drift at the code level:
+
+| Check | What it verifies |
+|---|---|
+| `module-existence` | All mandatory packages declared in the CALM file exist on disk |
+| `boundaries` | Package dependencies respect the `connects` relationships in the CALM file |
+| `package-conformance` | Every package has the required `package.json` fields |
+| `alistigo-metadata` | Every package has the correct `"alistigo": { "type": "…" }` field |
+
+Run it locally after changing a package boundary, before pushing, or in CI to prevent architecture drift from shipping silently.
+
+---
+
+## Quick Start
+
+### 1. Generate a CALM file for a new artifact
+
+```sh
+bun cli/artifact-arch-check/dist/cli.js generate <name>
+# → writes packages/architecture/systems/<name>-artifact.arch.calm.json
+```
+
+The generator reads the canonical template at `packages/architecture/systems/alistigo-artifact-module-composition.arch.calm.json` and substitutes the four artifact-specific slots:
+
+| Node | Generated package |
+|------|------------------|
+| `domain` | `@alistigo/{name}-domain` |
+| `document` | `@alistigo/{name}-document` |
+| `ui` | `@alistigo/{name}-components-react` |
+| `application` | `@alistigo/artifact-{name}` |
+| `skill` | `@alistigo/artifact-{name}-skill` |
+
+Shared platform nodes (`plugin-bus`, `storage-plugin`, `logger-plugin`) are copied unchanged from the template.
+
+### 2. Run checks
+
+```sh
+# Check all four checks
+bun cli/artifact-arch-check/dist/cli.js check <name>
+
+# Run specific checks only
+bun cli/artifact-arch-check/dist/cli.js check <name> --only module-existence,boundaries
+
+# Override the CALM file path
+bun cli/artifact-arch-check/dist/cli.js check <name> \
+  --arch packages/architecture/systems/<name>-artifact.arch.calm.json
+
+# Machine-readable output for CI scripts
+bun cli/artifact-arch-check/dist/cli.js check <name> --json
+```
+
+Exit code `0` if all checks pass, `1` if any fail.
+
+---
+
+## The Four Checks
+
+### `module-existence`
+
+Reads every node with a `core-npm-package` field and verifies the package directory and its `package.json` exist under `packages/`.
+
+**Optional nodes are never flagged:** plugins (`node-type: "plugin"`) and all nodes in the `plugin-system` composed-of group (`plugin-bus`, `storage-plugin`, `logger-plugin`) are skipped — the plugin subsystem is optional infrastructure.
+
+**Mandatory nodes:** `domain`, `document`, `ui`, `application`, `skill`.
+
+```
+✗ Module Existence
+
+  @alistigo/list-domain
+  Package not found at packages/list-domain/
+  Fix : bash scripts/new-package.sh list-domain
+  Docs: packages/architecture/docs/arch-check.md
+```
+
+### `boundaries`
+
+Derives the allowed `@alistigo/*` dependency set for each package from the `connects` relationships in the CALM file. A package may only declare dependencies on the packages of nodes it connects to as source.
+
+Rules derived from the canonical template:
+
+| Package | Allowed `@alistigo/*` deps |
+|---------|---------------------------|
+| `{name}-domain` | none |
+| `{name}-document` | `{name}-domain` |
+| `{name}-components-react` | `{name}-document` |
+| `artifact-{name}` | `{name}-components-react`, `{name}-document`, `{name}-domain`, `plugin-bus` |
+
+Any `@alistigo/*` entry in `dependencies`, `devDependencies`, or `peerDependencies` that falls outside this set is flagged.
+
+```
+✗ Dependency Boundaries
+
+  @alistigo/list-domain
+  Declares forbidden dependency @alistigo/list-document
+  Fix : Remove @alistigo/list-document from list-domain/package.json,
+        or update the CALM relationships
+  Docs: packages/architecture/docs/architecture.md#ddd-layers
+```
+
+**To allow a new dependency:** add a `connects` relationship in the CALM file (source → destination) then re-run.
+
+### `package-conformance`
+
+Verifies every mandatory package has these `package.json` fields:
+`name`, `version`, `license`, `type`, `exports`, `main`, `types`, `files`, `publishConfig.access`
+
+```
+✗ Package Conformance
+
+  @alistigo/artifact-list
+  Missing required fields: exports
+  Fix : Align with the package template in scripts/new-package.sh
+  Docs: packages/architecture/docs/arch-check.md#package-template
+```
+
+### `alistigo-metadata`
+
+Verifies every mandatory package has `"alistigo": { "type": "…" }` with the correct value, derived from the CALM node's `ddd-layer` and `node-type`:
+
+| CALM node | Expected `alistigo.type` |
+|-----------|--------------------------|
+| `module`, `ddd-layer: Domain` | `"domain"` |
+| `module`, `ddd-layer: Application` | `"application"` |
+| `module`, `ddd-layer: Presentation` | `"presentation"` |
+| `module`, `ddd-layer: Infrastructure` | `"infrastructure"` |
+| `node-type: plugin` | `"plugin"` |
+| `node-type: skill` | `"skill"` |
+
+```
+✗ Alistigo Metadata
+
+  @alistigo/list-domain
+  Missing "alistigo" metadata field
+  Fix : Add to packages/list-domain/package.json: "alistigo": { "type": "domain" }
+  Docs: cli/artifact-arch-check/docs/README.md#alistigo-metadata
+```
+
+---
+
+## `alistigo` Field Specification
+
+Every package must declare its architectural role:
+
+```json
+{
+  "alistigo": {
+    "type": "domain"
+  }
+}
+```
+
+Valid values: `"domain"`, `"application"`, `"presentation"`, `"infrastructure"`, `"plugin"`, `"skill"`.
+
+`scripts/new-package.sh` scaffolds new packages with `"alistigo": { "type": "TODO" }` as a placeholder.
+
+---
+
+## JSON Output
+
+Pass `--json` for structured output suitable for CI scripts and agent consumption:
+
+```sh
+bun cli/artifact-arch-check/dist/cli.js check list --json
+```
+
+```json
+{
+  "artifactName": "list",
+  "calmFile": "packages/architecture/systems/list-artifact.arch.calm.json",
+  "passed": false,
+  "checks": [
+    {
+      "checkId": "module-existence",
+      "checkName": "Module Existence",
+      "passed": true,
+      "issues": []
+    },
+    {
+      "checkId": "boundaries",
+      "checkName": "Dependency Boundaries",
+      "passed": false,
+      "issues": [
+        {
+          "packageName": "@alistigo/list-domain",
+          "message": "Declares forbidden dependency @alistigo/list-document",
+          "fix": "Remove @alistigo/list-document from list-domain/package.json, or update the CALM relationships",
+          "docsRef": "packages/architecture/docs/architecture.md#ddd-layers"
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## Extending the Allowed Dependency Graph
+
+When you intentionally need a new inter-package dependency, add a `connects` relationship to the artifact's CALM file:
+
+```json
+{
+  "unique-id": "ui-uses-domain",
+  "description": "UI reads domain value objects for display formatting.",
+  "relationship-type": {
+    "connects": {
+      "source": { "node": "ui" },
+      "destination": { "node": "domain", "interfaces": ["domain-api"] }
+    }
+  }
+}
+```
+
+Then re-run the check — the boundaries check will derive the new allowed set automatically.
+
+---
+
+## Reference
+
+- CALM template: `packages/architecture/systems/alistigo-artifact-module-composition.arch.calm.json`
+- CLI source: `cli/artifact-arch-check/`
+- Full CLI docs: `cli/artifact-arch-check/docs/README.md`
+- Architecture decision: `packages/architecture/adrs/0031-artifact-arch-check-cli.md`

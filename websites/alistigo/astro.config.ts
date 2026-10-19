@@ -88,6 +88,10 @@ export default defineConfig({
           items: [{ label: "Artifact Catalog", slug: "artifacts" }],
         },
         {
+          label: "Developer Tools",
+          items: [{ label: "artifact-arch-check", slug: "tools/artifact-arch-check" }],
+        },
+        {
           label: "Architecture Decisions",
           items: [{ label: "All ADRs", link: "/adrs/" }],
         },

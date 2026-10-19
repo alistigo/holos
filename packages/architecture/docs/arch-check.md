@@ -84,3 +84,22 @@ import { foo } from "@mlabrut/other-package";
 Edit `.dependency-cruiser.cjs` and add a new entry to the `forbidden` array.
 Re-run `pnpm qa:arch-check` to verify the rule behaves as expected.
 Full rule reference: [dependency-cruiser docs](https://github.com/sverweij/dependency-cruiser/blob/main/docs/rules-reference.md).
+
+---
+
+## Artifact-level conformance: `artifact-arch-check`
+
+For artifact-specific checks (module existence, DDD boundary enforcement, package.json conformance, and `alistigo.type` metadata), use the `artifact-arch-check` CLI:
+
+```sh
+# Check the list artifact
+bun cli/artifact-arch-check/dist/cli.js check list
+
+# Generate a CALM file for a new artifact
+bun cli/artifact-arch-check/dist/cli.js generate todo
+```
+
+This tool reads the CALM architecture file for the artifact and verifies that the workspace packages conform to it. It complements `qa:arch-check` (which enforces global import rules) by enforcing the structure declared in architecture-as-code.
+
+Full reference: [`cli/artifact-arch-check/docs/README.md`](../../../cli/artifact-arch-check/docs/README.md)
+ADR: [0031-artifact-arch-check-cli.md](../adrs/0031-artifact-arch-check-cli.md)

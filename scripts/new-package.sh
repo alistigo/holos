@@ -42,6 +42,9 @@ cat > "$PKG_DIR/package.json" <<EOF
   "files": ["dist"],
   "publishConfig": {
     "access": "public"
+  },
+  "alistigo": {
+    "type": "TODO"
   }
 }
 EOF
