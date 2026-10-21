@@ -1,3 +1,9 @@
+## 0.3.1 (2026-10-21)
+
+### 🧱 Updated Dependencies
+
+- Updated archify-render to 0.2.2
+
 ## 0.3.0 (2026-10-16)
 
 ### 🚀 Features

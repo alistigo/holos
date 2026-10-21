@@ -1,3 +1,11 @@
+## 0.5.5 (2026-10-21)
+
+### 🧱 Updated Dependencies
+
+- Updated core-document to 0.3.4
+- Updated list-domain to 0.4.5
+- Updated logger to 0.4.4
+
 ## 0.5.4 (2026-10-16)
 
 ### 🧱 Updated Dependencies

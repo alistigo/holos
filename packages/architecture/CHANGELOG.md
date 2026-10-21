@@ -1,3 +1,18 @@
+## 1.3.1 (2026-10-21)
+
+### 🚀 Features
+
+- **artifact-arch-check:** add CLI to enforce CALM architecture conformance ([a29daf8](https://github.com/alistigo/holos/commit/a29daf8))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.1
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.3.0 (2026-10-16)
 
 ### 🚀 Features

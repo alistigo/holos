@@ -1,3 +1,11 @@
+## 0.2.4 (2026-10-21)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.4
+- Updated artifact-plugin-api to 0.6.4
+- Updated logger to 0.4.4
+
 ## 0.2.3 (2026-10-09)
 
 ### 🧱 Updated Dependencies
