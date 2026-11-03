@@ -31,6 +31,9 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
     const pkg = node["core-npm-package"];
     if (pkg === undefined) continue;
 
+    // Skill nodes ship only markdown/docs — no JS entrypoint fields required
+    if (node["node-type"] === "skill") continue;
+
     const pkgDir = resolvePackageDir(ctx.workspaceRoot, pkg);
     let pkgJson: Record<string, unknown>;
     try {
