@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alistigo.com/schemas/alistigo-package-metadata",
+  "title": "Alistigo Package Metadata",
+  "description": "Top-level 'alistigo' key in every @alistigo/* package.json. Declares the architectural role of the package so platform tools can understand it without parsing CALM files.",
+  "type": "object",
+  "required": ["type"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Architectural role of this package.",
+      "enum": [
+        "domain",
+        "application",
+        "document",
+        "presentation",
+        "infrastructure",
+        "plugin",
+        "skill",
+        "tool"
+      ]
+    }
+  },
+  "$defs": {
+    "tool": {
+      "description": "Marks a dev/build CLI tool (e.g. @alistigo/calm-to-archify). Packages typed 'tool' are exempt from DDD boundary checks and may appear in any package's devDependencies without a CALM 'connects' relationship."
+    }
+  }
+}

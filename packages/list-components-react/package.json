@@ -44,6 +44,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "alistigo": {
+    "type": "presentation"
+  },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
     "i18n:extract": "pnpm -w run i18n:extract",

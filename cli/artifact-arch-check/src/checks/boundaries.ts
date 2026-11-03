@@ -1,4 +1,9 @@
-import { getCheckableNodes, readPackageJson, resolvePackageDir } from "../calm/reader.js";
+import {
+  getCheckableNodes,
+  readPackageJson,
+  resolvePackageDir,
+  tryResolveWorkspacePackageDir,
+} from "../calm/reader.js";
 import type { CalmNode, CalmRelationship } from "../calm/types.js";
 import type { CheckContext, CheckDefinition, CheckIssue, CheckResult } from "./types.js";
 
@@ -40,6 +45,23 @@ function buildAllowedDepsMap(
 }
 
 // fallow-ignore-next-line complexity
+async function isDevTool(workspaceRoot: string, npmPackageName: string): Promise<boolean> {
+  try {
+    const dir = await tryResolveWorkspacePackageDir(workspaceRoot, npmPackageName);
+    if (dir === undefined) return false;
+    const pkgJson = await readPackageJson(dir);
+    const alistigo = pkgJson.alistigo;
+    return (
+      typeof alistigo === "object" &&
+      alistigo !== null &&
+      (alistigo as Record<string, unknown>).type === "tool"
+    );
+  } catch {
+    return false;
+  }
+}
+
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const nodes = getCheckableNodes(ctx.calmFile);
@@ -61,9 +83,9 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
     }
 
     const allDeps: Record<string, string> = {
-      ...((pkgJson["dependencies"] as Record<string, string> | undefined) ?? {}),
-      ...((pkgJson["devDependencies"] as Record<string, string> | undefined) ?? {}),
-      ...((pkgJson["peerDependencies"] as Record<string, string> | undefined) ?? {}),
+      ...((pkgJson.dependencies as Record<string, string> | undefined) ?? {}),
+      ...((pkgJson.devDependencies as Record<string, string> | undefined) ?? {}),
+      ...((pkgJson.peerDependencies as Record<string, string> | undefined) ?? {}),
     };
 
     const alistigoDeps = Object.keys(allDeps).filter((d) => d.startsWith("@alistigo/"));
@@ -71,14 +93,14 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
     const allowed = allowedMap.get(node["unique-id"]) ?? new Set<string>();
 
     for (const dep of alistigoDeps) {
-      if (!allowed.has(dep)) {
-        issues.push({
-          packageName: pkg,
-          message: `Declares forbidden dependency ${dep}`,
-          fix: `Remove ${dep} from ${pkg.replace(/^@[^/]+\//, "")}/package.json, or update the CALM relationships`,
-          docsRef: `packages/architecture/docs/architecture.md#ddd-layers — source: ${ctx.calmFilePath}`,
-        });
-      }
+      if (allowed.has(dep)) continue;
+      if (await isDevTool(ctx.workspaceRoot, dep)) continue;
+      issues.push({
+        packageName: pkg,
+        message: `Declares forbidden dependency ${dep}`,
+        fix: `Remove ${dep} from ${pkg.replace(/^@[^/]+\//, "")}/package.json, or update the CALM relationships`,
+        docsRef: `packages/architecture/docs/architecture.md#ddd-layers — source: ${ctx.calmFilePath}`,
+      });
     }
   }
 

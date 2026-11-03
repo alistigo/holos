@@ -145,7 +145,7 @@ function topoLayers(nodes: string[], edges: SimpleConnection[]): string[][] {
   const adj = new Map<string, string[]>(nodes.map((n) => [n, []]));
   for (const { source, destination } of edges) {
     inDegree.set(destination, (inDegree.get(destination) ?? 0) + 1);
-    adj.get(source)!.push(destination);
+    adj.get(source)?.push(destination);
   }
   const layers: string[][] = [];
   let current = nodes.filter((n) => (inDegree.get(n) ?? 0) === 0);
@@ -182,7 +182,7 @@ function computeGroupLayers(members: string[], allConnections: SimpleConnection[
   // Reversed adjacency: dest → [nodes that depend on dest]
   const reversedAdj = new Map<string, string[]>(members.map((m) => [m, []]));
   for (const { source, destination } of internalEdges) {
-    reversedAdj.get(destination)!.push(source);
+    reversedAdj.get(destination)?.push(source);
   }
 
   // BFS from entry nodes using reversed edges (places nodes with many dependents near the top)
@@ -218,7 +218,7 @@ function computeGroupLayers(members: string[], allConnections: SimpleConnection[
   const rows = new Map<number, string[]>();
   for (const [node, layer] of layerOf) {
     if (!rows.has(layer)) rows.set(layer, []);
-    rows.get(layer)!.push(node);
+    rows.get(layer)?.push(node);
   }
   if (rows.size === 0) return [members];
   const maxIdx = Math.max(...rows.keys());
@@ -376,13 +376,11 @@ export function transformCalmToArchify(calm: CalmDocument, outputPath: string): 
       const pos = positions.get(node["unique-id"]) ?? { x: 0, y: 0, w: 140, h: 55 };
       const hint = hintMap.get(node["node-type"]);
       const sublabel =
-        hint?.["sublabel"] && typeof node[hint["sublabel"]] === "string"
-          ? (node[hint["sublabel"]] as string)
+        hint?.sublabel && typeof node[hint.sublabel] === "string"
+          ? (node[hint.sublabel] as string)
           : undefined;
       const tag =
-        hint?.["tag"] && typeof node[hint["tag"]] === "string"
-          ? (node[hint["tag"]] as string)
-          : undefined;
+        hint?.tag && typeof node[hint.tag] === "string" ? (node[hint.tag] as string) : undefined;
       return {
         id: node["unique-id"],
         type: mapNodeType(node["node-type"], node.name, hintMap),

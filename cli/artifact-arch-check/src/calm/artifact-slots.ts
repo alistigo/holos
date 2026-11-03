@@ -39,5 +39,5 @@ export async function generateArtifactCalmFile(opts: {
   const templateContent = await readFile(resolve(opts.templatePath), "utf-8");
   const template = JSON.parse(templateContent) as CalmArchFile;
   const generated = applyArtifactSlots(template, opts.artifactName);
-  await writeFile(resolve(opts.outputPath), JSON.stringify(generated, null, 2) + "\n", "utf-8");
+  await writeFile(resolve(opts.outputPath), `${JSON.stringify(generated, null, 2)}\n`, "utf-8");
 }

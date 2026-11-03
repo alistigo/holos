@@ -93,6 +93,8 @@ Verifies that each package only depends on `@alistigo/*` packages that are expli
 
 **How it works:** for each node, collects the `core-npm-package` of all nodes it points to in `connects` relationships. That set is the only `@alistigo/*` dependencies the package may declare. Checks `dependencies`, `devDependencies`, and `peerDependencies`.
 
+**Dev-tool exemption:** packages with `"alistigo": { "type": "tool" }` in their `package.json` are exempt from boundary checks. They may appear in any package's `devDependencies` without a `connects` relationship in the CALM file. See [`alistigo` metadata field](#alistigo-metadata-field) below.
+
 **Boundary rules derived from the artifact module composition CALM:**
 
 | Package | Allowed `@alistigo/*` dependencies |
@@ -141,6 +143,7 @@ Verifies that each package has the `"alistigo"` metadata field with a valid `typ
 
 | CALM `ddd-layer` / `node-type` | Expected `alistigo.type` |
 |-------------------------------|--------------------------|
+| `core-npm-package` ends in `-document` | `"document"` |
 | `ddd-layer: Domain` | `"domain"` |
 | `ddd-layer: Application` | `"application"` |
 | `ddd-layer: Presentation` | `"presentation"` |
@@ -153,7 +156,7 @@ Verifies that each package has the `"alistigo"` metadata field with a valid `typ
 ✗ alistigo-metadata › @alistigo/todo-domain is missing "alistigo" metadata
   Expected : { "alistigo": { "type": "domain" } }
   Fix      : Add the "alistigo" field to packages/todo-domain/package.json
-  Docs     : cli/artifact-arch-check/docs/README.md#alistigo-metadata
+  Docs     : cli/artifact-arch-check/README.md#alistigo-metadata
 ```
 
 ---
@@ -171,9 +174,20 @@ Every Alistigo package should carry a top-level `"alistigo"` field in its `packa
 }
 ```
 
-Valid `type` values: `"domain"`, `"application"`, `"presentation"`, `"infrastructure"`, `"plugin"`, `"skill"`.
+Valid `type` values are defined in the JSON schema at `packages/architecture/extensions/alistigo-package-metadata.schema.json`:
 
-This field is used by tools (including this CLI) to understand the architectural role of each package without having to parse CALM files directly.
+| Value | Description |
+|-------|-------------|
+| `"domain"` | DDD Domain layer — pure business logic, no framework deps |
+| `"document"` | Document module — data model, event sourcing, application service |
+| `"application"` | DDD Application layer — composition root / artifact entry point |
+| `"presentation"` | DDD Presentation layer — UI components |
+| `"infrastructure"` | DDD Infrastructure layer — adapters, storage, I/O |
+| `"plugin"` | Plugin — registers with the Plugin Bus at startup |
+| `"skill"` | AI skill — documentation/metadata asset with no runtime code |
+| `"tool"` | Dev/build CLI tool — exempt from boundary checks, may appear in `devDependencies` anywhere |
+
+Packages with `"type": "tool"` are never declared in CALM and are never subject to the `boundaries` or `alistigo-metadata` checks. Examples: `@alistigo/calm-to-archify`, `@alistigo/artifact-arch-check`.
 
 ---
 
@@ -206,7 +220,7 @@ artifact-arch-check check list --json
           "packageName": "@alistigo/list-domain",
           "message": "Missing \"alistigo\" metadata field",
           "fix": "Add to packages/list-domain/package.json: \"alistigo\": { \"type\": \"domain\" }",
-          "docsRef": "cli/artifact-arch-check/docs/README.md#alistigo-metadata"
+          "docsRef": "cli/artifact-arch-check/README.md#alistigo-metadata"
         }
       ]
     }

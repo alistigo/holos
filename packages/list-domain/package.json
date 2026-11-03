@@ -38,6 +38,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "alistigo": {
+    "type": "domain"
+  },
   "dependencies": {
     "typeid-js": "^1.2.0"
   },
