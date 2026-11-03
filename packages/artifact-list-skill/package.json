@@ -34,6 +34,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "alistigo": {
+    "type": "skill"
+  },
   "dependencies": {
     "@alistigo/artifact-config-list-format": "workspace:*"
   }
