@@ -30,6 +30,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "alistigo": {
+    "type": "tool"
+  },
   "engines": {
     "node": ">=18"
   },

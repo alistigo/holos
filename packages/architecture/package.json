@@ -37,6 +37,7 @@
     "./package.json": "./package.json",
     "./patterns/*": "./patterns/*",
     "./systems/*": "./systems/*",
+    "./extensions/*": "./extensions/*",
     "./docs/*": "./docs/*",
     "./adrs": "./adrs/index.js"
   },

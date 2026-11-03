@@ -31,7 +31,7 @@
   },
   "files": [
     "dist",
-    "docs"
+    "README.md"
   ],
   "engines": {
     "node": ">=18"
