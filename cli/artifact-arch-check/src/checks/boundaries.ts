@@ -49,11 +49,11 @@ async function isDevTool(workspaceRoot: string, npmPackageName: string): Promise
     const dir = await tryResolveWorkspacePackageDir(workspaceRoot, npmPackageName);
     if (dir === undefined) return false;
     const pkgJson = await readPackageJson(dir);
-    const alistigo = pkgJson["alistigo"];
+    const alistigo = pkgJson.alistigo;
     return (
       typeof alistigo === "object" &&
       alistigo !== null &&
-      (alistigo as Record<string, unknown>)["type"] === "tool"
+      (alistigo as Record<string, unknown>).type === "tool"
     );
   } catch {
     return false;
@@ -82,9 +82,9 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
     }
 
     const allDeps: Record<string, string> = {
-      ...((pkgJson["dependencies"] as Record<string, string> | undefined) ?? {}),
-      ...((pkgJson["devDependencies"] as Record<string, string> | undefined) ?? {}),
-      ...((pkgJson["peerDependencies"] as Record<string, string> | undefined) ?? {}),
+      ...((pkgJson.dependencies as Record<string, string> | undefined) ?? {}),
+      ...((pkgJson.devDependencies as Record<string, string> | undefined) ?? {}),
+      ...((pkgJson.peerDependencies as Record<string, string> | undefined) ?? {}),
     };
 
     const alistigoDeps = Object.keys(allDeps).filter((d) => d.startsWith("@alistigo/"));

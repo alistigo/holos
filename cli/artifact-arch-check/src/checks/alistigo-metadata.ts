@@ -23,7 +23,7 @@ function expectedAlistigoType(node: CalmNode): string {
 
   // Document modules use the "document" type regardless of their ddd-layer
   const pkg = node["core-npm-package"];
-  if (pkg !== undefined && pkg.endsWith("-document")) return "document";
+  if (pkg?.endsWith("-document")) return "document";
 
   switch (node["ddd-layer"]) {
     case "Domain":
@@ -74,7 +74,7 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
 
     const shortName = pkg.replace(/^@[^/]+\//, "");
     const expected = expectedAlistigoType(node);
-    const alistigoField = pkgJson["alistigo"];
+    const alistigoField = pkgJson.alistigo;
 
     if (typeof alistigoField !== "object" || alistigoField === null || !("type" in alistigoField)) {
       issues.push({
@@ -86,7 +86,7 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
       continue;
     }
 
-    const actualType = (alistigoField as Record<string, unknown>)["type"];
+    const actualType = (alistigoField as Record<string, unknown>).type;
     const actualTypeStr = String(actualType);
 
     if (!validTypes.includes(actualTypeStr)) {

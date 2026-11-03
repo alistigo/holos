@@ -86,7 +86,7 @@ export class CheckCommand extends Command {
       const results = await runChecks(ctx, checkIds);
       const passed = results.every((r) => r.passed);
       this.context.stdout.write(
-        JSON.stringify(
+        `${JSON.stringify(
           {
             artifactName: this.artifactName,
             calmFile: archPath,
@@ -95,7 +95,7 @@ export class CheckCommand extends Command {
           },
           null,
           2,
-        ) + "\n",
+        )}\n`,
       );
       return passed ? 0 : 1;
     }

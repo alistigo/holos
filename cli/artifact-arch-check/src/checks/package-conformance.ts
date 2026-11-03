@@ -13,12 +13,12 @@ const REQUIRED_TOP_LEVEL_FIELDS = [
 ] as const;
 
 function hasPublishConfig(pkg: Record<string, unknown>): boolean {
-  const pc = pkg["publishConfig"];
+  const pc = pkg.publishConfig;
   return (
     typeof pc === "object" &&
     pc !== null &&
     "access" in pc &&
-    typeof (pc as Record<string, unknown>)["access"] === "string"
+    typeof (pc as Record<string, unknown>).access === "string"
   );
 }
 
