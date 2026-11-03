@@ -44,6 +44,7 @@ function buildAllowedDepsMap(
   return allowed;
 }
 
+// fallow-ignore-next-line complexity
 async function isDevTool(workspaceRoot: string, npmPackageName: string): Promise<boolean> {
   try {
     const dir = await tryResolveWorkspacePackageDir(workspaceRoot, npmPackageName);
