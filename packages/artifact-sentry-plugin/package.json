@@ -34,7 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/logger": "workspace:*",
+    "@alistigo/pino-logger-plugin": "workspace:*",
     "@sentry/browser": "^9.0.0"
   },
   "devDependencies": {

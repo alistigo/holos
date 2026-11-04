@@ -41,7 +41,7 @@
   "dependencies": {
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/artifact-core-components-react": "workspace:*",
-    "@alistigo/logger": "workspace:*",
+    "@alistigo/pino-logger-plugin": "workspace:*",
     "jdenticon": "latest",
     "typeid-js": "^1.2.0"
   },

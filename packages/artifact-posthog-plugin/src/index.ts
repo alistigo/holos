@@ -1,5 +1,5 @@
 import type { AlistigoPlugin, PluginContext } from "@alistigo/artifact-plugin-api";
-import { createLogger } from "@alistigo/logger";
+import { createLogger } from "@alistigo/pino-logger-plugin";
 import posthog from "posthog-js";
 import pkg from "../package.json" with { type: "json" };
 

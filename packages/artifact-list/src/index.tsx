@@ -30,7 +30,7 @@
 
 import "./styles/app.css";
 
-import { setLogLevel } from "@alistigo/logger";
+import { setLogLevel } from "@alistigo/pino-logger-plugin";
 import autoMount from "./auto-mount.js";
 
 // Configure log level on bundle load.

@@ -1,11 +1,9 @@
-import type { LevelWithSilent, Logger } from "pino";
+import type { LoggerPlugin } from "@alistigo/artifact-plugin-api";
+import type { LevelWithSilent } from "pino";
 import pino from "pino";
 
-export type { Logger, LevelWithSilent };
+export type { LevelWithSilent };
 
-// Root logger — starts silent. App entry points call setLogLevel() before rendering.
-// Changing root.level propagates to all child loggers at write time (pino checks the
-// root level before forwarding to its transport).
 const root = pino({
   level: "silent",
   browser: { asObject: true },
@@ -15,7 +13,22 @@ export const setLogLevel = (level: LevelWithSilent): void => {
   root.level = level;
 };
 
-// Creates a child logger with a bound `module` field on every log entry.
-// Optionally accepts additional static context (e.g. { listId }).
-export const createLogger = (module: string, ctx?: Record<string, unknown>): Logger =>
-  root.child({ module, ...ctx });
+/** Creates a pino child logger. For application/infrastructure use only — domain/presentation layers should use createLogger from @alistigo/artifact-plugin-api instead. */
+export const createLogger = (
+  module: string,
+  ctx?: Record<string, unknown>,
+): ReturnType<typeof root.child> => root.child({ module, ...ctx });
+
+const pinoCreateLogger = createLogger;
+
+export const pinoLoggerPlugin: LoggerPlugin = {
+  name: "@alistigo/pino-logger-plugin",
+  type: "logger",
+  setup(ctx) {
+    ctx.on("log:emitted", ({ level, module, message, data }) => {
+      pinoCreateLogger(module)[level](data ?? {}, message);
+    });
+  },
+};
+
+export default pinoLoggerPlugin;

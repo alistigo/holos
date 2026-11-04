@@ -1,8 +1,5 @@
 import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
 import { loadPlugin } from "@alistigo/artifact-plugin-api";
-import { createLogger } from "@alistigo/logger";
-
-const log = createLogger("alistigo:artifact-list:plugins");
 
 // Always loaded first — claude preferred, local as fallback.
 const DEFAULT_STORAGE_PLUGINS: Record<string, Record<string, unknown>> = {
@@ -52,7 +49,7 @@ export async function loadPlugins(
       try {
         return await loadPlugin(packageName);
       } catch (err) {
-        log.error({ err, packageName }, "failed to load plugin");
+        console.error("[Alistigo] failed to load plugin", { err, packageName });
         return undefined;
       }
     }),

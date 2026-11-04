@@ -351,7 +351,7 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
       react:
@@ -418,7 +418,7 @@ importers:
       '@alistigo/list-domain':
         specifier: workspace:*
         version: link:../list-domain
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
       '@lingui/core':
@@ -529,7 +529,7 @@ importers:
 
   packages/artifact-posthog-plugin:
     dependencies:
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
       posthog-js:
@@ -545,7 +545,7 @@ importers:
 
   packages/artifact-sentry-plugin:
     dependencies:
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
       '@sentry/browser':
@@ -570,7 +570,7 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
       jdenticon:
@@ -618,7 +618,7 @@ importers:
       '@alistigo/claude-artifact-api':
         specifier: workspace:*
         version: link:../claude-artifact-api
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
     devDependencies:
@@ -680,9 +680,6 @@ importers:
       '@alistigo/list-domain':
         specifier: workspace:*
         version: link:../list-domain
-      '@alistigo/logger':
-        specifier: workspace:*
-        version: link:../logger
       '@lingui/core':
         specifier: ^6.0.0
         version: 6.0.1(babel-plugin-macros@3.1.0)
@@ -759,15 +756,15 @@ importers:
 
   packages/list-document:
     dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
       '@alistigo/core-document':
         specifier: workspace:*
         version: link:../core-document
       '@alistigo/list-domain':
         specifier: workspace:*
         version: link:../list-domain
-      '@alistigo/logger':
-        specifier: workspace:*
-        version: link:../logger
       ajv:
         specifier: ^8.17.0
         version: 8.20.0
@@ -805,7 +802,7 @@ importers:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
-      '@alistigo/logger':
+      '@alistigo/pino-logger-plugin':
         specifier: workspace:*
         version: link:../logger
     devDependencies:
@@ -815,6 +812,9 @@ importers:
 
   packages/logger:
     dependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
       pino:
         specifier: ^9.0.0
         version: 9.14.0

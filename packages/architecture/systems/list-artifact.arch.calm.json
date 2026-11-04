@@ -106,7 +106,7 @@
       "name": "Plugin Bus",
       "description": "Intermediary between the Application and plugins. Defines the plugin contract API that plugins (storage, logger, and future extensions) implement to register and communicate with the artifact. Application owns and initialises the plugin bus at startup.",
       "ddd-layer": "Application",
-      "core-npm-package": "@alistigo/plugin-bus",
+      "core-npm-package": "@alistigo/artifact-plugin-api",
       "interfaces": [
         {
           "unique-id": "plugin-bus-api",
@@ -133,10 +133,9 @@
       "unique-id": "logger-plugin",
       "node-type": "plugin",
       "name": "Logger",
-      "description": "Infrastructure plugin providing structured logging. Registers with the Plugin Bus at startup and provides a logger instance for structured, leveled output.",
+      "description": "Infrastructure plugin providing structured logging. Subscribes to log:emitted bus events and routes them to Pino. Domain and UI layers emit log events on the bus instead of importing a logger directly.",
       "ddd-layer": "Infrastructure",
-      "core-npm-package": "@alistigo/logger-plugin-api",
-      "default-plugin-package": "@alistigo/logger-plugin",
+      "core-npm-package": "@alistigo/pino-logger-plugin",
       "interfaces": [
         {
           "unique-id": "logger-api",
@@ -198,6 +197,37 @@
           "destination": {
             "node": "document",
             "interfaces": ["document-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-uses-plugin-bus",
+      "description": "Document emits structured log events on the plugin bus instead of importing a logger directly, keeping the domain/application layer free of infrastructure dependencies.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "ui-uses-plugin-bus",
+      "description": "UI emits structured log events on the plugin bus instead of importing a logger directly, keeping the presentation layer free of infrastructure dependencies.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
           }
         }
       }
@@ -277,6 +307,22 @@
           "destination": {
             "node": "plugin-bus",
             "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-logger-plugin",
+      "description": "Application imports and registers the pino logger plugin directly, wiring it into the plugin bus at startup before any other plugins.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "logger-plugin",
+            "interfaces": ["logger-api"]
           }
         }
       }

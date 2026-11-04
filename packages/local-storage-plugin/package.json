@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@alistigo/artifact-plugin-api": "workspace:*",
-    "@alistigo/logger": "workspace:*"
+    "@alistigo/pino-logger-plugin": "workspace:*"
   },
   "devDependencies": {
     "vite": "^7.0.0"

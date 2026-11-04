@@ -1,3 +1,4 @@
+import { createLogger, type Logger, type PluginEventBus } from "@alistigo/artifact-plugin-api";
 import type { ActorId, ListElementId, ListId, ListRepository } from "@alistigo/list-domain";
 import {
   createListElementContent,
@@ -6,12 +7,9 @@ import {
   ListElementNotFoundError,
   ListError,
 } from "@alistigo/list-domain";
-import { createLogger } from "@alistigo/logger";
 import { parseListMarkdown } from "../markdown/list-markdown.js";
 import { err, ok, type Result } from "../result.js";
 import type { AlistigoDocument } from "../types.js";
-
-const log = createLogger("alistigo:service");
 
 /**
  * Extended repository interface that adds raw-document access on top of the
@@ -36,7 +34,14 @@ export interface AlistigoListStore extends ListRepository {
  * ListError on failure.
  */
 export class ListApplicationService {
-  constructor(private readonly store: AlistigoListStore) {}
+  private readonly log: Logger;
+
+  constructor(
+    private readonly store: AlistigoListStore,
+    bus?: PluginEventBus,
+  ) {
+    this.log = createLogger(bus, "@alistigo/list-document");
+  }
 
   /**
    * Creates a new list and persists it.
@@ -50,7 +55,7 @@ export class ListApplicationService {
   ): Promise<Result<AlistigoDocument, ListError>> {
     try {
       const resolvedListId = listId ?? generateListId();
-      log.debug({ listId: resolvedListId.toString(), title }, "createList");
+      this.log.debug("createList", { listId: resolvedListId.toString(), title });
       const { list } = List.create({
         actorId,
         listId: resolvedListId,
@@ -73,7 +78,7 @@ export class ListApplicationService {
     actorId: ActorId,
   ): Promise<Result<AlistigoDocument, ListError>> {
     try {
-      log.debug({ listId: listId.toString(), content }, "addListElement");
+      this.log.debug("addListElement", { listId: listId.toString(), content });
       const list = await this.store.load(listId);
       if (!list) return err(new ListElementNotFoundError(listId.toString()));
       const listContent = createListElementContent(content);
@@ -95,10 +100,10 @@ export class ListApplicationService {
     actorId: ActorId,
   ): Promise<Result<AlistigoDocument, ListError>> {
     try {
-      log.debug(
-        { listId: listId.toString(), elementId: listElementId.toString() },
-        "deleteListElement",
-      );
+      this.log.debug("deleteListElement", {
+        listId: listId.toString(),
+        elementId: listElementId.toString(),
+      });
       const list = await this.store.load(listId);
       if (!list) return err(new ListElementNotFoundError(listId.toString()));
       list.deleteListElement({ actorId, listId, listElementId });
@@ -147,10 +152,10 @@ export class ListApplicationService {
     try {
       const { title, items } = parseListMarkdown(markdown);
       const resolvedListId = listId ?? generateListId();
-      log.debug(
-        { listId: resolvedListId.toString(), itemCount: items.length },
-        "applyAiInitialInput",
-      );
+      this.log.debug("applyAiInitialInput", {
+        listId: resolvedListId.toString(),
+        itemCount: items.length,
+      });
       const { list } = List.create({
         actorId,
         listId: resolvedListId,
@@ -171,10 +176,10 @@ export class ListApplicationService {
     await this.store.save(list);
     list.markEventsAsCommitted();
     const doc = await this.store.loadDocument(listId);
-    log.debug(
-      { listId: listId.toString(), elementCount: doc?.itemListElement.length },
-      "document saved",
-    );
+    this.log.debug("document saved", {
+      listId: listId.toString(),
+      elementCount: doc?.itemListElement.length,
+    });
     // biome-ignore lint/style/noNonNullAssertion: just saved, must exist
     return ok(doc!);
   }

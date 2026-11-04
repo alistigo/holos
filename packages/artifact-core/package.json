@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@alistigo/artifact-plugin-api": "workspace:*",
-    "@alistigo/logger": "workspace:*"
+    "@alistigo/pino-logger-plugin": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"

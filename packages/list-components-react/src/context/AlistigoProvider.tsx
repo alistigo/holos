@@ -9,9 +9,9 @@
  * used by the Playwright runner's `waitForIdle` synchronisation.
  */
 
+import { createLogger, type Logger, type PluginEventBus } from "@alistigo/artifact-plugin-api";
 import type { AlistigoDocument, ListApplicationService } from "@alistigo/list-document";
 import { generateActorId, type ListId, parseListElementId } from "@alistigo/list-domain";
-import { createLogger } from "@alistigo/logger";
 import {
   createContext,
   type JSX,
@@ -23,7 +23,6 @@ import {
 } from "react";
 
 const UI_ACTOR_ID = generateActorId();
-const log = createLogger("alistigo:provider");
 
 /** Returns the stable actor ID used for all list commands in this session. */
 export function getSessionActorId(): string {
@@ -39,6 +38,7 @@ const DocumentContext = createContext<DocumentContextValue | null>(null);
 interface ServiceContextValue {
   service: ListApplicationService;
   listId: ListId;
+  log: Logger;
 }
 const ServiceContext = createContext<ServiceContextValue | null>(null);
 
@@ -53,6 +53,7 @@ export interface AlistigoProviderProps {
   listId: ListId;
   initialDocument: AlistigoDocument;
   children: ReactNode;
+  bus?: PluginEventBus;
 }
 
 export function AlistigoProvider({
@@ -60,11 +61,13 @@ export function AlistigoProvider({
   listId,
   initialDocument,
   children,
+  bus,
 }: AlistigoProviderProps): JSX.Element {
   const [doc, setDoc] = useState<AlistigoDocument>(initialDocument);
   const [isPending, setIsPending] = useState(false);
+  const log = useMemo(() => createLogger(bus, "@alistigo/list-components-react"), [bus]);
   const docValue = useMemo(() => ({ doc, setDoc }), [doc]);
-  const serviceValue = useMemo(() => ({ service, listId }), [service, listId]);
+  const serviceValue = useMemo(() => ({ service, listId, log }), [service, listId, log]);
   const pendingValue = useMemo(() => ({ isPending, setIsPending }), [isPending]);
 
   return (
@@ -127,7 +130,7 @@ export interface AlistigoActions {
  */
 export function useAlistigoActions(): AlistigoActions {
   const { setDoc } = useDocumentContext();
-  const { service, listId } = useServiceContext();
+  const { service, listId, log } = useServiceContext();
   const { setIsPending } = usePendingContext();
   const setDocRef = useRef(setDoc);
   setDocRef.current = setDoc;
@@ -143,7 +146,7 @@ export function useAlistigoActions(): AlistigoActions {
               log.debug("element added");
               setDocRef.current(result.value);
             } else {
-              log.error({ error: result.error }, "addElement failed");
+              log.error("addElement failed", { error: result.error });
             }
           })
           .finally(() => setIsPending(false));
@@ -157,15 +160,15 @@ export function useAlistigoActions(): AlistigoActions {
           })
           .then((result) => {
             if (result.ok) {
-              log.debug({ elementId }, "element deleted");
+              log.debug("element deleted", { elementId });
               setDocRef.current(result.value);
             } else {
-              log.error({ error: result.error, elementId }, "deleteElement failed");
+              log.error("deleteElement failed", { error: result.error, elementId });
             }
           })
           .finally(() => setIsPending(false));
       },
     }),
-    [service, listId, setIsPending],
+    [service, listId, log, setIsPending],
   );
 }

@@ -34,7 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@alistigo/logger": "workspace:*",
+    "@alistigo/pino-logger-plugin": "workspace:*",
     "posthog-js": "^1.0.0"
   },
   "devDependencies": {

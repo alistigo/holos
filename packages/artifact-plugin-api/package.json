@@ -38,6 +38,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "alistigo": {
+    "type": "application"
+  },
   "devDependencies": {
     "@types/react": "^19.2.14"
   }
