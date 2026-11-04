@@ -1,6 +1,6 @@
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
 import { artifactContext, type ClaudeStorage } from "@alistigo/claude-artifact-api";
-import { createLogger } from "@alistigo/logger";
+import { createLogger } from "@alistigo/pino-logger-plugin";
 import { withStorageRetry } from "./retry.js";
 
 const log = createLogger("alistigo:claude-storage");

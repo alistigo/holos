@@ -16,7 +16,7 @@ import type {
   AlistigoDocument,
   AlistigoListStore,
 } from "@alistigo/list-document";
-import { createLogger } from "@alistigo/logger";
+import { pinoLoggerPlugin } from "@alistigo/pino-logger-plugin";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -31,13 +31,11 @@ import { ListKeyValueAdapter } from "../utils/list-key-value-adapter.js";
 import App from "./App.js";
 import DebugRenderErrorTrigger from "./DebugRenderErrorTrigger.js";
 
-const log = createLogger("alistigo:artifact-list");
-
 const LOCALE = (import.meta.env.VITE_LOCALE as string | undefined) ?? "en";
 
 const pluginLogger = {
-  info: (obj: unknown, msg?: string) => log.info(obj as Record<string, unknown>, msg),
-  error: (obj: unknown, msg?: string) => log.error(obj as Record<string, unknown>, msg),
+  info: (obj: unknown, msg?: string) => console.info("[plugin-runtime]", obj, msg),
+  error: (obj: unknown, msg?: string) => console.error("[plugin-runtime]", obj, msg),
 };
 
 function resolveActiveStorage(plugins: AlistigoPlugin[]): {
@@ -73,8 +71,9 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
     {
       onReady: async () => {
         const spec = buildPluginSpec(options.plugins);
-        const plugins = await loadPlugins(spec);
-        const { store, rawStore, pluginName } = resolveActiveStorage(plugins);
+        const dynamicPlugins = await loadPlugins(spec);
+        const plugins = [pinoLoggerPlugin, ...dynamicPlugins];
+        const { store, rawStore, pluginName } = resolveActiveStorage(dynamicPlugins);
 
         // Published mode: prefer existing stored document over ai-input-action.
         // This ensures user edits survive re-renders / page reloads.
@@ -115,7 +114,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
           runtime,
           store,
           storagePluginName: pluginName,
-          plugins,
+          plugins: dynamicPlugins,
           spec,
           resolvedDoc,
         });
@@ -174,6 +173,7 @@ export function ArtifactRoot({ options }: { options: MountOptions }): ReactNode 
                 plugins={plugins}
                 spec={spec}
                 isDraft={!published}
+                bus={runtime.bus}
               />
               <DebugRenderErrorTrigger />
             </ArtifactErrorBoundary>

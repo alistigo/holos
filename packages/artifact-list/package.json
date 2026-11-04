@@ -53,7 +53,7 @@
     "@alistigo/list-document": "workspace:*",
     "@alistigo/list-domain": "workspace:*",
     "@alistigo/list-components-react": "workspace:*",
-    "@alistigo/logger": "workspace:*",
+    "@alistigo/pino-logger-plugin": "workspace:*",
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
     "react": "^19.2.5",

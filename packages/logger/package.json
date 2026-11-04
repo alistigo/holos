@@ -1,5 +1,5 @@
 {
-  "name": "@alistigo/logger",
+  "name": "@alistigo/pino-logger-plugin",
   "version": "0.4.4",
   "license": "MIT",
   "author": {
@@ -23,7 +23,7 @@
   ],
   "private": false,
   "type": "module",
-  "description": "Shared pino-based logger for Alistigo apps and packages. Wraps pino with a singleton root logger and a createLogger factory for named child loggers.",
+  "description": "Pino-backed logger plugin for Alistigo. Subscribes to log:emitted bus events and routes them to Pino. Also exports setLogLevel for startup configuration.",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -38,7 +38,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "alistigo": {
+    "type": "plugin"
+  },
   "dependencies": {
+    "@alistigo/artifact-plugin-api": "workspace:*",
     "pino": "^9.0.0"
   },
   "devDependencies": {

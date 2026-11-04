@@ -1,5 +1,5 @@
 import type { KeyValueStore } from "@alistigo/artifact-plugin-api";
-import { createLogger } from "@alistigo/logger";
+import { createLogger } from "@alistigo/pino-logger-plugin";
 
 const log = createLogger("alistigo:local-storage");
 

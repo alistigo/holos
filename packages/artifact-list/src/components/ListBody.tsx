@@ -10,11 +10,8 @@ import {
 } from "@alistigo/list-components-react";
 import type { AlistigoDocument, AlistigoListStore } from "@alistigo/list-document";
 import { buildProjection } from "@alistigo/list-document";
-import { createLogger } from "@alistigo/logger";
 import { Trans } from "@lingui/react/macro";
 import { type JSX, useCallback, useMemo } from "react";
-
-const log = createLogger("alistigo:artifact-list:list-body");
 
 interface ListBodyProps {
   isDraft: boolean;
@@ -95,7 +92,7 @@ function ListBody({ isDraft, plugins, repository }: ListBodyProps): JSX.Element 
         };
         setDoc(updatedDoc);
         repository.saveDocument(updatedDoc).catch((err: unknown) => {
-          log.error({ err }, "failed to persist checkbox event");
+          console.error("[Alistigo] failed to persist checkbox event", err);
         });
       }
     },

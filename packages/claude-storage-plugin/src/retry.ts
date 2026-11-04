@@ -1,4 +1,4 @@
-import { createLogger } from "@alistigo/logger";
+import { createLogger } from "@alistigo/pino-logger-plugin";
 
 const log = createLogger("alistigo:claude-storage:retry");
 

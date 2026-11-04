@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
  * Typed event map for the host<->plugin event bus. Every event a host emits and
  * every event a plugin can subscribe to is declared here.
  */
+export type LogLevel = "trace" | "debug" | "info" | "warn" | "error";
+
 export interface AlistigoPluginEventMap {
   /** Emitted once, on first mount only. */
   "widget:displayed": { locale: string; storageType: string; version: string };
@@ -11,6 +13,13 @@ export interface AlistigoPluginEventMap {
   "error:uncaught": { error: unknown; componentStack?: string };
   /** Emitted when the active user identity changes. */
   "user:changed": { userId: string; pseudo: string; avatar?: string };
+  /** Emitted by domain/presentation packages instead of calling a logger directly. */
+  "log:emitted": {
+    level: LogLevel;
+    module: string;
+    message: string;
+    data?: Record<string, unknown>;
+  };
 }
 
 export type PluginEventName = keyof AlistigoPluginEventMap;
@@ -50,7 +59,7 @@ export interface PluginContext {
   store?: KeyValueStore;
 }
 
-export type PluginType = "monitoring" | "storage" | (string & {});
+export type PluginType = "monitoring" | "storage" | "logger" | (string & {});
 
 /** Generic key-value store — no domain knowledge. Values are JSON-serialisable objects. */
 export interface KeyValueStore {
@@ -126,4 +135,8 @@ export interface AlistigoPlugin {
     metadata: Record<string, unknown>,
     onCommand: (name: string, payload: unknown) => void,
   ) => ReactNode;
+}
+
+export interface LoggerPlugin extends AlistigoPlugin {
+  type: "logger";
 }

@@ -1,5 +1,5 @@
 import type { AlistigoPlugin, PluginContext } from "@alistigo/artifact-plugin-api";
-import { createLogger } from "@alistigo/logger";
+import { createLogger } from "@alistigo/pino-logger-plugin";
 import React, { type ReactNode } from "react";
 import pkg from "../package.json" with { type: "json" };
 import { AvatarBadge } from "./components/AvatarBadge.js";

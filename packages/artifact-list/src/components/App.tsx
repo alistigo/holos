@@ -6,17 +6,15 @@ import {
   Modal,
   type PluginInfo,
 } from "@alistigo/artifact-core-components-react";
-import type { AlistigoPlugin } from "@alistigo/artifact-plugin-api";
+import type { AlistigoPlugin, PluginEventBus } from "@alistigo/artifact-plugin-api";
+import { createLogger } from "@alistigo/artifact-plugin-api";
 import { AlistigoApp, AlistigoProvider } from "@alistigo/list-components-react";
 import type { AlistigoDocument, AlistigoListStore } from "@alistigo/list-document";
 import { ListApplicationService } from "@alistigo/list-document";
 import { parseListId } from "@alistigo/list-domain";
-import { createLogger } from "@alistigo/logger";
 import { type JSX, useEffect, useMemo, useState } from "react";
 import pkg from "../../package.json" with { type: "json" };
 import ListBody from "./ListBody.js";
-
-const log = createLogger("alistigo:artifact-list");
 
 function buildPluginInfos(
   plugins: AlistigoPlugin[],
@@ -81,6 +79,7 @@ interface AppProps {
   plugins: AlistigoPlugin[];
   spec: Record<string, Record<string, unknown>>;
   isDraft: boolean;
+  bus?: PluginEventBus;
 }
 
 // fallow-ignore-next-line complexity
@@ -90,11 +89,14 @@ function App({
   plugins,
   spec,
   isDraft,
+  bus,
 }: AppProps): JSX.Element | null {
+  const log = useMemo(() => createLogger(bus, "@alistigo/artifact-list"), [bus]);
+
   const service = useMemo(() => {
-    const base = new ListApplicationService(repository);
+    const base = new ListApplicationService(repository, bus);
     return createLazyInitService(base, repository, initialDocument);
-  }, [repository, initialDocument]);
+  }, [repository, bus, initialDocument]);
 
   const listId = useMemo(() => parseListId(initialDocument["@id"]), [initialDocument]);
 
@@ -107,13 +109,13 @@ function App({
     service
       .loadDocument(listId)
       .then((doc) => {
-        log.info({ listId: listId.toString() }, "app mounted");
+        log.info("app mounted", { listId: listId.toString() });
         setBootDoc(doc ?? initialDocument);
       })
       .catch((err: unknown) => {
-        log.error({ err }, "failed to load document");
+        log.error("failed to load document", { err });
       });
-  }, [service, listId, initialDocument]);
+  }, [service, listId, log, initialDocument]);
 
   if (!bootDoc) return null;
 
@@ -156,7 +158,12 @@ function App({
           </svg>
         </button>
       </ArtifactContextMenuContainer>
-      <AlistigoProvider service={service} listId={listId} initialDocument={bootDoc}>
+      <AlistigoProvider
+        service={service}
+        listId={listId}
+        initialDocument={bootDoc}
+        {...(bus !== undefined ? { bus } : {})}
+      >
         <AlistigoApp>
           <ListBody isDraft={isDraft} plugins={plugins} repository={repository} />
         </AlistigoApp>

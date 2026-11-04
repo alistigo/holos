@@ -5,7 +5,7 @@ export type {
   PluginRuntime,
 } from "@alistigo/artifact-plugin-api";
 export { createPluginRuntime } from "@alistigo/artifact-plugin-api";
-export { createLogger } from "@alistigo/logger";
+export { createLogger } from "@alistigo/pino-logger-plugin";
 export type { AuthPlugin } from "./auth.js";
 export type { ArtifactErrorBoundaryProps } from "./error-boundary.js";
 export { ArtifactErrorBoundary } from "./error-boundary.js";

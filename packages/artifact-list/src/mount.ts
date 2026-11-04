@@ -1,4 +1,3 @@
-import { createLogger } from "@alistigo/logger";
 import { createElement, StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { ArtifactRoot } from "./components/ArtifactRoot.js";
@@ -7,8 +6,6 @@ import type { MountOptions } from "./types.js";
 import { resolveContainer } from "./utils/container.js";
 
 export type { MountOptions } from "./types.js";
-
-const log = createLogger("alistigo:artifact-list");
 
 const roots = new Map<Element, Root>();
 
@@ -38,7 +35,7 @@ function deferUntilDomReady(container: string | HTMLElement, options: MountOptio
 function resolveContainerOrThrow(container: string | HTMLElement): Element {
   const el = resolveContainer(container);
   if (el == null) {
-    log.error({ selector: String(container) }, "container not found");
+    console.error("[Alistigo] container not found", { selector: String(container) });
     throw new Error(`Alistigo.mount: container not found: ${String(container)}`);
   }
   return el;
@@ -60,7 +57,7 @@ export async function mount(
 
   const el = resolveContainerOrThrow(container);
   registerMount(getContainerLabel(container, el));
-  log.info({ selector: String(container) }, "mount called");
+  console.info("[Alistigo] mount called", { selector: String(container) });
 
   const tree = createElement(StrictMode, null, createElement(ArtifactRoot, { options }));
   getOrCreateRoot(el).render(tree);

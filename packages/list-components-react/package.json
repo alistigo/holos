@@ -58,7 +58,6 @@
   },
   "dependencies": {
     "@alistigo/artifact-plugin-api": "workspace:*",
-    "@alistigo/logger": "workspace:*",
     "@lingui/core": "^6.0.0",
     "@lingui/react": "^6.0.0",
     "@alistigo/list-document": "workspace:*",
