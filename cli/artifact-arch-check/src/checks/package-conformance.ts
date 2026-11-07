@@ -1,4 +1,9 @@
-import { getCheckableNodes, readPackageJson, resolvePackageDir } from "../calm/reader.js";
+import {
+  getCheckableNodes,
+  readPackageJson,
+  resolveImplPackage,
+  resolvePackageDir,
+} from "../calm/reader.js";
 import type { CheckContext, CheckDefinition, CheckIssue, CheckResult } from "./types.js";
 
 const REQUIRED_TOP_LEVEL_FIELDS = [
@@ -28,11 +33,11 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
   const nodes = getCheckableNodes(ctx.calmFile);
 
   for (const node of nodes) {
-    const pkg = node["core-npm-package"];
-    if (pkg === undefined) continue;
-
     // Skill nodes ship only markdown/docs — no JS entrypoint fields required
     if (node["node-type"] === "skill") continue;
+
+    const pkg = resolveImplPackage(node, ctx.artifactName);
+    if (pkg === undefined) continue;
 
     const pkgDir = resolvePackageDir(ctx.workspaceRoot, pkg);
     let pkgJson: Record<string, unknown>;

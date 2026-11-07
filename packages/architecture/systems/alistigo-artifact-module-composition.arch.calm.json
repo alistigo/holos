@@ -39,6 +39,7 @@
       "name": "Domain",
       "description": "Pure, framework-free DDD domain model. Zero dependencies on other alistigo modules. Contains value objects, aggregates, commands, entities, errors, domain events, and repository interfaces. Defines the vocabulary and business rules of the artifact.",
       "ddd-layer": "Domain",
+      "package-name": "{domain}-domain",
       "interfaces": [
         {
           "unique-id": "domain-api",
@@ -56,6 +57,7 @@
       "name": "Document",
       "description": "Owns the artifact's data model and application service. Provides event-sourced projections, the application service exposing all document actions, serializer/deserializer, and a validation function. Re-exports the Domain module so downstream consumers need only depend on Document.",
       "ddd-layer": "Application",
+      "package-name": "{domain}-document",
       "core-npm-package": "@alistigo/core-document",
       "interfaces": [
         {
@@ -70,6 +72,7 @@
       "name": "UI",
       "description": "Presentation layer. Contains React components that display and interact with the Document module. Every component has a Storybook story. Depends on Document; domain types are accessed via Document's re-exports.",
       "ddd-layer": "Presentation",
+      "package-name": "{domain}-components-react",
       "core-npm-package": "@alistigo/artifact-core-components-react",
       "interfaces": [
         {
@@ -84,6 +87,7 @@
       "name": "Application",
       "description": "Entry point of the artifact. it orchestrates and wires together the different modules: Domain, Document, UI, and Plugin bus with all installed plugins (Storage, Logger, ui, etc ...).",
       "ddd-layer": "Application",
+      "package-name": "artifact-{domain}",
       "core-npm-package": "@alistigo/artifact-core",
       "interfaces": [
         {
@@ -102,7 +106,7 @@
       "name": "Plugin Bus",
       "description": "Intermediary between the Application and plugins. Defines the plugin contract API that plugins (storage, logger, and future extensions) implement to register and communicate with the artifact. Application owns and initialises the plugin bus at startup.",
       "ddd-layer": "Application",
-      "core-npm-package": "@alistigo/plugin-bus",
+      "core-npm-package": "@alistigo/artifact-plugin-api",
       "interfaces": [
         {
           "unique-id": "plugin-bus-api",
@@ -131,8 +135,7 @@
       "name": "Logger",
       "description": "Infrastructure plugin providing structured logging. Registers with the Plugin Bus at startup and provides a logger instance for structured, leveled output.",
       "ddd-layer": "Infrastructure",
-      "core-npm-package": "@alistigo/logger-plugin-api",
-      "default-plugin-package": "@alistigo/logger-plugin",
+      "core-npm-package": "@alistigo/pino-logger-plugin",
       "interfaces": [
         {
           "unique-id": "logger-api",
@@ -145,10 +148,25 @@
       "node-type": "skill",
       "name": "Skill",
       "description": "A complementary npm package published alongside the artifact. Contains a SKILL.md capability definition consumed by AI agents, reference documentation, and an optional config JSON schema. Has no code dependencies.",
+      "package-name": "artifact-{domain}-skill",
       "interfaces": [
         {
           "unique-id": "skill-definition",
           "description": "SKILL.md — the agent capability definition. Describes how an AI should generate, configure, and interact with the artifact."
+        }
+      ]
+    },
+    {
+      "unique-id": "claude-api",
+      "node-type": "system",
+      "name": "Claude Artifact API",
+      "description": "TypeScript types and inject script for the Claude artifact iframe API. Shared by all artifact applications to integrate with the Claude host environment.",
+      "ddd-layer": "Application",
+      "core-npm-package": "@alistigo/claude-artifact-api",
+      "interfaces": [
+        {
+          "unique-id": "claude-api-types",
+          "description": "Claude artifact iframe API types and inject script."
         }
       ]
     },
@@ -304,6 +322,69 @@
           "destination": {
             "node": "plugin-bus",
             "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-uses-plugin-bus",
+      "description": "Document emits structured log events on the plugin bus instead of importing a logger directly, keeping the domain/application layer free of infrastructure dependencies.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "ui-uses-plugin-bus",
+      "description": "UI emits structured log events on the plugin bus instead of importing a logger directly, keeping the presentation layer free of infrastructure dependencies.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-logger-plugin",
+      "description": "Application imports and registers the logger plugin directly, wiring it into the plugin bus at startup before any other plugins.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "logger-plugin",
+            "interfaces": ["logger-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-claude-api",
+      "description": "Application integrates with the Claude artifact iframe API to register lifecycle hooks and communicate with the Claude host environment.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "claude-api",
+            "interfaces": ["claude-api-types"]
           }
         }
       }

@@ -44,7 +44,7 @@ export class CheckCommand extends Command {
   arch = Option.String("--arch", {
     required: false,
     description:
-      "Path to the CALM architecture file. Default: packages/architecture/systems/{name}-artifact.arch.calm.json",
+      "Path to the CALM architecture file. Default: packages/architecture/systems/alistigo-artifact-module-composition.arch.calm.json",
   });
 
   only = Option.String("--only", {
@@ -59,7 +59,8 @@ export class CheckCommand extends Command {
   // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const archPath =
-      this.arch ?? `packages/architecture/systems/${this.artifactName}-artifact.arch.calm.json`;
+      this.arch ??
+      "packages/architecture/systems/alistigo-artifact-module-composition.arch.calm.json";
     const checkIds = this.only ? this.only.split(",").map((s) => s.trim()) : undefined;
     const workspaceRoot = process.cwd();
 
@@ -69,7 +70,6 @@ export class CheckCommand extends Command {
     } catch {
       this.context.stderr.write(
         `Error: Cannot read CALM file at ${archPath}\n` +
-          `  Tip: Generate it first with: artifact-arch-check generate ${this.artifactName}\n` +
           `  Docs: cli/artifact-arch-check/docs/README.md\n`,
       );
       return 1;
