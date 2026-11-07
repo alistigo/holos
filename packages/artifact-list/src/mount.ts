@@ -22,7 +22,7 @@ function getOrCreateRoot(el: Element): Root {
 }
 
 function deferUntilDomReady(container: string | HTMLElement, options: MountOptions): void {
-  console.info("[Alistigo] mount() called before DOM is ready — deferring to DOMContentLoaded");
+  console.log("[Alistigo] mount() called before DOM is ready — deferring to DOMContentLoaded");
   document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -57,7 +57,7 @@ export async function mount(
 
   const el = resolveContainerOrThrow(container);
   registerMount(getContainerLabel(container, el));
-  console.info("[Alistigo] mount called", { selector: String(container) });
+  console.log("[Alistigo] mount called", { selector: String(container) });
 
   const tree = createElement(StrictMode, null, createElement(ArtifactRoot, { options }));
   getOrCreateRoot(el).render(tree);

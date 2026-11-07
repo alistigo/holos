@@ -70,15 +70,19 @@ export default defineConfig(({ command }) => ({
   base: "./", // relative paths — required for GitHub Pages subpath deployment
   plugins: [
     {
-      name: "patch-vite-client-console-debug",
+      name: "patch-vite-console-methods",
       transform(code, id) {
-        if (id.includes("/vite/dist/client/client.mjs")) {
-          return {
-            code: code.replaceAll("console.debug(", "(console.debug || console.log)("),
-            map: null,
-          };
-        }
-        return null;
+        // console.debug and console.info may be absent (not functions) in sandboxed
+        // headless-Chromium iframes. Patch all call-sites in vite infrastructure so
+        // the devtools suggestion / HMR log falls back to console.log instead of
+        // throwing and preventing React from mounting.
+        const isViteInfra =
+          id.includes("/vite/dist/client/client.mjs") || id.includes("react-refresh");
+        if (!isViteInfra) return null;
+        const patched = code
+          .replaceAll("console.debug(", "(console.debug || console.log)(")
+          .replaceAll("console.info(", "(console.info || console.log)(");
+        return patched !== code ? { code: patched, map: null } : null;
       },
     },
     react({

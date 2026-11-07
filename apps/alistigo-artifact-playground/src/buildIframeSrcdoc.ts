@@ -39,7 +39,9 @@ function buildPluginOverrideScript(overrides: Record<string, string> | undefined
 function buildDevRefreshScript(): string {
   return `<script type="module">
       import { injectIntoGlobalHook } from "/@react-refresh";
-      injectIntoGlobalHook(window);
+      // injectIntoGlobalHook calls console.info which may be absent in sandboxed
+      // headless-Chromium iframes. Guard so React can still mount.
+      try { injectIntoGlobalHook(window); } catch (_e) {}
       window.$RefreshReg$ = () => {};
       window.$RefreshSig$ = () => (type) => type;
     </script>`;
@@ -108,6 +110,14 @@ export function buildIframeSrcdoc({
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+      // Replace window.console with a new object where every method is a real
+      // function. In sandboxed headless-Chromium iframes some console methods
+      // (e.g. console.info, console.debug) are absent; patching the existing
+      // native object fails because those properties are non-configurable.
+      // Replacing window.console itself works because that property is writable.
+      (function(){var c=window.console||{};var fb=(c.log||function(){}).bind(c);var nc={};["log","debug","info","warn","error","trace","group","groupCollapsed","groupEnd","dir","table","assert","count","countReset","time","timeEnd","timeLog","clear","profile","profileEnd","dirxml"].forEach(function(m){nc[m]=typeof c[m]==="function"?c[m].bind(c):fb;});try{window.console=nc;}catch(e){try{Object.defineProperty(window,"console",{value:nc,writable:true,configurable:true});}catch(e2){}}})();
+    </script>
     ${isClaude ? `${buildClaudeHeadScripts()}\n    ${buildArtifactStatusScript(config.published)}` : ""}
     <meta http-equiv="Content-Security-Policy" content="${csp}" />
     <meta charset="UTF-8" />

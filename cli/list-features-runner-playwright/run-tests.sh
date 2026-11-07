@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-# Runs the Playwright integration test suite against a locally started dev server.
+# Runs the Playwright integration test suite against a dev server.
 #
-# Responsibilities:
-#   1. Kill any stale process on port 5173 left by a previous interrupted run.
-#   2. Start alistigo-artifact-playground:dev in the background.
-#   3. Wait until port 5173 is accepting connections.
-#   4. Run the Cucumber/Playwright feature tests.
-#   5. Kill the dev server on exit — whether tests finished normally, the user
-#      pressed Ctrl-C, or lefthook killed this script mid-run (SIGTERM).
+# Two modes:
+#
+#   ALISTIGO_APP_URL set   — Use an already-running playground at that URL.
+#                            Validates the server is reachable; exits with an
+#                            error if it is not (never tries to start one).
+#
+#   ALISTIGO_APP_URL unset — Kill any stale process on port 5173, start
+#                            alistigo-artifact-playground:dev, wait for it to
+#                            be ready, then run the tests.
 #
 # Dependencies:
 #   trap  — bash builtin, always available.
@@ -15,6 +17,15 @@
 #             Checked at runtime; falls back to lsof (macOS / Alpine friendly).
 
 set -euo pipefail
+
+# ---------------------------------------------------------------------------
+# Load .env from the same directory as this script (if present).
+# This allows ALISTIGO_APP_URL to be set without exporting it in the shell.
+# ---------------------------------------------------------------------------
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/.env" ]; then
+  set -a; source "$SCRIPT_DIR/.env"; set +a
+fi
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -29,7 +40,6 @@ kill_port() {
   if command -v fuser &>/dev/null; then
     fuser -k "${port}/tcp" 2>/dev/null || true
   elif command -v lsof &>/dev/null; then
-    # xargs -r skips execution when stdin is empty (nothing on the port).
     lsof -ti:"${port}" 2>/dev/null | xargs -r kill -9 2>/dev/null || true
   else
     echo "[warn] Neither fuser nor lsof found; skipping pre-flight port kill." >&2
@@ -37,9 +47,9 @@ kill_port() {
 }
 
 # cleanup
-# Called by the EXIT/INT/TERM trap. Kills the background dev server (job %1).
-# Errors are suppressed: the server may have already exited by the time the
-# trap fires, or it may never have started (e.g. set -e fired before the &).
+# Called by the EXIT/INT/TERM trap. Kills the background dev server (job %1)
+# only when this script started one. When using a pre-existing server the
+# kill is a no-op because there is no background job.
 cleanup() {
   kill %1 2>/dev/null || true
   wait %1 2>/dev/null || true
@@ -62,20 +72,40 @@ trap cleanup EXIT INT TERM
 # Main
 # ---------------------------------------------------------------------------
 
-# Kill any leftover dev server from a previous interrupted run. Without this,
-# Vite finds port 5173 occupied, silently picks 5174, and the readiness loop
-# below waits on 5173 forever.
-kill_port 5173
+if [ -n "${ALISTIGO_APP_URL:-}" ]; then
+  # -------------------------------------------------------------------------
+  # Pre-configured URL: validate it and use it as-is.
+  # We never start a dev server here — if the URL is unreachable it means the
+  # playground isn't running, and the caller should fix that before re-running.
+  # -------------------------------------------------------------------------
+  echo "Using pre-configured playground at ALISTIGO_APP_URL=$ALISTIGO_APP_URL"
 
-# Start the dev server in the background. Nx resolves the build dependencies
-# (declared via dependsOn in project.json) before starting the server.
-nx run alistigo-artifact-playground:dev &
+  if ! curl -sf "$ALISTIGO_APP_URL" > /dev/null 2>&1; then
+    echo "" >&2
+    echo "  ERROR: ALISTIGO_APP_URL is set to '$ALISTIGO_APP_URL' but the server is not responding." >&2
+    echo "  Start the playground first (e.g. pnpm nx run alistigo-artifact-playground:dev)" >&2
+    echo "  or unset ALISTIGO_APP_URL to let this script start one automatically." >&2
+    echo "" >&2
+    exit 1
+  fi
 
-# Poll until the server is ready. curl -sf returns 0 as soon as the server
-# responds with any HTTP status (including 404 from the SPA index route).
-until curl -sf http://localhost:5173 > /dev/null; do sleep 1; done
+  echo "Server is reachable at $ALISTIGO_APP_URL"
+else
+  # -------------------------------------------------------------------------
+  # No URL given: start a fresh dev server on port 5173.
+  # Kill any leftover process on 5173 first so Vite always gets that port.
+  # -------------------------------------------------------------------------
+  kill_port 5173
+  export ALISTIGO_APP_URL="http://localhost:5173"
+
+  pnpm nx run alistigo-artifact-playground:dev &
+
+  # Poll until the server is ready.
+  until curl -sf "$ALISTIGO_APP_URL" > /dev/null 2>&1; do sleep 1; done
+  echo "Dev server ready at $ALISTIGO_APP_URL"
+fi
 
 # Run all Gherkin/Playwright scenarios. The exit code of this command becomes
 # the exit code of the script (bash preserves the last foreground command's
 # exit code through the EXIT trap).
-nx run list-features-runner-playwright:run-all-features
+pnpm nx run list-features-runner-playwright:run-all-features
