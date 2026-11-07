@@ -34,7 +34,7 @@ import DebugRenderErrorTrigger from "./DebugRenderErrorTrigger.js";
 const LOCALE = (import.meta.env.VITE_LOCALE as string | undefined) ?? "en";
 
 const pluginLogger = {
-  info: (obj: unknown, msg?: string) => console.info("[plugin-runtime]", obj, msg),
+  info: (obj: unknown, msg?: string) => console.log("[plugin-runtime]", obj, msg),
   error: (obj: unknown, msg?: string) => console.error("[plugin-runtime]", obj, msg),
 };
 
