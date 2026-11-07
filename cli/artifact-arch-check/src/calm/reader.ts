@@ -7,9 +7,24 @@ export async function readCalmFile(filePath: string): Promise<CalmArchFile> {
   return JSON.parse(content) as CalmArchFile;
 }
 
-/** Returns all nodes that carry a core-npm-package field (checkable packages). */
+/**
+ * Returns nodes that have a `package-name` pattern — these are the
+ * artifact-specific modules whose implementations are checked.
+ * Shared infrastructure nodes (plugin-bus, logger-plugin, etc.) are excluded.
+ */
 export function getCheckableNodes(calmFile: CalmArchFile): CalmNode[] {
-  return calmFile.nodes.filter((n) => n["core-npm-package"] !== undefined);
+  return calmFile.nodes.filter((n) => n["package-name"] !== undefined);
+}
+
+/**
+ * Resolves the `{domain}` placeholder in a node's `package-name` and returns
+ * the full scoped npm package name: `@alistigo/{resolved}`.
+ * Returns undefined for nodes without a `package-name`.
+ */
+export function resolveImplPackage(node: CalmNode, artifactName: string): string | undefined {
+  const pattern = node["package-name"];
+  if (pattern === undefined) return undefined;
+  return `@alistigo/${pattern.replace(/\{domain\}/g, artifactName)}`;
 }
 
 /** Maps @alistigo/package-name → packages/package-name absolute path. */

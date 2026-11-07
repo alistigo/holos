@@ -1,6 +1,6 @@
 import { access } from "node:fs/promises";
 import { resolve } from "node:path";
-import { getCheckableNodes, resolvePackageDir } from "../calm/reader.js";
+import { getCheckableNodes, resolveImplPackage, resolvePackageDir } from "../calm/reader.js";
 import type { CheckContext, CheckDefinition, CheckIssue, CheckResult } from "./types.js";
 
 async function exists(path: string): Promise<boolean> {
@@ -13,31 +13,15 @@ async function exists(path: string): Promise<boolean> {
 }
 
 // fallow-ignore-next-line complexity
-function buildPluginSystemNodeIds(ctx: CheckContext): Set<string> {
-  const ids = new Set<string>();
-  for (const rel of ctx.calmFile.relationships) {
-    const composedOf = rel["relationship-type"]["composed-of"];
-    if (composedOf !== undefined && composedOf.container === "plugin-system") {
-      for (const nodeId of composedOf.nodes) {
-        ids.add(nodeId);
-      }
-    }
-  }
-  return ids;
-}
-
-// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const nodes = getCheckableNodes(ctx.calmFile);
-  const pluginSystemIds = buildPluginSystemNodeIds(ctx);
 
   for (const node of nodes) {
-    const pkg = node["core-npm-package"];
-    if (pkg === undefined) continue;
-
     if (node["node-type"] === "plugin") continue;
-    if (pluginSystemIds.has(node["unique-id"])) continue;
+
+    const pkg = resolveImplPackage(node, ctx.artifactName);
+    if (pkg === undefined) continue;
 
     const pkgDir = resolvePackageDir(ctx.workspaceRoot, pkg);
     const pkgJsonPath = resolve(pkgDir, "package.json");

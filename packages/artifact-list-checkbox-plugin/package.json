@@ -23,6 +23,9 @@
     "checkbox",
     "todo"
   ],
+  "alistigo": {
+    "type": "plugin"
+  },
   "private": false,
   "type": "module",
   "main": "./dist/index.js",

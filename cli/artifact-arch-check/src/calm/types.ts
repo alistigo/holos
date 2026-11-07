@@ -9,6 +9,9 @@ export interface CalmNode {
   name: string;
   description: string;
   "ddd-layer"?: "Domain" | "Application" | "Presentation" | "Infrastructure";
+  /** Naming pattern for the artifact-specific implementation package. `{domain}` is substituted with the artifact name. */
+  "package-name"?: string;
+  /** The mandatory base/shared npm package this layer builds on. Present on nodes that DON'T have a `package-name` (shared nodes) or on nodes that DO (the base package their impl must depend on). */
   "core-npm-package"?: string;
   "default-plugin-package"?: string;
   interfaces?: CalmInterface[];

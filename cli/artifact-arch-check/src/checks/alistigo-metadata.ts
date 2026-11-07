@@ -1,6 +1,11 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { getCheckableNodes, readPackageJson, resolvePackageDir } from "../calm/reader.js";
+import {
+  getCheckableNodes,
+  readPackageJson,
+  resolveImplPackage,
+  resolvePackageDir,
+} from "../calm/reader.js";
 import type { CalmNode } from "../calm/types.js";
 import type { CheckContext, CheckDefinition, CheckIssue, CheckResult } from "./types.js";
 
@@ -17,13 +22,12 @@ async function readValidAlistigoTypes(workspaceRoot: string): Promise<string[]> 
 }
 
 // fallow-ignore-next-line complexity
-function expectedAlistigoType(node: CalmNode): string {
+function expectedAlistigoType(node: CalmNode, implPkg: string): string {
   if (node["node-type"] === "skill") return "skill";
   if (node["node-type"] === "plugin") return "plugin";
 
-  // Document modules use the "document" type regardless of their ddd-layer
-  const pkg = node["core-npm-package"];
-  if (pkg?.endsWith("-document")) return "document";
+  // Document modules: implementation package name ends with "-document"
+  if (implPkg.replace(/^@[^/]+\//, "").endsWith("-document")) return "document";
 
   switch (node["ddd-layer"]) {
     case "Domain":
@@ -61,7 +65,7 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
   }
 
   for (const node of nodes) {
-    const pkg = node["core-npm-package"];
+    const pkg = resolveImplPackage(node, ctx.artifactName);
     if (pkg === undefined) continue;
 
     const pkgDir = resolvePackageDir(ctx.workspaceRoot, pkg);
@@ -73,7 +77,7 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
     }
 
     const shortName = pkg.replace(/^@[^/]+\//, "");
-    const expected = expectedAlistigoType(node);
+    const expected = expectedAlistigoType(node, pkg);
     const alistigoField = pkgJson.alistigo;
 
     if (typeof alistigoField !== "object" || alistigoField === null || !("type" in alistigoField)) {
