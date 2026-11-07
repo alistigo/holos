@@ -28,6 +28,7 @@ pre-push:
       run: pnpm run build
     test:
       run: pnpm test
+      timeout: 20m
 
 post-merge:
   commands:
