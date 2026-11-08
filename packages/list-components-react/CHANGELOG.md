@@ -1,3 +1,20 @@
+## 0.5.7 (2026-11-08)
+
+### 🩹 Fixes
+
+- **arch:** route list-domain id utilities through list-document, add artifact arch-check to CI and pre-push ([fa1886e](https://github.com/alistigo/holos/commit/fa1886e))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-list-checkbox-plugin to 0.3.7
+- Updated artifact-plugin-api to 0.6.6
+- Updated list-document to 0.5.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.5.6 (2026-11-08)
 
 ### 🩹 Fixes
