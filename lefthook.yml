@@ -22,6 +22,8 @@ pre-push:
       run: pnpm run qa:audit
     artifact-sandbox-check:
       run: pnpm run qa:artifact-sandbox-check
+    artifact-arch-check:
+      run: pnpm run qa:artifact-arch-check
     typecheck:
       run: pnpm run build:typecheck
     build:

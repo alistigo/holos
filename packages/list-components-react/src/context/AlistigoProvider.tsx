@@ -11,7 +11,7 @@
 
 import { createLogger, type Logger, type PluginEventBus } from "@alistigo/artifact-plugin-api";
 import type { AlistigoDocument, ListApplicationService } from "@alistigo/list-document";
-import { generateActorId, type ListId, parseListElementId } from "@alistigo/list-domain";
+import { generateActorId, type ListId, parseListElementId } from "@alistigo/list-document";
 import {
   createContext,
   type JSX,
