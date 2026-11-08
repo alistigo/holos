@@ -1,3 +1,28 @@
+## 0.8.6 (2026-11-08)
+
+### 🩹 Fixes
+
+- **tests:** make Playwright/Cucumber e2e tests pass in headless Chromium sandbox ([81f5cf7](https://github.com/alistigo/holos/commit/81f5cf7))
+- **arch:** fix package conformance for list artifact ([79dc9c6](https://github.com/alistigo/holos/commit/79dc9c6))
+- **arch:** add missing alistigo metadata to list artifact packages ([a90186d](https://github.com/alistigo/holos/commit/a90186d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.5
+- Updated artifact-list-checkbox-plugin to 0.3.6
+- Updated list-components-react to 0.5.6
+- Updated artifact-plugin-api to 0.6.5
+- Updated claude-artifact-api to 0.4.5
+- Updated artifact-core to 0.4.5
+- Updated list-document to 0.5.6
+- Updated list-domain to 0.4.6
+- Updated logger to 0.4.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.8.5 (2026-10-21)
 
 ### 🧱 Updated Dependencies

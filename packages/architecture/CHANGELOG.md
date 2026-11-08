@@ -1,3 +1,18 @@
+## 1.3.2 (2026-11-08)
+
+### 🚀 Features
+
+- **artifact-arch-check:** dev-tool type exemption, JSON schema for alistigo metadata, root README ([7c98cc6](https://github.com/alistigo/holos/commit/7c98cc6))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.3.1 (2026-10-21)
 
 ### 🚀 Features

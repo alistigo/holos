@@ -1,3 +1,24 @@
+## 0.4.7 (2026-11-08)
+
+### 🩹 Fixes
+
+- **tests:** make Playwright/Cucumber e2e tests pass in headless Chromium sandbox ([81f5cf7](https://github.com/alistigo/holos/commit/81f5cf7))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.5
+- Updated list-components-react to 0.5.6
+- Updated local-storage-plugin to 0.5.5
+- Updated claude-artifact-api to 0.4.5
+- Updated artifact-manager to 0.4.5
+- Updated artifact-list to 0.8.6
+- Updated list-document to 0.5.6
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.6 (2026-10-21)
 
 ### 🧱 Updated Dependencies

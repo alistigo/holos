@@ -1,3 +1,18 @@
+## 0.4.6 (2026-11-08)
+
+### 🩹 Fixes
+
+- **arch:** add missing alistigo metadata to list artifact packages ([a90186d](https://github.com/alistigo/holos/commit/a90186d))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.2
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.5 (2026-10-21)
 
 ### 🧱 Updated Dependencies

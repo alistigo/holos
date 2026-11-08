@@ -1,3 +1,22 @@
+## 0.3.2 (2026-11-08)
+
+### 🚀 Features
+
+- **artifact-arch-check:** dev-tool type exemption, JSON schema for alistigo metadata, root README ([7c98cc6](https://github.com/alistigo/holos/commit/7c98cc6))
+
+### 🩹 Fixes
+
+- **lint:** apply biome auto-fixes surfaced by pre-push hook ([b3ce0f4](https://github.com/alistigo/holos/commit/b3ce0f4))
+
+### 🧱 Updated Dependencies
+
+- Updated archify-render to 0.2.3
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.1 (2026-10-21)
 
 ### 🧱 Updated Dependencies

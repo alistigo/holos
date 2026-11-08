@@ -1,3 +1,18 @@
+## 0.3.5 (2026-11-08)
+
+### 🩹 Fixes
+
+- **arch:** add missing alistigo metadata to list artifact packages ([a90186d](https://github.com/alistigo/holos/commit/a90186d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-list-format to 0.3.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.4 (2026-10-21)
 
 ### 🧱 Updated Dependencies

@@ -1,3 +1,9 @@
+## 0.3.6 (2026-11-08)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-manager to 0.4.5
+
 ## 0.3.5 (2026-10-21)
 
 ### 🧱 Updated Dependencies

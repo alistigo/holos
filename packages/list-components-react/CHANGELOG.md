@@ -1,3 +1,21 @@
+## 0.5.6 (2026-11-08)
+
+### 🩹 Fixes
+
+- **arch:** add missing alistigo metadata to list artifact packages ([a90186d](https://github.com/alistigo/holos/commit/a90186d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-list-checkbox-plugin to 0.3.6
+- Updated artifact-plugin-api to 0.6.5
+- Updated list-document to 0.5.6
+- Updated list-domain to 0.4.6
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.5.5 (2026-10-21)
 
 ### 🧱 Updated Dependencies

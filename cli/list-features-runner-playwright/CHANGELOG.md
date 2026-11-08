@@ -1,3 +1,21 @@
+## 0.4.7 (2026-11-08)
+
+### 🩹 Fixes
+
+- **tests:** untrack .env, add .env.example ([4f75cc7](https://github.com/alistigo/holos/commit/4f75cc7))
+- **tests:** make Playwright/Cucumber e2e tests pass in headless Chromium sandbox ([81f5cf7](https://github.com/alistigo/holos/commit/81f5cf7))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.5
+- Updated list-document to 0.5.6
+- Updated list-features to 0.5.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.6 (2026-10-21)
 
 ### 🧱 Updated Dependencies
