@@ -28,6 +28,13 @@
         "cwd": "cli/artifact-arch-check"
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "cli/artifact-arch-check"
+      }
+    },
     "run": {
       "executor": "nx:run-commands",
       "options": {
