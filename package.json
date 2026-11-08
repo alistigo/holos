@@ -21,6 +21,7 @@
     "qa:lint": "nx run-many -t qa:lint",
     "qa:arch-check": "depcruise apps packages cli --config .dependency-cruiser.cjs",
     "qa:arch-calm": "nx run architecture:qa:arch-calm",
+    "qa:artifact-arch-check": "nx run artifact-arch-check:qa:artifact-arch-check",
     "server:start:dev": "pm2 start pm2.ecosystem.config.cjs",
     "server:kill-all": "pm2 delete all 2>/dev/null; true",
     "server:status": "pm2 status",

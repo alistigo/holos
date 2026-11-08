@@ -34,6 +34,13 @@
         "command": "bun src/cli.ts",
         "cwd": "cli/artifact-arch-check"
       }
+    },
+    "qa:artifact-arch-check": {
+      "executor": "nx:run-commands",
+      "dependsOn": [{ "target": "build", "projects": "self" }],
+      "options": {
+        "command": "bun cli/artifact-arch-check/dist/cli.js check list"
+      }
     }
   }
 }

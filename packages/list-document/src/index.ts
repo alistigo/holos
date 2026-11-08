@@ -18,6 +18,7 @@ export { validateDocument } from "./validate.js";
 import documentSchemaJson from "./schemas/document.json" with { type: "json" };
 export const documentSchema = documentSchemaJson;
 
+export { generateActorId, type ListId, parseListElementId } from "@alistigo/list-domain";
 export {
   type AlistigoListStore,
   ListApplicationService,

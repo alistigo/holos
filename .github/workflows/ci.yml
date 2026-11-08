@@ -118,6 +118,9 @@ jobs:
       - name: Arch check
         run: pnpm qa:arch-check
 
+      - name: Artifact arch check
+        run: pnpm qa:artifact-arch-check
+
       - name: Fallow dead-code audit
         uses: fallow-rs/fallow@v2
         with:
