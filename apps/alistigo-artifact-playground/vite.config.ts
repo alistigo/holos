@@ -15,6 +15,7 @@
  *   3. Add a `build:<new>` target in this app's project.json.
  */
 
+import fs from "node:fs";
 import os from "node:os";
 import path, { resolve } from "node:path";
 import linguiMacro from "@lingui/babel-plugin-lingui-macro";
@@ -69,6 +70,28 @@ const activeCatalogPath = path.join(componentsPackageRoot, `src/locales/${LOCALE
 export default defineConfig(({ command }) => ({
   base: "./", // relative paths — required for GitHub Pages subpath deployment
   plugins: [
+    {
+      name: "serve-local-dist",
+      configureServer(server) {
+        server.middlewares.use("/__local-dist", (req, res, next) => {
+          const match = /^\/([^/]+)\/index\.js$/.exec(req.url ?? "");
+          if (!match) {
+            next();
+            return;
+          }
+          const pkgName = match[1];
+          const distFile = path.resolve(__dirname, `../../packages/${pkgName}/dist/index.js`);
+          fs.readFile(distFile, (err, data) => {
+            if (err) {
+              next();
+              return;
+            }
+            res.setHeader("Content-Type", "application/javascript");
+            res.end(data);
+          });
+        });
+      },
+    },
     {
       name: "patch-vite-console-methods",
       transform(code, id) {
