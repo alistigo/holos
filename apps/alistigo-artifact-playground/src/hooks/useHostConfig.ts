@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { KNOWN_APPS } from "../constants";
 
+export type PlaygroundMode = "dev" | "prod-local";
+
 export interface Config {
   app: string;
   lang: string;
@@ -13,6 +15,8 @@ export interface Config {
   plugins: Record<string, Record<string, unknown>>;
   /** Simulates a published artifact — injects window.claudeArtifactStatus into the iframe. Only relevant when aiContext === "claude". */
   published: boolean;
+  /** Controls the artifact script source: "dev" = Vite HMR, "prod-local" = local dist build. */
+  mode: PlaygroundMode;
 }
 
 /** Set VITE_DEFAULT_ARTIFACT at build time to pin a specific artifact as the landing default. */
@@ -29,6 +33,7 @@ export function useHostConfig() {
     rawMarkdown: "",
     plugins: {},
     published: true,
+    mode: "dev",
   });
   return { config, setConfig };
 }

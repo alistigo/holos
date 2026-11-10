@@ -30,6 +30,7 @@ const defaultConfig = {
   rawMarkdown: "",
   plugins: {},
   published: false,
+  mode: "dev" as const,
 };
 
 const noopSimulator: ClaudeSimulatorProps = {

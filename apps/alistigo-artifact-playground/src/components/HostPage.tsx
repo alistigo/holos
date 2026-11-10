@@ -6,7 +6,7 @@ import { useClaudeCompleteSimulator } from "../hooks/useClaudeCompleteSimulator"
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useMarkdownFixturesMap } from "../hooks/useDocumentFixtures";
 import { useDownloadSimulator } from "../hooks/useDownloadSimulator";
-import { type Config, useHostConfig } from "../hooks/useHostConfig";
+import { type Config, type PlaygroundMode, useHostConfig } from "../hooks/useHostConfig";
 import { useIframeControls } from "../hooks/useIframeControls";
 import { useLocalStorageEntries } from "../hooks/useLocalStorageEntries";
 import { useNavigationSimulator } from "../hooks/useNavigationSimulator";
@@ -34,8 +34,13 @@ const DEV_PLUGIN_URL_OVERRIDES: Record<string, string> | undefined = import.meta
     )
   : undefined;
 
-function resolveScriptUrl(isDev: boolean, app: string): string {
-  return isDev ? DEV_ENTRY_URL : (ARTIFACT_REGISTRY[app]?.cdnUrl ?? "");
+function resolveScriptUrl(mode: PlaygroundMode, app: string): string {
+  if (mode === "dev") return DEV_ENTRY_URL;
+  if (mode === "prod-local") {
+    const name = app.replace(/^@[^/]+\//, "");
+    return `/__local-dist/${name}/index.js`;
+  }
+  return ARTIFACT_REGISTRY[app]?.cdnUrl ?? "";
 }
 
 function useMarkdown(config: Config): string | undefined {
@@ -84,10 +89,10 @@ function HostPage(): JSX.Element {
       buildIframeSrcdoc({
         config,
         ...(markdown !== undefined ? { aiInputMarkdown: markdown } : {}),
-        scriptUrl: resolveScriptUrl(import.meta.env.DEV, config.app),
+        scriptUrl: resolveScriptUrl(config.mode, config.app),
         csp: SRCDOC_CSP,
-        isDev: import.meta.env.DEV,
-        devPluginUrlOverrides: DEV_PLUGIN_URL_OVERRIDES,
+        isDev: config.mode === "dev",
+        devPluginUrlOverrides: config.mode === "dev" ? DEV_PLUGIN_URL_OVERRIDES : undefined,
       }),
     [config, markdown],
   );
