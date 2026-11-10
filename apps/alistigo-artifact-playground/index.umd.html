@@ -3,11 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alistigo (UMD preview)</title>
+    <title>Alistigo (ESM preview)</title>
+    <!-- React import map must come before any type="module" script -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://cdn.jsdelivr.net/npm/react@19/+esm",
+          "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19/jsx-runtime/+esm",
+          "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19/+esm",
+          "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19/client/+esm"
+        }
+      }
+    </script>
   </head>
   <body>
     <!--
-      UMD preview mode: the built @alistigo/artifact bundle is served at
+      ESM preview mode: the built @alistigo/artifact bundle is served at
       /index.umd.js by the Vite middleware in vite.config.umd.ts.
       The bundle auto-mounts using the #alistigo-config below.
       Edit the config to test different documents.
@@ -20,13 +31,13 @@
           "@type": "ItemList",
           "alistigo:listId": "lst_00000000000000000000000000",
           "alistigo:schemaVersion": "1.0.0",
-          "name": "UMD Preview List",
+          "name": "ESM Preview List",
           "itemListElement": [],
           "alistigo:listEventLog": []
         }
       }
     </script>
     <div id="root"></div>
-    <script src="/index.umd.js"></script>
+    <script type="module" src="/index.umd.js"></script>
   </body>
 </html>

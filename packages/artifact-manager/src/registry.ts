@@ -13,7 +13,7 @@ export interface ArtifactEntry {
  */
 export const ARTIFACT_REGISTRY: Record<string, ArtifactEntry> = {
   "@alistigo/artifact-list": {
-    cdnUrl: "https://cdn.jsdelivr.net/npm/@alistigo/artifact-list@0/dist/index.umd.js",
+    cdnUrl: "https://cdn.jsdelivr.net/npm/@alistigo/artifact-list@0/dist/index.js",
     skillPackage: "@alistigo/artifact-list-skill",
     availablePlugins: [
       "@alistigo/artifact-user-plugin",
