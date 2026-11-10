@@ -25,14 +25,14 @@ export const SRCDOC_CSP = [
   "media-src 'self' blob:",
 ].join("; ");
 
-// React import map for prod mode — same URLs as artifact-manager/init.ts.
+// React import map for prod mode — same pinned URLs as artifact-manager/init.ts.
 // In dev, Vite resolves React through its own module graph; no map needed.
 const REACT_IMPORT_MAP = JSON.stringify({
   imports: {
-    react: "https://cdn.jsdelivr.net/npm/react@19/+esm",
-    "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19/jsx-runtime/+esm",
-    "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19/+esm",
-    "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19/client/+esm",
+    react: "https://cdn.jsdelivr.net/npm/react@19.2.5/+esm",
+    "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19.2.5/jsx-runtime/+esm",
+    "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/+esm",
+    "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/client/+esm",
   },
 });
 
