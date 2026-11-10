@@ -3,14 +3,16 @@ import { ARTIFACT_REGISTRY } from "./registry.js";
 
 // React import map for the artifact ES module and its plugins.
 // Must be injected before any <script type="module"> on the page.
-// All four specifiers resolve through jsDelivr so the browser module cache
-// deduplicates them — artifact and plugins share one React instance.
+// Pinned to exact X.Y.Z versions so the browser module-cache key matches the
+// absolute internal URLs that jsDelivr's /+esm transpilation emits for peer
+// deps — prevents two-React-instances / "f.H is null" hook dispatcher crashes.
+// react and react-dom must always be pinned to the same version.
 const REACT_IMPORT_MAP = JSON.stringify({
   imports: {
-    react: "https://cdn.jsdelivr.net/npm/react@19/+esm",
-    "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19/jsx-runtime/+esm",
-    "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19/+esm",
-    "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19/client/+esm",
+    react: "https://cdn.jsdelivr.net/npm/react@19.2.5/+esm",
+    "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19.2.5/jsx-runtime/+esm",
+    "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/+esm",
+    "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/client/+esm",
   },
 });
 
