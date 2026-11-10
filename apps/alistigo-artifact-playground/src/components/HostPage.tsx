@@ -34,6 +34,7 @@ const DEV_PLUGIN_URL_OVERRIDES: Record<string, string> | undefined = import.meta
     )
   : undefined;
 
+// fallow-ignore-next-line complexity
 function resolveScriptUrl(mode: PlaygroundMode, app: string): string {
   if (mode === "dev") return DEV_ENTRY_URL;
   if (mode === "prod-local") {
