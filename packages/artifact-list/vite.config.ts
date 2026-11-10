@@ -1,9 +1,11 @@
 /**
  * ES module build for @alistigo/artifact-list.
  *
- * React is externalized — it must be provided by the host page via an import
- * map pointing at jsDelivr (or equivalent CDN). This ensures the artifact
- * and any dynamically-loaded plugins share one React instance.
+ * React (bare "react" / "react/jsx-runtime") is externalized — provided by the
+ * host page via an import map pointing at jsDelivr. react-dom is intentionally
+ * bundled so rollup converts its internal require('react') to a bare import,
+ * ensuring the artifact, bundled react-dom, and any plugins all share one
+ * React instance through the same import-map URL.
  *
  * The active locale is baked at build time via LOCALE env var (default: en).
  * The virtual:alistigo-active-catalog alias maps to the actual .po file so
@@ -49,8 +51,10 @@ export default defineConfig({
       fileName: () => "index.js",
     },
     rollupOptions: {
-      // React is provided by the host page import map — do not bundle it.
-      external: ["react", "react-dom", "react-dom/client", "react/jsx-runtime"],
+      // Only bare React is externalized — provided by the host page import map.
+      // react-dom is bundled so rollup converts its internal require('react') to a
+      // bare import, ensuring all consumers share one React instance via the import map.
+      external: ["react", "react/jsx-runtime"],
     },
     outDir: "dist",
     minify: "esbuild",
