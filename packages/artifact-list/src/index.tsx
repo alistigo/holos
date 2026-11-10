@@ -1,24 +1,18 @@
 /**
  * @alistigo/artifact-list
  *
- * Self-contained UMD bundle for Claude HTML artifacts and standalone pages.
- * Bundles React, Lingui, all Alistigo packages into one file with no
- * external dependencies.
+ * ES module for Claude HTML artifacts and standalone pages.
+ * React is externalized — the host page must provide an import map pointing
+ * react / react-dom / react/jsx-runtime at jsDelivr (or equivalent CDN).
  *
- * Auto-mount (default — no JavaScript required):
- *   <script src="index.umd.js"></script>
+ * Auto-mount (default):
+ *   <script type="importmap">{ "imports": { "react": "...", ... } }</script>
+ *   <script type="module" src="index.js"></script>
  *
- *   Optional config before the bundle script:
+ *   Optional config before the module script:
  *   <script type="application/json" id="alistigo-config">
  *     { "container": "#app", "document": { ... } }
  *   </script>
- *
- * Explicit mount (advanced — do not mix with auto-mount):
- *   <script src="index.umd.js"></script>
- *   <script>Alistigo.mount('#root', { document: {...} }).catch(console.error);</script>
- *
- * mount() is async (it dynamically imports any configured plugins before
- * rendering) — callers relying on synchronous completion must update to await it.
  */
 
 /*

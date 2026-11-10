@@ -26,14 +26,14 @@
   ],
   "private": false,
   "type": "module",
-  "description": "Self-contained UMD bundle of the Alistigo list widget — for Claude HTML artifacts and standalone pages. Includes React, Lingui, and all Alistigo packages; no external dependencies required.",
+  "description": "ES module build of the Alistigo list widget — for Claude HTML artifacts and standalone pages. React is a required peer dependency provided via import map.",
   "exports": {
     ".": {
       "types": "./src/index.tsx",
-      "default": "./dist/index.umd.js"
+      "default": "./dist/index.js"
     }
   },
-  "main": "./dist/index.umd.js",
+  "main": "./dist/index.js",
   "types": "./src/index.tsx",
   "files": [
     "dist"

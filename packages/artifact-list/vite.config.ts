@@ -1,15 +1,15 @@
 /**
- * UMD bundle config for @alistigo/artifact-list.
+ * ES module build for @alistigo/artifact-list.
  *
- * Bundles everything (React, Lingui, all Alistigo packages) into one
- * self-contained UMD file — no external dependencies.
+ * React is externalized — it must be provided by the host page via an import
+ * map pointing at jsDelivr (or equivalent CDN). This ensures the artifact
+ * and any dynamically-loaded plugins share one React instance.
  *
  * The active locale is baked at build time via LOCALE env var (default: en).
  * The virtual:alistigo-active-catalog alias maps to the actual .po file so
  * the Lingui vite plugin can compile it at bundle time.
  *
- * CSS (Tailwind v4 + Radix Colors) is injected into the UMD file at build
- * time so the bundle is truly self-contained.
+ * CSS (Tailwind v4 + Radix Colors) is injected into the JS at build time.
  */
 
 import path from "node:path";
@@ -45,12 +45,13 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
-      name: "Alistigo",
-      formats: ["umd"],
-      fileName: () => "index.umd.js",
+      formats: ["es"],
+      fileName: () => "index.js",
     },
-    // Bundle everything — no external deps; self-contained artifact
-    rollupOptions: {},
+    rollupOptions: {
+      // React is provided by the host page import map — do not bundle it.
+      external: ["react", "react-dom", "react-dom/client", "react/jsx-runtime"],
+    },
     outDir: "dist",
     minify: "esbuild",
     sourcemap: true,
