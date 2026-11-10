@@ -1,7 +1,12 @@
 import path from "node:path";
 import { defineConfig } from "vite";
 
-export function definePluginConfig(dirname: string) {
+interface PluginBuildOptions {
+  /** Packages to leave as bare-specifier imports rather than bundling. Use for peer dependencies. */
+  external?: string[];
+}
+
+export function definePluginConfig(dirname: string, options?: PluginBuildOptions) {
   return defineConfig({
     define: {
       "process.env.NODE_ENV": JSON.stringify("production"),
@@ -12,9 +17,9 @@ export function definePluginConfig(dirname: string) {
         formats: ["es"],
         fileName: () => "index.js",
       },
-      // Bundle everything — no external deps; must be `await import()`-able with
-      // zero bare-specifier imports left in the output.
-      rollupOptions: {},
+      rollupOptions: {
+        external: options?.external ?? [],
+      },
       outDir: "dist",
       minify: "esbuild",
       sourcemap: true,
