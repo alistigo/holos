@@ -1,3 +1,21 @@
+## 0.2.7 (2026-11-11)
+
+### 🩹 Fixes
+
+- **react:** bundle React into artifact-list, eliminate CDN import maps ([5b728d3](https://github.com/alistigo/holos/commit/5b728d3))
+- **plugins:** externalize React from react-using plugin bundles ([b2e8c19](https://github.com/alistigo/holos/commit/b2e8c19))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.7
+- Updated artifact-plugin-api to 0.6.7
+- Updated logger to 0.4.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.6 (2026-11-08)
 
 ### 🧱 Updated Dependencies

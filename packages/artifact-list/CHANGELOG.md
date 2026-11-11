@@ -1,3 +1,31 @@
+## 0.9.0 (2026-11-11)
+
+### 🚀 Features
+
+- **artifact-list:** convert to ESM, add React import map for shared CDN instance ([2113807](https://github.com/alistigo/holos/commit/2113807))
+
+### 🩹 Fixes
+
+- **react:** bundle React into artifact-list, eliminate CDN import maps ([5b728d3](https://github.com/alistigo/holos/commit/5b728d3))
+- **artifact-list:** bundle react-dom to fix two-React-instances error in prod-local mode ([0f0ff14](https://github.com/alistigo/holos/commit/0f0ff14))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.7
+- Updated artifact-list-checkbox-plugin to 0.3.8
+- Updated list-components-react to 0.5.8
+- Updated artifact-plugin-api to 0.6.7
+- Updated claude-artifact-api to 0.4.7
+- Updated artifact-core to 0.4.7
+- Updated list-document to 0.5.8
+- Updated list-domain to 0.4.8
+- Updated logger to 0.4.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.8.7 (2026-11-08)
 
 ### 🧱 Updated Dependencies

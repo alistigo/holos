@@ -1,3 +1,23 @@
+## 0.4.7 (2026-11-11)
+
+### 🚀 Features
+
+- **artifact-list:** convert to ESM, add React import map for shared CDN instance ([2113807](https://github.com/alistigo/holos/commit/2113807))
+
+### 🩹 Fixes
+
+- **react:** bundle React into artifact-list, eliminate CDN import maps ([5b728d3](https://github.com/alistigo/holos/commit/5b728d3))
+- **react-import-map:** pin react and react-dom to exact 19.2.5 in all import maps ([baa8e6b](https://github.com/alistigo/holos/commit/baa8e6b))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-config-format to 0.3.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.6 (2026-11-08)
 
 ### 🧱 Updated Dependencies

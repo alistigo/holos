@@ -1,3 +1,33 @@
+## 0.4.9 (2026-11-11)
+
+### 🚀 Features
+
+- **playground:** hide Source selector and use CDN in production builds ([d25012c](https://github.com/alistigo/holos/commit/d25012c))
+- **playground:** serve plugins from local dist in prod-local mode ([4f729a9](https://github.com/alistigo/holos/commit/4f729a9))
+- **playground:** add prod-local mode to test locally built artifact bundles ([8010e8b](https://github.com/alistigo/holos/commit/8010e8b))
+- **artifact-list:** convert to ESM, add React import map for shared CDN instance ([2113807](https://github.com/alistigo/holos/commit/2113807))
+
+### 🩹 Fixes
+
+- **react:** bundle React into artifact-list, eliminate CDN import maps ([5b728d3](https://github.com/alistigo/holos/commit/5b728d3))
+- **react-import-map:** pin react and react-dom to exact 19.2.5 in all import maps ([baa8e6b](https://github.com/alistigo/holos/commit/baa8e6b))
+- **playground:** suppress fallow CRAP on resolveScriptUrl ([048fb48](https://github.com/alistigo/holos/commit/048fb48))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.7
+- Updated list-components-react to 0.5.8
+- Updated local-storage-plugin to 0.5.7
+- Updated claude-artifact-api to 0.4.7
+- Updated artifact-manager to 0.4.7
+- Updated artifact-list to 0.9.0
+- Updated list-document to 0.5.8
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.8 (2026-11-08)
 
 ### 🧱 Updated Dependencies
