@@ -57,6 +57,7 @@
     "@nx/workspace": "22.5.4",
     "@types/bun": "^1.2.0",
     "dependency-cruiser": "^17.4.0",
+    "rollup-plugin-external-globals": "^0.11.0",
     "fallow": "^2.80.0",
     "lefthook": "^2.1.8",
     "nx": "22.5.4",

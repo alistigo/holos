@@ -1,21 +1,6 @@
 import { validateArtifactConfig } from "@alistigo/artifact-config-format";
 import { ARTIFACT_REGISTRY } from "./registry.js";
 
-// React import map for the artifact ES module and its plugins.
-// Must be injected before any <script type="module"> on the page.
-// Pinned to exact X.Y.Z versions so the browser module-cache key matches the
-// absolute internal URLs that jsDelivr's /+esm transpilation emits for peer
-// deps — prevents two-React-instances / "f.H is null" hook dispatcher crashes.
-// react and react-dom must always be pinned to the same version.
-const REACT_IMPORT_MAP = JSON.stringify({
-  imports: {
-    react: "https://cdn.jsdelivr.net/npm/react@19.2.5/+esm",
-    "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19.2.5/jsx-runtime/+esm",
-    "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/+esm",
-    "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/client/+esm",
-  },
-});
-
 /**
  * Initialise an Alistigo artifact on the current page.
  *
@@ -45,16 +30,6 @@ export default function init(selector: string, config: unknown): void {
 
   if ((target as HTMLElement).id !== "app") {
     (target as HTMLElement).id = "app";
-  }
-
-  // Inject the React import map before the module script.
-  // The spec requires import maps to precede all <script type="module"> tags.
-  // Skip if one already exists (e.g. second artifact on the same page).
-  if (!document.querySelector('script[type="importmap"]')) {
-    const importMap = document.createElement("script");
-    importMap.type = "importmap";
-    importMap.textContent = REACT_IMPORT_MAP;
-    document.head.prepend(importMap);
   }
 
   const script = document.createElement("script");
