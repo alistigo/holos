@@ -34,10 +34,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-    "react": ">=19",
-    "react-dom": ">=19"
-  },
   "dependencies": {
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/artifact-core-components-react": "workspace:*",

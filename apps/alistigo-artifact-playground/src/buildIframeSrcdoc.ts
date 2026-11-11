@@ -25,21 +25,6 @@ export const SRCDOC_CSP = [
   "media-src 'self' blob:",
 ].join("; ");
 
-// React import map for prod mode — same pinned URLs as artifact-manager/init.ts.
-// In dev, Vite resolves React through its own module graph; no map needed.
-const REACT_IMPORT_MAP = JSON.stringify({
-  imports: {
-    react: "https://cdn.jsdelivr.net/npm/react@19.2.5/+esm",
-    "react/jsx-runtime": "https://cdn.jsdelivr.net/npm/react@19.2.5/jsx-runtime/+esm",
-    "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/+esm",
-    "react-dom/client": "https://cdn.jsdelivr.net/npm/react-dom@19.2.5/client/+esm",
-  },
-});
-
-function buildReactImportMap(): string {
-  return `<script type="importmap">${REACT_IMPORT_MAP}</script>`;
-}
-
 function buildEntryScript(scriptUrl: string): string {
   return `<script type="module" src="${scriptUrl}"></script>`;
 }
@@ -132,7 +117,6 @@ export function buildIframeSrcdoc({
       (function(){var c=window.console||{};var fb=(c.log||function(){}).bind(c);var nc={};["log","debug","info","warn","error","trace","group","groupCollapsed","groupEnd","dir","table","assert","count","countReset","time","timeEnd","timeLog","clear","profile","profileEnd","dirxml"].forEach(function(m){nc[m]=typeof c[m]==="function"?c[m].bind(c):fb;});try{window.console=nc;}catch(e){try{Object.defineProperty(window,"console",{value:nc,writable:true,configurable:true});}catch(e2){}}})();
     </script>
     ${isClaude ? `${buildClaudeHeadScripts()}\n    ${buildArtifactStatusScript(config.published)}` : ""}
-    ${!isDev ? buildReactImportMap() : ""}
     <meta http-equiv="Content-Security-Policy" content="${csp}" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

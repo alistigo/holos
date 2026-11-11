@@ -2,11 +2,12 @@
  * @alistigo/artifact-list
  *
  * ES module for Claude HTML artifacts and standalone pages.
- * React is externalized — the host page must provide an import map pointing
- * react / react-dom / react/jsx-runtime at jsDelivr (or equivalent CDN).
+ * React is bundled — no host-page import map required. The bundled React
+ * instance is exposed on globalThis.__ALISTIGO_REACT__ so plugins loaded
+ * later via dynamic import share the same React instance without bundling
+ * their own copy.
  *
  * Auto-mount (default):
- *   <script type="importmap">{ "imports": { "react": "...", ... } }</script>
  *   <script type="module" src="index.js"></script>
  *
  *   Optional config before the module script:
@@ -15,14 +16,17 @@
  *   </script>
  */
 
-/*
- * Embedded-app entry CSS. Imports the components-package CSS (which sets
- * up Tailwind v4 + Radix Colors + semantic tokens), then adds an
- * @source for this app's own files so utility classes used in
- * App.tsx / DevFixturePicker.tsx aren't tree-shaken away.
- */
-
 import "./styles/app.css";
+
+// Expose bundled React on globalThis so dynamically-loaded plugins can share
+// the same instance. Must run before any plugin import.
+import * as React from "react";
+import * as ReactJSXRuntime from "react/jsx-runtime";
+import * as ReactDOM from "react-dom";
+
+(globalThis as Record<string, unknown>).__ALISTIGO_REACT__ = React;
+(globalThis as Record<string, unknown>).__ALISTIGO_REACT_DOM__ = ReactDOM;
+(globalThis as Record<string, unknown>).__ALISTIGO_REACT_JSX_RUNTIME__ = ReactJSXRuntime;
 
 import { setLogLevel } from "@alistigo/pino-logger-plugin";
 import autoMount from "./auto-mount.js";

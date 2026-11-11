@@ -26,7 +26,7 @@
   ],
   "private": false,
   "type": "module",
-  "description": "ES module build of the Alistigo list widget — for Claude HTML artifacts and standalone pages. React is a required peer dependency provided via import map.",
+  "description": "ES module build of the Alistigo list widget — for Claude HTML artifacts and standalone pages. React is fully bundled; plugins share it via globalThis.__ALISTIGO_REACT__.",
   "exports": {
     ".": {
       "types": "./src/index.tsx",
