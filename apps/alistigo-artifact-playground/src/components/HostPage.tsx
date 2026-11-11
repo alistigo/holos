@@ -45,10 +45,12 @@ const PROD_LOCAL_PLUGIN_URL_OVERRIDES: Record<string, string> = Object.fromEntri
 
 // fallow-ignore-next-line complexity
 function resolveScriptUrl(mode: PlaygroundMode, app: string): string {
-  if (mode === "dev") return DEV_ENTRY_URL;
-  if (mode === "prod-local") {
-    const name = app.replace(/^@[^/]+\//, "");
-    return `/__local-dist/${name}/index.js`;
+  if (import.meta.env.DEV) {
+    if (mode === "dev") return DEV_ENTRY_URL;
+    if (mode === "prod-local") {
+      const name = app.replace(/^@[^/]+\//, "");
+      return `/__local-dist/${name}/index.js`;
+    }
   }
   return ARTIFACT_REGISTRY[app]?.cdnUrl ?? "";
 }

@@ -42,19 +42,21 @@ function ConfigTab({
       <section>
         <SectionHeader label="Playground config" />
         <div className="flex flex-col gap-2">
-          <label className="flex flex-col gap-1">
-            <span className="font-medium text-gray-600 text-xs">Source</span>
-            <select
-              className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
-              value={config.mode}
-              onChange={(e) =>
-                onConfigChange((c) => ({ ...c, mode: e.target.value as PlaygroundMode }))
-              }
-            >
-              <option value="dev">dev</option>
-              <option value="prod-local">prod local</option>
-            </select>
-          </label>
+          {import.meta.env.DEV && (
+            <label className="flex flex-col gap-1">
+              <span className="font-medium text-gray-600 text-xs">Source</span>
+              <select
+                className="px-2 py-1.5 border border-gray-300 rounded text-sm bg-white"
+                value={config.mode}
+                onChange={(e) =>
+                  onConfigChange((c) => ({ ...c, mode: e.target.value as PlaygroundMode }))
+                }
+              >
+                <option value="dev">dev</option>
+                <option value="prod-local">prod local</option>
+              </select>
+            </label>
+          )}
 
           <label className="flex flex-col gap-1">
             <span className="font-medium text-gray-600 text-xs">AI Context</span>
