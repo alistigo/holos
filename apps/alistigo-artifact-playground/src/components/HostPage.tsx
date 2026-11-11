@@ -34,6 +34,15 @@ const DEV_PLUGIN_URL_OVERRIDES: Record<string, string> | undefined = import.meta
     )
   : undefined;
 
+// Prod-local: point plugins at the local built dist files via the /__local-dist/ middleware,
+// so prod-local mode is fully self-contained without hitting jsDelivr.
+const PROD_LOCAL_PLUGIN_URL_OVERRIDES: Record<string, string> = Object.fromEntries(
+  Object.keys(__ALISTIGO_DEV_PLUGIN_SRC_PATHS__).map((packageName) => {
+    const name = packageName.replace(/^@[^/]+\//, "");
+    return [packageName, `/__local-dist/${name}/index.js`];
+  }),
+);
+
 // fallow-ignore-next-line complexity
 function resolveScriptUrl(mode: PlaygroundMode, app: string): string {
   if (mode === "dev") return DEV_ENTRY_URL;
@@ -93,7 +102,12 @@ function HostPage(): JSX.Element {
         scriptUrl: resolveScriptUrl(config.mode, config.app),
         csp: SRCDOC_CSP,
         isDev: config.mode === "dev",
-        devPluginUrlOverrides: config.mode === "dev" ? DEV_PLUGIN_URL_OVERRIDES : undefined,
+        devPluginUrlOverrides:
+          config.mode === "dev"
+            ? DEV_PLUGIN_URL_OVERRIDES
+            : config.mode === "prod-local"
+              ? PROD_LOCAL_PLUGIN_URL_OVERRIDES
+              : undefined,
       }),
     [config, markdown],
   );
