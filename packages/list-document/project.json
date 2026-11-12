@@ -15,18 +15,18 @@
       }
     },
     "test:schema": {
-      "dependsOn": [{ "target": "build", "projects": ["document-validator"] }],
+      "dependsOn": [{ "target": "build", "projects": ["core-document-validator"] }],
       "executor": "nx:run-commands",
       "options": {
-        "command": "bun ../../cli/document-validator/dist/cli.js validate-schema src/schemas/document.json",
+        "command": "bun ../../cli/core-document-validator/dist/cli.js validate-schema src/schemas/document.json",
         "cwd": "packages/list-document"
       }
     },
     "test:examples": {
-      "dependsOn": [{ "target": "build", "projects": ["document-validator"] }],
+      "dependsOn": [{ "target": "build", "projects": ["core-document-validator"] }],
       "executor": "nx:run-commands",
       "options": {
-        "command": "bun ../../cli/document-validator/dist/cli.js --schema src/schemas/document.json examples/*.json",
+        "command": "bun ../../cli/core-document-validator/dist/cli.js --schema src/schemas/document.json examples/*.json",
         "cwd": "packages/list-document"
       }
     },

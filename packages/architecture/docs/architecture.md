@@ -191,7 +191,7 @@ packages/
 └── local-storage-plugin/          # localStorage backend
 
 cli/
-├── document-validator/            # validate any artifact document against a JSON Schema
+├── core-document-validator/       # validate any artifact document against a JSON Schema
 ├── list-features-runner-playwright/ # Gherkin runner for list features
 └── agent-skill-tester/            # skill trigger accuracy evaluation
 ```

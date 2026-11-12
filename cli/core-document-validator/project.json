@@ -1,38 +1,38 @@
 {
-  "name": "document-validator",
+  "name": "core-document-validator",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "cli/document-validator/src",
+  "sourceRoot": "cli/core-document-validator/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "cli/document-validator/dist",
-        "tsConfig": "cli/document-validator/tsconfig.build.json",
-        "main": "cli/document-validator/src/cli.ts",
-        "rootDir": "cli/document-validator/src"
+        "outputPath": "cli/core-document-validator/dist",
+        "tsConfig": "cli/core-document-validator/tsconfig.build.json",
+        "main": "cli/core-document-validator/src/cli.ts",
+        "rootDir": "cli/core-document-validator/src"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsc -p tsconfig.json --noEmit",
-        "cwd": "cli/document-validator"
+        "cwd": "cli/core-document-validator"
       }
     },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "biome check .",
-        "cwd": "cli/document-validator"
+        "cwd": "cli/core-document-validator"
       }
     },
     "run": {
       "executor": "nx:run-commands",
       "options": {
         "command": "bun src/cli.ts",
-        "cwd": "cli/document-validator"
+        "cwd": "cli/core-document-validator"
       }
     }
   }

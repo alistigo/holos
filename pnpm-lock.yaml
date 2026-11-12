@@ -200,7 +200,7 @@ importers:
         specifier: ^22.0.0
         version: 22.19.17
 
-  cli/document-validator:
+  cli/core-document-validator:
     dependencies:
       '@alistigo/list-document':
         specifier: workspace:*
