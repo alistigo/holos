@@ -16,7 +16,6 @@ const { app } = readConfig();
 
 switch (app) {
   case "@alistigo/artifact-claude-capabilities-demo":
-    // fallow-ignore-next-line unresolved-import
     await import("@alistigo/artifact-claude-capabilities-demo");
     break;
   default:
