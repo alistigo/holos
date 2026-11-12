@@ -46,7 +46,7 @@
     "qa:audit": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "fallow audit"
+        "command": "fallow audit --base ${NX_BASE:-main}"
       }
     },
     "qa:stories-check": {
