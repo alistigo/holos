@@ -13,6 +13,7 @@ export interface ApplicationBuildOptions {
   rollupOptions?: NonNullable<UserConfig["build"]>["rollupOptions"];
 }
 
+// fallow-ignore-next-line complexity
 export function defineApplicationConfig(dirname: string, options?: ApplicationBuildOptions) {
   const config: UserConfig = {
     plugins: options?.plugins ?? [],
