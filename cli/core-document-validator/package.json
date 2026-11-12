@@ -9,12 +9,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "cli/document-validator"
+    "directory": "cli/core-document-validator"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/cli/document-validator#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/cli/core-document-validator#readme",
   "keywords": [
     "alistigo",
     "document",

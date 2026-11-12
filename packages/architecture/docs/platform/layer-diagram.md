@@ -94,7 +94,7 @@ These rules are enforced by `dependency-cruiser` (see `../arch-check.md`).
 
 | CLI directory | npm name | Purpose |
 |---|---|---|
-| `cli/document-validator` | `@alistigo/core-document-validator` | Validate any artifact document against a JSON Schema |
+| `cli/core-document-validator` | `@alistigo/core-document-validator` | Validate any artifact document against a JSON Schema |
 | `cli/list-features-runner-playwright` | `@alistigo/list-features-runner-playwright` | Gherkin runner for list features |
 | `cli/agent-skill-tester` | `@alistigo/agent-skill-tester` | Skill trigger accuracy evaluation |
 

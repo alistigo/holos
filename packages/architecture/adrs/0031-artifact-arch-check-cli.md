@@ -56,7 +56,7 @@ Each check is a standalone `CheckDefinition` that can be run individually via `-
 
 Valid types: `"domain"`, `"application"`, `"presentation"`, `"infrastructure"`, `"plugin"`, `"skill"`. This field allows tooling to understand a package's architectural role without parsing CALM files.
 
-**CLI conventions:** Clipanion + Ink, matching the pattern of `cli/document-validator` and `cli/nx-npm-publications`. Error output includes a `Fix:` line and a `Docs:` reference on every issue — designed to be readable by both humans and AI agents.
+**CLI conventions:** Clipanion + Ink, matching the pattern of `cli/core-document-validator` and `cli/nx-npm-publications`. Error output includes a `Fix:` line and a `Docs:` reference on every issue — designed to be readable by both humans and AI agents.
 
 **JSON output mode** (`--json`) emits structured output for CI scripts and automated pipelines.
 
