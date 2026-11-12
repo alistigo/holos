@@ -29,6 +29,12 @@
   "private": false,
   "type": "module",
   "description": "Self-contained UMD bundle — a Claude artifact that demonstrates all Claude iframe APIs: storage, AI completions, file download, network proxy, and external navigation.",
+  "exports": {
+    ".": {
+      "import": "./dist/index.umd.js",
+      "types": "./src/index.tsx"
+    }
+  },
   "main": "./dist/index.umd.js",
   "types": "./src/index.tsx",
   "files": [
