@@ -50,6 +50,9 @@ Alistigo is a **platform for AI artifacts** — NOT a list app. The list artifac
   use the `@0` major-version-pin convention — never version-less (ADR-0011).
 - `window.fetch` inside Claude artifact iframes routes ONLY to `api.anthropic.com`;
   it MUST NOT be documented or used as a general HTTP proxy (ADR-0020).
+- Artifacts MUST distinguish Draft from Published mode via `artifactContext()`. In draft
+  mode a full-screen overlay and persistent Draft badge MUST be rendered; storage writes
+  MUST throw immediately via a `requirePublished()` guard (ADR-0019).
 
 **Rationale:** A monolithic approach forces copy-paste of every loading sequence and
 error-boundary across artifacts. Four independently versioned tiers mean a second artifact
@@ -153,6 +156,13 @@ Strict mode is ON everywhere: `strict`, `exactOptionalPropertyTypes`,
   JSON Schema, TypeScript types, examples, README, event projector, and a markdown parser
   where applicable.
 
+**Package Metadata** (ADR-0031)
+
+Every workspace package MUST declare `"alistigo": { "type": "<value>" }` in its
+`package.json`. Valid types: `domain`, `application`, `presentation`, `infrastructure`,
+`plugin`, `skill`. Enforced by `qa:artifact-arch-check`; boundary rules are derived from
+CALM at runtime.
+
 **Observability**
 
 - Structured logging: pino via `@alistigo/logger` (`createLogger(module, ctx?)`). Ad-hoc
@@ -194,13 +204,20 @@ AI does the work; the human holds the wheel.
 
 **Quality Gates**
 
+All QA gates run via the unified `pnpm nx run holos:qa` command (pre-commit, pre-push, and
+every PR). Gates that also post inline PR review comments run additionally via the Fallow
+GitHub Action.
+
 | Gate | Trigger | Tool |
 |------|---------|------|
-| `qa:lint` | Pre-push + every PR | Biome |
-| `qa:arch-check` | Pre-push + every PR | dependency-cruiser |
-| `qa:audit` | Pre-push + every PR | Fallow (changed files only) |
-| `qa:dead-code` | Weekly CI | Fallow (full repo) |
-| `qa:arch-calm` | Every PR | CALM CLI (`pnpm nx run architecture:qa:arch-calm`) |
+| `qa:lint` | Pre-commit + pre-push + every PR | Biome |
+| `qa:arch-check` | Pre-commit + pre-push + every PR | dependency-cruiser |
+| `qa:arch-calm` | Pre-commit + pre-push + every PR | CALM CLI |
+| `qa:dead-code` | Pre-commit + pre-push + every PR | Fallow (full repo) |
+| `qa:audit` | Pre-commit + pre-push + every PR | Fallow (changed files; also posts PR comments) |
+| `qa:stories-check` | Pre-commit + pre-push + every PR | bash script (ADR-0012) |
+| `qa:artifact-arch-check` | Pre-commit + pre-push + every PR | artifact-arch-check CLI (ADR-0031) |
+| `qa:artifact-sandbox-check` | Pre-commit + pre-push + every PR | bash script |
 
 ALL `qa:*` gates MUST pass before any merge. No `--no-verify` bypass; fix the underlying
 issue.
@@ -235,4 +252,4 @@ system boundaries and relationships.
 All PRs are expected to verify compliance with the active principles. Compliance review is
 expected on each amendment. No automated merges to `main` without CI passing.
 
-**Version**: 1.0.0 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-10-09
+**Version**: 1.1.0 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-11-12
