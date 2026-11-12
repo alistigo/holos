@@ -7,3 +7,16 @@ feature.json
 
 # Per-machine extension config overrides.
 extensions/*/local-config.yml
+
+# Spec Kit CLI-managed content — installed and refreshed by the Specify CLI,
+# not project-owned. Run `specify install` (or equivalent) to restore on a
+# fresh checkout.
+extensions/companion/
+extensions/.registry
+integrations/
+init-options.json
+integration.json
+events.py
+memory/.constitution-template.json
+scripts/
+workflows/
