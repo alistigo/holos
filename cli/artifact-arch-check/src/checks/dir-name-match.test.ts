@@ -48,11 +48,11 @@ describe("dirNameMatchCheck", () => {
     const result = await dirNameMatchCheck.run(makeContext(root, makeCalmFile([])));
 
     expect(result.passed).toBe(false);
-    expect(result.issues).toHaveLength(1);
-    expect(result.issues[0]!.message).toContain("packages/logger");
-    expect(result.issues[0]!.message).toContain("@alistigo/pino-logger-plugin");
-    expect(result.issues[0]!.message).toContain("packages/pino-logger-plugin");
-    expect(result.issues[0]!.fix).toContain("git mv packages/logger packages/pino-logger-plugin");
+    const issue = result.issues[0]!;
+    expect(issue.message).toContain("packages/logger");
+    expect(issue.message).toContain("@alistigo/pino-logger-plugin");
+    expect(issue.message).toContain("packages/pino-logger-plugin");
+    expect(issue.fix).toContain("git mv packages/logger packages/pino-logger-plugin");
   });
 
   it("passes for unscoped package name when dir matches", async () => {

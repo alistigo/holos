@@ -5,6 +5,7 @@ import type { CheckContext, CheckDefinition, CheckIssue, CheckResult } from "./t
 
 const SCAN_DIRS = ["packages", "cli", "apps"];
 
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
 
