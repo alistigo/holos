@@ -359,7 +359,7 @@ importers:
         version: link:../artifact-plugin-api
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
       react:
         specifier: ^18.0.0 || ^19.0.0
         version: 19.2.5
@@ -435,7 +435,7 @@ importers:
         version: link:../list-domain
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
       '@lingui/core':
         specifier: ^6.0.0
         version: 6.0.1(babel-plugin-macros@3.1.0)
@@ -555,7 +555,7 @@ importers:
     dependencies:
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
       posthog-js:
         specifier: ^1.0.0
         version: 1.383.2
@@ -574,7 +574,7 @@ importers:
     dependencies:
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
       '@sentry/browser':
         specifier: ^9.0.0
         version: 9.47.1
@@ -599,7 +599,7 @@ importers:
         version: link:../artifact-plugin-api
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
       jdenticon:
         specifier: latest
         version: 3.3.0
@@ -653,7 +653,7 @@ importers:
         version: link:../claude-artifact-api
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
     devDependencies:
       '@alistigo/artifact-dev-tools':
         specifier: workspace:*
@@ -837,7 +837,7 @@ importers:
         version: link:../artifact-plugin-api
       '@alistigo/pino-logger-plugin':
         specifier: workspace:*
-        version: link:../logger
+        version: link:../pino-logger-plugin
     devDependencies:
       '@alistigo/artifact-dev-tools':
         specifier: workspace:*
@@ -846,7 +846,7 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1)
 
-  packages/logger:
+  packages/pino-logger-plugin:
     dependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*

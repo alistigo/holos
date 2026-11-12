@@ -9,12 +9,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistigo/holos.git",
-    "directory": "packages/logger"
+    "directory": "packages/pino-logger-plugin"
   },
   "bugs": {
     "url": "https://github.com/alistigo/holos/issues"
   },
-  "homepage": "https://github.com/alistigo/holos/tree/main/packages/logger#readme",
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/pino-logger-plugin#readme",
   "keywords": [
     "alistigo",
     "logger",
