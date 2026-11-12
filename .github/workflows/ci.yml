@@ -110,18 +110,14 @@ jobs:
         if: steps.detect-affected.outputs.require_playwright == 'true'
         run: pnpm --filter @alistigo/list-features-runner-playwright exec playwright install-deps chromium
 
-      # Order matters: cheap → expensive. A typecheck fail short-circuits
-      # the build; a build fail short-circuits tests.
-      - name: Lint (affected)
-        run: pnpm exec nx affected -t qa:lint --parallel=3
+      # QA gate: all workspace-wide checks via single Nx target.
+      # Adding a new check → one line in project.json, automatically runs here.
+      - name: QA checks
+        run: pnpm nx run holos:qa
 
-      - name: Arch check
-        run: pnpm qa:arch-check
-
-      - name: Artifact arch check
-        run: pnpm qa:artifact-arch-check
-
-      - name: Fallow dead-code audit
+      # Kept separate: posts inline review comments on PRs (additive; qa already runs audit).
+      - name: Fallow audit — PR review comments
+        if: github.event_name == 'pull_request'
         uses: fallow-rs/fallow@v2
         with:
           command: audit

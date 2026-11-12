@@ -2,6 +2,22 @@
   "name": "holos",
   "$schema": "./node_modules/nx/schemas/project-schema.json",
   "targets": {
+    "qa": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run-many -t qa:lint --parallel=3",
+          "nx run holos:qa:arch-check",
+          "nx run holos:qa:dead-code",
+          "nx run holos:qa:audit",
+          "nx run holos:qa:stories-check",
+          "nx run holos:qa:artifact-sandbox-check",
+          "nx run artifact-arch-check:qa:artifact-arch-check"
+        ],
+        "parallel": false
+      },
+      "cache": false
+    },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
@@ -14,6 +30,12 @@
         "command": "depcruise apps packages cli --config .dependency-cruiser.cjs"
       }
     },
+    "qa:arch-calm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run architecture:qa:arch-calm"
+      }
+    },
     "qa:dead-code": {
       "executor": "nx:run-commands",
       "options": {
@@ -24,6 +46,24 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "fallow audit"
+      }
+    },
+    "qa:stories-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/check-stories.sh"
+      }
+    },
+    "qa:artifact-sandbox-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/check-no-form-submit.sh"
+      }
+    },
+    "qa:artifact-arch-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run artifact-arch-check:qa:artifact-arch-check"
       }
     },
     "build": {
