@@ -50,7 +50,7 @@ Alistigo is a four-tier platform. Each tier is independently versioned; platform
 │  packages/artifact-core-components-react  @alistigo/artifact-core-components-react │
 │  packages/artifact-plugin-api        @alistigo/artifact-plugin-api          │
 │  packages/ai-chat-async-api          @alistigo/ai-chat-async-api            │
-│  packages/logger                     @alistigo/logger                       │
+│  packages/pino-logger-plugin         @alistigo/pino-logger-plugin           │
 └──────────────────────────────────────────┬───────────────────────────────────┘
                                            │
 ┌──────────────────────────────────────────▼───────────────────────────────────┐
@@ -170,7 +170,7 @@ packages/
 ├── artifact-core-components-react/ # LoadingScreen, ErrorScreen, AlistigoBadge, ArtifactInfoModal
 ├── artifact-plugin-api/           # AlistigoPlugin interface, loadPlugin(), event bus
 ├── ai-chat-async-api/             # <api-calls> executor, ApiCallsExecutor, ArtifactApiDefinition
-├── logger/                        # pino-based structured logging
+├── pino-logger-plugin/            # pino-based structured logging
 │
 │   # List Artifact
 ├── artifact-list/                 # @alistigo/artifact-list — UMD bundle

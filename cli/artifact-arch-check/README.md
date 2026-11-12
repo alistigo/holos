@@ -214,6 +214,22 @@ This check performs a workspace-wide scan of all packages in `packages/`, `cli/`
 
 ---
 
+### `dir-name-match`
+
+Verifies that every package's directory name matches its npm package name (without the `@scope/` prefix).
+
+This check scans all subdirectories of `packages/`, `cli/`, and `apps/`. For each directory that contains a `package.json`, it strips the scope prefix from the `name` field (e.g. `@alistigo/pino-logger-plugin` → `pino-logger-plugin`) and compares that against the directory name. A mismatch makes the monorepo harder to navigate and breaks the workspace convention of inferring the package from its path.
+
+**Example error:**
+```
+✗ dir-name-match › packages/logger does not match "@alistigo/pino-logger-plugin"
+  Expected : packages/pino-logger-plugin
+  Fix      : git mv packages/logger packages/pino-logger-plugin
+  Docs     : cli/artifact-arch-check/README.md#dir-name-match
+```
+
+---
+
 ## JSON output (for CI and agents)
 
 Use `--json` to get structured output suitable for CI scripts and AI agent consumption:

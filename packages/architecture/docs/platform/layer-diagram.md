@@ -46,7 +46,7 @@ Full layer diagram with all package names as of P0 (2026-07-27).
 │  packages/ai-chat-async-api          @alistigo/ai-chat-async-api  (optional) │
 │    └─ ApiCallsExecutor, ArtifactApiDefinition, <api-calls> tag executor     │
 │                                                                              │
-│  packages/logger                     @alistigo/logger                       │
+│  packages/pino-logger-plugin         @alistigo/pino-logger-plugin           │
 │    └─ pino-based structured logging, createLogger(), setLogLevel()          │
 └──────────────────────────────────────────┬───────────────────────────────────┘
                                            │
