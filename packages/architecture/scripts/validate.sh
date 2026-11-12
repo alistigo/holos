@@ -14,10 +14,22 @@ set -euo pipefail
 
 shopt -s nullglob
 
+# Absolute path to this package's root, independent of invocation CWD.
+PKG_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 status=0
 
+# Generate a temp URL-to-local mapping for the alistigo.com CALM extension.
+# The extension file is local-only — it is not hosted at the URL referenced in $ref.
+MAPPING_FILE="$(mktemp /tmp/calm-url-mapping.XXXXXX.json)"
+trap 'rm -f "$MAPPING_FILE"' EXIT
+cat > "$MAPPING_FILE" <<EOF
+{
+  "https://alistigo.com/calm/extensions/alistigo-node-types": "$PKG_ROOT/extensions/alistigo-node-types.calm-extension.json"
+}
+EOF
+
 # --- Validate systems (concrete architectures) ---
-arch_files=(systems/*.arch.calm.json)
+arch_files=("$PKG_ROOT"/systems/*.arch.calm.json)
 if (( ${#arch_files[@]} == 0 )); then
   echo "ERROR: no CALM architecture files found in systems/"
   exit 1
@@ -25,32 +37,32 @@ fi
 
 for f in "${arch_files[@]}"; do
   echo "Validating architecture $f"
-  if ! pnpm calm validate -a "$f" --strict -f pretty; then
+  if ! pnpm calm validate -a "$f" --strict -f pretty -u "$MAPPING_FILE"; then
     status=1
   fi
 done
 
 # --- Validate patterns (JSON-Schema CALM patterns) ---
-pattern_files=(patterns/*.pattern.calm.json)
+pattern_files=("$PKG_ROOT"/patterns/*.pattern.calm.json)
 for f in "${pattern_files[@]}"; do
   echo "Validating pattern $f"
-  if ! pnpm calm validate -p "$f" --strict -f pretty; then
+  if ! pnpm calm validate -p "$f" --strict -f pretty -u "$MAPPING_FILE"; then
     status=1
   fi
 done
 
 # --- Validate artifact implementations against the base pattern ---
 # Each implementation lives in its own package under ../../packages/<name>/.
-impl_files=(../../packages/list-domain/artifact-list.arch.calm.json)
-pattern="patterns/alistigo-artifact.pattern.calm.json"
+impl_files=("$PKG_ROOT"/systems/list-artifact.arch.calm.json)
+pattern="$PKG_ROOT/patterns/alistigo-artifact-module-composition.pattern.calm.json"
 
 for f in "${impl_files[@]}"; do
   echo "Validating implementation $f (standalone)"
-  if ! pnpm calm validate -a "$f" --strict -f pretty; then
+  if ! pnpm calm validate -a "$f" --strict -f pretty -u "$MAPPING_FILE"; then
     status=1
   fi
-  echo "Validating implementation $f against pattern $pattern"
-  if ! pnpm calm validate -p "$pattern" -a "$f" --strict -f pretty; then
+  echo "Validating implementation $f against pattern"
+  if ! pnpm calm validate -p "$pattern" -a "$f" --strict -f pretty -u "$MAPPING_FILE"; then
     status=1
   fi
 done

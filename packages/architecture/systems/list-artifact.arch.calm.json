@@ -84,7 +84,7 @@
     },
     {
       "unique-id": "application",
-      "node-type": "module",
+      "node-type": "system",
       "name": "Application",
       "description": "Entry point of the artifact. it orchestrates and wires together the different modules: Domain, Document, UI, and Plugin bus with all installed plugins (Storage, Logger, ui, etc ...).",
       "ddd-layer": "Application",
@@ -202,37 +202,6 @@
       }
     },
     {
-      "unique-id": "document-uses-plugin-bus",
-      "description": "Document emits structured log events on the plugin bus instead of importing a logger directly, keeping the domain/application layer free of infrastructure dependencies.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "document"
-          },
-          "destination": {
-            "node": "plugin-bus",
-            "interfaces": ["plugin-bus-api"]
-          }
-        }
-      }
-    },
-    {
-      "unique-id": "ui-uses-plugin-bus",
-      "description": "UI emits structured log events on the plugin bus instead of importing a logger directly, keeping the presentation layer free of infrastructure dependencies.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "ui",
-            "interfaces": ["ui-components"]
-          },
-          "destination": {
-            "node": "plugin-bus",
-            "interfaces": ["plugin-bus-api"]
-          }
-        }
-      }
-    },
-    {
       "unique-id": "skill-for-artifact",
       "description": "The skill package provides the AI agent capability definition for this artifact.",
       "relationship-type": {
@@ -312,22 +281,6 @@
       }
     },
     {
-      "unique-id": "application-uses-logger-plugin",
-      "description": "Application imports and registers the pino logger plugin directly, wiring it into the plugin bus at startup before any other plugins.",
-      "relationship-type": {
-        "connects": {
-          "source": {
-            "node": "application",
-            "interfaces": ["application-api"]
-          },
-          "destination": {
-            "node": "logger-plugin",
-            "interfaces": ["logger-api"]
-          }
-        }
-      }
-    },
-    {
       "unique-id": "storage-uses-plugin-bus",
       "description": "Storage registers with the plugin bus to integrate with the artifact as an infrastructure plugin.",
       "relationship-type": {
@@ -355,6 +308,53 @@
           "destination": {
             "node": "plugin-bus",
             "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "document-uses-plugin-bus",
+      "description": "Document emits structured log events on the plugin bus instead of importing a logger directly, keeping the domain/application layer free of infrastructure dependencies.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "document"
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "ui-uses-plugin-bus",
+      "description": "UI emits structured log events on the plugin bus instead of importing a logger directly, keeping the presentation layer free of infrastructure dependencies.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "ui",
+            "interfaces": ["ui-components"]
+          },
+          "destination": {
+            "node": "plugin-bus",
+            "interfaces": ["plugin-bus-api"]
+          }
+        }
+      }
+    },
+    {
+      "unique-id": "application-uses-logger-plugin",
+      "description": "Application imports and registers the pino logger plugin directly, wiring it into the plugin bus at startup before any other plugins.",
+      "relationship-type": {
+        "connects": {
+          "source": {
+            "node": "application",
+            "interfaces": ["application-api"]
+          },
+          "destination": {
+            "node": "logger-plugin",
+            "interfaces": ["logger-api"]
           }
         }
       }

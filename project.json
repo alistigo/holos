@@ -8,6 +8,7 @@
         "commands": [
           "nx run-many -t qa:lint --parallel=3",
           "nx run holos:qa:arch-check",
+          "nx run architecture:qa:arch-calm",
           "nx run holos:qa:dead-code",
           "nx run holos:qa:audit",
           "nx run holos:qa:stories-check",
