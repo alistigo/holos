@@ -32,6 +32,7 @@
     "packages/claude-artifact-list-storage/**",
     "packages/local-storage-repository/**",
 
+    "packages/artifact-dev-tools/templates/**",
     "packages/alistigo-*",
     "cli/alistigo-*",
     "packages/artifact-storage-explorer",

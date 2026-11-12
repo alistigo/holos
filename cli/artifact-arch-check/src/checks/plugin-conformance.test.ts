@@ -75,44 +75,35 @@ describe("pluginConformanceCheck", () => {
     expect(result.issues[0]!.message).toContain('"react-dom"');
   });
 
-  it("passes when react is only in peerDependencies", async () => {
-    await writePackageJson(root, "@alistigo/my-thing-plugin", {
-      ...COMPLIANT_PLUGIN,
-      peerDependencies: { react: "^19.0.0" },
-    });
+  const PASSING_CASES: Array<[string, string, Record<string, unknown>]> = [
+    [
+      "passes when react is only in peerDependencies",
+      "@alistigo/my-thing-plugin",
+      { ...COMPLIANT_PLUGIN, peerDependencies: { react: "^19.0.0" } },
+    ],
+    [
+      "passes when react is only in devDependencies",
+      "@alistigo/my-thing-plugin",
+      { ...COMPLIANT_PLUGIN, devDependencies: { react: "^19.0.0" } },
+    ],
+    [
+      "skips packages without alistigo.type === plugin",
+      "@alistigo/not-a-plugin",
+      {
+        name: "@alistigo/not-a-plugin",
+        alistigo: { type: "domain" },
+        dependencies: { react: "^19.0.0" },
+      },
+    ],
+    [
+      "skips packages without an alistigo field",
+      "@alistigo/no-metadata",
+      { name: "@alistigo/no-metadata" },
+    ],
+  ];
 
-    const result = await pluginConformanceCheck.run(makeContext(root, makeCalmFile([])));
-
-    expect(result.passed).toBe(true);
-  });
-
-  it("passes when react is only in devDependencies", async () => {
-    await writePackageJson(root, "@alistigo/my-thing-plugin", {
-      ...COMPLIANT_PLUGIN,
-      devDependencies: { react: "^19.0.0" },
-    });
-
-    const result = await pluginConformanceCheck.run(makeContext(root, makeCalmFile([])));
-
-    expect(result.passed).toBe(true);
-  });
-
-  it("skips packages that do not have alistigo.type === plugin", async () => {
-    await writePackageJson(root, "@alistigo/not-a-plugin", {
-      name: "@alistigo/not-a-plugin",
-      alistigo: { type: "domain" },
-      dependencies: { react: "^19.0.0" },
-    });
-
-    const result = await pluginConformanceCheck.run(makeContext(root, makeCalmFile([])));
-
-    expect(result.passed).toBe(true);
-  });
-
-  it("skips packages without an alistigo field", async () => {
-    await writePackageJson(root, "@alistigo/no-metadata", {
-      name: "@alistigo/no-metadata",
-    });
+  it.each(PASSING_CASES)("%s", async (_label, pkgName, pkgJson) => {
+    await writePackageJson(root, pkgName, pkgJson);
 
     const result = await pluginConformanceCheck.run(makeContext(root, makeCalmFile([])));
 

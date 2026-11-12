@@ -7,6 +7,7 @@ const PLUGIN_NAME_PATTERN = /^@[^/]+\/.+-plugin$/;
 const REACT_RUNTIME_DEPS = ["react", "react-dom"];
 const SCAN_DIRS = ["packages", "cli", "apps"];
 
+// fallow-ignore-next-line complexity
 async function collectPluginPackages(
   workspaceRoot: string,
 ): Promise<Array<{ pkgName: string; pkgJson: Record<string, unknown> }>> {
@@ -42,6 +43,7 @@ async function collectPluginPackages(
   return results;
 }
 
+// fallow-ignore-next-line complexity
 async function run(ctx: CheckContext): Promise<CheckResult> {
   const issues: CheckIssue[] = [];
   const plugins = await collectPluginPackages(ctx.workspaceRoot);
