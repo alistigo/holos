@@ -1,3 +1,21 @@
+## 0.2.8 (2026-11-12)
+
+### 🚀 Features
+
+- **artifact-dev-tools:** centralise build tooling + plugin conformance checks ([57574b3](https://github.com/alistigo/holos/commit/57574b3))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.8
+- Updated artifact-plugin-api to 0.6.8
+- Updated artifact-dev-tools to 0.2.0
+- Updated pino-logger-plugin to 0.5.0
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.7 (2026-11-11)
 
 ### 🩹 Fixes

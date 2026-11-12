@@ -1,3 +1,18 @@
+## 0.5.0 (2026-11-12)
+
+### 🚀 Features
+
+- **artifact-arch-check:** rename packages/logger → pino-logger-plugin + dir-name-match check ([499392d](https://github.com/alistigo/holos/commit/499392d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.8
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.7 (2026-11-11)
 
 ### 🧱 Updated Dependencies

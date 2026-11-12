@@ -1,3 +1,9 @@
+## 0.6.0 (2026-11-12)
+
+### 🧱 Updated Dependencies
+
+- Updated list-document to 0.5.9
+
 ## 0.5.8 (2026-11-11)
 
 ### 🧱 Updated Dependencies

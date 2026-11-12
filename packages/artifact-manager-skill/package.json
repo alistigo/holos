@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-manager-skill",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Alistigo artifact-manager agent skill (agentskills.io)",
   "license": "MIT",
   "author": {

@@ -1,3 +1,25 @@
+## 0.4.10 (2026-11-12)
+
+### 🩹 Fixes
+
+- **fallow:** remove stale suppression and fix audit base detection on CI ([7540696](https://github.com/alistigo/holos/commit/7540696))
+- **fallow:** add exports fields and suppress unresolvable dynamic import ([680df4d](https://github.com/alistigo/holos/commit/680df4d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.8
+- Updated list-components-react to 0.5.9
+- Updated local-storage-plugin to 0.5.8
+- Updated claude-artifact-api to 0.4.8
+- Updated artifact-manager to 0.4.8
+- Updated artifact-list to 0.9.1
+- Updated list-document to 0.5.9
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.9 (2026-11-11)
 
 ### 🚀 Features

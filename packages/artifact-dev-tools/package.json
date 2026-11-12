@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-dev-tools",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shared build tooling for Alistigo artifact packages and plugins.",
   "license": "MIT",
   "private": true,

@@ -1,3 +1,22 @@
+## 0.4.8 (2026-11-12)
+
+### 🩹 Fixes
+
+- **fallow:** add exports fields and suppress unresolvable dynamic import ([680df4d](https://github.com/alistigo/holos/commit/680df4d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.8
+- Updated explorer-components-react to 0.5.8
+- Updated claude-storage-plugin to 0.6.8
+- Updated claude-artifact-api to 0.4.8
+- Updated artifact-core to 0.4.8
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.7 (2026-11-11)
 
 ### 🧱 Updated Dependencies

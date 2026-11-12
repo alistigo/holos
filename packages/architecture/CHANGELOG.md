@@ -1,3 +1,22 @@
+## 1.3.5 (2026-11-12)
+
+### 🚀 Features
+
+- **artifact-arch-check:** rename packages/logger → pino-logger-plugin + dir-name-match check ([499392d](https://github.com/alistigo/holos/commit/499392d))
+
+### 🩹 Fixes
+
+- **architecture:** fix qa:arch-calm and re-add to qa orchestrator ([606b9e4](https://github.com/alistigo/holos/commit/606b9e4))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.5
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.3.4 (2026-11-11)
 
 ### 🧱 Updated Dependencies

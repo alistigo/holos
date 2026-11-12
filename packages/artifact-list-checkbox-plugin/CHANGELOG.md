@@ -1,3 +1,24 @@
+## 0.3.9 (2026-11-12)
+
+### 🚀 Features
+
+- **artifact-dev-tools:** centralise build tooling + plugin conformance checks ([57574b3](https://github.com/alistigo/holos/commit/57574b3))
+
+### 🩹 Fixes
+
+- **fallow:** add exports fields and suppress unresolvable dynamic import ([680df4d](https://github.com/alistigo/holos/commit/680df4d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.8
+- Updated artifact-dev-tools to 0.2.0
+- Updated list-document to 0.5.9
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.8 (2026-11-11)
 
 ### 🩹 Fixes

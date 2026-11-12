@@ -1,3 +1,11 @@
+## 0.5.9 (2026-11-12)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.8
+- Updated core-document to 0.3.8
+- Updated list-domain to 0.4.9
+
 ## 0.5.8 (2026-11-11)
 
 ### 🧱 Updated Dependencies
