@@ -1,5 +1,5 @@
+import { definePluginConfig } from "@alistigo/artifact-dev-tools";
 import externalGlobals from "rollup-plugin-external-globals";
-import { definePluginConfig } from "../../scripts/vite-plugin-build.ts";
 
 // React is provided by the artifact-list host via globalThis.__ALISTIGO_REACT__.
 // external-globals rewrites bare react imports to those globals at build time.

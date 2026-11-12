@@ -1,0 +1,39 @@
+{
+  "name": "{{NAME}}",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/{{NAME}}/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/{{NAME}}/dist",
+        "tsConfig": "packages/{{NAME}}/tsconfig.json",
+        "main": "packages/{{NAME}}/src/index.ts",
+        "rootDir": "packages/{{NAME}}/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/{{NAME}}"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/{{NAME}}"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/{{NAME}}"
+      }
+    }
+  }
+}

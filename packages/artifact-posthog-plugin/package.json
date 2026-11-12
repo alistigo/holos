@@ -38,6 +38,7 @@
     "posthog-js": "^1.0.0"
   },
   "devDependencies": {
+    "@alistigo/artifact-dev-tools": "workspace:*",
     "@alistigo/artifact-plugin-api": "workspace:*",
     "vite": "^7.0.0"
   }

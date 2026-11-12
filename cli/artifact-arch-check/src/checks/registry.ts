@@ -2,6 +2,7 @@ import { alistigoMetadataCheck } from "./alistigo-metadata.js";
 import { boundariesCheck } from "./boundaries.js";
 import { moduleExistenceCheck } from "./module-existence.js";
 import { packageConformanceCheck } from "./package-conformance.js";
+import { pluginConformanceCheck } from "./plugin-conformance.js";
 import type { CheckContext, CheckDefinition, CheckResult } from "./types.js";
 
 export const ALL_CHECKS: CheckDefinition[] = [
@@ -9,6 +10,7 @@ export const ALL_CHECKS: CheckDefinition[] = [
   boundariesCheck,
   packageConformanceCheck,
   alistigoMetadataCheck,
+  pluginConformanceCheck,
 ];
 
 export async function runChecks(ctx: CheckContext, checkIds?: string[]): Promise<CheckResult[]> {

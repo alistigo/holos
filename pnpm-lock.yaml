@@ -398,6 +398,15 @@ importers:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1)
 
+  packages/artifact-dev-tools:
+    devDependencies:
+      rollup:
+        specifier: ^4.0.0
+        version: 4.60.2
+      vite:
+        specifier: ^7.0.0
+        version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1)
+
   packages/artifact-list:
     dependencies:
       '@alistigo/artifact-core':
@@ -440,6 +449,9 @@ importers:
         specifier: ^19.2.5
         version: 19.2.5(react@19.2.5)
     devDependencies:
+      '@alistigo/artifact-dev-tools':
+        specifier: workspace:*
+        version: link:../artifact-dev-tools
       '@emotion/is-prop-valid':
         specifier: ^1.4.0
         version: 1.4.0
@@ -483,6 +495,9 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
     devDependencies:
+      '@alistigo/artifact-dev-tools':
+        specifier: workspace:*
+        version: link:../artifact-dev-tools
       '@storybook/react-vite':
         specifier: ^10.3.0
         version: 10.3.6(esbuild@0.27.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.2)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1))
@@ -545,6 +560,9 @@ importers:
         specifier: ^1.0.0
         version: 1.383.2
     devDependencies:
+      '@alistigo/artifact-dev-tools':
+        specifier: workspace:*
+        version: link:../artifact-dev-tools
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
         version: link:../artifact-plugin-api
@@ -589,6 +607,9 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
     devDependencies:
+      '@alistigo/artifact-dev-tools':
+        specifier: workspace:*
+        version: link:../artifact-dev-tools
       '@storybook/react-vite':
         specifier: ^10.3.0
         version: 10.3.6(esbuild@0.27.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.2)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1))
@@ -634,6 +655,9 @@ importers:
         specifier: workspace:*
         version: link:../logger
     devDependencies:
+      '@alistigo/artifact-dev-tools':
+        specifier: workspace:*
+        version: link:../artifact-dev-tools
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1)
@@ -815,6 +839,9 @@ importers:
         specifier: workspace:*
         version: link:../logger
     devDependencies:
+      '@alistigo/artifact-dev-tools':
+        specifier: workspace:*
+        version: link:../artifact-dev-tools
       vite:
         specifier: ^7.0.0
         version: 7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1)

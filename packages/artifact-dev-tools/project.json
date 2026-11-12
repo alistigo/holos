@@ -1,0 +1,39 @@
+{
+  "name": "artifact-dev-tools",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/artifact-dev-tools/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/artifact-dev-tools/dist",
+        "tsConfig": "packages/artifact-dev-tools/tsconfig.json",
+        "main": "packages/artifact-dev-tools/src/index.ts",
+        "rootDir": "packages/artifact-dev-tools/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "packages/artifact-dev-tools"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "packages/artifact-dev-tools"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "packages/artifact-dev-tools"
+      }
+    }
+  }
+}
