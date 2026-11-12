@@ -63,7 +63,7 @@ async function run(ctx: CheckContext): Promise<CheckResult> {
       issues.push({
         packageName: pkg,
         message: `Missing required fields: ${missing.join(", ")}`,
-        fix: `Align with the package template in scripts/new-package.sh`,
+        fix: `Align with the package template in packages/artifact-dev-tools/scripts/new-package.sh`,
         docsRef: "packages/architecture/docs/arch-check.md#package-template",
       });
     }

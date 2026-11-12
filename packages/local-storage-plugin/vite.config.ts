@@ -6,6 +6,6 @@
  * jsDelivr URL with zero import map.
  */
 
-import { definePluginConfig } from "../../scripts/vite-plugin-build.ts";
+import { definePluginConfig } from "@alistigo/artifact-dev-tools";
 
 export default definePluginConfig(__dirname);

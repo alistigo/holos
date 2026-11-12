@@ -55,8 +55,9 @@ pnpm qa:audit           # Fallow: fast changed-file risk gate (pre-push / CI)
 ## Adding a New Package
 
 ```sh
-bash scripts/new-package.sh <name>
+bash packages/artifact-dev-tools/scripts/new-package.sh <name>
 # Creates packages/<name>/ with src/index.ts, package.json, tsconfig.json, project.json
+# Templates live in packages/artifact-dev-tools/templates/new-package/
 ```
 
 Or use Nx generators: `nx generate @nx/js:library --name=<name> --directory=packages/<name>`

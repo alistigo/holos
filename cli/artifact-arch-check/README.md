@@ -81,7 +81,7 @@ Verifies that every CALM node with a `core-npm-package` field corresponds to an 
 ✗ module-existence › @alistigo/todo-domain not found
   Expected path : packages/todo-domain/
   Architecture  : todo-artifact.arch.calm.json → node "domain"
-  Fix           : bash scripts/new-package.sh todo-domain
+  Fix           : bash packages/artifact-dev-tools/scripts/new-package.sh todo-domain
   Docs          : packages/architecture/docs/arch-check.md
 ```
 
@@ -188,6 +188,29 @@ Valid `type` values are defined in the JSON schema at `packages/architecture/ext
 | `"tool"` | Dev/build CLI tool — exempt from boundary checks, may appear in `devDependencies` anywhere |
 
 Packages with `"type": "tool"` are never declared in CALM and are never subject to the `boundaries` or `alistigo-metadata` checks. Examples: `@alistigo/calm-to-archify`, `@alistigo/artifact-arch-check`.
+
+---
+
+### `plugin-conformance`
+
+Verifies that every package tagged as `"alistigo": { "type": "plugin" }` follows two rules:
+
+**Rule 1 — Naming convention:** the npm package name must end with `-plugin` (pattern `@scope/<something>-plugin`).
+
+**Rule 2 — React dependency placement:** `react` and `react-dom` must NOT appear in `dependencies`. They must be in `peerDependencies` (or `devDependencies` for build-time type checking only). Plugins are loaded dynamically into a host that already provides React, so bundling it creates duplicate instances.
+
+This check performs a workspace-wide scan of all packages in `packages/`, `cli/`, and `apps/` directories, so it enforces the convention across the full monorepo each time it runs.
+
+**Example errors:**
+```
+✗ plugin-conformance › @alistigo/my-thing does not end with "-plugin"
+  Fix : Rename to "@alistigo/my-thing-plugin" and update all references
+  Docs: cli/artifact-arch-check/README.md#plugin-conformance
+
+✗ plugin-conformance › "react" is listed in dependencies; plugins must not bundle React
+  Fix : Move "react" from dependencies to peerDependencies in my-thing-plugin/package.json
+  Docs: cli/artifact-arch-check/README.md#plugin-conformance
+```
 
 ---
 

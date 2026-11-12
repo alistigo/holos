@@ -60,6 +60,7 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
+    "@alistigo/artifact-dev-tools": "workspace:*",
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",
     "@lingui/vite-plugin": "^6.0.0",
     "@tailwindcss/vite": "^4.0.0",

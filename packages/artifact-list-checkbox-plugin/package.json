@@ -42,6 +42,7 @@
     "typeid-js": "^1.2.0"
   },
   "devDependencies": {
+    "@alistigo/artifact-dev-tools": "workspace:*",
     "@storybook/react-vite": "^10.3.0",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.2.14",

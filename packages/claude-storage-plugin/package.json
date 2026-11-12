@@ -47,6 +47,7 @@
     "@alistigo/pino-logger-plugin": "workspace:*"
   },
   "devDependencies": {
+    "@alistigo/artifact-dev-tools": "workspace:*",
     "vite": "^7.0.0"
   }
 }
