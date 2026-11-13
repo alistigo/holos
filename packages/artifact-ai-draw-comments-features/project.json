@@ -1,0 +1,23 @@
+{
+  "name": "artifact-ai-draw-comments-features",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "{projectRoot}/step-definitions",
+  "projectType": "library",
+  "targets": {
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": true,
+        "commands": ["bun ./node_modules/gherklin/bin/gherklin", "biome check ."],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

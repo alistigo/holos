@@ -25,6 +25,7 @@
 
     "lingui.config.ts",
     "packages/list-features/gherklin.config.ts",
+    "packages/artifact-ai-draw-comments-features/gherklin.config.ts",
     "packages/list-features/tools/validate.ts",
 
     ".github/**",
@@ -71,6 +72,7 @@
     "@alistigo/artifact-manager",
     "@alistigo/list-components-react",
     "@lingui/react",
+    "@alistigo/artifact-ai-draw-comments",
     "gherklin",
     "@cucumber/pretty-formatter",
     "@lingui/format-po",

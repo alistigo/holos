@@ -1,0 +1,63 @@
+{
+  "name": "@alistigo/artifact-ai-draw-comments",
+  "version": "0.1.0",
+  "description": "Embeddable Claude artifact widget for visual draw annotations — select a region, draw shapes, attach a comment, send to Claude.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/artifact-ai-draw-comments"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-ai-draw-comments#readme",
+  "keywords": [
+    "alistigo",
+    "claude",
+    "artifact",
+    "draw",
+    "annotation",
+    "widget"
+  ],
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.umd.js",
+      "types": "./src/index.tsx"
+    }
+  },
+  "main": "./dist/index.umd.js",
+  "types": "./src/index.tsx",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "alistigo": {
+    "type": "widget"
+  },
+  "dependencies": {
+    "@alistigo/claude-artifact-api": "workspace:*",
+    "@lingui/react": "^5.3.1",
+    "konva": "^9.3.20",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@lingui/vite-plugin": "^5.3.1",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.0.0",
+    "vite": "^7.0.0",
+    "vite-plugin-css-injected-by-js": "^4.0.1"
+  }
+}
