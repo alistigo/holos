@@ -1,4 +1,7 @@
 import type Konva from "konva";
+// Explicit shape registration for react-konva core mode (tree-shaking: avoids full konva import)
+import "konva/lib/shapes/Line";
+import "konva/lib/shapes/Rect";
 import { useRef, useState } from "react";
 import { Layer, Line, Rect, Stage } from "react-konva";
 import type { SelectionRegion } from "../domain/session.js";

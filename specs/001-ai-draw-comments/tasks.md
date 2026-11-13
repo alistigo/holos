@@ -98,10 +98,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Update `packages/artifact-ai-draw-comments/src/auto-mount.tsx`: ensure robust parsing of `#alistigo-config` JSON (gracefully handle malformed JSON or missing `drawComments` key); verify selector resolution falls back to `document.body` when `container` is omitted or not found (FR-013, embed-api.md contract); depends on T022
-- [ ] T032 [US3] Update `packages/artifact-ai-draw-comments/src/index.tsx`: verify `window.AiDrawComments.mount(container)` is a no-op if already mounted; verify `unmount()` removes the root and cleans up all event listeners; verify `isReady()` returns `false` when `window.claude` is absent (embed-api.md imperative API contract); depends on T023
-- [ ] T033 [US3] Write `packages/artifact-ai-draw-comments-features/step-definitions/embed-host.steps.ts`: step implementations for `embed-host.feature` scenarios; test via JSDOM with a minimal host artifact DOM tree containing `#alistigo-config`; depends on T031, T032
-- [ ] T034 [US3] Update `packages/artifact-ai-draw-comments/vite.config.ts` if needed: confirm UMD bundle contains all required exports (`window.AiDrawComments`) and that `name: "AiDrawComments"` is correctly set; run `nx run artifact-ai-draw-comments:build` and verify bundle size ≤ 150 KB gzipped (target from embed-api.md); if Konva pushes the bundle over target, evaluate `konva/lib` tree-shaking options
+- [x] T031 [US3] Update `packages/artifact-ai-draw-comments/src/auto-mount.tsx`: ensure robust parsing of `#alistigo-config` JSON (gracefully handle malformed JSON or missing `drawComments` key); verify selector resolution falls back to `document.body` when `container` is omitted or not found (FR-013, embed-api.md contract); depends on T022
+- [x] T032 [US3] Update `packages/artifact-ai-draw-comments/src/index.tsx`: verify `window.AiDrawComments.mount(container)` is a no-op if already mounted; verify `unmount()` removes the root and cleans up all event listeners; verify `isReady()` returns `false` when `window.claude` is absent (embed-api.md imperative API contract); depends on T023
+- [x] T033 [US3] Write `packages/artifact-ai-draw-comments-features/step-definitions/embed-host.steps.ts`: step implementations for `embed-host.feature` scenarios; test via JSDOM with a minimal host artifact DOM tree containing `#alistigo-config`; depends on T031, T032
+- [x] T034 [US3] Update `packages/artifact-ai-draw-comments/vite.config.ts` if needed: confirm UMD bundle contains all required exports (`window.AiDrawComments`) and that `name: "AiDrawComments"` is correctly set; run `nx run artifact-ai-draw-comments:build` and verify bundle size ≤ 150 KB gzipped (target from embed-api.md); if Konva pushes the bundle over target, evaluate `konva/lib` tree-shaking options
 
 **Checkpoint**: Quickstart Scenario 2 passes; bundle size verified; `nx run artifact-ai-draw-comments-features:test` passes for embed-host scenarios
 

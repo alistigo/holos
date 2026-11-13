@@ -1,6 +1,6 @@
 {
   "default": {
-    "paths": ["features/claude-response.feature"],
+    "paths": ["features/claude-response.feature", "features/embed-host.feature"],
     "import": ["step-definitions/**/*.steps.ts"],
     "format": ["progress"]
   }

@@ -9,6 +9,13 @@ export default defineConfig({
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
+  resolve: {
+    // Bypass the full `import 'konva'` in react-konva's default entry.
+    // ReactKonvaCore uses konva/lib/Core.js only; shapes are registered explicitly in DrawCanvas.tsx.
+    alias: {
+      "react-konva": path.resolve(__dirname, "node_modules/react-konva/es/ReactKonvaCore.js"),
+    },
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
