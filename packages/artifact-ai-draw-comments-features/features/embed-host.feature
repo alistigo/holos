@@ -2,7 +2,7 @@ Feature: Embed the Draw Comment Widget in a Host Artifact
   A developer can include the ai-draw-comments bundle in their Claude artifact
   to gain draw-comment capability with a single script tag and no extra configuration.
 
-  @P3
+  @P3 @jsdom-required
   Scenario: Draw Comment button appears in a host artifact on load
     Given a host artifact that has included the ai-draw-comments bundle via script tag
     When the host artifact loads

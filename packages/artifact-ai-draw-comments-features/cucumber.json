@@ -6,6 +6,7 @@
       "features/embed-host.feature"
     ],
     "import": ["step-definitions/**/*.steps.ts"],
-    "format": ["progress"]
+    "format": ["progress"],
+    "tags": "not @jsdom-required"
   }
 }
