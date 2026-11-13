@@ -20,10 +20,24 @@
         "cwd": "{projectRoot}"
       }
     },
+    "storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "storybook dev -p 6006",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "storybook build",
+        "cwd": "{projectRoot}"
+      }
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -rf dist",
+        "command": "rm -rf dist storybook-static",
         "cwd": "{projectRoot}"
       }
     }

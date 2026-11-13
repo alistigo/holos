@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@source "../../**/*.{ts,tsx}";
+
+@layer base {
+  :root {
+    --ai-draw-overlay-z: 9000;
+    --ai-draw-panel-z: 9001;
+    --ai-draw-toolbar-z: 9002;
+  }
+}

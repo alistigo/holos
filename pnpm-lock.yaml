@@ -159,7 +159,7 @@ importers:
     dependencies:
       archify:
         specifier: github:tt-a1i/archify
-        version: https://codeload.github.com/tt-a1i/archify/tar.gz/73aaa0696e8f72c232ea710e6fa94fd953f3e773
+        version: archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620
       clipanion:
         specifier: 4.0.0-rc.4
         version: 4.0.0-rc.4(typanion@3.14.0)
@@ -313,10 +313,16 @@ importers:
       react-dom:
         specifier: ^19.2.5
         version: 19.2.5(react@19.2.5)
+      react-konva:
+        specifier: ^19.0.0
+        version: 19.3.2(@types/react@19.2.14)(konva@9.3.22)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
     devDependencies:
       '@lingui/vite-plugin':
         specifier: ^5.3.1
         version: 5.9.5(babel-plugin-macros@3.1.0)(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1))
+      '@storybook/react-vite':
+        specifier: ^10.3.0
+        version: 10.3.6(esbuild@0.27.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.2)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(typescript@5.9.3)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1))
       '@tailwindcss/vite':
         specifier: ^4.0.0
         version: 4.2.4(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.9.1))
@@ -3632,6 +3638,16 @@ packages:
     peerDependencies:
       '@types/react': ^19.2.0
 
+  '@types/react-reconciler@0.28.9':
+    resolution: {integrity: sha512-HHM3nxyUZ3zAylX8ZEyrDNd2XZOnQ0D5XfunJF5FLQnZbHHYq4UWvW1QfelQNXv1ICNkwYhfxjwfnqivYB6bFg==}
+    peerDependencies:
+      '@types/react': '*'
+
+  '@types/react-reconciler@0.34.0':
+    resolution: {integrity: sha512-zVDzX0Fk1XgDP2IutTpSrxd57jwOHlX3rlPrFz68Sc+06tpgOFRlqSUK2ZiqQeQXqnIfUb2cfJQUupXBKy498w==}
+    peerDependencies:
+      '@types/react': '*'
+
   '@types/react@18.3.31':
     resolution: {integrity: sha512-vfEqpXTvwT91yhmwdfouStN2hSKwTvyRs8qpLfADyrq/kxDw0hZM7Wk9Ug1FELj8hIby+S/+kQCSRFF32nv2Qw==}
 
@@ -3806,9 +3822,10 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  archify@https://codeload.github.com/tt-a1i/archify/tar.gz/73aaa0696e8f72c232ea710e6fa94fd953f3e773:
-    resolution: {tarball: https://codeload.github.com/tt-a1i/archify/tar.gz/73aaa0696e8f72c232ea710e6fa94fd953f3e773}
+  archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620:
+    resolution: {tarball: https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620}
     version: 0.0.0
+    engines: {node: '>=18'}
 
   arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
@@ -5522,6 +5539,11 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
+  its-fine@2.1.1:
+    resolution: {integrity: sha512-C5ZoVkeqSt0Aje0tzESO+iT/EQpNFNL39GkP7mCACtoZUFD6GcyerFCr6kp0ZtiII4W9HoYkY48Soy5xE/uHKw==}
+    peerDependencies:
+      react: ^19.0.0
+
   jackspeak@4.2.3:
     resolution: {integrity: sha512-ykkVRwrYvFm1nb2AJfKKYPr0emF6IiXDYUaFx4Zn9ZuIH7MrzEZ3sD5RlqGXNRpHtvUHJyOnCEFxOlNDtGo7wg==}
     engines: {node: 20 || >=22}
@@ -6669,11 +6691,24 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
+  react-konva@19.3.2:
+    resolution: {integrity: sha512-Uv0xlWoRSCByHinqs/03SFL8E28fYbe59sQ+2EJpwa1O4Zlz0+T+8DaKwlma9C2rkYwYj6j8eHD41F5oJafagg==}
+    peerDependencies:
+      konva: ^8.0.1 || ^7.2.5 || ^9.0.0 || ^10.0.0
+      react: ^19.3.0
+      react-dom: ^19.3.0
+
   react-reconciler@0.29.2:
     resolution: {integrity: sha512-zZQqIiYgDCTP/f1N/mAR10nJGrPD2ZR+jDSEsKWJHYC7Cm2wodlwbR3upZRdC3cjIjSlTLNVyO7Iu0Yy7t2AYg==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
       react: ^18.3.1
+
+  react-reconciler@0.34.0:
+    resolution: {integrity: sha512-eVibvB1fc9j5Qf1KRkiM3GzRPBdjg2P6G6QV2f3P6Eb3OGMxRBhdg2rrUwjbV5JrQaJj8nOa8uajmmJA5tJWjQ==}
+    engines: {node: '>=0.10.0'}
+    peerDependencies:
+      react: ^19.3.0
 
   react-refresh@0.17.0:
     resolution: {integrity: sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==}
@@ -6946,6 +6981,9 @@ packages:
 
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+
+  scheduler@0.28.0:
+    resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
 
   schema-dts-lib@1.0.0:
     resolution: {integrity: sha512-9MEO5vpQH9JdBioUupqluzxSYxPLjhmqRUudk15adUl/ypnRsM2/M1kN3AmVJQeG7nZqcL68H8JlGqQQT6vy9A==}
@@ -10783,6 +10821,14 @@ snapshots:
     dependencies:
       '@types/react': 19.2.14
 
+  '@types/react-reconciler@0.28.9(@types/react@19.2.14)':
+    dependencies:
+      '@types/react': 19.2.14
+
+  '@types/react-reconciler@0.34.0(@types/react@19.2.14)':
+    dependencies:
+      '@types/react': 19.2.14
+
   '@types/react@18.3.31':
     dependencies:
       '@types/prop-types': 15.7.15
@@ -10954,7 +11000,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.2
 
-  archify@https://codeload.github.com/tt-a1i/archify/tar.gz/73aaa0696e8f72c232ea710e6fa94fd953f3e773: {}
+  archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620: {}
 
   arg@4.1.3: {}
 
@@ -12957,6 +13003,13 @@ snapshots:
 
   isexe@2.0.0: {}
 
+  its-fine@2.1.1(@types/react@19.2.14)(react@19.2.5):
+    dependencies:
+      '@types/react-reconciler': 0.28.9(@types/react@19.2.14)
+      react: 19.2.5
+    transitivePeerDependencies:
+      - '@types/react'
+
   jackspeak@4.2.3:
     dependencies:
       '@isaacs/cliui': 9.0.0
@@ -14450,11 +14503,28 @@ snapshots:
 
   react-is@18.3.1: {}
 
+  react-konva@19.3.2(@types/react@19.2.14)(konva@9.3.22)(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
+    dependencies:
+      '@types/react-reconciler': 0.34.0(@types/react@19.2.14)
+      its-fine: 2.1.1(@types/react@19.2.14)(react@19.2.5)
+      konva: 9.3.22
+      react: 19.2.5
+      react-dom: 19.2.5(react@19.2.5)
+      react-reconciler: 0.34.0(react@19.2.5)
+      scheduler: 0.28.0
+    transitivePeerDependencies:
+      - '@types/react'
+
   react-reconciler@0.29.2(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+
+  react-reconciler@0.34.0(react@19.2.5):
+    dependencies:
+      react: 19.2.5
+      scheduler: 0.28.0
 
   react-refresh@0.17.0: {}
 
@@ -14864,6 +14934,8 @@ snapshots:
       loose-envify: 1.4.0
 
   scheduler@0.27.0: {}
+
+  scheduler@0.28.0: {}
 
   schema-dts-lib@1.0.0(typescript@5.9.3):
     dependencies:

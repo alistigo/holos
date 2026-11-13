@@ -1,4 +1,5 @@
 export interface DrawShape {
+  id: string;
   type: "rectangle" | "line";
   startX: number;
   startY: number;
