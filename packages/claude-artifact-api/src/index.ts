@@ -35,8 +35,15 @@ export interface ClaudeStorage {
   list(prefix?: string, shared?: boolean): Promise<ClaudeStorageListResult>;
 }
 
+export type ClaudeMessageContent =
+  | { type: "text"; text: string }
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: "image/png"; data: string };
+    };
+
 export interface ClaudeApi {
-  complete(prompt: string): Promise<string>;
+  complete(prompt: string | ClaudeMessageContent[]): Promise<string>;
 }
 
 declare global {

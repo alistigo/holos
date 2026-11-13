@@ -1,0 +1,47 @@
+{
+  "name": "@alistigo/artifact-ai-draw-comments-features",
+  "version": "0.1.0",
+  "description": "Gherkin behavior specifications for the ai-draw-comments widget. Source of truth for what the widget should do.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "packages/artifact-ai-draw-comments-features"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/packages/artifact-ai-draw-comments-features#readme",
+  "keywords": [
+    "alistigo",
+    "gherkin",
+    "bdd",
+    "behavior",
+    "specifications",
+    "draw",
+    "annotation"
+  ],
+  "private": false,
+  "type": "module",
+  "files": [
+    "features"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "alistigo": {
+    "type": "application"
+  },
+  "dependencies": {
+    "@alistigo/artifact-ai-draw-comments": "workspace:*"
+  },
+  "devDependencies": {
+    "gherklin": "^1.0.0",
+    "prettier": "^3.3.0",
+    "prettier-plugin-gherkin": "^3.1.2"
+  }
+}
