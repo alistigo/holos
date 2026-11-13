@@ -68,7 +68,7 @@ A developer building a Claude artifact wants to add draw-comment capability to t
 - What happens if `window.claude` API is unavailable? → The tool displays a non-blocking warning that it is not running inside a Claude artifact, and the "Send" button is disabled.
 - What if the selected region is very small (e.g., less than 20×20 pixels)? → A minimum selection size is enforced; the user is nudged to select a larger area.
 - What if Claude's response is delayed? → A loading indicator appears below the annotation after sending, replaced by the response when it arrives.
-- What if `window.claude.sendMessage()` fails or times out? → An inline error message appears below the canvas; the toolbar and "Send" button are re-enabled so the user can retry without losing their drawing or comment.
+- What if `window.claude.complete()` fails or times out? → An inline error message appears below the canvas; the toolbar and "Send" button are re-enabled so the user can retry without losing their drawing or comment.
 
 ## Requirements *(mandatory)*
 
@@ -89,7 +89,7 @@ A developer building a Claude artifact wants to add draw-comment capability to t
 - **FR-013**: The tool MUST be embeddable in another Claude artifact via a single bundle inclusion, with the Draw Comment button appearing in the host's UI.
 - **FR-015**: The tool MUST ship an agent skill package that allows Claude to understand and invoke the draw-comment capability in conversation.
 - **FR-014**: When `window.claude` is not available, the tool MUST display a clear notice and disable the "Send" button.
-- **FR-016**: If `window.claude.sendMessage()` fails or times out, the tool MUST display an inline error message below the canvas and re-enable the toolbar and "Send" button so the user can retry with their drawing and comment preserved.
+- **FR-016**: If `window.claude.complete()` fails or times out, the tool MUST display an inline error message below the canvas and re-enable the toolbar and "Send" button so the user can retry with their drawing and comment preserved.
 - **FR-017**: The drawing overlay MUST provide an explicit "Cancel" (or "×") button that dismisses the overlay and discards any in-progress drawing. Pressing the Escape key MUST have the same effect.
 
 ### Key Entities
@@ -126,8 +126,8 @@ A developer building a Claude artifact wants to add draw-comment capability to t
 
 ### Session 2026-11-13
 
-- Q: What specific method of the `window.claude` API should be used to submit the annotated PNG and comment text to Claude? → A: `window.claude.sendMessage()` with a multi-content array — an image block (PNG as base64) plus a text block (comment).
+- Q: What specific method of the `window.claude` API should be used to submit the annotated PNG and comment text to Claude? → A: `window.claude.complete()` with a multi-content array — an image block (PNG as base64) plus a text block (comment). Note: `sendMessage()` does not exist; the correct method is `complete()` (see research.md Decision 1).
 - Q: Should ai-draw-comments implement the full Alistigo Artifact Contract or be a lightweight embeddable widget? → A: Lightweight embeddable widget (no full contract), but a skill package MUST be provided.
 - Q: After a user sends a draw comment and sees Claude's response, can they start a new annotation cycle? → A: Yes — sequential annotations are allowed; the button re-activates after each Claude response.
-- Q: When `window.claude.sendMessage()` fails mid-flight, what should the tool do? → A: Show an inline error below the canvas; re-enable toolbar and "Send" so the user can retry with drawing and comment preserved.
+- Q: When `window.claude.complete()` fails mid-flight, what should the tool do? → A: Show an inline error below the canvas; re-enable toolbar and "Send" so the user can retry with drawing and comment preserved.
 - Q: How should a user cancel the draw-comment overlay without sending? → A: An explicit "Cancel" / "×" button on the overlay plus the Escape key; both dismiss and discard the in-progress drawing.
