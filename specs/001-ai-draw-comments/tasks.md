@@ -81,10 +81,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T027 [US2] Update `packages/artifact-ai-draw-comments/src/application/send-annotation.ts`: after `sendAnnotation` resolves, return the Claude response string; wire through App.tsx so the session transitions `sent → responded` with `claudeResponse` set (FR-011); depends on T013, T021
-- [ ] T028 [US2] Update `packages/artifact-ai-draw-comments/src/App.tsx`: when `claudeResponse` arrives on the active session, transition status from `sent` to `responded`; ensure `DrawCommentButton` re-activates (is no longer disabled) after `responded`; a new "Draw Comment" click creates a new `DrawCommentSession` and transitions to `selecting` (prior sessions remain in display thread read-only); depends on T021, T027
-- [ ] T029 [US2] Update `packages/artifact-ai-draw-comments/src/components/AnnotationThread.tsx`: confirm loading indicator (spinner or "Claude is thinking…") is shown when `session.status === "sent"` and `session.claudeResponse === null`; confirm response text renders once `session.claudeResponse` is set; annotated PNG and comment remain visible above the response (US2 scenario 2); depends on T020
-- [ ] T030 [US2] Update `packages/artifact-ai-draw-comments-features/step-definitions/`: add step implementations for `claude-response.feature` scenarios that drive `App` through the `sent → responded` transition; depends on T028
+- [x] T027 [US2] Update `packages/artifact-ai-draw-comments/src/application/send-annotation.ts`: after `sendAnnotation` resolves, return the Claude response string; wire through App.tsx so the session transitions `sent → responded` with `claudeResponse` set (FR-011); depends on T013, T021
+- [x] T028 [US2] Update `packages/artifact-ai-draw-comments/src/App.tsx`: when `claudeResponse` arrives on the active session, transition status from `sent` to `responded`; ensure `DrawCommentButton` re-activates (is no longer disabled) after `responded`; a new "Draw Comment" click creates a new `DrawCommentSession` and transitions to `selecting` (prior sessions remain in display thread read-only); depends on T021, T027
+- [x] T029 [US2] Update `packages/artifact-ai-draw-comments/src/components/AnnotationThread.tsx`: confirm loading indicator (spinner or "Claude is thinking…") is shown when `session.status === "sent"` and `session.claudeResponse === null`; confirm response text renders once `session.claudeResponse` is set; annotated PNG and comment remain visible above the response (US2 scenario 2); depends on T020
+- [x] T030 [US2] Update `packages/artifact-ai-draw-comments-features/step-definitions/`: add step implementations for `claude-response.feature` scenarios that drive `App` through the `sent → responded` transition; depends on T028
 
 **Checkpoint**: Both US1 and US2 work sequentially in the playground; `nx run artifact-ai-draw-comments:build` still passes; `nx run artifact-ai-draw-comments:storybook` still builds
 

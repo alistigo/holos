@@ -30,6 +30,16 @@
     ".": {
       "import": "./dist/index.umd.js",
       "types": "./src/index.tsx"
+    },
+    "./domain/session": {
+      "bun": "./src/domain/session.ts",
+      "import": "./src/domain/session.js",
+      "types": "./src/domain/session.ts"
+    },
+    "./domain/shapes": {
+      "bun": "./src/domain/shapes.ts",
+      "import": "./src/domain/shapes.js",
+      "types": "./src/domain/shapes.ts"
     }
   },
   "main": "./dist/index.umd.js",

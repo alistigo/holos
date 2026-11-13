@@ -1,0 +1,7 @@
+{
+  "default": {
+    "paths": ["features/claude-response.feature"],
+    "import": ["step-definitions/**/*.steps.ts"],
+    "format": ["progress"]
+  }
+}

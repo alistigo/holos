@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "types": ["node"]
+  },
+  "include": ["step-definitions/**/*.ts", "gherklin.config.ts"]
+}
