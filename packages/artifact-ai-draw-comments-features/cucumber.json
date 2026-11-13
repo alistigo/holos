@@ -1,6 +1,10 @@
 {
   "default": {
-    "paths": ["features/claude-response.feature", "features/embed-host.feature"],
+    "paths": [
+      "features/draw-comment-send.feature",
+      "features/claude-response.feature",
+      "features/embed-host.feature"
+    ],
     "import": ["step-definitions/**/*.steps.ts"],
     "format": ["progress"]
   }
