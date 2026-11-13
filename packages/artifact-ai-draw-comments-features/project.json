@@ -4,6 +4,13 @@
   "sourceRoot": "{projectRoot}/step-definitions",
   "projectType": "library",
   "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun ./node_modules/@cucumber/cucumber/bin/cucumber.js",
+        "cwd": "{projectRoot}"
+      }
+    },
     "qa:lint": {
       "executor": "nx:run-commands",
       "options": {
