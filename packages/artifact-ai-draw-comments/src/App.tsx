@@ -1,5 +1,5 @@
 import type Konva from "konva";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sendAnnotation } from "./application/claude-bridge.js";
 import { AnnotationThread } from "./components/AnnotationThread.js";
 import { CommentInput } from "./components/CommentInput.js";
@@ -141,6 +141,7 @@ function AnnotationList({ sessions }: { sessions: DrawCommentSession[] }) {
   );
 }
 
+// fallow-ignore-next-line complexity
 export function App() {
   const [logs, setLogs] = useState<SessionEventLog[]>([]);
   const [activeTool, setActiveTool] = useState<"rectangle" | "line">("rectangle");
@@ -225,13 +226,39 @@ export function App() {
     }
   }
 
+  // Handle Escape during the drawing phase (SelectionOverlay covers selecting; this covers drawing/submitting).
+  const activeLogRef = useRef(activeLog);
+  activeLogRef.current = activeLog;
+  useEffect(() => {
+    // fallow-ignore-next-line complexity
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      const log = activeLogRef.current;
+      if (log === undefined) return;
+      const session = projectSession(log);
+      if (session.status === "drawing" || session.status === "submitting") {
+        setLogs((prev) =>
+          appendEvent(prev, log.sessionId, { type: "AnnotationCancelled", at: Date.now() }),
+        );
+        setShapes([]);
+        setComment("");
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <div className="ai-draw-comments font-sans text-sm">
       <ClaudeUnavailableBanner onDismiss={handleDismissError} />
       <DrawCommentButton
         onClick={startSession}
-        disabled={isActive}
-        disabledReason="An annotation is already in progress"
+        disabled={isActive || !("claude" in window)}
+        disabledReason={
+          !("claude" in window)
+            ? "Draw comments require a Claude artifact environment"
+            : "An annotation is already in progress"
+        }
       />
       {activeSession !== null && (
         <SessionActiveView

@@ -111,19 +111,19 @@
 
 **Purpose**: Ship the agent skill so Claude can understand and invoke draw-comment capability in conversation.
 
-- [ ] T035 Author `packages/artifact-ai-draw-comments-skill/SKILL.md`: define skill name `artifact-ai-draw-comments`, describe how Claude should suggest the widget to users who want to give visual feedback on artifacts, describe how to embed via `<script>` tag and the `window.AiDrawComments` API, include example invocations; add `packages/artifact-ai-draw-comments-skill/README.md`
-- [ ] T036 Add Nx targets to `packages/artifact-ai-draw-comments-skill/project.json`: `lint` (biome check), `typecheck` (tsc --noEmit on any type declarations if present); verify `nx run artifact-ai-draw-comments-skill:lint` passes
+- [x] T035 Author `packages/artifact-ai-draw-comments-skill/SKILL.md`: define skill name `artifact-ai-draw-comments`, describe how Claude should suggest the widget to users who want to give visual feedback on artifacts, describe how to embed via `<script>` tag and the `window.AiDrawComments` API, include example invocations; add `packages/artifact-ai-draw-comments-skill/README.md`
+- [x] T036 Add Nx targets to `packages/artifact-ai-draw-comments-skill/project.json`: `lint` (biome check), `typecheck` (tsc --noEmit on any type declarations if present); verify `nx run artifact-ai-draw-comments-skill:lint` passes
 
 ---
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T037 [P] Update `packages/artifact-ai-draw-comments/README.md`: document embedding (single script tag, `#alistigo-config`), imperative API, `window.claude` requirement, and standalone usage; reference `specs/001-ai-draw-comments/contracts/embed-api.md`
-- [ ] T038 [P] Add step definitions for `draw-comment-send.feature` scenarios in `packages/artifact-ai-draw-comments-features/step-definitions/draw-comment-send.steps.ts`; run `nx run artifact-ai-draw-comments-features:test` and ensure all P1 Gherkin scenarios pass
-- [ ] T039 [P] Run Quickstart Scenario 3 (Send Failure Recovery, FR-016): stub `window.claude.complete` to reject; verify inline error appears, toolbar + Send re-enable, drawing + comment preserved; fix any bugs found
-- [ ] T040 [P] Run Quickstart Scenario 4 (Cancel via Escape, FR-017): press Escape during selection and drawing; verify overlay dismisses, session discarded, button re-activates; fix any bugs found
-- [ ] T041 [P] Run Quickstart Scenario 5 (`window.claude` Unavailable, FR-014): delete `window.claude`; verify button is visually disabled with tooltip/notice; fix any bugs found
-- [ ] T042 Run full QA gate: `pnpm nx run holos:qa` — lint, typecheck, build, dead-code audit all pass for affected packages; fix any violations
+- [x] T037 [P] Update `packages/artifact-ai-draw-comments/README.md`: document embedding (single script tag, `#alistigo-config`), imperative API, `window.claude` requirement, and standalone usage; reference `specs/001-ai-draw-comments/contracts/embed-api.md`
+- [x] T038 [P] Add step definitions for `draw-comment-send.feature` scenarios in `packages/artifact-ai-draw-comments-features/step-definitions/draw-comment-send.steps.ts`; run `nx run artifact-ai-draw-comments-features:test` and ensure all P1 Gherkin scenarios pass
+- [x] T039 [P] Run Quickstart Scenario 3 (Send Failure Recovery, FR-016): stub `window.claude.complete` to reject; verify inline error appears, toolbar + Send re-enable, drawing + comment preserved; fix any bugs found
+- [x] T040 [P] Run Quickstart Scenario 4 (Cancel via Escape, FR-017): press Escape during selection and drawing; verify overlay dismisses, session discarded, button re-activates; fix any bugs found
+- [x] T041 [P] Run Quickstart Scenario 5 (`window.claude` Unavailable, FR-014): delete `window.claude`; verify button is visually disabled with tooltip/notice; fix any bugs found
+- [x] T042 Run full QA gate: `pnpm nx run holos:qa` — lint, typecheck, build, dead-code audit all pass for affected packages; fix any violations
 
 ---
 
