@@ -44,6 +44,10 @@ Alistigo is a **platform for AI artifacts** — NOT a list app. The list artifac
 - Every `@alistigo` artifact MUST implement the Artifact Contract: lifecycle phases,
   loading screen, error screen, Alistigo badge, plugin hook, config-doc + state-doc,
   and an agent skill package (ADR-0018).
+- **Exception — `widget` packages**: packages with `"alistigo": { "type": "widget" }`
+  are lightweight embeddable UI components designed to run inside a host artifact or
+  standalone. They are exempt from the Artifact Contract requirements above. They MUST
+  still ship an agent skill package.
 - Platform packages MUST NOT be copy-pasted into new artifacts — depend on them via
   `workspace:*` or npm.
 - Artifacts are delivered as UMD bundles via npm + jsDelivr; all jsDelivr URLs MUST
@@ -160,8 +164,10 @@ Strict mode is ON everywhere: `strict`, `exactOptionalPropertyTypes`,
 
 Every workspace package MUST declare `"alistigo": { "type": "<value>" }` in its
 `package.json`. Valid types: `domain`, `application`, `presentation`, `infrastructure`,
-`plugin`, `skill`. Enforced by `qa:artifact-arch-check`; boundary rules are derived from
-CALM at runtime.
+`plugin`, `skill`, `widget`. Type meanings:
+- `widget`: lightweight embeddable UI component; lighter than `application`; exempt from
+  Artifact Contract; MUST still ship an agent skill package.
+Enforced by `qa:artifact-arch-check`; boundary rules are derived from CALM at runtime.
 
 **Observability**
 
@@ -252,4 +258,4 @@ system boundaries and relationships.
 All PRs are expected to verify compliance with the active principles. Compliance review is
 expected on each amendment. No automated merges to `main` without CI passing.
 
-**Version**: 1.1.0 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-11-12
+**Version**: 1.2.0 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-11-13

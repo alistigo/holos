@@ -112,6 +112,35 @@ responded
 
 ---
 
+## Domain Events (In-Memory Event Sourcing)
+
+`DrawCommentSession` is a **projected view** derived from an append-only `SessionEventLog`. No events are persisted; the log lives in memory for the lifetime of the React component tree (constitution Principle III — ALL mutations MUST be appended events).
+
+```typescript
+export type SessionEvent =
+  | { type: "AnnotationStarted";   sessionId: string; at: number }
+  | { type: "RegionSelected";      region: SelectionRegion; at: number }
+  | { type: "ShapeDrawn";          shape: DrawShape; at: number }
+  | { type: "CommentUpdated";      comment: string; at: number }
+  | { type: "AnnotationSubmitting"; at: number }
+  | { type: "AnnotationSent";      snapshot: AnnotatedSnapshot; at: number }
+  | { type: "SendFailed";          error: string; at: number }
+  | { type: "ClaudeResponded";     response: string; at: number }
+  | { type: "AnnotationCancelled"; at: number };
+
+export type SessionEventLog = { sessionId: string; events: SessionEvent[] };
+```
+
+Projector (pure function, no side effects):
+
+```typescript
+export function projectSession(log: SessionEventLog): DrawCommentSession
+```
+
+`App.tsx` stores `SessionEventLog[]` as its primary React state. It derives `DrawCommentSession[]` by calling `projectSession()` on each log. To mutate state, it appends an event to the relevant log — never modifies the projected object directly.
+
+---
+
 ## Extended ClaudeApi Type (to be added to `@alistigo/claude-artifact-api`)
 
 ```typescript

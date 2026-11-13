@@ -50,10 +50,10 @@ Technical approach: React + Konva for the drawing overlay; `html-to-image` (pre-
 | I. Package-First | Every deliverable is a workspace package under `packages/` | ✅ PASS | Three new packages: main widget, skill, features |
 | I. Package-First | Each package has `package.json` (scoped `@alistigo/`), `project.json`, `README.md`, `LICENSE` | ✅ PASS | Scaffolded via `new-package.sh` |
 | I. Package-First | Cross-package imports via `workspace:*` | ✅ PASS | `artifact-ai-draw-comments` → `claude-artifact-api` via `workspace:*` |
-| II. Platform Architecture | Artifact Contract (loading screen, badge, config-doc, etc.) | ✅ JUSTIFIED | Explicitly waived in clarification Q2 — lightweight plugin, not a full artifact |
-| II. Platform Architecture | `"alistigo": { "type": "..." }` in package.json | ✅ PASS | Main widget = `application`; skill = `skill` |
-| III. DDD + Event Sourcing | Domain layer has zero external imports | ✅ PASS | `DrawCommentSession` state machine is pure logic; no DOM/IO imports |
-| III. DDD + Event Sourcing | No persistence → event store not applicable | ✅ PASS | Explicitly session-scoped |
+| II. Platform Architecture | Artifact Contract (loading screen, badge, config-doc, etc.) | ✅ PASS | `widget` type is explicitly exempt from Artifact Contract per constitution v1.2.0 |
+| II. Platform Architecture | `"alistigo": { "type": "..." }` in package.json | ✅ PASS | Main widget = `widget`; skill = `skill` |
+| III. DDD + Event Sourcing | Domain layer has zero external imports | ✅ PASS | `session.ts` defines `SessionEvent` union + `projectSession()` projector; pure logic; no DOM/IO imports |
+| III. DDD + Event Sourcing | ALL mutations are appended events | ✅ PASS | In-memory `SessionEventLog`; `App.tsx` appends events, derives `DrawCommentSession` via `projectSession()`; no direct state mutation |
 | IV. TDD via Gherkin | Behavior specified in `.feature` files before implementation | ✅ PASS | `artifact-ai-draw-comments-features` package required (see Project Structure) |
 | IV. TDD via Gherkin | Every React component has a co-located Storybook story | ✅ PASS | Enforced by `qa:stories-check`; must be authored before implementation |
 | V. Architecture as Code | CALM — no new architectural boundaries introduced | ✅ N/A | This feature adds packages within existing boundaries; no `packages/architecture/` changes required |
