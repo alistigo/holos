@@ -3,8 +3,28 @@
   "specName": "001-ai-draw-comments",
   "branch": "001-ai-draw-comments",
   "selectedAt": "2026-11-13T12:47:58.758Z",
-  "currentStep": "specify",
-  "status": "draft",
-  "history": [],
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
+  "history": [
+    {
+      "step": "specify",
+      "status": "specified",
+      "by": "extension",
+      "at": "2026-11-13T12:47:58.758Z"
+    },
+    {
+      "step": "plan",
+      "status": "planned",
+      "by": "extension",
+      "at": "2026-11-13T13:00:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "status": "ready-to-implement",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-13T14:00:00.000Z"
+    }
+  ],
   "telemetryInstanceId": "71904f97-ada2-422f-a130-a0f0c2b199d1"
 }
