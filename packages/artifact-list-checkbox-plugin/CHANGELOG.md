@@ -1,3 +1,11 @@
+## 0.3.10 (2026-11-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.9
+- Updated artifact-dev-tools to 0.2.1
+- Updated list-document to 0.5.10
+
 ## 0.3.9 (2026-11-12)
 
 ### 🚀 Features

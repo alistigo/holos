@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-sentry-plugin",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Sentry error-monitoring plugin for @alistigo artifacts.",
   "license": "MIT",
   "author": {

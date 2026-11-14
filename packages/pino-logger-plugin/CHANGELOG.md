@@ -1,3 +1,9 @@
+## 0.5.1 (2026-11-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.9
+
 ## 0.5.0 (2026-11-12)
 
 ### 🚀 Features

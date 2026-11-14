@@ -1,3 +1,13 @@
+## 0.4.9 (2026-11-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.9
+- Updated explorer-components-react to 0.5.9
+- Updated claude-storage-plugin to 0.6.9
+- Updated claude-artifact-api to 0.4.9
+- Updated artifact-core to 0.4.9
+
 ## 0.4.8 (2026-11-12)
 
 ### 🩹 Fixes

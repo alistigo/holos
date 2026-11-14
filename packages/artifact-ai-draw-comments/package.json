@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-ai-draw-comments",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Embeddable Claude artifact widget for visual draw annotations — select a region, draw shapes, attach a comment, send to Claude.",
   "license": "MIT",
   "author": {

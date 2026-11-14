@@ -1,3 +1,18 @@
+## 1.3.6 (2026-11-14)
+
+### 🚀 Features
+
+- **artifact-ai-draw-comments:** Phase 8 Convergence — TypeID, Lingui i18n, domain purity (T043-T049) ([41608c7](https://github.com/alistigo/holos/commit/41608c7))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.6
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.3.5 (2026-11-12)
 
 ### 🚀 Features

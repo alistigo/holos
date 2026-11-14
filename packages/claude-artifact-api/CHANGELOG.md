@@ -1,3 +1,14 @@
+## 0.4.9 (2026-11-14)
+
+### 🚀 Features
+
+- **001:** Phase 1+2 — scaffold packages, domain layer, Gherkin features ([8241cf3](https://github.com/alistigo/holos/commit/8241cf3))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-ai-draw-comments-features",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Gherkin behavior specifications for the ai-draw-comments widget. Source of truth for what the widget should do.",
   "license": "MIT",
   "author": {

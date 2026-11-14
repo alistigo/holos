@@ -1,3 +1,12 @@
+## 0.6.9 (2026-11-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.9
+- Updated claude-artifact-api to 0.4.9
+- Updated artifact-dev-tools to 0.2.1
+- Updated pino-logger-plugin to 0.5.1
+
 ## 0.6.8 (2026-11-12)
 
 ### 🚀 Features

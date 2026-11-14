@@ -1,3 +1,18 @@
+## 0.9.2 (2026-11-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.9
+- Updated artifact-list-checkbox-plugin to 0.3.10
+- Updated list-components-react to 0.5.10
+- Updated artifact-plugin-api to 0.6.9
+- Updated claude-artifact-api to 0.4.9
+- Updated artifact-dev-tools to 0.2.1
+- Updated pino-logger-plugin to 0.5.1
+- Updated artifact-core to 0.4.9
+- Updated list-document to 0.5.10
+- Updated list-domain to 0.4.10
+
 ## 0.9.1 (2026-11-12)
 
 ### 🚀 Features

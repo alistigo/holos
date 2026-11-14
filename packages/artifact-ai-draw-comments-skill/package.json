@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-ai-draw-comments-skill",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Alistigo artifact-ai-draw-comments agent skill — visual draw annotation capability for Claude artifact iframes.",
   "license": "MIT",
   "author": {

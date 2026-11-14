@@ -1,3 +1,15 @@
+## 0.4.11 (2026-11-14)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.9
+- Updated list-components-react to 0.5.10
+- Updated local-storage-plugin to 0.5.9
+- Updated claude-artifact-api to 0.4.9
+- Updated artifact-manager to 0.4.9
+- Updated artifact-list to 0.9.2
+- Updated list-document to 0.5.10
+
 ## 0.4.10 (2026-11-12)
 
 ### 🩹 Fixes
