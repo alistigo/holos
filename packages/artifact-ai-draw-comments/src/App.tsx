@@ -228,7 +228,8 @@ export function App() {
     }
   }
 
-  // fallow-ignore-next-line complexity — React send handler; branching is guard clauses, not reducible
+  // Guard clauses only; not reducible without non-obvious restructuring
+  // fallow-ignore-next-line complexity
   async function handleSend() {
     const log = activeLog;
     const session = activeSession;
