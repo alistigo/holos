@@ -21,6 +21,7 @@
     "**/.storybook/**",
 
     "apps/alistigo-artifact-playground/index.umd.html",
+    "packages/artifact-ai-draw-comments/demo/**",
     "apps/alistigo-artifact-playground/src/components/DevFixturePicker.tsx",
 
     "**/lingui.config.ts",
