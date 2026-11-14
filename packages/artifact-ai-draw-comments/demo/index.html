@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Draw Comments — Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 2rem;
+        background: #f5f5f5;
+        min-height: 100vh;
+      }
+      .demo-content {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      h1 { color: #1a1a1a; }
+      p { color: #555; line-height: 1.6; }
+    </style>
+    <!-- html-to-image CDN dependency required by the widget -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js"></script>
+  </head>
+  <body>
+    <div class="demo-content">
+      <h1>AI Draw Comments Demo</h1>
+      <p>
+        This page demonstrates the <code>@alistigo/artifact-ai-draw-comments</code> widget.
+        The "Draw Comment" button appears above — click it to start an annotation session.
+      </p>
+      <p>
+        Note: sending to Claude requires a Claude artifact iframe context
+        (<code>window.claude</code>). In this standalone demo, the send step will
+        show an error since <code>window.claude</code> is not available.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris.
+      </p>
+    </div>
+    <script src="../dist/index.umd.js"></script>
+  </body>
+</html>

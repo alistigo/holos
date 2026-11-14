@@ -23,7 +23,7 @@
     "apps/alistigo-artifact-playground/index.umd.html",
     "apps/alistigo-artifact-playground/src/components/DevFixturePicker.tsx",
 
-    "lingui.config.ts",
+    "**/lingui.config.ts",
     "packages/list-features/gherklin.config.ts",
     "packages/artifact-ai-draw-comments-features/gherklin.config.ts",
     "packages/list-features/tools/validate.ts",

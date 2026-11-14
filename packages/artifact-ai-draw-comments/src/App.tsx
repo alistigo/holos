@@ -1,6 +1,7 @@
+import { Trans, useLingui } from "@lingui/react/macro";
 import type Konva from "konva";
 import { useEffect, useRef, useState } from "react";
-import { sendAnnotation } from "./application/claude-bridge.js";
+import { sendAnnotationUseCase } from "./application/send-annotation.js";
 import { AnnotationThread } from "./components/AnnotationThread.js";
 import { CommentInput } from "./components/CommentInput.js";
 import { DrawCanvas } from "./components/DrawCanvas.js";
@@ -14,9 +15,8 @@ import type {
   SessionEvent,
   SessionEventLog,
 } from "./domain/session.js";
-import { projectSession } from "./domain/session.js";
+import { generateDrawCommentSessionId, projectSession } from "./domain/session.js";
 import type { DrawShape } from "./domain/shapes.js";
-import { buildAnnotatedSnapshot } from "./domain/snapshot.js";
 import "./styles/widget.css";
 
 function appendEvent(
@@ -35,10 +35,11 @@ function isSessionActive(session: DrawCommentSession | null): boolean {
 }
 
 function ClaudeUnavailableBanner({ onDismiss }: { onDismiss: () => void }) {
+  const { t } = useLingui();
   if ("claude" in window) return null;
   return (
     <ErrorBanner
-      message="window.claude is not available — this widget requires a Claude artifact context."
+      message={t`window.claude is not available — this widget requires a Claude artifact context.`}
       onDismiss={onDismiss}
     />
   );
@@ -55,6 +56,7 @@ interface DrawingPhaseProps {
   onShapesChange: (shapes: DrawShape[]) => void;
   onCommentChange: (v: string) => void;
   onSend: () => void;
+  onCancel: () => void;
   onDismissError: () => void;
 }
 
@@ -69,8 +71,10 @@ function DrawingPhase({
   onShapesChange,
   onCommentChange,
   onSend,
+  onCancel,
   onDismissError,
 }: DrawingPhaseProps) {
+  const { t } = useLingui();
   return (
     <>
       {session.region !== null && (
@@ -110,6 +114,15 @@ function DrawingPhase({
               isSending={session.status === "submitting"}
             />
           </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={session.status === "submitting"}
+            aria-label={t`Cancel annotation`}
+            className="shrink-0 rounded px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Trans>Cancel</Trans>
+          </button>
         </div>
       </div>
     </>
@@ -118,12 +131,11 @@ function DrawingPhase({
 
 interface SessionActiveViewProps extends DrawingPhaseProps {
   onSelect: (region: SelectionRegion) => void;
-  onCancel: () => void;
 }
 
-function SessionActiveView({ session, onSelect, onCancel, ...rest }: SessionActiveViewProps) {
+function SessionActiveView({ session, onSelect, ...rest }: SessionActiveViewProps) {
   if (session.status === "selecting") {
-    return <SelectionOverlay onSelect={onSelect} onCancel={onCancel} />;
+    return <SelectionOverlay onSelect={onSelect} onCancel={rest.onCancel} />;
   }
   if (session.status !== "drawing" && session.status !== "submitting") return null;
   return <DrawingPhase session={session} {...rest} />;
@@ -143,6 +155,7 @@ function AnnotationList({ sessions }: { sessions: DrawCommentSession[] }) {
 
 // fallow-ignore-next-line complexity
 export function App() {
+  const { t } = useLingui();
   const [logs, setLogs] = useState<SessionEventLog[]>([]);
   const [activeTool, setActiveTool] = useState<"rectangle" | "line">("rectangle");
   const [shapes, setShapes] = useState<DrawShape[]>([]);
@@ -160,7 +173,7 @@ export function App() {
   }
 
   function startSession() {
-    const id = crypto.randomUUID();
+    const id = generateDrawCommentSessionId().toString();
     setShapes([]);
     setComment("");
     setLogs((prev) => [
@@ -199,25 +212,31 @@ export function App() {
     }
   }
 
-  async function doSend(sessionId: string, regionEl: HTMLDivElement, stage: Konva.Stage) {
+  async function doSend(
+    session: DrawCommentSession,
+    sessionId: string,
+    regionEl: HTMLDivElement,
+    stage: Konva.Stage,
+  ) {
     dispatch(sessionId, { type: "AnnotationSubmitting", at: Date.now() });
     try {
-      const snapshot = await buildAnnotatedSnapshot(regionEl, stage, comment);
+      const { snapshot, response } = await sendAnnotationUseCase(session, regionEl, stage);
       dispatch(sessionId, { type: "AnnotationSent", snapshot, at: Date.now() });
-      const response = await sendAnnotation(snapshot);
       dispatch(sessionId, { type: "ClaudeResponded", response, at: Date.now() });
     } catch (e) {
       dispatch(sessionId, { type: "SendFailed", error: String(e), at: Date.now() });
     }
   }
 
+  // fallow-ignore-next-line complexity — React send handler; branching is guard clauses, not reducible
   async function handleSend() {
     const log = activeLog;
-    if (log === undefined) return;
+    const session = activeSession;
+    if (log === undefined || session === null) return;
     const regionEl = regionRef.current;
     const stage = stageRef.current;
     if (regionEl === null || stage === null) return;
-    await doSend(log.sessionId, regionEl, stage);
+    await doSend(session, log.sessionId, regionEl, stage);
   }
 
   function handleDismissError() {
@@ -256,8 +275,8 @@ export function App() {
         disabled={isActive || !("claude" in window)}
         disabledReason={
           !("claude" in window)
-            ? "Draw comments require a Claude artifact environment"
-            : "An annotation is already in progress"
+            ? t`Draw comments require a Claude artifact environment`
+            : t`An annotation is already in progress`
         }
       />
       {activeSession !== null && (

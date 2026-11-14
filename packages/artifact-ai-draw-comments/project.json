@@ -34,6 +34,14 @@
         "cwd": "{projectRoot}"
       }
     },
+    "demo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vite preview --open demo/index.html",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["build"]
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

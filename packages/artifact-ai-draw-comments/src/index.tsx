@@ -1,6 +1,7 @@
 export { App } from "./App.js";
 export { ClaudeUnavailableError, sendAnnotation } from "./application/claude-bridge.js";
 export { sendAnnotationUseCase } from "./application/send-annotation.js";
+export { buildAnnotatedSnapshot } from "./application/snapshot-builder.js";
 export { mount, unmount } from "./auto-mount.js";
 export type {
   AnnotatedSnapshot,
@@ -13,7 +14,6 @@ export type {
 export { canSend, projectSession } from "./domain/session.js";
 export type { DrawShape } from "./domain/shapes.js";
 export { DEFAULT_STROKE_COLOR } from "./domain/shapes.js";
-export { buildAnnotatedSnapshot } from "./domain/snapshot.js";
 
 export function isReady(): boolean {
   return "claude" in window;

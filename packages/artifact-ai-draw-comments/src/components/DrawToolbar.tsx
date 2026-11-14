@@ -1,3 +1,5 @@
+import { useLingui } from "@lingui/react/macro";
+
 type DrawTool = "rectangle" | "line";
 
 interface DrawToolbarProps {
@@ -6,21 +8,22 @@ interface DrawToolbarProps {
 }
 
 export function DrawToolbar({ activeTool, onToolChange }: DrawToolbarProps) {
+  const { t } = useLingui();
   return (
     <div className="flex flex-col gap-1 rounded-md border border-gray-200 bg-white p-1 shadow-sm">
       <ToolButton
         tool="rectangle"
         isActive={activeTool === "rectangle"}
         onSelect={onToolChange}
-        label="Rectangle"
-        title="Draw rectangle"
+        label={t`Rectangle`}
+        title={t`Draw rectangle`}
       />
       <ToolButton
         tool="line"
         isActive={activeTool === "line"}
         onSelect={onToolChange}
-        label="Line"
-        title="Draw line"
+        label={t`Line`}
+        title={t`Draw line`}
       />
     </div>
   );

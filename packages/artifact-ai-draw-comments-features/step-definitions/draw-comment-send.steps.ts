@@ -30,6 +30,18 @@ const SNAPSHOT = {
   capturedAt: 5000,
 };
 
+function initDrawingPhase(world: DrawSendWorld): void {
+  world.log = {
+    sessionId: DS_SESSION_ID,
+    events: [
+      { type: "AnnotationStarted", sessionId: DS_SESSION_ID, at: 1000 },
+      { type: "RegionSelected", region: REGION, at: 2000 },
+    ],
+  };
+  world.session = projectSession(world.log);
+  assert.equal(world.session.status, "drawing");
+}
+
 // --- Scenario 1: Draw Comment button is visible on load ---
 
 Given(
@@ -108,15 +120,7 @@ Then("a rectangular selection indicator is shown over that region", function (th
 // --- Scenario 4: Confirming a selection shows the drawing canvas and toolbar ---
 
 Given("a region has been selected by drag", function (this: DrawSendWorld) {
-  this.log = {
-    sessionId: DS_SESSION_ID,
-    events: [
-      { type: "AnnotationStarted", sessionId: DS_SESSION_ID, at: 1000 },
-      { type: "RegionSelected", region: REGION, at: 2000 },
-    ],
-  };
-  this.session = projectSession(this.log);
-  assert.equal(this.session.status, "drawing");
+  initDrawingPhase(this);
 });
 
 When("the selection is confirmed", function (this: DrawSendWorld) {
@@ -139,15 +143,7 @@ Then("a drawing toolbar is visible adjacent to the canvas", function (this: Draw
 // --- Scenario 5: Drawing a rectangle on the canvas keeps underlying content visible ---
 
 Given("the canvas is active with the rectangle tool selected", function (this: DrawSendWorld) {
-  this.log = {
-    sessionId: DS_SESSION_ID,
-    events: [
-      { type: "AnnotationStarted", sessionId: DS_SESSION_ID, at: 1000 },
-      { type: "RegionSelected", region: REGION, at: 2000 },
-    ],
-  };
-  this.session = projectSession(this.log);
-  assert.equal(this.session.status, "drawing");
+  initDrawingPhase(this);
 });
 
 When("the user click-drags on the canvas to draw a rectangle", function (this: DrawSendWorld) {
@@ -229,5 +225,52 @@ Then("the drawing canvas switches to read-only mode", function (this: DrawSendWo
     this.session.status,
     "sent",
     "Session must be in 'sent' state (read-only) after send",
+  );
+});
+
+// --- Scenario 7: Cancel button in selection overlay dismisses the annotation session ---
+
+When(
+  "the user clicks the {string} cancel button in the top-right corner",
+  function (this: DrawSendWorld, _label: string) {
+    this.log = {
+      ...this.log,
+      events: [...this.log.events, { type: "AnnotationCancelled", at: 2000 }],
+    };
+    this.session = projectSession(this.log);
+  },
+);
+
+Then("the selection overlay is dismissed", function (this: DrawSendWorld) {
+  assert.equal(this.session.status, "idle", "Session must return to idle after cancel");
+});
+
+Then("the {string} button is re-enabled", function (this: DrawSendWorld, _label: string) {
+  const buttonEnabled = this.session.status === "idle" || this.session.status === "responded";
+  assert.ok(buttonEnabled, `Button must be re-enabled after cancel; got "${this.session.status}"`);
+});
+
+// --- Scenario 8: Cancel button in drawing panel dismisses the annotation session ---
+
+Given("the drawing phase is active with the canvas visible", function (this: DrawSendWorld) {
+  initDrawingPhase(this);
+});
+
+When(
+  "the user clicks the {string} button in the drawing panel",
+  function (this: DrawSendWorld, _label: string) {
+    this.log = {
+      ...this.log,
+      events: [...this.log.events, { type: "AnnotationCancelled", at: 3000 }],
+    };
+    this.session = projectSession(this.log);
+  },
+);
+
+Then("the drawing canvas and toolbar are dismissed", function (this: DrawSendWorld) {
+  assert.equal(
+    this.session.status,
+    "idle",
+    "Session must return to idle after cancel from drawing",
   );
 });

@@ -1,3 +1,4 @@
+import { Trans, useLingui } from "@lingui/react/macro";
 import type { DrawCommentSession, SessionStatus } from "../domain/session.js";
 
 interface AnnotationThreadProps {
@@ -9,6 +10,7 @@ function isAwaitingResponse(status: SessionStatus, claudeResponse: string | null
 }
 
 export function AnnotationThread({ session }: AnnotationThreadProps) {
+  const { t } = useLingui();
   const { snapshot, claudeResponse, status } = session;
 
   if (snapshot === null) return null;
@@ -18,7 +20,7 @@ export function AnnotationThread({ session }: AnnotationThreadProps) {
       <div className="p-3">
         <img
           src={`data:image/png;base64,${snapshot.pngBase64}`}
-          alt="Annotated region"
+          alt={t`Annotated region`}
           className="w-full rounded border border-gray-100"
         />
         {snapshot.comment.length > 0 && (
@@ -32,7 +34,7 @@ export function AnnotationThread({ session }: AnnotationThreadProps) {
               className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500"
               aria-hidden="true"
             />
-            Claude is thinking…
+            <Trans>Claude is thinking…</Trans>
           </div>
         ) : (
           <p className="whitespace-pre-wrap text-sm text-gray-800">{claudeResponse}</p>

@@ -38,6 +38,8 @@ All entity IDs use **TypeID** from the [`typeid-js`](https://github.com/jetify-c
 | `lev` | ListEventId | `@alistigo/list-domain` |
 | `act` | ActorId | `@alistigo/list-domain` |
 | `usr` | UserId | `@alistigo/artifact-user-plugin` |
+| `dcs` | DrawCommentSessionId | `@alistigo/artifact-ai-draw-comments` |
+| `dsh` | DrawShapeId | `@alistigo/artifact-ai-draw-comments` |
 
 New entity types must claim a prefix in this table before shipping.
 

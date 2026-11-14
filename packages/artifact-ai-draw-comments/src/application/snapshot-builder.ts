@@ -1,7 +1,5 @@
 import type { Stage } from "konva/lib/Stage";
-import type { AnnotatedSnapshot } from "./session.js";
-
-export type { AnnotatedSnapshot };
+import type { AnnotatedSnapshot } from "../domain/session.js";
 
 export async function buildAnnotatedSnapshot(
   regionEl: HTMLElement,

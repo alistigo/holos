@@ -1,3 +1,4 @@
+import { Trans, useLingui } from "@lingui/react/macro";
 import type { DrawShape } from "../domain/shapes.js";
 
 interface CommentInputProps {
@@ -15,6 +16,7 @@ export function CommentInput({
   onSend,
   isSending,
 }: CommentInputProps) {
+  const { t } = useLingui();
   const sendable = shapes.length > 0 || comment.trim().length > 0;
 
   return (
@@ -22,11 +24,11 @@ export function CommentInput({
       <textarea
         value={comment}
         onChange={(e) => onCommentChange(e.target.value)}
-        placeholder="Add a comment… (optional)"
+        placeholder={t`Add a comment… (optional)`}
         rows={2}
         className="w-full resize-none rounded border border-gray-300 px-2 py-1.5 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
         disabled={isSending}
-        aria-label="Annotation comment"
+        aria-label={t`Annotation comment`}
       />
       <div className="flex justify-end">
         <button
@@ -35,7 +37,7 @@ export function CommentInput({
           disabled={!sendable || isSending}
           className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSending ? "Sending…" : "Send"}
+          {isSending ? <Trans>Sending…</Trans> : <Trans>Send</Trans>}
         </button>
       </div>
     </div>

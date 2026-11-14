@@ -1,5 +1,7 @@
+import { I18nProvider } from "@lingui/react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App.js";
+import { bootI18n, i18n } from "./i18n.js";
 
 const MOUNT_ID = "ai-draw-comments-root";
 
@@ -31,11 +33,16 @@ function parseConfig(): unknown {
 
 export function mount(container: HTMLElement): void {
   if (document.getElementById(MOUNT_ID) !== null) return;
+  bootI18n();
   const root = document.createElement("div");
   root.id = MOUNT_ID;
   container.prepend(root);
   rootInstance = createRoot(root);
-  rootInstance.render(<App />);
+  rootInstance.render(
+    <I18nProvider i18n={i18n}>
+      <App />
+    </I18nProvider>,
+  );
 }
 
 export function unmount(): void {
