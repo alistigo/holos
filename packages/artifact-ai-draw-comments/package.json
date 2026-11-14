@@ -55,14 +55,17 @@
   },
   "dependencies": {
     "@alistigo/claude-artifact-api": "workspace:*",
-    "@lingui/react": "^5.3.1",
+    "@lingui/core": "^6.0.0",
+    "@lingui/react": "^6.0.0",
     "konva": "^9.3.20",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-konva": "^19.0.0"
+    "react-konva": "^19.0.0",
+    "typeid-js": "^0.7.0"
   },
   "devDependencies": {
-    "@lingui/vite-plugin": "^5.3.1",
+    "@lingui/babel-plugin-lingui-macro": "^6.0.0",
+    "@lingui/vite-plugin": "^6.0.0",
     "@storybook/react-vite": "^10.3.0",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.2.14",

@@ -5,7 +5,7 @@ import "konva/lib/shapes/Rect";
 import { useRef, useState } from "react";
 import { Layer, Line, Rect, Stage } from "react-konva";
 import type { SelectionRegion } from "../domain/session.js";
-import { DEFAULT_STROKE_COLOR, type DrawShape } from "../domain/shapes.js";
+import { DEFAULT_STROKE_COLOR, type DrawShape, generateDrawShapeId } from "../domain/shapes.js";
 
 interface DrawCanvasProps {
   region: SelectionRegion;
@@ -44,7 +44,7 @@ export function DrawCanvas({ region, activeTool, onShapesChange, stageRef }: Dra
     if (!isDrawing.current || draft === null) return;
     isDrawing.current = false;
     const newShape: DrawShape = {
-      id: crypto.randomUUID(),
+      id: generateDrawShapeId().toString(),
       type: activeTool,
       ...draft,
       strokeColor: DEFAULT_STROKE_COLOR,

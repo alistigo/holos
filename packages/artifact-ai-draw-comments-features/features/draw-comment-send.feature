@@ -42,3 +42,17 @@ Feature: Annotate and Send a Draw Comment
     And the PNG and comment are sent to Claude via window.claude.complete
     And the drawing canvas switches to read-only mode
 
+  @P1
+  Scenario: Cancel button in selection overlay dismisses the annotation session
+    Given selection mode is active
+    When the user clicks the "×" cancel button in the top-right corner
+    Then the selection overlay is dismissed
+    And the "Draw Comment" button is re-enabled
+
+  @P1
+  Scenario: Cancel button in drawing panel dismisses the annotation session
+    Given the drawing phase is active with the canvas visible
+    When the user clicks the "Cancel" button in the drawing panel
+    Then the drawing canvas and toolbar are dismissed
+    And the "Draw Comment" button is re-enabled
+

@@ -1,4 +1,12 @@
+import type { TypeID } from "typeid-js";
+import { typeid } from "typeid-js";
 import type { DrawShape } from "./shapes.js";
+
+export type DrawCommentSessionId = TypeID<"dcs">;
+
+export function generateDrawCommentSessionId(): DrawCommentSessionId {
+  return typeid("dcs");
+}
 
 export type SessionStatus = "idle" | "selecting" | "drawing" | "submitting" | "sent" | "responded";
 

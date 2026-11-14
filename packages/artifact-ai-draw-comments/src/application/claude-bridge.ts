@@ -1,5 +1,5 @@
 import "@alistigo/claude-artifact-api";
-import type { AnnotatedSnapshot } from "../domain/snapshot.js";
+import type { AnnotatedSnapshot } from "../domain/session.js";
 
 export class ClaudeUnavailableError extends Error {
   constructor() {

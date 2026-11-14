@@ -1,9 +1,12 @@
+import { useLingui } from "@lingui/react/macro";
+
 interface ErrorBannerProps {
   message: string;
   onDismiss: () => void;
 }
 
 export function ErrorBanner({ message, onDismiss }: ErrorBannerProps) {
+  const { t } = useLingui();
   return (
     <div
       role="alert"
@@ -30,7 +33,7 @@ export function ErrorBanner({ message, onDismiss }: ErrorBannerProps) {
       <button
         type="button"
         onClick={onDismiss}
-        aria-label="Dismiss error"
+        aria-label={t`Dismiss error`}
         className="ml-auto shrink-0 text-red-400 hover:text-red-600"
       >
         ×
