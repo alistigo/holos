@@ -190,15 +190,15 @@ importers:
   cli/artifact-features-runner-playwright:
     dependencies:
       '@cucumber/cucumber':
-        specifier: ^11.3.0
-        version: 11.3.0
+        specifier: ^12.9.0
+        version: 12.9.0
       clipanion:
         specifier: 4.0.0-rc.4
         version: 4.0.0-rc.4(typanion@3.14.0)
     devDependencies:
       '@cucumber/pretty-formatter':
         specifier: ^1.0.1
-        version: 1.0.1(@cucumber/cucumber@11.3.0)(@cucumber/messages@32.3.1)
+        version: 1.0.1(@cucumber/cucumber@12.9.0)(@cucumber/messages@32.3.1)
       '@types/node':
         specifier: ^22.0.0
         version: 22.19.17
@@ -889,6 +889,10 @@ importers:
         version: link:../../cli/calm-to-archify
 
   packages/list-features:
+    dependencies:
+      '@cucumber/cucumber':
+        specifier: ^12.9.0
+        version: 12.9.0
     devDependencies:
       '@alistigo/artifact-plugin-api':
         specifier: workspace:*
@@ -896,9 +900,6 @@ importers:
       '@alistigo/list-document':
         specifier: workspace:*
         version: link:../list-document
-      '@cucumber/cucumber':
-        specifier: ^12.9.0
-        version: 12.9.0
       gherklin:
         specifier: ^1.0.0
         version: 1.0.12
@@ -9157,15 +9158,6 @@ snapshots:
     dependencies:
       class-transformer: 0.5.1
       reflect-metadata: 0.2.2
-
-  '@cucumber/pretty-formatter@1.0.1(@cucumber/cucumber@11.3.0)(@cucumber/messages@32.3.1)':
-    dependencies:
-      '@cucumber/cucumber': 11.3.0
-      '@cucumber/messages': 32.3.1
-      ansi-styles: 5.2.0
-      cli-table3: 0.6.5
-      figures: 3.2.0
-      ts-dedent: 2.2.0
 
   '@cucumber/pretty-formatter@1.0.1(@cucumber/cucumber@12.9.0)(@cucumber/messages@32.3.1)':
     dependencies:

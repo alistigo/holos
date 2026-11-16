@@ -49,8 +49,10 @@
     "access": "public"
   },
   "dependencies": {},
+  "peerDependencies": {
+    "@cucumber/cucumber": "^12.9.0"
+  },
   "devDependencies": {
-    "@cucumber/cucumber": "^12.9.0",
     "@alistigo/artifact-plugin-api": "workspace:*",
     "@alistigo/list-document": "workspace:*",
     "gherklin": "^1.0.0",
