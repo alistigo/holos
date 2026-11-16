@@ -76,6 +76,7 @@
     "@alistigo/artifact-ai-draw-comments",
     "gherklin",
     "@cucumber/pretty-formatter",
+    "playwright",
     "@lingui/format-po",
     "@emotion/is-prop-valid",
     "astro",
