@@ -45,6 +45,27 @@ Shared infrastructure nodes (`application`, `plugin-bus`, `storage-plugin`, `log
 
 ---
 
+### `features`
+
+Scans the workspace for all packages with `"alistigo.type": "features"` and validates naming conventions and domain metadata.
+
+```sh
+artifact-arch-check features
+artifact-arch-check features --workspace=/path/to/root
+artifact-arch-check features --json
+```
+
+**Options:**
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--workspace <path>` | Path to the workspace root | current working directory |
+| `--json` | Machine-readable JSON output | false |
+
+**Exit code:** `0` if all features packages pass, `1` if any violations found.
+
+---
+
 ### `check <artifact-name>`
 
 Runs conformance checks against the artifact's CALM file and workspace packages.
@@ -186,6 +207,7 @@ Valid `type` values are defined in the JSON schema at `packages/architecture/ext
 | `"plugin"` | Plugin — registers with the Plugin Bus at startup |
 | `"skill"` | AI skill — documentation/metadata asset with no runtime code |
 | `"tool"` | Dev/build CLI tool — exempt from boundary checks, may appear in `devDependencies` anywhere |
+| `"features"` | Cucumber/Gherkin feature library — exports `.feature` files, step definitions, and fixtures for a specific domain |
 
 Packages with `"type": "tool"` are never declared in CALM and are never subject to the `boundaries` or `alistigo-metadata` checks. Examples: `@alistigo/calm-to-archify`, `@alistigo/artifact-arch-check`.
 
@@ -226,6 +248,58 @@ This check scans all subdirectories of `packages/`, `cli/`, and `apps/`. For eac
   Expected : packages/pino-logger-plugin
   Fix      : git mv packages/logger packages/pino-logger-plugin
   Docs     : cli/artifact-arch-check/README.md#dir-name-match
+```
+
+---
+
+### `features` checks
+
+These rules apply to every package with `"alistigo": { "type": "features" }` in the workspace. The check is performed by the `features` subcommand (see above), not by `check <artifact-name>`.
+
+#### `features/naming-convention`
+
+The npm package name (without the `@scope/` prefix) must end with `-features`.
+
+**Example error:**
+```
+✗ @alistigo/list-feats (packages/list-feats)
+  [features/naming-convention] Package name must end with "-features" after the scope. Got: "list-feats"
+```
+
+---
+
+#### `features/domain-required`
+
+The `alistigo.domain` field must be present and non-empty.
+
+**Example error:**
+```
+✗ @alistigo/list-features (packages/list-features)
+  [features/domain-required] "alistigo.domain" is required and must be non-empty
+```
+
+---
+
+#### `features/domain-consistent`
+
+`alistigo.domain` must equal the prefix before `-features` in the package name. For `@alistigo/list-features` the expected domain is `"list"`.
+
+**Example error:**
+```
+✗ @alistigo/list-features (packages/list-features)
+  [features/domain-consistent] "alistigo.domain" ("todo") does not match the name prefix ("list")
+```
+
+---
+
+#### `features/domain-unique`
+
+A given domain value may only be claimed by one features package across the entire workspace. Duplicate copies of the same package (e.g. dist caches) are deduplicated by package name before this check runs.
+
+**Example error:**
+```
+✗ @alistigo/list-features (packages/list-features)
+  [features/domain-unique] "alistigo.domain" ("list") is declared by multiple packages: @alistigo/list-features, @alistigo/list-features-v2
 ```
 
 ---
