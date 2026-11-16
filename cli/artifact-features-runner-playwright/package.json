@@ -11,7 +11,7 @@
     "artifact-features-runner-playwright": "./dist/cli.js"
   },
   "dependencies": {
-    "@cucumber/cucumber": "^11.3.0",
+    "@cucumber/cucumber": "^12.9.0",
     "clipanion": "4.0.0-rc.4"
   },
   "devDependencies": {

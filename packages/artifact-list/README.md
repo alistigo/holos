@@ -87,3 +87,29 @@ src/
 ```
 
 **Convention:** each non-entry file carries `export default` for its single primary export (the function or component that matches the file name). Files with two equally important public helpers (`container.ts`) use named exports only. The entry `index.tsx` does not follow this rule — it is a re-export barrel.
+
+## E2E tests
+
+End-to-end tests run the Cucumber/Gherkin scenarios from `@alistigo/list-features` against a live
+playground instance using `artifact-features-runner-playwright`.
+
+### Auto mode (default)
+
+Builds the playground, starts it on `http://localhost:4173`, runs the tests, and stops the server:
+
+```sh
+pnpm nx run artifact-list:test:e2e
+```
+
+### Attach mode
+
+If the playground is already running (e.g. via `pnpm nx run alistigo-artifact-playground:preview`
+or the dev server on `:5173`), use the attach target so no server lifecycle is managed:
+
+```sh
+# Against the default preview port (http://localhost:4173)
+pnpm nx run artifact-list:test:e2e-attach
+
+# Against a custom host — extra args after -- are forwarded to the runner CLI
+pnpm nx run artifact-list:test:e2e-attach -- --host=http://localhost:5173
+```
