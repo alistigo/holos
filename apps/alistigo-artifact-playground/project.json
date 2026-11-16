@@ -62,7 +62,7 @@
     "preview": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vite preview --port 5173 --strictPort",
+        "command": "vite preview",
         "cwd": "apps/alistigo-artifact-playground"
       }
     },
