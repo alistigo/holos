@@ -20,4 +20,13 @@ Use `dynamicallyLoaded` in `.fallowrc.json` instead of scattering inline `// fal
 - Genuine complexity that can't be reduced (large switch dispatchers, multi-step protocol handlers)
 - The ignore sits right next to the function that actually has the problem — keeps the context local
 
+**CRITICAL — fallow suppress comment format:**
+Fallow parses EVERY whitespace-separated word after `fallow-ignore-next-line` as a separate issue kind token. Unknown tokens → stale suppression errors. Use only the bare kind name, nothing after it:
+```ts
+// Plain explanation comment goes here (ignored by fallow)
+// fallow-ignore-next-line complexity
+async function handleSend() {
+```
+NEVER: `// fallow-ignore-next-line complexity — description text` — the `—`, `description`, and `text` become unrecognized kind tokens and cause 3 stale suppression errors in `qa:dead-code`.
+
 **How to apply:** Before adding an inline ignore for `unused-class-member`, check if the file contains a framework-coupled class. If yes, add the file to `dynamicallyLoaded` in `.fallowrc.json` and remove all the per-method ignores.
