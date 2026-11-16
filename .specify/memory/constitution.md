@@ -164,7 +164,7 @@ Strict mode is ON everywhere: `strict`, `exactOptionalPropertyTypes`,
 
 Every workspace package MUST declare `"alistigo": { "type": "<value>" }` in its
 `package.json`. Valid types: `domain`, `application`, `presentation`, `infrastructure`,
-`plugin`, `skill`, `widget`. Type meanings:
+`plugin`, `skill`, `widget`, `features`. Type meanings:
 - `widget`: lightweight embeddable UI component; lighter than `application`; exempt from
   Artifact Contract; MUST still ship an agent skill package.
 Enforced by `qa:artifact-arch-check`; boundary rules are derived from CALM at runtime.
@@ -258,4 +258,4 @@ system boundaries and relationships.
 All PRs are expected to verify compliance with the active principles. Compliance review is
 expected on each amendment. No automated merges to `main` without CI passing.
 
-**Version**: 1.2.0 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-11-13
+**Version**: 1.2.1 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-11-16

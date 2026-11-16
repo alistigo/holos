@@ -24,6 +24,10 @@
   ],
   "private": false,
   "type": "module",
+  "alistigo": {
+    "type": "features",
+    "domain": "list"
+  },
   "description": "Gherkin behavior specifications for Alistigo AI. Source of truth for what the app should do; the runner reads these files to assert conformance.",
   "exports": {
     ".": {
@@ -46,7 +50,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@cucumber/cucumber": "^12.9.0",
+    "@alistigo/artifact-plugin-api": "workspace:*",
+    "@alistigo/list-document": "workspace:*",
     "gherklin": "^1.0.0",
+    "playwright": "^1.61.0",
     "prettier": "^3.3.0",
     "prettier-plugin-gherkin": "^3.1.2"
   }

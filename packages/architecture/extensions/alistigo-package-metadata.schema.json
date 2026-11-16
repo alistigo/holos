@@ -18,7 +18,8 @@
         "infrastructure",
         "plugin",
         "skill",
-        "tool"
+        "tool",
+        "features"
       ]
     }
   },

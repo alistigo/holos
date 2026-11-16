@@ -13,7 +13,8 @@
           "nx run holos:qa:audit",
           "nx run holos:qa:stories-check",
           "nx run holos:qa:artifact-sandbox-check",
-          "nx run artifact-arch-check:qa:artifact-arch-check"
+          "nx run artifact-arch-check:qa:artifact-arch-check",
+          "nx run artifact-arch-check:qa:artifact-arch-check:features"
         ],
         "parallel": false
       },

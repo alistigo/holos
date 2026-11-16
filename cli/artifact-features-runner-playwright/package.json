@@ -1,0 +1,22 @@
+{
+  "name": "@alistigo/artifact-features-runner-playwright",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Generic Playwright-backed Cucumber runner for Alistigo artifact features packages.",
+  "alistigo": {
+    "type": "infrastructure"
+  },
+  "bin": {
+    "artifact-features-runner-playwright": "./dist/cli.js"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^11.3.0",
+    "clipanion": "4.0.0-rc.4"
+  },
+  "devDependencies": {
+    "@cucumber/pretty-formatter": "^1.0.1",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0"
+  }
+}

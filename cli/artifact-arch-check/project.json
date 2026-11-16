@@ -48,6 +48,12 @@
       "options": {
         "command": "bun cli/artifact-arch-check/dist/cli.js check list"
       }
+    },
+    "qa:artifact-arch-check:features": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun cli/artifact-arch-check/src/cli.ts features"
+      }
     }
   }
 }

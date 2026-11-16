@@ -1,0 +1,44 @@
+{
+  "name": "artifact-features-runner-playwright",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "cli/artifact-features-runner-playwright/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json",
+        "cwd": "cli/artifact-features-runner-playwright"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "cli/artifact-features-runner-playwright"
+      }
+    },
+    "qa:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check .",
+        "cwd": "cli/artifact-features-runner-playwright"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf dist",
+        "cwd": "cli/artifact-features-runner-playwright"
+      }
+    },
+    "test:list": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build", { "projects": ["list-features"], "target": "build" }],
+      "options": {
+        "command": "bun src/cli.ts --target=@alistigo/list-features",
+        "cwd": "cli/artifact-features-runner-playwright"
+      }
+    }
+  }
+}
