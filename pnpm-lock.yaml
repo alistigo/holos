@@ -187,6 +187,25 @@ importers:
         specifier: ^18.0.0
         version: 18.3.31
 
+  cli/artifact-features-runner-playwright:
+    dependencies:
+      '@cucumber/cucumber':
+        specifier: ^11.3.0
+        version: 11.3.0
+      clipanion:
+        specifier: 4.0.0-rc.4
+        version: 4.0.0-rc.4(typanion@3.14.0)
+    devDependencies:
+      '@cucumber/pretty-formatter':
+        specifier: ^1.0.1
+        version: 1.0.1(@cucumber/cucumber@11.3.0)(@cucumber/messages@32.3.1)
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.17
+      tsx:
+        specifier: ^4.19.0
+        version: 4.21.0
+
   cli/calm-to-archify:
     dependencies:
       '@alistigo/archify-render':
@@ -230,37 +249,6 @@ importers:
       '@types/react':
         specifier: ^18.0.0
         version: 18.3.31
-
-  cli/list-features-runner-playwright:
-    dependencies:
-      '@alistigo/artifact-plugin-api':
-        specifier: workspace:*
-        version: link:../../packages/artifact-plugin-api
-      '@alistigo/list-document':
-        specifier: workspace:*
-        version: link:../../packages/list-document
-      '@alistigo/list-features':
-        specifier: workspace:*
-        version: link:../../packages/list-features
-      '@cucumber/cucumber':
-        specifier: ^12.9.0
-        version: 12.9.0
-      playwright:
-        specifier: ^1.61.0
-        version: 1.61.1
-    devDependencies:
-      '@cucumber/pretty-formatter':
-        specifier: ^1.0.1
-        version: 1.0.1(@cucumber/cucumber@12.9.0)(@cucumber/messages@32.3.1)
-      '@types/node':
-        specifier: ^22.0.0
-        version: 22.19.17
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@types/node@22.19.17)(typescript@5.9.3)
-      tsx:
-        specifier: ^4.19.0
-        version: 4.21.0
 
   cli/nx-npm-publications:
     dependencies:
@@ -902,9 +890,21 @@ importers:
 
   packages/list-features:
     devDependencies:
+      '@alistigo/artifact-plugin-api':
+        specifier: workspace:*
+        version: link:../artifact-plugin-api
+      '@alistigo/list-document':
+        specifier: workspace:*
+        version: link:../list-document
+      '@cucumber/cucumber':
+        specifier: ^12.9.0
+        version: 12.9.0
       gherklin:
         specifier: ^1.0.0
         version: 1.0.12
+      playwright:
+        specifier: ^1.61.0
+        version: 1.61.1
       prettier:
         specifier: ^3.3.0
         version: 3.8.3
@@ -9158,6 +9158,15 @@ snapshots:
       class-transformer: 0.5.1
       reflect-metadata: 0.2.2
 
+  '@cucumber/pretty-formatter@1.0.1(@cucumber/cucumber@11.3.0)(@cucumber/messages@32.3.1)':
+    dependencies:
+      '@cucumber/cucumber': 11.3.0
+      '@cucumber/messages': 32.3.1
+      ansi-styles: 5.2.0
+      cli-table3: 0.6.5
+      figures: 3.2.0
+      ts-dedent: 2.2.0
+
   '@cucumber/pretty-formatter@1.0.1(@cucumber/cucumber@12.9.0)(@cucumber/messages@32.3.1)':
     dependencies:
       '@cucumber/cucumber': 12.9.0
@@ -15479,24 +15488,6 @@ snapshots:
   trough@2.2.0: {}
 
   ts-dedent@2.2.0: {}
-
-  ts-node@10.9.2(@types/node@22.19.17)(typescript@5.9.3):
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.12
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 22.19.17
-      acorn: 8.16.0
-      acorn-walk: 8.3.5
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.4
-      make-error: 1.3.6
-      typescript: 5.9.3
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
 
   ts-node@10.9.2(@types/node@25.5.2)(typescript@5.9.3):
     dependencies:

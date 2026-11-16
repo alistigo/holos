@@ -2,6 +2,7 @@
 import { createRequire } from "node:module";
 import { Builtins, Cli } from "clipanion";
 import { CheckCommand } from "./cli/commands/check.js";
+import { FeaturesCommand } from "./cli/commands/features.js";
 import { GenerateCommand } from "./cli/commands/generate.js";
 
 // Resolves to the package root from both src/ (bun) and dist/ (node).
@@ -16,6 +17,7 @@ const cli = new Cli({
 });
 
 cli.register(CheckCommand);
+cli.register(FeaturesCommand);
 cli.register(GenerateCommand);
 cli.register(Builtins.HelpCommand);
 cli.register(Builtins.VersionCommand);

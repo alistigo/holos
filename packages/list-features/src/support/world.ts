@@ -22,7 +22,8 @@ export class AlistigoWorld extends World {
 
   constructor(opts: IWorldOptions) {
     super(opts);
-    this.baseUrl = process.env.ALISTIGO_APP_URL ?? "http://localhost:5173";
+    this.baseUrl =
+      process.env.PLAYWRIGHT_BASE_URL ?? process.env.ALISTIGO_APP_URL ?? "http://localhost:4173";
   }
 
   async beforeScenario(browser: Browser): Promise<void> {
