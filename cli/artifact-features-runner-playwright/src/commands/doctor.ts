@@ -1,4 +1,6 @@
 import { Command, Option } from "clipanion";
+import { browserChecks } from "../lib/browser-checks.js";
+import { browsersInit, resolveChromiumExecutable } from "../lib/browsers.js";
 import { CHECK_ICONS, type CheckResult, check } from "../lib/check.js";
 import { loadFeaturesPackage } from "../lib/features-package.js";
 import {
@@ -46,6 +48,11 @@ export class DoctorCommand extends Command {
 
   artifact = Option.String("--artifact", {
     description: "Artifact to select in the playground (default: the first one offered)",
+  });
+
+  chromiumExecutable = Option.String("--chromium-executable", {
+    description:
+      "Launch this chromium binary instead of playwright's bundled download (also: ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE)",
   });
 
   verbose = Option.Boolean("--verbose", false, {
@@ -106,6 +113,9 @@ export class DoctorCommand extends Command {
 
     for (const result of await this.checkFeaturesPackage()) run(result);
 
+    const executable = resolveChromiumExecutable(this.chromiumExecutable);
+    for (const result of browserChecks(browsersInit(), executable)) run(result);
+
     const { result: reachable, html } = await fetchHost(this.host);
     run(reachable);
     if (html === undefined) {
@@ -115,7 +125,14 @@ export class DoctorCommand extends Command {
       const onConsole = this.verbose
         ? (message: string) => stdout.write(`      ${message}\n`)
         : undefined;
-      for (const result of await probePlayground(this.host, this.artifact, onConsole)) run(result);
+      for (const result of await probePlayground(
+        this.host,
+        this.artifact,
+        onConsole,
+        executable?.path,
+      )) {
+        run(result);
+      }
     }
 
     const failed = results.filter((result) => result.status === "fail").length;

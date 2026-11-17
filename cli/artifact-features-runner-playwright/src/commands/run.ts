@@ -1,5 +1,10 @@
 import { loadConfiguration, runCucumber } from "@cucumber/cucumber/api";
 import { Command, Option } from "clipanion";
+import {
+  CHROMIUM_EXECUTABLE_ENV,
+  resolveChromiumExecutable,
+  validateChromiumExecutable,
+} from "../lib/browsers.js";
 import { loadFeaturesPackage } from "../lib/features-package.js";
 import { validateHost } from "../lib/playground.js";
 
@@ -36,12 +41,26 @@ export class RunCommand extends Command {
     description: "Base URL of the playground to run scenarios against",
   });
 
+  chromiumExecutable = Option.String("--chromium-executable", {
+    description:
+      "Launch this chromium binary instead of playwright's bundled download (also: ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE)",
+  });
+
   // fallow-ignore-next-line complexity
   async execute(): Promise<number> {
     const hostError = validateHost(this.host);
     if (hostError !== undefined) {
       this.context.stderr.write(`Error: ${hostError}\n`);
       return 1;
+    }
+
+    const executable = resolveChromiumExecutable(this.chromiumExecutable);
+    if (executable !== undefined) {
+      const problem = validateChromiumExecutable(executable.path);
+      if (problem !== undefined) {
+        this.context.stderr.write(`Error: ${CHROMIUM_EXECUTABLE_ENV}: ${problem}\n`);
+        return 1;
+      }
     }
 
     const outcome = await loadFeaturesPackage(this.target, process.cwd());
@@ -54,6 +73,9 @@ export class RunCommand extends Command {
     const { pkg } = outcome;
 
     process.env["PLAYWRIGHT_BASE_URL"] = this.host;
+    // The step definitions launch the browser in this same process, so the executable
+    // choice travels to them through the environment.
+    if (executable !== undefined) process.env[CHROMIUM_EXECUTABLE_ENV] = executable.path;
 
     const { runConfiguration } = await loadConfiguration({
       file: false,

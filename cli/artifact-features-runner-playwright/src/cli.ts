@@ -1,19 +1,12 @@
 #!/usr/bin/env node
-import { createRequire } from "node:module";
-import { Builtins, Cli } from "clipanion";
-import { DoctorCommand } from "./commands/doctor.js";
-import { RunCommand } from "./commands/run.js";
+import { initBrowsers } from "./lib/browsers.js";
 
-const { version } = createRequire(import.meta.url)("../package.json") as { version: string };
+// Order matters. playwright-core resolves its browsers directory once, in module
+// scope, from PLAYWRIGHT_BROWSERS_PATH — so the repo `.env` has to be applied and a
+// usable path chosen *before* anything that imports playwright is loaded. Hence the
+// dynamic import below: static imports would be evaluated first and read the stale
+// (possibly read-only, wrong-revision) value this is meant to replace.
+initBrowsers();
 
-const cli = new Cli({
-  binaryLabel: "artifact-features-runner-playwright",
-  binaryName: "artifact-features-runner-playwright",
-  binaryVersion: version,
-});
-
-cli.register(RunCommand);
-cli.register(DoctorCommand);
-cli.register(Builtins.HelpCommand);
-cli.register(Builtins.VersionCommand);
-cli.runExit(process.argv.slice(2));
+const { main } = await import("./main.js");
+await main(process.argv.slice(2));
