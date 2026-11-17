@@ -85,6 +85,7 @@ LinkedIn Skills: `linkedin-post-writer`/`linkedin-comment-drafter`/`linkedin-rep
 - [Job research project](project_job_research.md) — tracking career transition tasks and decisions
 - [Alistigo AI](project_alistigo_ai.md) — base list app + plugins (todo, checklist, etc.); M1 = base list, NOT todo list
 - [Communication workflow](project_communication_linkedin_skills.md) — LinkedIn + dev.to only (no X, no auto-publish); backlog and drafts in `communication/`, skill `communication`, command `/communicate`; LinkedIn drafting hands off to vendored `linkedin-post-writer` (2026-07-03)
+- [Playwright browsers on this machine](project_playwright_browsers.md) — nix exports a read-only PLAYWRIGHT_BROWSERS_PATH; repo `.env` overrides it, nix chromium is the no-sudo fallback (2026-11-17)
 
 ## References
 
