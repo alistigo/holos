@@ -1,4 +1,6 @@
 import { type Browser, chromium, type Page } from "playwright";
+import { aptPackageForLibrary } from "./browser-checks.js";
+import { BROWSERS_PATH_ENV, CHROMIUM_EXECUTABLE_ENV } from "./browsers.js";
 import { type CheckResult, check } from "./check.js";
 
 const PREVIEW_IFRAME = 'iframe[name="artifact-preview"]';
@@ -186,15 +188,29 @@ async function runPageChecks(
   results.push(await checkArtifactMounts(page));
 }
 
+const USE_OWN_BROWSER = `Or skip the download: set ${CHROMIUM_EXECUTABLE_ENV} in the repo .env to a chromium that already runs on this host.`;
+
+function missingLibraryFix(library: string): string[] {
+  const aptPackage = aptPackageForLibrary(library);
+  const install =
+    aptPackage === undefined
+      ? "pnpm playwright:install-deps"
+      : `sudo apt-get install -y ${aptPackage} (or: pnpm playwright:install-deps)`;
+  return [`Missing OS library ${library} — run: ${install}`, USE_OWN_BROWSER];
+}
+
+function notDownloadedFix(): string[] {
+  return [
+    "Browser not downloaded — run: pnpm playwright:install",
+    `See the Browsers path and Browser revision checks above; a machine-wide ${BROWSERS_PATH_ENV} is overridden by the repo .env.`,
+    USE_OWN_BROWSER,
+  ];
+}
+
 function chromiumLaunchFix(reason: string): string[] {
-  const missingLib = /error while loading shared libraries: ([^:]+)/.exec(reason);
-  if (missingLib) {
-    return [`Missing OS library ${missingLib[1]} — run: pnpm playwright:install-deps`];
-  }
-  if (reason.includes("Executable doesn't exist")) {
-    return ["Browser not downloaded — run: pnpm playwright:install"];
-  }
-  return [];
+  const library = /error while loading shared libraries: ([^:]+)/.exec(reason)?.[1];
+  if (library !== undefined) return missingLibraryFix(library);
+  return reason.includes("Executable doesn't exist") ? notDownloadedFix() : [];
 }
 
 /**
@@ -206,10 +222,11 @@ export async function probePlayground(
   host: string,
   artifact: string | undefined,
   onConsole?: (message: string) => void,
+  executablePath?: string,
 ): Promise<CheckResult[]> {
   let browser: Browser;
   try {
-    browser = await chromium.launch();
+    browser = await chromium.launch(executablePath === undefined ? {} : { executablePath });
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
     return [

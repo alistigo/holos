@@ -65,6 +65,7 @@ Ready to run features.
 | `--target` | no | Features package to validate — omit to check the host only | — |
 | `--artifact` | no | Artifact to select in the playground | the first one offered |
 | `--verbose` | no | Stream browser console output while probing | `false` |
+| `--chromium-executable` | no | Launch this chromium binary instead of the bundled download | `ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE`, else the bundled browser |
 
 Failing checks print the steps to fix them. **Exit code:** `0` if no check failed (warnings are tolerated), `1` otherwise.
 
@@ -74,12 +75,59 @@ Failing checks print the steps to fix them. **Exit code:** `0` if no check faile
 |-------|------------|
 | Features package | `--target` cannot be resolved from the cwd, is not `alistigo.type: "features"`, or does not export its directories |
 | Feature files | `FEATURES_DIR` is unreadable or holds no `.feature` files — usually an unbuilt package |
+| Browsers path | never fails; warns when the configured `PLAYWRIGHT_BROWSERS_PATH` had to be declined (read-only, or wrong revision) or is not writable |
+| Browser revision | the browsers directory lacks the chromium revision *this* playwright expects (`pnpm playwright:install`) |
+| Chromium executable | `--chromium-executable` / `ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE` points at something missing or not executable; warns on a browser major-version skew |
+| Host requirements | never fails; warns when `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` is set, which hides missing-library errors until launch |
 | Host reachable | nothing answers on `--host` |
 | Playground page | the served HTML lacks the dev-playground markers (warning only) |
 | Chromium | Browser binary not downloaded (`pnpm playwright:install`) or OS library missing (`pnpm playwright:install-deps`) |
 | Artifact selector | the page has no `Artifact` combobox, so it is not the playground |
 | Preview config | the selection never reached the preview iframe's `#alistigo-config` |
 | Artifact mount | the iframe body stayed empty — the artifact bundle failed to load |
+
+## Which browser gets launched
+
+Resolved once, in the CLI entrypoint, before anything imports playwright — playwright-core
+reads `PLAYWRIGHT_BROWSERS_PATH` once at import time, so it cannot be changed later.
+
+Precedence, highest first:
+
+1. `--chromium-executable`
+2. the repo-root `.env` (`ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE`, `PLAYWRIGHT_BROWSERS_PATH`)
+3. the inherited shell environment
+4. playwright's default cache — `${XDG_CACHE_HOME:-~/.cache}/ms-playwright`
+
+The repo `.env` deliberately **overrides** the inherited environment: a value exported
+machine-wide is not repo-scoped, and Nx's own dotenv loading runs with `override: false`,
+so it can never replace an inherited variable. See `.env.example` at the repo root.
+
+On top of that, a configured browsers path is **declined** when it cannot serve the
+installed playwright — it is read-only, or it lacks the required revision while the
+default cache has it. The doctor's `Browsers path` check names what was declined and why,
+rather than letting it surface as a bare `Executable doesn't exist`.
+
+### Browsers on a nix / non-FHS machine
+
+`playwright-driver.browsers` from nixpkgs exports a machine-wide
+`PLAYWRIGHT_BROWSERS_PATH` pointing into `/nix/store`. Two things follow:
+
+- The store path is **read-only**, so `playwright install` blocks on its registry lock
+  instead of failing. `pnpm playwright:install` therefore goes through
+  `scripts/playwright-install.sh`, which forces a writable directory first.
+- Its browser revision tracks *nixpkgs'* playwright, not this repo's, so the revision the
+  installed playwright wants is usually absent.
+
+Either install the OS libraries and use the bundled download (identical to CI), or point
+the runner at the chromium nix already provides:
+
+```sh
+# in .env — no sudo, no download, works offline
+ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE=/nix/store/<hash>-playwright-chromium-headless-shell/chrome-headless-shell-linux64/chrome-headless-shell
+```
+
+Expect a `Chromium executable` warning when that browser's major version differs from the
+one this playwright bundles.
 
 ## Troubleshooting
 

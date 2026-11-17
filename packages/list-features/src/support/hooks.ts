@@ -19,7 +19,13 @@ let browser: Browser | undefined;
  * BeforeAll and AfterAll hooks to manage the Playwright browser instance across all scenarios.
  */
 BeforeAll(async () => {
-  browser = await chromium.launch({ headless: process.env.HEADED !== "1" });
+  // Set by the features runner (from the repo .env, its --chromium-executable flag, or
+  // the shell) when this host cannot run playwright's bundled download.
+  const executablePath = process.env.ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE;
+  browser = await chromium.launch({
+    headless: process.env.HEADED !== "1",
+    ...(executablePath === undefined || executablePath === "" ? {} : { executablePath }),
+  });
 });
 
 AfterAll(async () => {
