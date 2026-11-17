@@ -1,3 +1,18 @@
+## 1.3.7 (2026-11-17)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** implement generic Playwright Cucumber runner ([d513359](https://github.com/alistigo/holos/commit/d513359))
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.7
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 1.3.6 (2026-11-14)
 
 ### 🚀 Features

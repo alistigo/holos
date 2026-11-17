@@ -1,3 +1,24 @@
+## 0.4.12 (2026-11-17)
+
+### 🚀 Features
+
+- **artifact-list:** wire features runner into test:e2e + fix CI ([b28df15](https://github.com/alistigo/holos/commit/b28df15))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.10
+- Updated list-components-react to 0.5.11
+- Updated local-storage-plugin to 0.5.10
+- Updated claude-artifact-api to 0.4.10
+- Updated artifact-manager to 0.4.10
+- Updated artifact-list to 0.10.0
+- Updated list-document to 0.5.11
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.11 (2026-11-14)
 
 ### 🧱 Updated Dependencies

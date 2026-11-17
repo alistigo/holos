@@ -1,3 +1,14 @@
+## 0.4.2 (2026-11-17)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** implement generic Playwright Cucumber runner ([d513359](https://github.com/alistigo/holos/commit/d513359))
+
+### ❤️ Thank You
+
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 ## 0.4.0 (2026-11-12)

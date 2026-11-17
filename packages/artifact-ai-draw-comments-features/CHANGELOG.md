@@ -1,3 +1,9 @@
+## 0.2.1 (2026-11-17)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-ai-draw-comments to 0.2.1
+
 ## 0.2.0 (2026-11-14)
 
 ### 🚀 Features

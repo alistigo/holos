@@ -1,3 +1,26 @@
+## 0.5.10 (2026-11-17)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** implement generic Playwright Cucumber runner ([d513359](https://github.com/alistigo/holos/commit/d513359))
+
+### 🩹 Fixes
+
+- **artifact-features-runner-playwright:** launch a chromium that this host can actually run ([7b4e3a7](https://github.com/alistigo/holos/commit/7b4e3a7))
+- **list-features:** move playwright to peerDependencies to fix BeforeAll hook ([5ac2a6f](https://github.com/alistigo/holos/commit/5ac2a6f))
+- **artifact-list:** fix e2e infrastructure — vite PATH, two-mode targets, Cucumber v12 ([8a49429](https://github.com/alistigo/holos/commit/8a49429))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-plugin-api to 0.6.10
+- Updated list-document to 0.5.11
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 
 
 

@@ -1,3 +1,36 @@
+## 0.10.0 (2026-11-17)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** add doctor command, resolve target from cwd ([adc031d](https://github.com/alistigo/holos/commit/adc031d))
+- **artifact-list:** wire features runner into test:e2e + fix CI ([b28df15](https://github.com/alistigo/holos/commit/b28df15))
+
+### 🩹 Fixes
+
+- **artifact-features-runner-playwright:** launch a chromium that this host can actually run ([7b4e3a7](https://github.com/alistigo/holos/commit/7b4e3a7))
+- **artifact-list:** fix e2e infrastructure — vite PATH, two-mode targets, Cucumber v12 ([8a49429](https://github.com/alistigo/holos/commit/8a49429))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-core-components-react to 0.5.10
+- Updated artifact-list-checkbox-plugin to 0.3.11
+- Updated list-components-react to 0.5.11
+- Updated artifact-plugin-api to 0.6.10
+- Updated claude-artifact-api to 0.4.10
+- Updated artifact-dev-tools to 0.2.2
+- Updated pino-logger-plugin to 0.5.2
+- Updated artifact-core to 0.4.10
+- Updated list-document to 0.5.11
+- Updated list-features to 0.5.10
+- Updated list-domain to 0.4.11
+
+### ❤️ Thank You
+
+- Claude Opus 4.7
+- Claude Opus 5
+- Claude Sonnet 4.6
+- Mikael Labrut @MLKiiwy
+
 ## 0.9.2 (2026-11-14)
 
 ### 🧱 Updated Dependencies
