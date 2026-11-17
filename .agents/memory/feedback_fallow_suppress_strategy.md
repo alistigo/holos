@@ -29,4 +29,7 @@ async function handleSend() {
 ```
 NEVER: `// fallow-ignore-next-line complexity — description text` — the `—`, `description`, and `text` become unrecognized kind tokens and cause 3 stale suppression errors in `qa:dead-code`.
 
+**When `ignoreDependencies` is the right tool:**
+A `workspace:*` dep that is resolved at *runtime* (by name, from `process.cwd()`) and never `import`ed from source reads as an unused devDependency to fallow. That is not a false positive to argue with — add the package name to `ignoreDependencies` in `.fallowrc.json`. Example: `@alistigo/list-features` in `packages/artifact-list` exists only so the features runner can resolve it from the consumer's cwd.
+
 **How to apply:** Before adding an inline ignore for `unused-class-member`, check if the file contains a framework-coupled class. If yes, add the file to `dynamicallyLoaded` in `.fallowrc.json` and remove all the per-method ignores.

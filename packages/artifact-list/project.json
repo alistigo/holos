@@ -56,8 +56,8 @@
         { "projects": ["list-features"], "target": "build" }
       ],
       "options": {
-        "command": "bash -c '(cd apps/alistigo-artifact-playground && pnpm exec vite preview) & SPID=$!; count=0; until curl -sf http://localhost:4173 >/dev/null 2>&1 || [ $count -ge 30 ]; do sleep 1; count=$((count+1)); done; bun cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/list-features; STATUS=$?; kill $SPID 2>/dev/null; exit $STATUS'",
-        "cwd": "{workspaceRoot}"
+        "command": "bash -c '(cd ../../apps/alistigo-artifact-playground && pnpm exec vite preview) & SPID=$!; count=0; until curl -sf http://localhost:4173 >/dev/null 2>&1 || [ $count -ge 30 ]; do sleep 1; count=$((count+1)); done; bun ../../cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/list-features; STATUS=$?; kill $SPID 2>/dev/null; exit $STATUS'",
+        "cwd": "{projectRoot}"
       }
     },
     "test:e2e-attach": {
@@ -67,8 +67,19 @@
         { "projects": ["list-features"], "target": "build" }
       ],
       "options": {
-        "command": "bun cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/list-features",
-        "cwd": "{workspaceRoot}"
+        "command": "bun ../../cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/list-features",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:e2e-doctor": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        { "projects": ["artifact-features-runner-playwright"], "target": "build" },
+        { "projects": ["list-features"], "target": "build" }
+      ],
+      "options": {
+        "command": "bun ../../cli/artifact-features-runner-playwright/dist/cli.js doctor --target=@alistigo/list-features",
+        "cwd": "{projectRoot}"
       }
     }
   }

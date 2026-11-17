@@ -31,14 +31,6 @@
         "command": "rm -rf dist",
         "cwd": "cli/artifact-features-runner-playwright"
       }
-    },
-    "test:list": {
-      "executor": "nx:run-commands",
-      "dependsOn": ["build", { "projects": ["list-features"], "target": "build" }],
-      "options": {
-        "command": "bun src/cli.ts --target=@alistigo/list-features",
-        "cwd": "cli/artifact-features-runner-playwright"
-      }
     }
   }
 }
