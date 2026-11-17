@@ -76,10 +76,45 @@ Failing checks print the steps to fix them. **Exit code:** `0` if no check faile
 | Feature files | `FEATURES_DIR` is unreadable or holds no `.feature` files — usually an unbuilt package |
 | Host reachable | nothing answers on `--host` |
 | Playground page | the served HTML lacks the dev-playground markers (warning only) |
-| Chromium | Playwright's browser is missing — run `pnpm playwright:install` |
+| Chromium | Browser binary not downloaded (`pnpm playwright:install`) or OS library missing (`pnpm playwright:install-deps`) |
 | Artifact selector | the page has no `Artifact` combobox, so it is not the playground |
 | Preview config | the selection never reached the preview iframe's `#alistigo-config` |
 | Artifact mount | the iframe body stayed empty — the artifact bundle failed to load |
+
+## Troubleshooting
+
+### Chromium fails to launch
+
+Two separate failure classes share the same symptom:
+
+**Binary not downloaded** — Playwright's browser cache (`~/.cache/ms-playwright`) is empty or stale.
+
+```sh
+pnpm playwright:install
+```
+
+**OS shared library missing** — the binary is present but a system library is absent. Typical error:
+
+```
+chrome-headless-shell: error while loading shared libraries: libasound.so.2:
+cannot open shared object file: No such file or directory
+```
+
+Fix (installs all Chromium system dependencies for your OS):
+
+```sh
+pnpm playwright:install-deps
+```
+
+Single-package shortcut for the `libasound.so.2` error on Ubuntu 26.04:
+
+```sh
+sudo apt-get install -y libasound2t64
+```
+
+(The package was renamed from `libasound2` to `libasound2t64` in Ubuntu's time_t 64-bit transition — `libasound2` has no candidate on Ubuntu 26.04+.)
+
+**Why CI reinstalls deps on every run:** the browser binary is cacheable (CI caches `~/.cache/ms-playwright`) but OS system libraries live outside that cache and must be reinstalled each time. `scripts/setup.sh` runs both steps automatically on a fresh clone.
 
 ## Features package contract
 

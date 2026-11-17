@@ -39,6 +39,7 @@
     "nx": "nx",
     "clean": "nx run-many -t clean",
     "playwright:install": "pnpm --filter @alistigo/artifact-features-runner-playwright exec playwright install chromium",
+    "playwright:install-deps": "pnpm --filter @alistigo/artifact-features-runner-playwright exec playwright install-deps chromium",
     "i18n:extract": "lingui extract",
     "i18n:extract:clean": "lingui extract --clean",
     "i18n:compile": "lingui compile",
