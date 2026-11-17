@@ -22,7 +22,7 @@ export class RunCommand extends Command {
       ],
       [
         "Run against a specific host",
-        "artifact-features-runner-playwright --target=@alistigo/list-features --host=http://localhost:4173",
+        "artifact-features-runner-playwright --target=@alistigo/list-features --host=http://localhost:5173",
       ],
     ],
   });
@@ -32,7 +32,7 @@ export class RunCommand extends Command {
     description: "npm package name of the features package to run (e.g. @alistigo/list-features)",
   });
 
-  host = Option.String("--host", "http://localhost:4173", {
+  host = Option.String("--host", "http://localhost:5173", {
     description: "Base URL of the playground to run scenarios against",
   });
 

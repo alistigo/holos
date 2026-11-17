@@ -26,13 +26,13 @@ Direct invocation — note the `cwd`, which must be a package that depends on th
 cd packages/artifact-list
 bun ../../cli/artifact-features-runner-playwright/dist/cli.js \
   --target=@alistigo/list-features \
-  --host=http://localhost:4173
+  --host=http://localhost:5173
 ```
 
 | Flag | Required | Description | Default |
 |------|----------|-------------|---------|
 | `--target` | yes | npm package name of the features package to run | — |
-| `--host` | no | Base URL of the playground to test against | `http://localhost:4173` |
+| `--host` | no | Base URL of the playground to test against | `http://localhost:5173` |
 
 **Exit code:** `0` if all scenarios pass, `1` if any scenario fails or the target package is invalid.
 
@@ -49,7 +49,7 @@ artifact-features-runner-playwright doctor
 
   ✓ Features package: @alistigo/list-features (domain "list") → /workspaces/holos/packages/artifact-list/node_modules/@alistigo/list-features
   ✓ Feature files: 10 .feature file(s) under /workspaces/holos/packages/list-features/features
-  ✓ Host reachable: http://localhost:4173 responded 200
+  ✓ Host reachable: http://localhost:5173 responded 200
   ✓ Playground page: served HTML carries the dev-playground markers
   ✓ Chromium: launched 149.0.7827.55
   ✓ Artifact selector: selected "@alistigo/artifact-list" of 2 offered
@@ -61,7 +61,7 @@ Ready to run features.
 
 | Flag | Required | Description | Default |
 |------|----------|-------------|---------|
-| `--host` | no | Base URL of the playground to check | `http://localhost:4173` |
+| `--host` | no | Base URL of the playground to check | `http://localhost:5173` |
 | `--target` | no | Features package to validate — omit to check the host only | — |
 | `--artifact` | no | Artifact to select in the playground | the first one offered |
 | `--verbose` | no | Stream browser console output while probing | `false` |
