@@ -35,7 +35,7 @@ export class DoctorCommand extends Command {
     ],
   });
 
-  host = Option.String("--host", "http://localhost:4173", {
+  host = Option.String("--host", "http://localhost:5173", {
     description: "Base URL of the playground to check",
   });
 
