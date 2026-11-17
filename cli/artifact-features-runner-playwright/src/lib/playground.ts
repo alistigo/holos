@@ -186,6 +186,17 @@ async function runPageChecks(
   results.push(await checkArtifactMounts(page));
 }
 
+function chromiumLaunchFix(reason: string): string[] {
+  const missingLib = /error while loading shared libraries: ([^:]+)/.exec(reason);
+  if (missingLib) {
+    return [`Missing OS library ${missingLib[1]} — run: pnpm playwright:install-deps`];
+  }
+  if (reason.includes("Executable doesn't exist")) {
+    return ["Browser not downloaded — run: pnpm playwright:install"];
+  }
+  return [];
+}
+
 /**
  * Drives the playground end to end: the host is only "really the playground" if an
  * artifact can be selected and that selection reaches the preview iframe.
@@ -202,9 +213,7 @@ export async function probePlayground(
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
     return [
-      check("Chromium", "fail", `cannot launch chromium (${reason})`, [
-        "Install the browser: pnpm playwright:install",
-      ]),
+      check("Chromium", "fail", `cannot launch chromium (${reason})`, chromiumLaunchFix(reason)),
     ];
   }
 

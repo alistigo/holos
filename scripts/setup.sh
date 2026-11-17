@@ -114,6 +114,18 @@ info "Installing Node workspace dependencies..."
 mise exec -- pnpm install
 info "Node dependencies installed."
 
+# ── 2b. Playwright browsers + OS libraries ───────────────────────────────────
+info "Installing Playwright Chromium..."
+mise exec -- pnpm playwright:install
+
+if sudo -n true 2>/dev/null; then
+  mise exec -- pnpm playwright:install-deps
+  info "Playwright system libraries installed."
+else
+  warn "Skipping Playwright system libraries (no passwordless sudo). To add manually:"
+  echo "    pnpm playwright:install-deps"
+fi
+
 # ── 3. .claude/ symlinks ─────────────────────────────────────────────────────
 # Wire repo .agents/ subdirectories into .claude/ so Claude skills, commands,
 # PRDs, and epics are resolved from version-controlled paths.
