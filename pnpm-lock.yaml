@@ -159,7 +159,7 @@ importers:
     dependencies:
       archify:
         specifier: github:tt-a1i/archify
-        version: archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620
+        version: archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/a7ed6fd6657da90414831d1d42cf95987188750c
       clipanion:
         specifier: 4.0.0-rc.4
         version: 4.0.0-rc.4(typanion@3.14.0)
@@ -525,6 +525,9 @@ importers:
       '@alistigo/artifact-dev-tools':
         specifier: workspace:*
         version: link:../artifact-dev-tools
+      '@alistigo/list-features':
+        specifier: workspace:*
+        version: link:../list-features
       '@emotion/is-prop-valid':
         specifier: ^1.4.0
         version: 1.4.0
@@ -3843,8 +3846,8 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620:
-    resolution: {tarball: https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620}
+  archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/a7ed6fd6657da90414831d1d42cf95987188750c:
+    resolution: {tarball: https://codeload.github.com/tt-a1i/archify/tar.gz/a7ed6fd6657da90414831d1d42cf95987188750c}
     version: 0.0.0
     engines: {node: '>=18'}
 
@@ -11068,7 +11071,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.2
 
-  archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/e37848822238e3a61b12739185cdadd49843a620: {}
+  archify-repository@https://codeload.github.com/tt-a1i/archify/tar.gz/a7ed6fd6657da90414831d1d42cf95987188750c: {}
 
   arg@4.1.3: {}
 
