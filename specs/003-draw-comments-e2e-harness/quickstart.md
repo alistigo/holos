@@ -118,8 +118,12 @@ would be missing (F1).
 pnpm nx run artifact-ai-draw-comments:test:e2e
 ```
 
-**Expected**: `13 scenarios (12 passed, 1 skipped)` and exit `0` — SC-003 exactly. The
-skipped one is `embed-host`'s script-tag mount, retagged `@todo` (FR-027).
+**Expected**: `13 scenarios (13 passed)`, then `1 scenario excluded by @todo`, and exit `0`.
+That is SC-003's 13 retained scenarios — the excluded one is `embed-host`'s script-tag mount,
+tagged `@todo` (FR-027), and the count line is how it stays visible in the report rather than
+being reported `skipped`; see the runner README for why skipping is not available. The
+fourteenth, "Reloading the artifact discards an in-progress annotation", was added by T078 as
+the regression guard for reload-time artifact selection, so the passing total is 13, not 12.
 
 **Then prove the failure path (SC-009)**: change the "Draw Comment" button's `aria-label`
 in `packages/artifact-ai-draw-comments/src/components/DrawCommentButton.tsx`, rebuild, re-run.

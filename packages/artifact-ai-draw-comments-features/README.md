@@ -23,7 +23,7 @@ execution path, which is what keeps one way of running the specs rather than two
 
 | Path | Contents |
 |------|----------|
-| `features/` | The `.feature` files — 13 scenarios across 3 features |
+| `features/` | The `.feature` files — 14 scenarios across 3 features |
 | `src/step-definitions/` | Step implementations, driving the widget's UI |
 | `src/support/selectors.ts` | The widget's roles, accessible names and test ids |
 | `src/support/draw-comments.page.ts` | `DrawCommentsPage extends PlaygroundPage` — drag, draw, send, read back |
@@ -79,12 +79,22 @@ output and deserves its own spec. See the follow-up issue linked from
 needs a bare host document with the bundle in a `<script>` tag, which the playground does not
 provide — it injects artifacts as modules.
 
-The runner **filters** `@todo` scenarios out of the run rather than reporting them skipped, so
-the suite prints `12 scenarios (12 passed)` rather than 13 with one skipped. The reason is in
-the runner's README: Cucumber resolves step definitions before hooks run, so making `@todo`
-scenarios appear as skipped would surface `list-features`' unimplemented posthog feature as
-`undefined` and abort that suite. The tag in the `.feature` file is the record that the
-thirteenth scenario exists and is not yet covered.
+The runner **filters** `@todo` scenarios out of the run rather than reporting them skipped,
+and then reports the count it left out:
+
+```text
+13 scenarios (13 passed)
+60 steps (60 passed)
+
+1 scenario excluded by @todo (not yet implemented; see the feature files).
+```
+
+So Cucumber's totals cover the 13 that ran, and the line below them accounts for the
+fourteenth. The reason it is filtered rather than skipped is in the runner's README: Cucumber
+resolves step definitions before hooks run, so making `@todo` scenarios appear as skipped
+would surface `list-features`' unimplemented posthog feature as `undefined` and abort that
+suite. Between the tag in the `.feature` file and that count, the scenario is recorded in
+both the specs and every run's output.
 
 ## Tags
 

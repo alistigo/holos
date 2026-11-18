@@ -57,3 +57,13 @@ Feature: Annotate and Send a Draw Comment
     When the user clicks the "Cancel annotation" button in the drawing panel
     Then the drawing canvas and toolbar are dismissed
     And the "Draw Comment" button is re-enabled
+
+  # Guards the harness as much as the widget: the playground keeps the selected
+  # artifact in memory only, so a reload that does not re-select it lands on a
+  # different artifact — where there is no "Draw Comment" button to re-enable.
+  @P1
+  Scenario: Reloading the artifact discards an in-progress annotation
+    Given the drawing phase is active with the canvas visible
+    When the user reloads the artifact
+    Then the drawing canvas and toolbar are dismissed
+    And the "Draw Comment" button is re-enabled

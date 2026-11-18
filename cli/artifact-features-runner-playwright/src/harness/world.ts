@@ -79,6 +79,8 @@ export class ArtifactWorld extends World {
    * Seeds the preview origin's localStorage and reloads so the artifact picks
    * it up. The generic form of "start this scenario from a known state"; a
    * domain package wraps it with its own document type.
+   *
+   * Reloads through `reloadArtifact`, never `page.reload()` — see why there.
    */
   async seedStorage(entries: Record<string, string>): Promise<void> {
     if (!this.playgroundPage) return;
@@ -88,14 +90,24 @@ export class ArtifactWorld extends World {
         localStorage.setItem(key, value);
       }
     }, entries);
-    await this.page.reload();
-    await this.playgroundPage.waitForArtifactReady();
+    await this.reloadArtifact();
   }
 
-  /** Reloads the artifact; localStorage survives, so persisted state is reread. */
+  /**
+   * Reloads the artifact; localStorage survives, so persisted state is reread.
+   *
+   * Delegates to `PlaygroundPage.reload()` rather than driving `page.reload()`
+   * here, because the reload has to be followed by re-selecting the artifact.
+   * The playground keeps the chosen artifact in React state only — no URL
+   * parameter, no storage — so a bare page reload drops the selection back to
+   * the registry's first entry. And since every artifact exposes the same
+   * `alistigo-app` readiness marker, waiting for readiness afterwards resolves
+   * happily against the *wrong* artifact, and the scenario then runs against it
+   * reporting nothing amiss. The draw-comments suite's "Reloading the artifact
+   * discards an in-progress annotation" scenario is the regression guard.
+   */
   async reloadArtifact(): Promise<void> {
-    await this.page.reload();
-    await this.playgroundPage.waitForArtifactReady();
+    await this.playgroundPage.reload();
   }
 
   async enablePlugin(packageName: string): Promise<void> {

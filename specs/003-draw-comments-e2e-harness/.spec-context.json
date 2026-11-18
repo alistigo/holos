@@ -2,7 +2,7 @@
   "workflow": "speckit",
   "specName": "Draw-Comments End-to-End Features via the Generic Runner",
   "branch": "feat/003-draw-comments-e2e-harness",
-  "currentStep": "converge",
+  "currentStep": "implement",
   "status": "implementing",
   "history": [
     {
