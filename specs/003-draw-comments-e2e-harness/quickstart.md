@@ -50,9 +50,27 @@ harness through the same bare specifier it hands Cucumber.
 
 ## Step 3 — The widget is selectable and mounts in the playground
 
+**Exercise both modes.** They resolve the artifact bundle by entirely different paths, and a
+break in one is invisible from the other:
+
+| Mode | How the iframe gets the artifact | What only this mode can catch |
+|---|---|---|
+| `dev` | Vite serves the aliased **source**, so the playground's Lingui plugin transforms the artifact's own `.po` | a catalog the plugin's config does not declare (500 on `messages.po`), HMR-only breakage |
+| `preview` | the registry's CDN URL, route-served from the local `dist/` by the harness | what `test:e2e` actually asserts against |
+
+Skipping `dev` is how the Lingui catalog defect (T073) reached a merge-ready branch: every
+assertion below passed under `preview`.
+
 ```sh
 pnpm nx run alistigo-artifact-playground:dev     # http://localhost:5173
 ```
+
+**Load the page once and let it settle before asserting anything.** On a cold start Vite
+discovers dependencies and logs `optimized dependencies changed. reloading` — twice, in
+practice — and each is a full-page reload that detaches the preview iframe mid-interaction.
+By hand this is invisible; a script that selects the artifact and immediately queries the
+frame will fail on a detached frame and look like a mount bug. `vite preview` has no
+dependency-optimization step, so this is dev-only.
 
 In a browser:
 
@@ -64,6 +82,9 @@ In a browser:
    banner shows, and no uncaught error appears in the console (FR-003).
 5. Switch back to `@alistigo/artifact-list` → it mounts normally (FR-005).
 
+6. The widget's controls carry **English accessible names**, not Lingui hash ids — a missing
+   or unresolvable catalog shows up as `aria-label="TzVdRJ"` rather than as an error.
+
 **Then the full cycle (FR-004)**: click "Draw Comment", drag a region over the host prose,
 draw a rectangle, type a comment, click "Send".
 
@@ -71,6 +92,9 @@ draw a rectangle, type a comment, click "Send".
 simulator's canned response below that. The `Claude Simulator` tab shows one logged request.
 **Failure mode this catches**: F3 — before the prompt is normalised, the *host page* (not the
 iframe) dies with "Objects are not valid as a React child" at this exact point.
+
+**Now repeat the whole step against `preview`** (`nx run alistigo-artifact-playground:preview`,
+port 4173), which is what `test:e2e` drives.
 
 ---
 
@@ -195,4 +219,7 @@ locators and domain fixtures (SC-005).
 | Canvas not over the selected region | F2b, double offset in `DrawCanvas` | remove the duplicated `left`/`top` |
 | `htmlToImage is undefined` | `aiContext` is not `claude`, or the cdnjs route is not served | run in the Claude context; check the harness's `html-to-image` route (F4) |
 | Two browsers launch | harness loaded twice | research D2 fallback |
+| 500 on `messages.po?import` in dev | the playground's Lingui config does not declare that artifact's catalog | add it to `apps/alistigo-artifact-playground/lingui.config.ts` |
+| A scenario runs against the wrong artifact | every artifact exposes the same readiness marker, so a stale `framenavigated` can satisfy the wait | `selectArtifact` polls the iframe's `#alistigo-config` until it reports the requested app |
+| In dev, the artifact mounts then the frame goes blank or detaches | Vite's cold-start `optimized dependencies changed. reloading` | load the page once and wait before asserting; see step 3 |
 | Region selection does nothing | the drag was under 20×20 px | the overlay enforces a minimum; drag a larger area |

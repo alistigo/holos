@@ -13,6 +13,9 @@ import { PLATFORM_TEST_IDS, PREVIEW_IFRAME_NAME, PREVIEW_IFRAME_TITLE } from "./
 /** How long to wait for the preview iframe to renavigate after a selection change. */
 const FRAME_NAV_TIMEOUT = 5_000;
 
+/** How long to wait for the preview to report the artifact we selected. */
+const PREVIEW_APP_TIMEOUT = 20_000;
+
 export class PlaygroundPage {
   readonly baseUrl: string;
   readonly page: Page;
@@ -41,6 +44,44 @@ export class PlaygroundPage {
       predicate: (frame) => frame.name() === PREVIEW_IFRAME_NAME,
       timeout: FRAME_NAV_TIMEOUT,
     });
+  }
+
+  /** The artifact the preview iframe currently reports, from its injected config. */
+  private async previewApp(): Promise<string | undefined> {
+    const text = await this.artifactFrame
+      .locator("#alistigo-config")
+      .textContent({ timeout: 2_000 })
+      .catch(() => null);
+    if (text === null) return undefined;
+    try {
+      return (JSON.parse(text) as { app?: string }).app;
+    } catch {
+      return undefined;
+    }
+  }
+
+  /**
+   * Polls the preview's injected config until it reports `expected`.
+   *
+   * Waiting on a `framenavigated` event alone is not enough: every artifact
+   * exposes the same readiness marker, so if the event we caught was the
+   * iframe's *initial* navigation rather than the one our selection triggered,
+   * `waitForArtifactReady` happily matches the artifact that was already there
+   * and the scenario runs against the wrong one. Asking the iframe which app it
+   * holds is the only check that cannot be satisfied by the previous artifact.
+   */
+  private async waitForPreviewApp(expected: string): Promise<void> {
+    const deadline = Date.now() + PREVIEW_APP_TIMEOUT;
+    let seen: string | undefined;
+    while (Date.now() < deadline) {
+      seen = await this.previewApp();
+      if (seen === expected) return;
+      await this.page.waitForTimeout(100);
+    }
+    throw new Error(
+      `the preview iframe reports app "${seen ?? "(none)"}", expected "${expected}" — ` +
+        "the selection did not reach the artifact iframe.",
+    );
   }
 
   async open(): Promise<void> {
@@ -73,9 +114,8 @@ export class PlaygroundPage {
     }
     if ((await selector.inputValue()) === name) return;
 
-    const navigated = this.waitForPreviewNavigation();
     await selector.selectOption(name);
-    await navigated;
+    await this.waitForPreviewApp(name);
   }
 
   /**

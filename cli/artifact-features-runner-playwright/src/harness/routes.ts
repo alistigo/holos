@@ -10,10 +10,14 @@
  *     would be invisible.
  *  2. Plugin bundles, resolved the same way (or through the dev server's
  *     `/@fs/` overrides when the playground runs in dev mode).
- * The first two are served from the workspace instead. A third, `html-to-image`
- * from cdnjs, is left alone: it is loaded under an `integrity` hash for the
- * minified build that npm does not ship, so a local substitute is rejected by
- * the browser. It stays the one external dependency of a run. Resolution is by package
+ * Both are served from the workspace instead, so a run needs no network.
+ *
+ * `html-to-image` used to be a third case and the one hole in that promise: the
+ * playground loaded it from cdnjs under a Subresource Integrity hash for the
+ * minified build, which the unminified file on npm cannot satisfy, so no local
+ * substitute survived the browser's SRI check. The playground now serves it
+ * from its own origin instead, which closes the hole at the source and needs no
+ * interception here. Resolution is by package
  * name through node's own resolver, never by a relative path reaching out of
  * this package — a `../../packages/...` read is both fragile and a
  * `no-cross-package-relative-import` violation.
@@ -202,10 +206,6 @@ export async function installDefaultRoutes(
     fulfillJs(route, CLAUDE_STORAGE_STUB),
   );
 
-  // `html-to-image` is deliberately NOT intercepted. The playground loads it
-  // from cdnjs with an `integrity` attribute, and cdnjs serves the minified
-  // build while npm ships only the unminified one — so no local file can
-  // satisfy the SRI check, and substituting one makes the browser reject the
-  // script outright. Scenarios that send an annotation therefore depend on
-  // reaching cdnjs; everything else in a run is served locally.
+  // `html-to-image` needs no route: the playground serves it from its own
+  // origin (see buildIframeSrcdoc.ts), so it never leaves the machine.
 }
