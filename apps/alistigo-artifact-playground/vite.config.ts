@@ -31,6 +31,10 @@ const artifactClaudeCapabilitiesDemoSrc = path.resolve(
   __dirname,
   "../../packages/artifact-claude-capabilities-demo/src/index.tsx",
 );
+const artifactAiDrawCommentsSrc = path.resolve(
+  __dirname,
+  "../../packages/artifact-ai-draw-comments/src/index.tsx",
+);
 
 // Absolute paths to each plugin package's source entry, so the playground can load
 // plugins straight from local source in dev instead of jsDelivr (see
@@ -120,6 +124,18 @@ export default defineConfig(({ command }) => ({
     alias: {
       "@alistigo/artifact-list": artifactListSrc,
       "@alistigo/artifact-claude-capabilities-demo": artifactClaudeCapabilitiesDemoSrc,
+      "@alistigo/artifact-ai-draw-comments": artifactAiDrawCommentsSrc,
+      // The widget's own vite build aliases react-konva to its core entry to
+      // avoid the full `import "konva"`; the playground must do the same, or
+      // dev mode pulls in every Konva shape.
+      "react-konva": path.resolve(
+        __dirname,
+        "../../packages/artifact-ai-draw-comments/node_modules/react-konva/es/ReactKonvaCore.js",
+      ),
+      "virtual:ai-draw-comments-catalog": path.resolve(
+        __dirname,
+        "../../packages/artifact-ai-draw-comments/src/locales/en/messages.po",
+      ),
       "virtual:alistigo-active-catalog": activeCatalogPath,
     },
   },

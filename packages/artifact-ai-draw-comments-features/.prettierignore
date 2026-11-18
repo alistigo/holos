@@ -1,0 +1,8 @@
+# Prettier in this package only formats .feature files.
+# Biome handles everything else (TS/JS/JSON/MD).
+**/*
+!features/
+!features/**/
+!**/*.feature
+node_modules/
+dist/

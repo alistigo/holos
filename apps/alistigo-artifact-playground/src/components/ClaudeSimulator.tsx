@@ -158,6 +158,10 @@ function AiSubTab({
                     <span className="text-red-600 font-medium">error</span>
                   )}
                 </div>
+                {/* entry.prompt is always a string: the hook collapses a
+                    content-block array via describePrompt() before it lands
+                    here. Rendering the raw array would throw "Objects are not
+                    valid as a React child" and take down this host page. */}
                 <div className="text-gray-700 truncate" title={entry.prompt}>
                   ↑ {entry.prompt}
                 </div>

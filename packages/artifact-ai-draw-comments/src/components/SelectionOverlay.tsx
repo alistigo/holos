@@ -69,6 +69,9 @@ export function SelectionOverlay({ onSelect, onCancel }: SelectionOverlayProps) 
       onMouseUp={handleMouseUp}
       role="presentation"
       aria-label={t`Drag to select annotation area`}
+      // role="presentation" keeps this out of the a11y tree on purpose, so a
+      // role+name locator cannot reach it; behaviour specs target this id.
+      data-testid="selection-overlay"
     >
       <button
         type="button"
@@ -81,6 +84,7 @@ export function SelectionOverlay({ onSelect, onCancel }: SelectionOverlayProps) 
       </button>
       {preview !== null && (
         <div
+          data-testid="selection-indicator"
           className="pointer-events-none absolute border-2 border-blue-500 bg-blue-100/20"
           style={{
             left: preview.x,

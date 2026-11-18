@@ -1,0 +1,14 @@
+{
+  "plugins": ["prettier-plugin-gherkin"],
+  "overrides": [
+    {
+      "files": "*.feature",
+      "options": {
+        "parser": "gherkin",
+        "printWidth": 100,
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    }
+  ]
+}

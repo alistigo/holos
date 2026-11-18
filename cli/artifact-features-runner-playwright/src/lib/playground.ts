@@ -1,4 +1,5 @@
 import { type Browser, chromium, type Page } from "playwright";
+import { localBundleFor } from "../harness/routes.js";
 import { aptPackageForLibrary } from "./browser-checks.js";
 import { BROWSERS_PATH_ENV, CHROMIUM_EXECUTABLE_ENV } from "./browsers.js";
 import { type CheckResult, check } from "./check.js";
@@ -176,6 +177,37 @@ async function checkArtifactMounts(page: Page): Promise<CheckResult> {
   }
 }
 
+/**
+ * Whether the preview will load the artifact from the working tree or from the
+ * published bundle on jsDelivr.
+ *
+ * A `vite preview` build is not a dev build, so the playground falls back to the
+ * registry's CDN URL; the harness intercepts that and serves the local `dist/`
+ * instead. Without a local build the request falls through to the network, and
+ * the scenarios then assert against the *published* artifact — so a
+ * source-only change looks absent and every readiness wait times out.
+ *
+ * Warns rather than fails, so `doctor` stays usable against a real deployment.
+ */
+function checkLocalBundle(artifact: string | undefined, from: string): CheckResult {
+  if (artifact === undefined) {
+    return check("Local bundle", "skip", "no --artifact given, nothing to resolve");
+  }
+  const local = localBundleFor(artifact, "dist/index.js", from);
+  if (local !== undefined) {
+    return check("Local bundle", "ok", `serving ${local.replace(`${process.cwd()}/`, "")}`);
+  }
+  return check(
+    "Local bundle",
+    "warn",
+    `no local build found for ${artifact} — the preview will fetch the published bundle from jsDelivr`,
+    [
+      `Build it first: nx run ${artifact.replace(/^@[^/]+\//, "")}:build`,
+      "Until then, scenarios assert against the published artifact, not your working tree.",
+    ],
+  );
+}
+
 async function runPageChecks(
   page: Page,
   artifact: string | undefined,
@@ -184,6 +216,7 @@ async function runPageChecks(
   const selection = await checkArtifactSelector(page, artifact);
   results.push(selection.result);
   if (selection.selected === undefined) return;
+  results.push(checkLocalBundle(selection.selected, process.cwd()));
   results.push(await checkPreviewConfig(page, selection.selected));
   results.push(await checkArtifactMounts(page));
 }

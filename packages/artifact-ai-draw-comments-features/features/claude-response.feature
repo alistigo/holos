@@ -2,12 +2,15 @@ Feature: View Claude Response to a Draw Comment
   After sending a draw comment, Claude's response appears inline below the annotation
   without navigating away or reloading the artifact.
 
+  Background:
+    Given the draw comment widget is loaded over a host artifact
+
   @P2
   Scenario: Claude response appears below the annotation after sending
-    Given a draw comment was just sent via window.claude.complete
-    When Claude responds via the window.claude API
+    Given a draw comment has been sent via window.claude.complete
+    When Claude answers
     Then Claude's response text appears below the annotation display area
-    And the page does not reload
+    And the artifact has not reloaded
 
   @P2
   Scenario: Annotation PNG and comment remain visible above the response
@@ -21,4 +24,3 @@ Feature: View Claude Response to a Draw Comment
     Given Claude's response is displayed below the annotation
     When the user looks at the top of the artifact
     Then the "Draw Comment" button is active and can be clicked to start a new annotation
-

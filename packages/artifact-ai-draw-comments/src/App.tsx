@@ -80,6 +80,7 @@ function DrawingPhase({
       {session.region !== null && (
         <div
           ref={regionRef}
+          data-testid="draw-region"
           className="absolute"
           style={{
             left: session.region.x,
@@ -97,6 +98,7 @@ function DrawingPhase({
         </div>
       )}
       <div
+        data-testid="draw-panel"
         className="fixed bottom-0 left-0 right-0 shadow-lg"
         style={{ zIndex: "var(--ai-draw-panel-z)" }}
       >
@@ -269,7 +271,13 @@ export function App() {
   }, []);
 
   return (
-    <div className="ai-draw-comments font-sans text-sm">
+    // `data-testid="alistigo-app"` is the platform readiness marker: the features
+    // harness waits for it inside the preview iframe to know the widget is mounted
+    // and interactive. It is a test affordance, not the Artifact Contract — this
+    // package stays a `widget` and keeps that exemption.
+    // `relative` gives the absolutely-positioned region overlay a predictable
+    // containing block instead of the initial containing block.
+    <div className="ai-draw-comments relative font-sans text-sm" data-testid="alistigo-app">
       <ClaudeUnavailableBanner onDismiss={handleDismissError} />
       <DrawCommentButton
         onClick={startSession}

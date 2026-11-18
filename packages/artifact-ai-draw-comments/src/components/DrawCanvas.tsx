@@ -86,10 +86,10 @@ export function DrawCanvas({ region, activeTool, onShapesChange, stageRef }: Dra
       : { id: "draft", type: activeTool, ...draft, strokeColor: DEFAULT_STROKE_COLOR };
 
   return (
-    <div
-      className="absolute"
-      style={{ left: region.x, top: region.y, width: region.width, height: region.height }}
-    >
+    // Fills the region wrapper in App.tsx, which already carries the region's
+    // left/top offset. Re-applying it here put the canvas at twice the offset,
+    // so the overlay never sat on the region the user selected.
+    <div className="absolute inset-0">
       <Stage
         ref={stageRef}
         width={region.width}

@@ -1,8 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "types": ["node"]
+    "lib": ["ESNext", "DOM"],
+    "types": ["bun"],
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
-  "include": ["step-definitions/**/*.ts", "gherklin.config.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "gherklin.config.ts"]
 }

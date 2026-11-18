@@ -8,6 +8,6 @@
     "types": ["vite/client"],
     "noEmit": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../packages/artifact-ai-draw-comments/src/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

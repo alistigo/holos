@@ -21,7 +21,8 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "@uiw/react-json-view": "^2.0.0-alpha.43"
+    "@uiw/react-json-view": "^2.0.0-alpha.43",
+    "@alistigo/artifact-ai-draw-comments": "workspace:*"
   },
   "devDependencies": {
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",

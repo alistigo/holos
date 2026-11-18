@@ -7,7 +7,13 @@
 
 Behavior specifications for Alistigo AI, written in [Gherkin](https://cucumber.io/docs/gherkin/reference/).
 
-These `.feature` files are the **source of truth for what the app should do**. The runner ([`@alistigo/features-runner-playwright`](../../cli/alistigo-features-runner-playwright/)) reads them and asserts the app conforms. We follow TDD — features are written and reviewed *before* the code that satisfies them.
+These `.feature` files are the **source of truth for what the app should do**. The runner ([`@alistigo/artifact-features-runner-playwright`](../../cli/artifact-features-runner-playwright/)) reads them and asserts the app conforms. We follow TDD — features are written and reviewed *before* the code that satisfies them.
+
+The generic half of the browser setup — the browser and per-scenario lifecycle, the Cucumber
+World base class, the playground page object and CDN route interception — lives in that
+runner's `/harness` entry point, shared with every other features package. What is in this
+package is list-specific: the `.feature` files, the step definitions, `ListWorld`,
+`ListApplicationPage`, the list selectors and the list document fixtures.
 
 The package follows the universal conventions of the [`gherkin-features` skill](../../.agents/skills/gherkin-features/SKILL.md). The skill is the source of truth for the structure (organization, tooling, tag categories, glossary sections); this package fills in the Alistigo-specific contents.
 

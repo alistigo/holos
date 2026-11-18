@@ -6,12 +6,16 @@
   "targets": {
     "build": {
       "command": "vite build",
-      "options": { "cwd": "{projectRoot}" },
+      "options": {
+        "cwd": "{projectRoot}"
+      },
       "outputs": ["{projectRoot}/dist"]
     },
     "typecheck": {
       "command": "tsc --noEmit",
-      "options": { "cwd": "{projectRoot}" }
+      "options": {
+        "cwd": "{projectRoot}"
+      }
     },
     "qa:lint": {
       "executor": "nx:run-commands",
@@ -46,6 +50,94 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "rm -rf dist storybook-static",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "i18n:extract": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "lingui extract",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "i18n:extract:clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "lingui extract --clean",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:e2e": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": ["alistigo-artifact-playground"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-features-runner-playwright"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-ai-draw-comments-features"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-ai-draw-comments"],
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "bash -c '(cd ../../apps/alistigo-artifact-playground && pnpm exec vite preview) & SPID=$!; count=0; until curl -sf http://localhost:4173 >/dev/null 2>&1 || [ $count -ge 30 ]; do sleep 1; count=$((count+1)); done; bun ../../cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/artifact-ai-draw-comments-features --artifact=@alistigo/artifact-ai-draw-comments --host=http://localhost:4173; STATUS=$?; kill $SPID 2>/dev/null; exit $STATUS'",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:e2e-attach": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": ["artifact-features-runner-playwright"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-ai-draw-comments-features"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-ai-draw-comments"],
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "bun ../../cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/artifact-ai-draw-comments-features --artifact=@alistigo/artifact-ai-draw-comments",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:e2e-doctor": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": ["artifact-features-runner-playwright"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-ai-draw-comments-features"],
+          "target": "build"
+        },
+        {
+          "projects": ["artifact-ai-draw-comments"],
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "bun ../../cli/artifact-features-runner-playwright/dist/cli.js doctor --target=@alistigo/artifact-ai-draw-comments-features --artifact=@alistigo/artifact-ai-draw-comments",
         "cwd": "{projectRoot}"
       }
     }

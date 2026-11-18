@@ -27,4 +27,11 @@ export const ARTIFACT_REGISTRY: Record<string, ArtifactEntry> = {
     skillPackage: "@alistigo/artifact-claude-capabilities-demo-skill",
     availablePlugins: [],
   },
+  // Appended deliberately: KNOWN_APPS[0] is the playground's landing default,
+  // and the list artifact must keep that slot so its scenarios stay unaffected.
+  "@alistigo/artifact-ai-draw-comments": {
+    cdnUrl: "https://cdn.jsdelivr.net/npm/@alistigo/artifact-ai-draw-comments@0/dist/index.umd.js",
+    skillPackage: "@alistigo/artifact-ai-draw-comments-skill",
+    availablePlugins: [],
+  },
 };

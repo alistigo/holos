@@ -21,10 +21,14 @@ export const ROLES = {
   pseudoInput: { role: "textbox", name: "Pseudo" },
 } as const;
 
+/**
+ * List-domain test ids only. The platform-wide markers — the `alistigo-app`
+ * readiness root and the `action-pending` busy flag — now live in
+ * `PLATFORM_TEST_IDS` in the runner's harness, because every artifact exposes
+ * them and the harness waits on them without domain knowledge.
+ */
 export const TEST_IDS = {
-  app: "alistigo-app",
   emptyState: "empty-state",
-  actionPending: "action-pending",
   badge: "alistigo-badge",
   userPseudo: "user-pseudo",
 } as const;
