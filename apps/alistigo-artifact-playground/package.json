@@ -11,18 +11,19 @@
     "build:all": "pnpm run build:en && pnpm run build:fr"
   },
   "dependencies": {
-    "@alistigo/claude-artifact-api": "workspace:*",
+    "@alistigo/artifact-ai-draw-comments": "workspace:*",
+    "@alistigo/artifact-claude-capabilities-demo": "workspace:*",
     "@alistigo/artifact-list": "workspace:*",
     "@alistigo/artifact-manager": "workspace:*",
-    "@alistigo/artifact-claude-capabilities-demo": "workspace:*",
-    "@alistigo/list-document": "workspace:*",
+    "@alistigo/claude-artifact-api": "workspace:*",
     "@alistigo/list-components-react": "workspace:*",
+    "@alistigo/list-document": "workspace:*",
     "@alistigo/local-storage-plugin": "workspace:*",
+    "@uiw/react-json-view": "^2.0.0-alpha.43",
+    "html-to-image": "1.11.13",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "@uiw/react-json-view": "^2.0.0-alpha.43",
-    "@alistigo/artifact-ai-draw-comments": "workspace:*"
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",

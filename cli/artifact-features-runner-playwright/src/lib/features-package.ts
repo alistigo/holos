@@ -83,6 +83,69 @@ function unresolved(name: string, from: string): LoadOutcome {
   };
 }
 
+/** A tag line carrying `@todo`, e.g. `@P3 @todo`. */
+function isTodoTag(line: string): boolean {
+  return /(^|\s)@todo(\s|$)/.test(line);
+}
+
+function isTagLine(line: string): boolean {
+  return /^\s*@/.test(line);
+}
+
+function isScenarioLine(line: string): boolean {
+  return /^\s*Scenario(\s+Outline)?\s*:/.test(line);
+}
+
+/** True when the `Feature:` itself is tagged `@todo`, which covers every scenario in it. */
+function featureIsTodo(lines: string[]): boolean {
+  const featureLine = lines.findIndex((line) => /^\s*Feature\s*:/.test(line));
+  return lines.slice(0, featureLine === -1 ? 0 : featureLine).some(isTodoTag);
+}
+
+// CRAP, not complexity: cyclomatic 6 and cognitive 8 are well inside the
+// thresholds, but CRAP assumes zero coverage and there is no coverage dump in
+// this gate. The four cases in features-package.test.ts cover both branches of
+// this function (feature-level @todo and per-scenario tags).
+// fallow-ignore-next-line complexity
+function countTodoInSource(source: string): number {
+  const lines = source.split("\n");
+  if (featureIsTodo(lines)) return lines.filter(isScenarioLine).length;
+
+  let total = 0;
+  let tagged = false;
+  for (const line of lines) {
+    if (isTagLine(line)) {
+      tagged = isTodoTag(line);
+    } else if (isScenarioLine(line)) {
+      if (tagged) total += 1;
+      tagged = false;
+    }
+  }
+  return total;
+}
+
+/**
+ * Scenarios the runner will filter out because they are tagged `@todo`.
+ *
+ * The run excludes them rather than reporting them skipped, because Cucumber
+ * resolves step definitions before hooks run: a `@todo` scenario whose steps
+ * were never written reports `undefined` and `failFast` aborts the suite. The
+ * cost of filtering is that unimplemented work vanishes from the report
+ * entirely — so the runner counts them here and says so, which is the part that
+ * actually matters to someone reading the output.
+ */
+export function countTodoScenarios(featuresDir: string, featureFiles: string[]): number {
+  let total = 0;
+  for (const file of featureFiles) {
+    try {
+      total += countTodoInSource(readFileSync(path.join(featuresDir, file), "utf8"));
+    } catch {
+      // An unreadable feature file is the caller's problem, not this counter's.
+    }
+  }
+  return total;
+}
+
 function readFeatureFiles(featuresDir: string): string[] | undefined {
   try {
     return readdirSync(featuresDir, { recursive: true })

@@ -1,4 +1,15 @@
 import claudeBridgeHtml from "@alistigo/claude-artifact-api/inject-script.html?raw";
+// Served from this app's own origin rather than cdnjs, so a features run needs
+// no network: cdnjs serves the *minified* build under a Subresource Integrity
+// hash that the unminified file on npm cannot satisfy, so the previous CDN
+// script tag could not be route-intercepted by the test harness without the
+// browser rejecting it. Vite emits this as an asset and hands back its URL, in
+// dev and in a build alike.
+//
+// `cdnjs.cloudflare.com` deliberately stays in the CSP below: that directive
+// models the sandbox a real Claude artifact runs inside, not what this app
+// happens to need.
+import htmlToImageUrl from "html-to-image/dist/html-to-image.js?url";
 import type { Config } from "./hooks/useHostConfig";
 
 const _devHost = typeof __ALISTIGO_DEV_HOSTNAME__ !== "undefined" ? __ALISTIGO_DEV_HOSTNAME__ : "";
@@ -47,7 +58,9 @@ function buildDevRefreshScript(): string {
 
 function buildClaudeHeadScripts(): string {
   return [
-    `<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js" integrity="sha512-iZ2ORl595Wx6miw+GuadDet4WQbdSWS3JLMoNfY8cRGoEFy6oT3G9IbcrBeL6AfkgpA51ETt/faX6yLV+/gFJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`,
+    // Same-origin, so no `integrity`/`crossorigin` is needed — SRI guards
+    // against a compromised third-party host, which this no longer is.
+    `<script src="${htmlToImageUrl}"></script>`,
     claudeBridgeHtml,
   ].join("\n    ");
 }

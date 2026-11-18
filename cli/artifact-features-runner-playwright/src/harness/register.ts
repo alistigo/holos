@@ -47,6 +47,15 @@ AfterAll(async () => {
 /**
  * Not-yet-implemented scenarios are skipped before any browser context exists,
  * so they cost nothing and cannot fail.
+ *
+ * The `run` command additionally filters `@todo` out at the configuration level,
+ * which means this hook does not fire on a normal run — Cucumber resolves step
+ * definitions before hooks, so a `@todo` scenario with no step definitions would
+ * report `undefined` and abort a failFast suite before any hook could skip it.
+ * The hook is still part of the published harness contract: anything composing
+ * its own Cucumber run from `/harness` without that filter gets the skip
+ * behaviour, and it is the mechanism `run` would rely on if the filter is ever
+ * dropped. `run` reports the excluded count so the scenarios stay visible.
  */
 Before({ tags: "@todo" }, () => "skipped" as const);
 

@@ -6,7 +6,7 @@ import {
   resolveChromiumExecutable,
   validateChromiumExecutable,
 } from "../lib/browsers.js";
-import { loadFeaturesPackage } from "../lib/features-package.js";
+import { countTodoScenarios, loadFeaturesPackage } from "../lib/features-package.js";
 import { harnessRegistrationModule } from "../lib/harness-path.js";
 import { validateHost } from "../lib/playground.js";
 
@@ -127,6 +127,16 @@ export class RunCommand extends Command {
       },
     });
     const { success } = await runCucumber(runConfiguration);
+
+    // Say what the `not @todo` filter removed, so unimplemented scenarios are
+    // visible in the output instead of silently absent from the counts above.
+    const todo = countTodoScenarios(pkg.featuresDir, pkg.featureFiles);
+    if (todo > 0) {
+      this.context.stdout.write(
+        `\n${todo} scenario${todo === 1 ? "" : "s"} excluded by @todo ` +
+          "(not yet implemented; see the feature files).\n",
+      );
+    }
 
     return success ? 0 : 1;
   }

@@ -16,6 +16,7 @@
  */
 
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import os from "node:os";
 import path, { resolve } from "node:path";
 import linguiMacro from "@lingui/babel-plugin-lingui-macro";
@@ -35,6 +36,15 @@ const artifactAiDrawCommentsSrc = path.resolve(
   __dirname,
   "../../packages/artifact-ai-draw-comments/src/index.tsx",
 );
+
+/**
+ * `react-konva`'s core entry, resolved from the draw-comments widget's package
+ * root. ReactKonvaCore avoids the full `import "konva"`; the widget registers
+ * the shapes it needs explicitly, and its own Vite build aliases this same way.
+ */
+const reactKonvaCoreEntry = createRequire(
+  path.join(path.dirname(artifactAiDrawCommentsSrc), "noop.js"),
+).resolve("react-konva/es/ReactKonvaCore.js");
 
 // Absolute paths to each plugin package's source entry, so the playground can load
 // plugins straight from local source in dev instead of jsDelivr (see
@@ -118,7 +128,10 @@ export default defineConfig(({ command }) => ({
       },
     }),
     tailwindcss(),
-    lingui(),
+    // Pointed explicitly at this app's own config rather than letting the plugin
+    // walk up to the repo-root one, which declares only the list-components-react
+    // catalog and therefore 500s on any other artifact's `.po`. See lingui.config.ts.
+    lingui({ configPath: path.resolve(__dirname, "lingui.config.ts") }),
   ],
   resolve: {
     alias: {
@@ -128,10 +141,12 @@ export default defineConfig(({ command }) => ({
       // The widget's own vite build aliases react-konva to its core entry to
       // avoid the full `import "konva"`; the playground must do the same, or
       // dev mode pulls in every Konva shape.
-      "react-konva": path.resolve(
-        __dirname,
-        "../../packages/artifact-ai-draw-comments/node_modules/react-konva/es/ReactKonvaCore.js",
-      ),
+      //
+      // Resolved through node from the widget's package root rather than written
+      // as a path into its `node_modules`: react-konva is not hoisted to the
+      // workspace root, so a hard path depends on pnpm's private layout for
+      // another package and breaks silently if pnpm relocates or dedupes it.
+      "react-konva": reactKonvaCoreEntry,
       "virtual:ai-draw-comments-catalog": path.resolve(
         __dirname,
         "../../packages/artifact-ai-draw-comments/src/locales/en/messages.po",
