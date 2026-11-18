@@ -19,21 +19,17 @@
     "**/.lingui/**",
     "**/.fallow/**",
     "**/.storybook/**",
-
     "apps/alistigo-artifact-playground/index.umd.html",
     "packages/artifact-ai-draw-comments/demo/**",
     "apps/alistigo-artifact-playground/src/components/DevFixturePicker.tsx",
-
     "**/lingui.config.ts",
     "packages/list-features/gherklin.config.ts",
     "packages/artifact-ai-draw-comments-features/gherklin.config.ts",
     "packages/list-features/tools/validate.ts",
-
     ".github/**",
     "ai/**",
     "packages/claude-artifact-list-storage/**",
     "packages/local-storage-repository/**",
-
     "packages/artifact-dev-tools/templates/**",
     "packages/alistigo-*",
     "cli/alistigo-*",
@@ -45,13 +41,17 @@
     "**/*.test.{ts,tsx}",
     "**/tests/**/*.{ts,tsx}",
     "**/*.stories.{ts,tsx}",
-    "packages/list-features/src/support/hooks.ts",
+    "cli/artifact-features-runner-playwright/src/harness/register.ts",
+    "cli/artifact-features-runner-playwright/src/harness/world.ts",
+    "cli/artifact-features-runner-playwright/src/harness/playground.page.ts",
     "packages/list-features/src/support/world.ts",
-    "packages/list-features/src/pages/application.page.ts",
     "**/cli/commands/*.{ts,js}",
     "cli/artifact-features-runner-playwright/src/commands/*.ts",
     "**/*.steps.{ts,js}",
-    "**/umd-entry.{ts,js}"
+    "**/umd-entry.{ts,js}",
+    "packages/list-features/src/pages/list-application.page.ts",
+    "packages/artifact-ai-draw-comments-features/src/support/world.ts",
+    "packages/artifact-ai-draw-comments-features/src/support/draw-comments.page.ts"
   ],
   "rules": {
     "unused-files": "error",
@@ -78,6 +78,8 @@
     "@cucumber/pretty-formatter",
     "playwright",
     "@alistigo/list-features",
+    "@alistigo/artifact-features-runner-playwright",
+    "@alistigo/artifact-ai-draw-comments-features",
     "@lingui/format-po",
     "@emotion/is-prop-valid",
     "astro",

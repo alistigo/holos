@@ -61,6 +61,27 @@ function buildAiInputScript(markdown: string): string {
   return `<script id="ai-input-action" type="text/markdown">${markdown}</script>`;
 }
 
+/**
+ * Static host content for artifacts that annotate a host page rather than own it.
+ *
+ * The draw-comments widget is an embeddable overlay: it prepends itself to the
+ * host body and expects content behind it to select a region over and draw on.
+ * An empty iframe body gives it nothing to annotate.
+ *
+ * This lives in the srcdoc rather than in `artifact-entry.tsx` because that
+ * module only runs in dev — a preview/production build points the iframe
+ * straight at the artifact's registry URL. The srcdoc is built by the host page
+ * in both modes, so this is the only place the surface exists either way.
+ */
+function buildHostSurface(app: string): string {
+  if (app !== "@alistigo/artifact-ai-draw-comments") return "";
+  return `<article data-testid="draw-comments-host-surface" style="max-width:48rem;margin:0 auto;padding:1.5rem;font-family:sans-serif;color:#333">
+      <h1 style="font-size:1.5rem;margin:0 0 1rem">Quarterly report</h1>
+      <p style="line-height:1.6;margin:0 0 1rem">This panel stands in for a host artifact. Click &ldquo;Draw Comment&rdquo;, drag a region over this text, draw on it, and send the annotation to Claude.</p>
+      <p style="line-height:1.6;margin:0">Revenue grew across all three regions this quarter, with the strongest movement in the north. Operating costs held flat against a 12% increase in volume, and the margin improvement carried through to the bottom line.</p>
+    </article>`;
+}
+
 /** Builds the config object injected into the artifact iframe. */
 export function buildArtifactConfig(config: Config): Record<string, unknown> {
   const cfg: Record<string, unknown> = {
@@ -127,6 +148,7 @@ export function buildIframeSrcdoc({
   </head>
   <body id="artifacts-component-root-html">
     ${aiInputMarkdown !== undefined ? buildAiInputScript(aiInputMarkdown) : ""}
+    ${buildHostSurface(config.app)}
     ${buildEntryScript(scriptUrl)}
   </body>
 </html>`;

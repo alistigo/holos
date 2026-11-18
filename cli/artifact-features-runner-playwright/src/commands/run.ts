@@ -1,11 +1,13 @@
 import { loadConfiguration, runCucumber } from "@cucumber/cucumber/api";
 import { Command, Option } from "clipanion";
+import { ARTIFACT_ENV } from "../harness/world.js";
 import {
   CHROMIUM_EXECUTABLE_ENV,
   resolveChromiumExecutable,
   validateChromiumExecutable,
 } from "../lib/browsers.js";
 import { loadFeaturesPackage } from "../lib/features-package.js";
+import { harnessRegistrationModule } from "../lib/harness-path.js";
 import { validateHost } from "../lib/playground.js";
 
 export class RunCommand extends Command {
@@ -19,6 +21,15 @@ export class RunCommand extends Command {
 
       The target is resolved from the current working directory, so the package
       that invokes the runner must declare it as a dependency.
+
+      The shared browser harness — browser and scenario lifecycle, the World,
+      the playground page object and CDN route interception — is supplied by
+      this runner and registered ahead of the target package's own support
+      files, so a features package carries only its features and its
+      domain-specific step definitions.
+
+      Pass --artifact to select a specific artifact in the playground before
+      scenarios run; omit it to use whatever the playground defaults to.
     `,
     examples: [
       [
@@ -28,6 +39,10 @@ export class RunCommand extends Command {
       [
         "Run against a specific host",
         "artifact-features-runner-playwright --target=@alistigo/list-features --host=http://localhost:5173",
+      ],
+      [
+        "Select a specific artifact in the playground first",
+        "artifact-features-runner-playwright --target=@alistigo/artifact-ai-draw-comments-features --artifact=@alistigo/artifact-ai-draw-comments",
       ],
     ],
   });
@@ -39,6 +54,11 @@ export class RunCommand extends Command {
 
   host = Option.String("--host", "http://localhost:5173", {
     description: "Base URL of the playground to run scenarios against",
+  });
+
+  artifact = Option.String("--artifact", {
+    description:
+      "Artifact to select in the playground before scenarios run — omit to use the playground's own default",
   });
 
   chromiumExecutable = Option.String("--chromium-executable", {
@@ -72,21 +92,37 @@ export class RunCommand extends Command {
     }
     const { pkg } = outcome;
 
-    process.env["PLAYWRIGHT_BASE_URL"] = this.host;
-    // The step definitions launch the browser in this same process, so the executable
-    // choice travels to them through the environment.
+    process.env.PLAYWRIGHT_BASE_URL = this.host;
+    // The harness runs in this same process, so these choices travel to it
+    // through the environment rather than a constructor argument.
     if (executable !== undefined) process.env[CHROMIUM_EXECUTABLE_ENV] = executable.path;
+    // Unset means "leave the Artifact selector alone", which is the behaviour
+    // every features package had before this flag existed.
+    if (this.artifact !== undefined) process.env[ARTIFACT_ENV] = this.artifact;
 
     const { runConfiguration } = await loadConfiguration({
       file: false,
       provided: {
         paths: [`${pkg.featuresDir}/**/*.feature`],
+        // Order matters and is part of the harness contract: the shared
+        // registration module goes FIRST so its setWorldConstructor runs before
+        // a features package's own, which must win (last call wins).
         import: [
+          harnessRegistrationModule(),
           `${pkg.stepDefinitionsDir}/**/*.js`,
           ...(pkg.supportDir === undefined ? [] : [`${pkg.supportDir}/**/*.js`]),
         ],
         format: ["@cucumber/pretty-formatter"],
         failFast: true,
+        // @todo scenarios are filtered out rather than skipped in-report.
+        //
+        // The harness also skips them in a Before hook, which would keep them
+        // visible as "skipped" — but step resolution happens BEFORE hooks run,
+        // so a @todo scenario whose steps were never written is reported
+        // "undefined" regardless, and failFast then aborts the run. That is the
+        // case in list-features' @todo posthog feature. Until those step
+        // definitions exist, filtering is the only way a @todo scenario neither
+        // fails nor aborts the suite.
         tags: "not @todo",
       },
     });

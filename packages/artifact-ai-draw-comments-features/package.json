@@ -27,22 +27,36 @@
   ],
   "private": false,
   "type": "module",
+  "alistigo": {
+    "type": "features",
+    "domain": "artifact-ai-draw-comments"
+  },
+  "description": "Gherkin behavior specifications for the ai-draw-comments widget, executed in a browser by @alistigo/artifact-features-runner-playwright against the dev playground.",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
+    "dist",
     "features"
   ],
   "publishConfig": {
     "access": "public"
   },
-  "alistigo": {
-    "type": "application"
-  },
-  "dependencies": {
-    "@alistigo/artifact-ai-draw-comments": "workspace:*"
+  "peerDependencies": {
+    "@cucumber/cucumber": "^12.9.0",
+    "playwright": "^1.61.0"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^11.0.0",
+    "@alistigo/artifact-features-runner-playwright": "workspace:*",
+    "@cucumber/cucumber": "^12.9.0",
     "@types/node": "^22.0.0",
     "gherklin": "^1.0.0",
+    "playwright": "^1.61.0",
     "prettier": "^3.3.0",
     "prettier-plugin-gherkin": "^3.1.2"
   }

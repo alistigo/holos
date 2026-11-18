@@ -4,6 +4,8 @@ A generic Playwright-backed Cucumber runner for Alistigo artifact features packa
 
 The runner is domain-agnostic: it depends on no features package. `--target` is resolved from the **current working directory**, so the package whose `test:e2e` target invokes the runner is the one that declares the features package as a dependency.
 
+It also **owns the shared browser harness** — browser and per-scenario lifecycle, the Cucumber World, the playground page object and CDN route interception — published as a second entry point, `@alistigo/artifact-features-runner-playwright/harness`. A features package carries only its `.feature` files and its domain-specific step definitions. See [The harness](#the-harness).
+
 ## Commands
 
 | Command | Purpose |
@@ -33,6 +35,12 @@ bun ../../cli/artifact-features-runner-playwright/dist/cli.js \
 |------|----------|-------------|---------|
 | `--target` | yes | npm package name of the features package to run | — |
 | `--host` | no | Base URL of the playground to test against | `http://localhost:5173` |
+| `--artifact` | no | Artifact to select in the playground before scenarios run | the playground's own default |
+| `--chromium-executable` | no | Launch this chromium binary instead of the bundled download | `ARTIFACT_FEATURES_CHROMIUM_EXECUTABLE`, else the bundled browser |
+
+Omitting `--artifact` leaves the Artifact selector untouched, which is the behaviour every
+features package had before the flag existed. Passing a value the playground does not offer
+fails before any scenario runs, printing what it does offer.
 
 **Exit code:** `0` if all scenarios pass, `1` if any scenario fails or the target package is invalid.
 
@@ -164,14 +172,121 @@ sudo apt-get install -y libasound2t64
 
 **Why CI reinstalls deps on every run:** the browser binary is cacheable (CI caches `~/.cache/ms-playwright`) but OS system libraries live outside that cache and must be reinstalled each time. `scripts/setup.sh` runs both steps automatically on a fresh clone.
 
+## The harness
+
+Everything generic about driving an artifact in a browser lives here, not in the features
+packages. This exists because the alternative is every features package re-implementing the
+same browser lifecycle, World and playground navigation — which is exactly what happened
+with the first two.
+
+```ts
+import {
+  ArtifactWorld,
+  PlaygroundPage,
+  PLATFORM_TEST_IDS,
+  installBundleRoute,
+  installDefaultRoutes,
+} from "@alistigo/artifact-features-runner-playwright/harness";
+```
+
+| Export | What it gives you |
+|--------|-------------------|
+| `ArtifactWorld` | The Cucumber World: `baseUrl`, `artifact`, `browser`, `context`, `page`, `playgroundPage`, `pageErrors`, plus `seedStorage`, `reloadArtifact`, `enablePlugin` |
+| `PlaygroundPage` | `open`, `selectArtifact`, `waitForArtifactReady`, `reload`, `enablePlugin`, `fillPluginConfig`, and the `artifactFrame` / `previewFrame` accessors |
+| `PLATFORM_TEST_IDS` | The platform DOM contract — `app` (the readiness marker) and `actionPending` |
+| `installBundleRoute` | Serve a fixture bundle in place of a package's real fetch |
+| `installDefaultRoutes` | What every scenario gets: local builds over jsDelivr, the Claude storage stub, dev-server plugin paths |
+
+Importing the entry point **registers nothing**. The runner separately imports the harness's
+registration module and places it **first** in Cucumber's `import` list, ahead of the target
+package's step definitions and support files. That order is part of the contract:
+`setWorldConstructor` is last-call-wins, so the base World must register before a features
+package overrides it with a subclass.
+
+### Entry points
+
+| Specifier | Purpose |
+|-----------|---------|
+| `@alistigo/artifact-features-runner-playwright` | Library surface (features-package resolution, host validation, check types) |
+| `@alistigo/artifact-features-runner-playwright/harness` | The shared harness above |
+| `bin` → `dist/cli.js` | The CLI |
+
+Importing `/harness` does not pull in `clipanion` or any argument parsing.
+
+### Breaking-change rules
+
+| Change | Classification |
+|--------|----------------|
+| Removing or renaming an export | major |
+| Adding an optional method or export | minor |
+| Changing `PLATFORM_TEST_IDS.app` | major — every artifact and widget must change with it |
+| Changing hook registration order | major — silently changes which World wins |
+
+### The readiness marker
+
+`waitForArtifactReady()` waits for `data-testid="alistigo-app"` inside the preview iframe.
+Every artifact **and widget** rendered in the playground must expose it on its mounted root.
+`@alistigo/list-components-react`'s `AlistigoApp` does this already; `widget`-type packages
+must add it themselves even though they are otherwise exempt from the Artifact Contract —
+without it the harness has no way to tell "mounted and interactive" from "still loading", and
+every scenario hangs.
+
+### Which bundle the preview actually loads
+
+`installDefaultRoutes` intercepts `https://cdn.jsdelivr.net/npm/@alistigo/**`, resolves the
+package in the workspace, and serves its local `dist/` build. **This matters more than it
+sounds.** A `vite preview` build is not a dev build, so the playground's `resolveScriptUrl`
+falls through to the registry's CDN URL — without interception, `test:e2e` asserts against the
+*published* artifact and any source-only change looks absent.
+
+A package with no local build falls through to the network rather than failing; `doctor`'s
+`Local bundle` check is what tells you that happened.
+
+One request is deliberately **not** intercepted: `html-to-image` from cdnjs, which the
+draw-comments widget needs for its snapshot. The playground loads it under an `integrity`
+hash for the minified build, and npm ships only the unminified one, so no local substitute
+survives the browser's SRI check. Scenarios that send an annotation therefore reach cdnjs;
+everything else in a run is served locally.
+
+### `@todo` scenarios
+
+Scenarios tagged `@todo` are filtered out of the run. The harness also carries a `Before` hook
+that marks them skipped, which would keep them visible in the report — but Cucumber resolves
+step definitions *before* hooks run, so a `@todo` scenario whose steps were never written is
+reported `undefined` regardless, and `failFast` then aborts the suite. `list-features`' `@todo`
+posthog feature is in exactly that state. Until those step definitions exist, filtering is the
+only way such a scenario neither fails nor aborts the run.
+
 ## Features package contract
 
 A valid `--target` package must:
 
-1. Declare `"alistigo": { "type": "features", "domain": "<domain>" }` in its `package.json`.
+1. Declare `"alistigo": { "type": "features", "domain": "<domain>" }` in its `package.json`,
+   where `domain` is the unscoped package name minus the `-features` suffix.
 2. Export `FEATURES_DIR` — absolute path to the directory containing `.feature` files.
 3. Export `STEP_DEFINITIONS_DIR` — absolute path to the compiled step definition files.
-4. Optionally export `SUPPORT_DIR` — absolute path to compiled support/hooks files (World class, before/after hooks).
+4. Optionally export `SUPPORT_DIR` — absolute path to compiled **domain** support code (a
+   `World` subclass and a `PlaygroundPage` subclass). The generic lifecycle is the harness's.
+
+### What stays in a features package, and what does not
+
+| Must provide | Must NOT contain |
+|---|---|
+| `.feature` files | `BeforeAll` / `AfterAll` browser launch |
+| Compiled step definitions | `Before` / `After` context and page setup |
+| `FEATURES_DIR` / `STEP_DEFINITIONS_DIR` exports | A `World` not derived from `ArtifactWorld` |
+| Domain locators (roles and accessible names first) | Playground navigation or readiness waiting |
+| Domain fixtures (documents, fake plugin bundles) | Screenshot-on-failure or `@todo` skip hooks |
+| Optionally: a `World` / `PlaygroundPage` subclass | CDN or plugin route plumbing |
+| | Its own Cucumber profile or in-process `test` target |
+| | A relative path escaping the package (`../../packages/...`) |
+
+Checked mechanically:
+
+```sh
+grep -rnE "BeforeAll|AfterAll|chromium\.launch|page\.goto" packages/*-features/src
+# -> no output
+```
 
 **Example `src/index.ts`:**
 
@@ -191,10 +306,16 @@ export const SUPPORT_DIR = path.resolve(__distDir, "support");
 1. Scaffold a package under `packages/<domain>-features/`.
 2. Add `"alistigo": { "type": "features", "domain": "<domain>" }` to its `package.json`.
 3. Place Gherkin `.feature` files under `features/` (not compiled — these are copied to `dist/` by the build).
-4. Write step definitions in `src/step-definitions/` and support hooks in `src/support/`.
+4. Write step definitions in `src/step-definitions/`, and any domain `World` /
+   `PlaygroundPage` subclass in `src/support/` — no lifecycle hooks of your own.
 5. Export `FEATURES_DIR`, `STEP_DEFINITIONS_DIR`, and `SUPPORT_DIR` from `src/index.ts`.
+   Set `"types": ["bun"]` in `tsconfig.json`: the Nx build runs from the workspace root, and
+   a bare `["node"]` only resolves from the package's own `node_modules`.
 6. Add `"@alistigo/<domain>-features": "workspace:*"` to the devDependencies of the artifact package that will run them, then `pnpm install`.
-7. Add `test:e2e` / `test:e2e-doctor` targets to that artifact's `project.json`, modelled on `packages/artifact-list/project.json`.
+7. Add `test:e2e` / `test:e2e-attach` / `test:e2e-doctor` targets to that artifact's
+   `project.json`, modelled on `packages/artifact-ai-draw-comments/project.json`. Pass
+   `--artifact` if the playground should select a specific artifact, and make the artifact's
+   **own build** a `dependsOn` — the harness serves that local build over the CDN URL.
 8. Verify the wiring before writing scenarios:
    ```sh
    nx run <artifact>:test:e2e-doctor

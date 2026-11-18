@@ -60,10 +60,12 @@
     "konva": "^9.3.20",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-konva": "^19.0.0",
+    "react-konva": "~19.2.7",
     "typeid-js": "^0.7.0"
   },
   "devDependencies": {
+    "@alistigo/artifact-ai-draw-comments-features": "workspace:*",
+    "@alistigo/artifact-features-runner-playwright": "workspace:*",
     "@lingui/babel-plugin-lingui-macro": "^6.0.0",
     "@lingui/vite-plugin": "^6.0.0",
     "@storybook/react-vite": "^10.3.0",

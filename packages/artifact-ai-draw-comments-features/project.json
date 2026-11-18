@@ -1,13 +1,23 @@
 {
   "name": "artifact-ai-draw-comments-features",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "{projectRoot}/step-definitions",
+  "sourceRoot": "{projectRoot}/src",
   "projectType": "library",
   "targets": {
-    "test": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/artifact-ai-draw-comments-features/dist",
+        "tsConfig": "packages/artifact-ai-draw-comments-features/tsconfig.json",
+        "main": "packages/artifact-ai-draw-comments-features/src/index.ts",
+        "rootDir": "packages/artifact-ai-draw-comments-features/src"
+      }
+    },
+    "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bun ./node_modules/@cucumber/cucumber/bin/cucumber.js",
+        "command": "tsc -p tsconfig.json --noEmit",
         "cwd": "{projectRoot}"
       }
     },
@@ -16,6 +26,20 @@
       "options": {
         "parallel": true,
         "commands": ["bun ./node_modules/gherklin/bin/gherklin", "biome check ."],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["prettier --write 'features/**/*.feature'", "biome check . --write"],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --check 'features/**/*.feature'",
         "cwd": "{projectRoot}"
       }
     },

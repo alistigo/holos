@@ -1,4 +1,8 @@
-import type { FrameLocator, Locator, Page } from "playwright";
+import {
+  PLATFORM_TEST_IDS,
+  PlaygroundPage,
+} from "@alistigo/artifact-features-runner-playwright/harness";
+import type { Locator } from "playwright";
 import { deleteButtonName, ROLES, TEST_IDS } from "../support/selectors";
 
 declare global {
@@ -6,53 +10,35 @@ declare global {
   var __alistigoFakeSentryPlugin: { initialized: boolean; capturedError: boolean } | undefined;
 }
 
-export class ApplicationPage {
-  private readonly applicationUrl: string;
-  private readonly page: Page;
-
-  constructor(applicationUrl: string, page: Page) {
-    this.applicationUrl = applicationUrl;
-    this.page = page;
-  }
-
-  private get artifactFrame(): FrameLocator {
-    return this.page.frameLocator('iframe[title="Artifact preview"]');
-  }
-
-  async open(): Promise<void> {
-    await this.page.goto(this.applicationUrl);
-    await this.waitForArtifactReady();
-  }
-
-  async waitForArtifactReady(): Promise<void> {
-    await this.artifactFrame.getByTestId(TEST_IDS.app).waitFor({ state: "visible" });
-  }
-
-  async reload(): Promise<void> {
-    await this.page.reload();
-    await this.waitForArtifactReady();
-  }
-
+/**
+ * The list artifact's page object.
+ *
+ * Navigation, artifact selection, readiness waiting, reloading and plugin
+ * enabling are inherited from `PlaygroundPage` in the runner's harness — they
+ * are identical for every artifact. What remains here is the list domain:
+ * adding and deleting elements, reading rows, checkboxes, and user identity.
+ */
+export class ListApplicationPage extends PlaygroundPage {
   async waitForPluginInitialized(): Promise<void> {
-    const frame = this.page.frame("artifact-preview");
+    const frame = this.previewFrame;
     if (!frame) throw new Error("artifact-preview frame not found");
     await frame.waitForFunction(() => __alistigoFakeSentryPlugin?.initialized === true);
   }
 
   async isPluginInitialized(): Promise<boolean> {
-    const frame = this.page.frame("artifact-preview");
+    const frame = this.previewFrame;
     if (!frame) return false;
     return frame.evaluate(() => __alistigoFakeSentryPlugin?.initialized === true);
   }
 
   async waitForPluginCapturedError(): Promise<void> {
-    const frame = this.page.frame("artifact-preview");
+    const frame = this.previewFrame;
     if (!frame) throw new Error("artifact-preview frame not found");
     await frame.waitForFunction(() => __alistigoFakeSentryPlugin?.capturedError === true);
   }
 
   async triggerDebugRenderError(): Promise<void> {
-    const frame = this.page.frame("artifact-preview");
+    const frame = this.previewFrame;
     if (!frame) throw new Error("artifact-preview frame not found");
     await frame.waitForFunction(() => typeof __alistigoDebugTriggerRenderError === "function");
     await frame.evaluate(() => __alistigoDebugTriggerRenderError?.());
@@ -179,12 +165,12 @@ export class ApplicationPage {
 
   private async waitForIdle(): Promise<void> {
     await this.artifactFrame
-      .locator(`[data-testid="${TEST_IDS.actionPending}"][data-state="pending"]`)
+      .locator(`[data-testid="${PLATFORM_TEST_IDS.actionPending}"][data-state="pending"]`)
       .waitFor({ state: "attached", timeout: 1000 })
       .catch(() => undefined);
 
     await this.artifactFrame
-      .locator(`[data-testid="${TEST_IDS.actionPending}"][data-state="idle"]`)
+      .locator(`[data-testid="${PLATFORM_TEST_IDS.actionPending}"][data-state="idle"]`)
       .waitFor({ state: "attached" });
   }
 }

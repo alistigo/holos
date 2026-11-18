@@ -2,13 +2,54 @@
   "name": "@alistigo/artifact-features-runner-playwright",
   "version": "0.2.0",
   "private": true,
-  "type": "module",
   "description": "Generic Playwright-backed Cucumber runner for Alistigo artifact features packages.",
+  "license": "MIT",
+  "author": {
+    "name": "Mikael Labrut",
+    "email": "contact@alistigo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistigo/holos.git",
+    "directory": "cli/artifact-features-runner-playwright"
+  },
+  "bugs": {
+    "url": "https://github.com/alistigo/holos/issues"
+  },
+  "homepage": "https://github.com/alistigo/holos/tree/main/cli/artifact-features-runner-playwright#readme",
+  "keywords": [
+    "alistigo",
+    "gherkin",
+    "cucumber",
+    "playwright",
+    "bdd",
+    "runner",
+    "artifact"
+  ],
+  "type": "module",
   "alistigo": {
     "type": "infrastructure"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./harness": {
+      "import": "./dist/harness/index.js",
+      "types": "./dist/harness/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
     "artifact-features-runner-playwright": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@cucumber/cucumber": "^12.9.0",

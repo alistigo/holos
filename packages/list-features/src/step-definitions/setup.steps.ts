@@ -1,13 +1,12 @@
 import { type DataTable, Given } from "@cucumber/cucumber";
 import { buildEmptyDocument, buildPopulatedDocument } from "../support/document";
-import { installUserPluginRoute } from "../support/storage-routes.js";
-import type { AlistigoWorld } from "../support/world";
+import type { ListWorld } from "../support/world.js";
 
-Given("an empty list", async function (this: AlistigoWorld) {
+Given("an empty list", async function (this: ListWorld) {
   await this.setDocument(buildEmptyDocument());
 });
 
-Given("a list:", async function (this: AlistigoWorld, table: DataTable) {
+Given("a list:", async function (this: ListWorld, table: DataTable) {
   const elementTexts = table.raw().map((row, i) => {
     if (row.length !== 1) {
       throw new Error(
@@ -23,40 +22,43 @@ Given("a list:", async function (this: AlistigoWorld, table: DataTable) {
   await this.setDocument(buildPopulatedDocument(elementTexts));
 });
 
-Given("the {string} plugin", async function (this: AlistigoWorld, packageName: string) {
+Given("the {string} plugin", async function (this: ListWorld, packageName: string) {
   await this.setPluginUnderTest(packageName);
 });
 
 Given(
   "a non-initialized artifact {string} with plugin configured",
-  async function (this: AlistigoWorld, _artifact: string) {
+  async function (this: ListWorld, _artifact: string) {
     this.setPluginConfig({ dsn: "https://fake-dsn.example/1" });
   },
 );
 
 Given(
   "an non-initialized artifact {string} with plugin not configured",
-  async function (this: AlistigoWorld, _artifact: string) {
+  async function (this: ListWorld, _artifact: string) {
     this.setPluginConfig({});
   },
 );
 
 Given(
   "an initialized artifact {string} with plugin configured",
-  async function (this: AlistigoWorld, _artifact: string) {
+  async function (this: ListWorld, _artifact: string) {
     this.setPluginConfig({ dsn: "https://fake-dsn.example/1" });
     await this.initializeArtifactWithPlugin();
     await this.applicationPage.waitForPluginInitialized();
   },
 );
 
-Given("an artifact with the user plugin enabled", async function (this: AlistigoWorld) {
-  await installUserPluginRoute(this.page);
+// The user plugin is deliberately not route-intercepted: it uses React hooks and
+// JSX, and serving a pre-built bundle would introduce a second React instance
+// that breaks every hook. In dev the playground points it at a Vite /@fs/ URL
+// served from the shared module graph, giving plugin and host the same React.
+Given("an artifact with the user plugin enabled", async function (this: ListWorld) {
   await this.enablePlugin("@alistigo/artifact-user-plugin");
 });
 
 // The checkbox plugin is always active as a DEFAULT_FEATURE_PLUGIN in artifact-list.
 // This step documents the precondition without needing additional setup.
-Given("the checkbox plugin is active", async function (this: AlistigoWorld) {
+Given("the checkbox plugin is active", async function (this: ListWorld) {
   // no-op: @alistigo/artifact-list-checkbox-plugin loads by default
 });

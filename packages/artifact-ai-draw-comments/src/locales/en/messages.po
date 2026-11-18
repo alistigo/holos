@@ -3,3 +3,96 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language: \n"
+"Language-Team: \n"
+
+#: src/components/CommentInput.tsx:27
+msgid "Add a comment… (optional)"
+msgstr "Add a comment… (optional)"
+
+#: src/App.tsx:286
+msgid "An annotation is already in progress"
+msgstr "An annotation is already in progress"
+
+#: src/components/AnnotationThread.tsx:23
+msgid "Annotated region"
+msgstr "Annotated region"
+
+#: src/components/CommentInput.tsx:31
+msgid "Annotation comment"
+msgstr "Annotation comment"
+
+#: src/App.tsx:124
+msgid "Cancel"
+msgstr "Cancel"
+
+#: src/App.tsx:121
+msgid "Cancel annotation"
+msgstr "Cancel annotation"
+
+#: src/components/SelectionOverlay.tsx:76
+msgid "Cancel selection"
+msgstr "Cancel selection"
+
+#: src/components/AnnotationThread.tsx:37
+msgid "Claude is thinking…"
+msgstr "Claude is thinking…"
+
+#: src/components/ErrorBanner.tsx:36
+msgid "Dismiss error"
+msgstr "Dismiss error"
+
+#: src/components/SelectionOverlay.tsx:71
+msgid "Drag to select annotation area"
+msgstr "Drag to select annotation area"
+
+#: src/components/SelectionOverlay.tsx:99
+msgid "Drag to select area — Esc to cancel"
+msgstr "Drag to select area — Esc to cancel"
+
+#: src/components/DrawCommentButton.tsx:17
+#: src/components/DrawCommentButton.tsx:19
+#: src/components/DrawCommentButton.tsx:36
+msgid "Draw Comment"
+msgstr "Draw Comment"
+
+#: src/App.tsx:285
+msgid "Draw comments require a Claude artifact environment"
+msgstr "Draw comments require a Claude artifact environment"
+
+#: src/components/DrawToolbar.tsx:26
+msgid "Draw line"
+msgstr "Draw line"
+
+#: src/components/DrawToolbar.tsx:19
+msgid "Draw rectangle"
+msgstr "Draw rectangle"
+
+#: src/components/DrawToolbar.tsx:25
+msgid "Line"
+msgstr "Line"
+
+#: src/components/DrawToolbar.tsx:18
+msgid "Rectangle"
+msgstr "Rectangle"
+
+#: src/components/SelectionOverlay.tsx:95
+msgid "Select a larger area (minimum 20×20 px)"
+msgstr "Select a larger area (minimum 20×20 px)"
+
+#: src/components/CommentInput.tsx:40
+msgid "Send"
+msgstr "Send"
+
+#: src/components/CommentInput.tsx:40
+msgid "Sending…"
+msgstr "Sending…"
+
+#: src/App.tsx:42
+msgid "window.claude is not available — this widget requires a Claude artifact context."
+msgstr "window.claude is not available — this widget requires a Claude artifact context."
