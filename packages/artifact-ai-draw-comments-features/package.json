@@ -31,7 +31,6 @@
     "type": "features",
     "domain": "artifact-ai-draw-comments"
   },
-  "description": "Gherkin behavior specifications for the ai-draw-comments widget, executed in a browser by @alistigo/artifact-features-runner-playwright against the dev playground.",
   "exports": {
     ".": {
       "import": "./dist/index.js",
