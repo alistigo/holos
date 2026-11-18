@@ -242,20 +242,43 @@ falls through to the registry's CDN URL — without interception, `test:e2e` ass
 A package with no local build falls through to the network rather than failing; `doctor`'s
 `Local bundle` check is what tells you that happened.
 
-One request is deliberately **not** intercepted: `html-to-image` from cdnjs, which the
-draw-comments widget needs for its snapshot. The playground loads it under an `integrity`
-hash for the minified build, and npm ships only the unminified one, so no local substitute
-survives the browser's SRI check. Scenarios that send an annotation therefore reach cdnjs;
-everything else in a run is served locally.
+`html-to-image`, which the draw-comments widget needs for its snapshot, is not intercepted
+either — it does not have to be. The playground serves it from its own origin through a Vite
+`?url` asset import, so nothing in a run reaches cdnjs. The route interception above covers
+jsDelivr; this one is solved at the source instead, because the file arrived under an
+`integrity` hash for cdnjs's *minified* build while npm ships only the unminified one, and no
+substitute survives the browser's SRI check. Same-origin needs no `integrity` at all.
+
+`cdnjs.cloudflare.com` nonetheless stays in the srcdoc's `script-src`: that directive models
+the sandbox a real published Claude artifact runs inside, not what the playground happens to
+need. A full annotate → send → respond cycle has been verified with every non-localhost
+request aborted.
 
 ### `@todo` scenarios
 
-Scenarios tagged `@todo` are filtered out of the run. The harness also carries a `Before` hook
-that marks them skipped, which would keep them visible in the report — but Cucumber resolves
-step definitions *before* hooks run, so a `@todo` scenario whose steps were never written is
-reported `undefined` regardless, and `failFast` then aborts the suite. `list-features`' `@todo`
-posthog feature is in exactly that state. Until those step definitions exist, filtering is the
-only way such a scenario neither fails nor aborts the run.
+Scenarios tagged `@todo` are filtered out of the run, and the runner then prints how many it
+left out, after Cucumber's own summary:
+
+```text
+13 scenarios (13 passed)
+60 steps (60 passed)
+
+1 scenario excluded by @todo (not yet implemented; see the feature files).
+```
+
+The count is what keeps a `@todo` scenario from quietly disappearing: the Cucumber totals only
+ever describe what ran, so without that line a suite that silently dropped a scenario and one
+that never had it look identical. The runner counts the `@todo` tags in the target's own
+`.feature` files, so the line is right for any features package without needing anyone's
+unwritten step definitions.
+
+Filtering rather than skipping is deliberate. The harness does carry a `Before` hook that
+marks `@todo` scenarios skipped, which would keep them in Cucumber's own totals — but
+Cucumber resolves step definitions *before* hooks run, so a `@todo` scenario whose steps were
+never written is reported `undefined` regardless, and `failFast` then aborts the suite.
+`list-features`' `@todo` posthog feature is in exactly that state. Until those step
+definitions exist, filtering plus the count is the only arrangement where such a scenario
+neither fails, nor aborts the run, nor vanishes from the report.
 
 ## Features package contract
 

@@ -240,3 +240,10 @@ Then("the drawing canvas and toolbar are dismissed", async function (this: DrawC
   await this.widget.canvas.waitFor({ state: "detached" });
   await this.widget.drawPanel.waitFor({ state: "detached" });
 });
+
+When("the user reloads the artifact", async function (this: DrawCommentsWorld) {
+  // Goes through the harness, which re-selects the artifact after the reload.
+  // Without that, the playground comes back on its default artifact and the
+  // assertions below would be looking at the wrong one.
+  await this.reloadArtifact();
+});
