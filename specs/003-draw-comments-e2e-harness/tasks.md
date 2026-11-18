@@ -362,7 +362,88 @@ and reading output.
 
 ---
 
+## Phase 8: Defect — the dev playground cannot load the widget (found after merge-ready)
+
+**Reported**: 2026-11-18, by running `nx run alistigo-artifact-playground:dev` and selecting
+the draw-comments artifact.
+
+```text
+[plugin:vite-plugin-lingui-load-catalog] Requested resource
+packages/artifact-ai-draw-comments/src/locales/en/messages.po is not matched to any of your
+catalogs paths specified in "lingui.config".
+
+Your catalogs:
+/workspaces/holos/packages/list-components-react/src/locales/{locale}/messages
+```
+
+**Severity**: dev mode only. The e2e suite, `test:e2e-attach` and `test:e2e-doctor` are
+unaffected — they run against `vite preview`, where the iframe loads the widget's prebuilt
+UMD bundle (with its catalog already baked in) through the harness's bundle route, so the
+playground's own Lingui plugin never sees the widget's `.po`.
+
+**Root cause**: T026 added two aliases to `apps/alistigo-artifact-playground/vite.config.ts`
+so dev mode would serve the widget from source, mirroring the two existing artifacts:
+
+```ts
+"@alistigo/artifact-ai-draw-comments": artifactAiDrawCommentsSrc,
+"virtual:ai-draw-comments-catalog": ".../artifact-ai-draw-comments/src/locales/en/messages.po",
+```
+
+The widget's `src/i18n.ts` imports `virtual:ai-draw-comments-catalog`, the alias turns that
+into the widget's `.po`, and the playground's `@lingui/vite-plugin` then tries to transform
+it. That plugin resolves its config by walking **up** from the app directory, so it finds the
+repo-root `lingui.config.ts`, which declares exactly one catalog —
+`packages/list-components-react/src/locales/{locale}/messages` — by deliberate design ("the
+components package is the single source of truth for catalogs across the Alistigo apps"). The
+widget's own `lingui.config.ts` is never consulted, because nothing walks *down* into it.
+
+**Why the implementation missed it**: quickstart step 3 says to verify in `dev`; I verified
+the equivalent journey against `vite preview` instead, because that is what `test:e2e` uses.
+Every assertion in that step passed there. The dev path was never loaded with this artifact
+selected.
+
+- [ ] T073 Make the playground's Lingui plugin aware of the widget's catalog, so
+  `nx run alistigo-artifact-playground:dev` can load `@alistigo/artifact-ai-draw-comments`.
+  Confirmed mechanics: the plugin's `getCatalogForFile(path, await getCatalogs(config))`
+  iterates **every** catalog in the resolved config, so one additional catalog entry is
+  enough; and `lingui()` accepts config-discovery options (`declare function lingui({ failOnMissing, failOnCompileError, ...linguiConfig })` → `getConfig(linguiConfig)`), so
+  `configPath` can be pointed somewhere explicit. Three routes, recommended first:
+  1. **Add `apps/alistigo-artifact-playground/lingui.config.ts`** declaring both catalogs
+     (`list-components-react` and the widget), and pass it explicitly as
+     `lingui({ configPath: path.resolve(__dirname, "lingui.config.ts") })` rather than relying
+     on upward discovery. Keeps dev-from-source for all three artifacts, leaves the root
+     config untouched, and is one new file. Watch for drift: the root config's
+     `include: ["apps/alistigo-artifact-playground/src"]` would then be described in two
+     places, so the new file should say which one `pnpm i18n:extract` uses.
+  2. **Add the widget's catalog to the root `lingui.config.ts`.** Smallest diff, but the root
+     declares `locales: ["en", "fr"]` while the widget declares only `en`, so a root-level
+     `lingui extract` would start generating an `fr` catalog the widget does not want — and it
+     contradicts that config's stated single-source-of-truth intent.
+  3. **Drop all three widget aliases** (`@alistigo/artifact-ai-draw-comments`, `react-konva`,
+     `virtual:ai-draw-comments-catalog`) and let dev mode load the widget's built UMD bundle,
+     as `prod-local` does. The bug disappears, dev matches exactly what the e2e suite tests,
+     and it also removes the `react-konva` alias that reaches into the widget's own
+     `node_modules` — which is fragile regardless. Cost: no HMR on widget source in the
+     playground, unlike the other two artifacts, and dev then requires
+     `nx run artifact-ai-draw-comments:build` first.
+
+  **Verification** (the gap that let this through — do all four):
+  - `nx run alistigo-artifact-playground:dev`, select the draw-comments artifact, and
+    complete a full annotate → send → respond cycle with no overlay error
+  - select `@alistigo/artifact-list` and `@alistigo/artifact-claude-capabilities-demo` in the
+    same dev session and confirm both still mount — route 1 and 2 both touch shared Lingui
+    config, so a regression here would hit the list artifact's translations
+  - confirm the widget's accessible names render as English, not Lingui hash ids: a broken
+    catalog surfaces as `aria-label="TzVdRJ"` rather than an error (research F8)
+  - re-run `nx run artifact-ai-draw-comments:test:e2e` and `artifact-list:test:e2e` to confirm
+    preview mode is unchanged
+  - update `quickstart.md` step 3 to state that dev **and** preview must both be exercised,
+    since they resolve the artifact bundle by entirely different paths
+
 ## Follow-ups carried forward
+
+T073 above is a **defect in delivered work**, not a follow-up: dev mode regressed and the
+fix belongs in this feature's PR (alistigo/holos#153) rather than a later one.
 
 T066 and T067 are **deliberately left unchecked and unfiled**. They are real work this
 feature uncovered but did not do, and they are recorded here rather than as GitHub issues at
