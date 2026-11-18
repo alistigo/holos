@@ -1,3 +1,9 @@
+## 0.4.12 (2026-11-18)
+
+### 🧱 Updated Dependencies
+
+- Updated calm-to-archify to 0.3.8
+
 ## 0.4.11 (2026-11-17)
 
 ### 🧱 Updated Dependencies

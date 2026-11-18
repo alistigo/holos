@@ -1,6 +1,6 @@
 {
   "name": "@alistigo/artifact-features-runner-playwright",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Generic Playwright-backed Cucumber runner for Alistigo artifact features packages.",
   "license": "MIT",

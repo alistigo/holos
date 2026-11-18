@@ -1,3 +1,23 @@
+## 0.2.2 (2026-11-18)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** share the browser harness and convert draw-comments features ([592234a](https://github.com/alistigo/holos/commit/592234a))
+
+### 🩹 Fixes
+
+- package.json ([56ec7ea](https://github.com/alistigo/holos/commit/56ec7ea))
+- **artifact-features-runner-playwright:** keep the selected artifact across a reload ([3b5780d](https://github.com/alistigo/holos/commit/3b5780d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-features-runner-playwright to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.1 (2026-11-17)
 
 ### 🧱 Updated Dependencies

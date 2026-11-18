@@ -1,3 +1,19 @@
+## 0.5.11 (2026-11-18)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** share the browser harness and convert draw-comments features ([592234a](https://github.com/alistigo/holos/commit/592234a))
+
+### 🧱 Updated Dependencies
+
+- Updated list-document to 0.5.12
+- Updated artifact-features-runner-playwright to 0.3.0
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.5.10 (2026-11-17)
 
 ### 🚀 Features

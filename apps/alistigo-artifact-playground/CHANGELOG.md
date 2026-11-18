@@ -1,3 +1,29 @@
+## 0.4.13 (2026-11-18)
+
+### 🚀 Features
+
+- **artifact-features-runner-playwright:** share the browser harness and convert draw-comments features ([592234a](https://github.com/alistigo/holos/commit/592234a))
+
+### 🩹 Fixes
+
+- **alistigo-artifact-playground:** load the widget in dev, and close the convergence gaps ([ca5673d](https://github.com/alistigo/holos/commit/ca5673d))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-claude-capabilities-demo to 0.4.11
+- Updated artifact-ai-draw-comments to 0.2.2
+- Updated list-components-react to 0.5.12
+- Updated local-storage-plugin to 0.5.11
+- Updated claude-artifact-api to 0.4.11
+- Updated artifact-manager to 0.4.11
+- Updated artifact-list to 0.10.1
+- Updated list-document to 0.5.12
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.4.12 (2026-11-17)
 
 ### 🚀 Features
