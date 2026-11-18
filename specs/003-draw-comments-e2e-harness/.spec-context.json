@@ -2,7 +2,7 @@
   "workflow": "speckit",
   "specName": "Draw-Comments End-to-End Features via the Generic Runner",
   "branch": "feat/003-draw-comments-e2e-harness",
-  "currentStep": "implement",
+  "currentStep": "converge",
   "status": "implementing",
   "history": [
     {
@@ -620,11 +620,51 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-11-18T08:17:23.920Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T073",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-18T08:43:14.955Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T074",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-18T08:43:14.955Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T075",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-18T08:43:14.955Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T076",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-18T08:43:14.955Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T077",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-18T08:43:14.955Z"
     }
   ],
   "telemetryInstanceId": "c6d61fd0-dc4a-421a-b862-e108a4f7b443",
   "currentTask": "T066",
-  "convergeStartedAt": "2026-11-18T08:17:23.938Z",
+  "convergeStartedAt": "2026-11-18T08:43:57.437Z",
   "convergePasses": [
     {
       "startedAt": "2026-11-18T08:17:23.947Z",
