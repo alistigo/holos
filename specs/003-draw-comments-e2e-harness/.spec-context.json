@@ -3,7 +3,7 @@
   "specName": "Draw-Comments End-to-End Features via the Generic Runner",
   "branch": "feat/003-draw-comments-e2e-harness",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -684,90 +684,111 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-11-18T10:28:42.820Z"
+    },
+    {
+      "step": "converge",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-18T14:01:06.140Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-18T14:01:36.625Z"
     }
   ],
   "telemetryInstanceId": "c6d61fd0-dc4a-421a-b862-e108a4f7b443",
-  "currentTask": "T066",
+  "currentTask": null,
   "convergeStartedAt": "2026-11-18T08:43:57.437Z",
   "convergePasses": [
     {
       "startedAt": "2026-11-18T08:17:23.947Z",
       "by": "extension",
-      "before": [
-        "T001",
-        "T002",
-        "T003",
-        "T004",
-        "T005",
-        "T006",
-        "T007",
-        "T008",
-        "T009",
-        "T010",
-        "T011",
-        "T012",
-        "T013",
-        "T014",
-        "T015",
-        "T016",
-        "T017",
-        "T018",
-        "T019",
-        "T020",
-        "T021",
-        "T022",
-        "T023",
-        "T024",
-        "T025",
-        "T026",
-        "T027",
-        "T028",
-        "T029",
-        "T030",
-        "T031",
-        "T032",
-        "T033",
-        "T034",
-        "T035",
-        "T036",
-        "T037",
-        "T038",
-        "T039",
-        "T040",
-        "T041",
-        "T042",
-        "T043",
-        "T044",
-        "T045",
-        "T046",
-        "T047",
-        "T048",
-        "T049",
-        "T050",
-        "T051",
-        "T052",
-        "T053",
-        "T054",
-        "T055",
-        "T056",
-        "T057",
-        "T058",
-        "T059",
-        "T060",
-        "T061",
-        "T062",
-        "T063",
-        "T064",
-        "T065",
-        "T066",
-        "T067",
-        "T068",
-        "T069",
-        "T070",
-        "T071",
-        "T072",
-        "T073"
+      "finishedAt": "2026-11-18T14:01:06.161Z",
+      "added": [
+        "T074",
+        "T075",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080"
       ]
     }
+  ],
+  "verified": [
+    {
+      "what": "draw-comments e2e suite",
+      "command": "pnpm nx run artifact-ai-draw-comments:test:e2e",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 11.0,
+      "result": "1 scenario excluded by @todo (not yet implemented; see the feature files). ·  NX   Successfully ran target test:e2e for project artifact-ai-draw-comments and 25 tasks it depends on · Nx read the output from the cache instead of running the command for 25 out of 26 tasks.",
+      "commit": "9a708b6",
+      "tree": "35c284c9ff1b8025766d087968cd96caa172c026"
+    },
+    {
+      "what": "list-features e2e suite (no regression)",
+      "command": "pnpm nx run artifact-list:test:e2e",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 24.9,
+      "result": "3 scenarios excluded by @todo (not yet implemented; see the feature files). ·  NX   Successfully ran target test:e2e for project artifact-list and 25 tasks it depends on · Nx read the output from the cache instead of running the command for 25 out of 26 tasks.",
+      "commit": "9a708b6",
+      "tree": "35c284c9ff1b8025766d087968cd96caa172c026"
+    },
+    {
+      "what": "runner features-package contract tests",
+      "command": "pnpm nx run artifact-features-runner-playwright:test",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.5,
+      "result": "\u001b[0m\u001b[2m 0 fail\u001b[0m ·  15 expect() calls · Ran 9 tests across 1 file. \u001b[0m\u001b[2m[\u001b[1m23.00ms\u001b[0m\u001b[2m]\u001b[0m",
+      "commit": "9a708b6",
+      "tree": "35c284c9ff1b8025766d087968cd96caa172c026"
+    },
+    {
+      "what": "widget domain tests",
+      "command": "pnpm nx run artifact-ai-draw-comments:test",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.5,
+      "result": "\u001b[0m\u001b[2m 0 fail\u001b[0m ·  29 expect() calls · Ran 16 tests across 1 file. \u001b[0m\u001b[2m[\u001b[1m12.00ms\u001b[0m\u001b[2m]\u001b[0m",
+      "commit": "9a708b6",
+      "tree": "35c284c9ff1b8025766d087968cd96caa172c026"
+    },
+    {
+      "what": "architecture boundaries",
+      "command": "pnpm qa:arch-check",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.4,
+      "result": "> holos@ qa:arch-check /workspaces/holos · > depcruise apps packages cli --config .dependency-cruiser.cjs · ✔ no dependency violations found (414 modules, 801 dependencies cruised)",
+      "commit": "9a708b6",
+      "tree": "deabbfd7ccdc7da3a4042c5447cfb2f561bda1a4"
+    },
+    {
+      "what": "dead code / unused exports",
+      "command": "pnpm qa:dead-code",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.3,
+      "result": "fallow: 2 workspace discovery diagnostics. Run `fallow list --workspaces` for detail. ·   190 entry points detected (68 package.json, 67 plugin, 47 dynamically loaded, 8 manual entry) · ✓ No issues found (0.14s)",
+      "commit": "9a708b6",
+      "tree": "deabbfd7ccdc7da3a4042c5447cfb2f561bda1a4"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "Shipped at 78/80 tasks. T066 and T067 are out-of-scope follow-ups the user chose to keep in tasks.md rather than file as GitHub issues; nothing in this feature depends on either. Recorded in research.md (F6, CALM gap), plan.md Complexity Tracking, and the features package README.",
+      "step": "implement"
+    }
+  ],
+  "expectations": [
+    "T066 — make the annotated PNG capture host content behind the overlay: a behavioural change to what the widget screenshots, needs its own spec",
+    "T067 — model the dev-tools tier in @alistigo/architecture: a pre-existing CALM gap this feature touches but does not close"
   ]
 }
