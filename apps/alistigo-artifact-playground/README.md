@@ -20,6 +20,53 @@ nx run alistigo-artifact-playground:build    # production bundle in dist/
 nx run alistigo-artifact-playground:preview  # serve the production build
 ```
 
+## Opening the playground on a specific artifact
+
+Two values can be set from the address, so a link can hand someone a reproduction
+without them clicking through the form:
+
+| Parameter | Sets | Accepts |
+|---|---|---|
+| `artifact` | the Artifact field | a full registry key (`@alistigo/artifact-list`), or any unambiguous short form of one (`artifact-list`, `list`) |
+| `source` | the Source field | `dev` or `prod-local` (also `prod local`, `prod_local`). Development only — a production build does not render the field, so the parameter is ignored there |
+
+```
+http://localhost:5173/?artifact=list
+http://localhost:5173/?artifact=ai-draw-comments&source=prod-local
+http://localhost:5173/?artifact=@alistigo/artifact-claude-capabilities-demo
+```
+
+A value the playground does not offer is ignored rather than fatal: the saved or
+default value is used and the form shows what it actually chose. The parameters
+are read once, on load — change a field afterwards and your change stands; the
+address will not pull it back. The playground never rewrites its own address, so
+a shareable link is one you compose yourself.
+
+## The form remembers itself
+
+The left panel's Config tab is saved to `localStorage` whenever you change it and
+restored on load, so a reload costs you nothing: artifact, source, AI context,
+language, read-only, enabled plugins with their config, document fixture and raw
+markdown, plus the published toggle.
+
+- **One key**: `dev-playground:config:v1`, holding `{"v":1,"config":{…}}`. The
+  prefix is deliberate — the Storage tab lists `alistigo`-prefixed keys as *the
+  artifact's* storage, and the playground's own setup does not belong in that list.
+- **Not saved**: the Claude Simulator's own controls (response delay, canned
+  response, error and suppression modes), its log buffers, and which tab is open.
+  Those are per-session tooling, not configuration injected into the artifact.
+- **Clear Data does not reset it.** That button clears what the *artifact* stored;
+  your form setup is written straight back afterwards. The preview iframe is
+  same-origin, so "the artifact's storage" and the playground's are one area — the
+  write-back is what keeps the two concerns separate.
+- **To reset the form**, delete that key (DevTools → Application → Local Storage),
+  or open the playground with the fields you want in the address.
+- A saved setup naming an artifact, plugin or fixture that no longer exists falls
+  back for *that field only* and keeps the rest. An unreadable or
+  unrecognised-version entry is discarded whole and the playground opens on its
+  defaults. With storage unavailable altogether — a private window — everything
+  works, it just remembers nothing.
+
 ## Dev fixture picker
 
 In dev mode (`import.meta.env.DEV === true`) a small overlay in the top-right lets you swap the editor's document on the fly. It's populated from `fixtures/*.json` via Vite's `import.meta.glob`. The overlay is dropped from production builds at tree-shake time.

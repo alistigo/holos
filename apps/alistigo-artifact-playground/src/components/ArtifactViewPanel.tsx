@@ -3,12 +3,22 @@ import { lightTheme } from "@uiw/react-json-view/light";
 import type React from "react";
 import type { JSX, RefObject } from "react";
 import { useMemo, useState } from "react";
+import { type SrcdocPart, segmentSource } from "../buildIframeSrcdoc";
 import { SourceView } from "./SourceView";
 
-type Tab = "app" | "source" | "config" | "ai-input";
+type Tab =
+  | "app"
+  | "source"
+  | "ai-bridge"
+  | "artifact-source"
+  | "playground-source"
+  | "config"
+  | "ai-input";
 
 interface ArtifactViewPanelProps {
   srcdoc: string;
+  /** The parts the srcdoc was assembled from; each code tab shows one segment's. */
+  parts: readonly SrcdocPart[];
   iframeRef: RefObject<HTMLIFrameElement | null>;
   reloadKey: number;
   iframeAllow: string;
@@ -55,9 +65,79 @@ function AiInputPanel({ markdown }: { markdown: string | undefined }): JSX.Eleme
   );
 }
 
+interface TabSpec {
+  id: Tab;
+  label: string;
+  /** Absent for the App tab, whose iframe is mounted separately and never unmounted. */
+  render?: () => JSX.Element;
+}
+
+/**
+ * The tab row, as data.
+ *
+ * A table rather than a chain of `activeTab === …` branches: this component was
+ * already over the complexity threshold with four tabs (hence the ignore below),
+ * and three more branches would mean widening that suppression instead of
+ * keeping the branching flat.
+ *
+ * Order: the four views that show the injected page's code sit together, with
+ * Source first because it is the whole of what the next three partition.
+ */
+function buildTabs({
+  srcdoc,
+  parts,
+  configJson,
+  aiInput,
+}: Pick<ArtifactViewPanelProps, "srcdoc" | "parts" | "configJson" | "aiInput">): TabSpec[] {
+  return [
+    { id: "app", label: "App" },
+    {
+      id: "source",
+      label: "Source",
+      render: () => <SourceView code={srcdoc} label="srcdoc HTML" />,
+    },
+    {
+      id: "ai-bridge",
+      label: "AI Bridge",
+      render: () => (
+        <SourceView
+          code={segmentSource(parts, "ai-bridge")}
+          label="AI bridge — injected by the AI chat"
+          emptyMessage="This AI context injects no bridge code."
+        />
+      ),
+    },
+    {
+      id: "artifact-source",
+      label: "Artifact source",
+      render: () => (
+        <SourceView
+          code={segmentSource(parts, "artifact")}
+          label="artifact entry — no bridge, no config tag, no AI input"
+        />
+      ),
+    },
+    {
+      id: "playground-source",
+      label: "Playground source",
+      render: () => (
+        <SourceView
+          code={segmentSource(parts, "playground")}
+          label="playground host markup — everything the other tabs do not own"
+        />
+      ),
+    },
+    // The remaining two show their own segment in readable form rather than as
+    // markup, and still own it for the partition the Source tab is the whole of.
+    { id: "config", label: "Config", render: () => <JsonPanel json={configJson} /> },
+    { id: "ai-input", label: "AI Input", render: () => <AiInputPanel markdown={aiInput} /> },
+  ];
+}
+
 // fallow-ignore-next-line complexity
 export function ArtifactViewPanel({
   srcdoc,
+  parts,
   iframeRef,
   reloadKey,
   iframeAllow,
@@ -66,17 +146,13 @@ export function ArtifactViewPanel({
 }: ArtifactViewPanelProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<Tab>("app");
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: "app", label: "App" },
-    { id: "source", label: "Source" },
-    { id: "config", label: "Config" },
-    { id: "ai-input", label: "AI Input" },
-  ];
+  const tabs = buildTabs({ srcdoc, parts, configJson, aiInput });
+  const active = tabs.find((tab) => tab.id === activeTab);
 
   return (
     <div className="flex flex-col h-full w-full">
       {/* Banner — host app chrome, sits above the iframe */}
-      <div className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 border-b border-gray-200 shrink-0">
+      <div className="flex flex-wrap items-center gap-1 px-3 py-1.5 bg-gray-100 border-b border-gray-200 shrink-0">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -102,16 +178,13 @@ export function ArtifactViewPanel({
           srcDoc={srcdoc}
           title="Artifact preview"
           name="artifact-preview"
-          className="h-full w-full border-none"
-          style={{ display: activeTab === "app" ? "block" : "none" }}
+          className={`h-full w-full border-none ${activeTab === "app" ? "block" : "hidden"}`}
           sandbox="allow-scripts allow-same-origin"
           referrerPolicy="no-referrer"
           data-no-service-worker="true"
           allow={iframeAllow}
         />
-        {activeTab === "source" && <SourceView html={srcdoc} />}
-        {activeTab === "config" && <JsonPanel json={configJson} />}
-        {activeTab === "ai-input" && <AiInputPanel markdown={aiInput} />}
+        {active?.render?.()}
       </div>
 
       {/* Footer */}

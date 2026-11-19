@@ -17,6 +17,17 @@ const SAMPLE_HTML = [
   "</html>",
 ].join("\n");
 
+const BRIDGE_SNIPPET = [
+  '<script src="/assets/html-to-image-D-nNcK7c.js"></script>',
+  "<script>",
+  "  window.claudeArtifactApi = { complete, storage, download };",
+  "</script>",
+  '<script>window.claudeArtifactStatus = "published";</script>',
+].join("\n");
+
+const ARTIFACT_SNIPPET =
+  '<script type="module" src="http://localhost:5173/src/artifact-entry.tsx"></script>';
+
 const meta: Meta<typeof SourceView> = {
   title: "Playground/SourceView",
   component: SourceView,
@@ -24,7 +35,7 @@ const meta: Meta<typeof SourceView> = {
   tags: ["playground"],
   decorators: [
     (Story) => (
-      <div style={{ height: "100vh" }}>
+      <div className="h-screen">
         <Story />
       </div>
     ),
@@ -33,10 +44,32 @@ const meta: Meta<typeof SourceView> = {
 export default meta;
 type Story = StoryObj<typeof SourceView>;
 
-export const Default: Story = { args: { html: SAMPLE_HTML } };
-export const Empty: Story = { args: { html: "" } };
-export const LongHtml: Story = {
+/** The Source tab: the whole injected document. */
+export const WholeDocument: Story = { args: { code: SAMPLE_HTML, label: "srcdoc HTML" } };
+
+/** The AI Bridge tab: one segment, a few lines of it. */
+export const BridgeSegment: Story = { args: { code: BRIDGE_SNIPPET, label: "AI bridge" } };
+
+/** The Artifact source tab: the single tag that loads the artifact. */
+export const ArtifactSegment: Story = {
+  args: { code: ARTIFACT_SNIPPET, label: "artifact entry" },
+};
+
+/** An empty segment — what AI Bridge shows when the context injects no bridge. */
+export const EmptySegmentWithMessage: Story = {
   args: {
-    html: Array.from({ length: 30 }, (_, i) => `<!-- line ${i} -->\n${SAMPLE_HTML}`).join("\n"),
+    code: "",
+    label: "AI bridge",
+    emptyMessage: "This AI context injects no bridge code.",
+  },
+};
+
+/** Empty with no message: the highlighter renders, blank. */
+export const EmptyWithoutMessage: Story = { args: { code: "", label: "srcdoc HTML" } };
+
+export const LongDocument: Story = {
+  args: {
+    label: "srcdoc HTML",
+    code: Array.from({ length: 30 }, (_, i) => `<!-- line ${i} -->\n${SAMPLE_HTML}`).join("\n"),
   },
 };

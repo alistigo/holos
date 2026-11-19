@@ -83,8 +83,12 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bun src/cli.ts --type list/markdown ../../apps/alistigo-artifact-playground/fixtures/empty.md ../../apps/alistigo-artifact-playground/fixtures/groceries.md ../../apps/alistigo-artifact-playground/fixtures/duplicates.md",
-        "cwd": "cli/core-document-validator"
+        "cwd": "apps/alistigo-artifact-playground",
+        "parallel": false,
+        "commands": [
+          "bun test",
+          "bun ../../cli/core-document-validator/src/cli.ts --type list/markdown fixtures/empty.md fixtures/groceries.md fixtures/duplicates.md"
+        ]
       }
     },
     "clean": {
