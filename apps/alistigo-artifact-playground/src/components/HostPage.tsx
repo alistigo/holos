@@ -1,7 +1,7 @@
 import { ARTIFACT_REGISTRY } from "@alistigo/artifact-manager";
 import type { JSX } from "react";
 import { useCallback, useMemo, useState } from "react";
-import { buildArtifactConfig, buildIframeSrcdoc, SRCDOC_CSP } from "../buildIframeSrcdoc";
+import { assembleSrcdoc, buildArtifactConfig, buildIframeParts } from "../buildIframeSrcdoc";
 import { useClaudeCompleteSimulator } from "../hooks/useClaudeCompleteSimulator";
 import { useClaudeStorageSimulator } from "../hooks/useClaudeStorageSimulator";
 import { useDocumentFixtures, useMarkdownFixturesMap } from "../hooks/useDocumentFixtures";
@@ -11,6 +11,7 @@ import { useIframeControls } from "../hooks/useIframeControls";
 import { useLocalStorageEntries } from "../hooks/useLocalStorageEntries";
 import { useNavigationSimulator } from "../hooks/useNavigationSimulator";
 import { useProxyFetchSimulator } from "../hooks/useProxyFetchSimulator";
+import { SRCDOC_ASSETS, SRCDOC_CSP } from "../srcdoc-assets";
 import { ArtifactViewPanel } from "./ArtifactViewPanel";
 import type { ClaudeSimulatorProps } from "./ClaudeSimulator";
 import HostForm from "./HostForm";
@@ -66,7 +67,7 @@ function useMarkdown(config: Config): string | undefined {
 
 // fallow-ignore-next-line complexity
 function HostPage(): JSX.Element {
-  const { config, setConfig } = useHostConfig();
+  const { config, setConfig, rewritePersisted } = useHostConfig();
   const { iframeRef, reloadKey, reload, clearData } = useIframeControls();
   const [simulatorDelayMs, setSimulatorDelayMs] = useState(0);
   const [suppressResponses, setSuppressResponses] = useState(false);
@@ -88,17 +89,34 @@ function HostPage(): JSX.Element {
   const handleClearData = useCallback(async () => {
     clearStorage();
     await clearData();
+    // clearData() clears the *iframe's* localStorage, and the srcdoc iframe runs
+    // with allow-same-origin — so that is this origin's storage, the playground's
+    // own saved setup included. `config` is unchanged, so the persist effect in
+    // useHostConfig never fires, and the setup would be silently gone at the next
+    // page load with nothing on screen to explain it. Write it back (FR-022).
+    //
+    // Narrowing the clear to `alistigo`-prefixed keys is not the alternative: the
+    // list artifact persists under the bare key `document`, which such a filter
+    // would stop clearing.
+    rewritePersisted();
     refreshLocalStorage();
-  }, [clearStorage, clearData, refreshLocalStorage]);
+  }, [clearStorage, clearData, refreshLocalStorage, rewritePersisted]);
 
   const iframeAllow =
     config.aiContext === "claude" ? "clipboard-write" : "fullscreen, clipboard-write";
 
+  // Its own derivation, deliberately: the Config tab wants the object indented
+  // for reading, while the `config` segment inside the document must stay compact
+  // or the srcdoc stops being byte-identical to what the e2e suites expect (S-1).
+  // Both renderings already share their single source, buildArtifactConfig — so
+  // this is two formats of one derivation, not two derivations.
   const configJson = useMemo(() => JSON.stringify(buildArtifactConfig(config), null, 2), [config]);
 
-  const srcdoc = useMemo(
+  // Built once: the preview gets the assembled document, the panel gets the parts
+  // behind it, so every tab and the iframe always agree about what is loaded.
+  const parts = useMemo(
     () =>
-      buildIframeSrcdoc({
+      buildIframeParts({
         config,
         ...(markdown !== undefined ? { aiInputMarkdown: markdown } : {}),
         scriptUrl: resolveScriptUrl(config.mode, config.app),
@@ -110,9 +128,12 @@ function HostPage(): JSX.Element {
             : config.mode === "prod-local"
               ? PROD_LOCAL_PLUGIN_URL_OVERRIDES
               : undefined,
+        assets: SRCDOC_ASSETS,
       }),
     [config, markdown],
   );
+
+  const srcdoc = useMemo(() => assembleSrcdoc(parts), [parts]);
 
   const simulator: ClaudeSimulatorProps = {
     aiContext: config.aiContext,
@@ -157,6 +178,7 @@ function HostPage(): JSX.Element {
       <div className="w-1/2">
         <ArtifactViewPanel
           srcdoc={srcdoc}
+          parts={parts}
           iframeRef={iframeRef}
           reloadKey={reloadKey}
           iframeAllow={iframeAllow}
