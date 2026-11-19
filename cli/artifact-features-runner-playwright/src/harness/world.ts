@@ -98,13 +98,17 @@ export class ArtifactWorld extends World {
    *
    * Delegates to `PlaygroundPage.reload()` rather than driving `page.reload()`
    * here, because the reload has to be followed by re-selecting the artifact.
-   * The playground keeps the chosen artifact in React state only — no URL
-   * parameter, no storage — so a bare page reload drops the selection back to
-   * the registry's first entry. And since every artifact exposes the same
-   * `alistigo-app` readiness marker, waiting for readiness afterwards resolves
-   * happily against the *wrong* artifact, and the scenario then runs against it
-   * reporting nothing amiss. The draw-comments suite's "Reloading the artifact
-   * discards an in-progress annotation" scenario is the regression guard.
+   *
+   * The playground now persists the chosen artifact to localStorage, so a bare
+   * reload usually does restore it and the re-selection is a no-op. Keep it
+   * anyway: `seedStorage` below clears that storage — the preview iframe is
+   * same-origin, so there is only one storage area — and after such a clear a
+   * reload does drop the selection back to the registry's first entry. Since
+   * every artifact exposes the same `alistigo-app` readiness marker, waiting for
+   * readiness afterwards would resolve happily against the *wrong* artifact and
+   * the scenario would run against it reporting nothing amiss. The draw-comments
+   * suite's "Reloading the artifact discards an in-progress annotation" scenario
+   * is the regression guard.
    */
   async reloadArtifact(): Promise<void> {
     await this.playgroundPage.reload();
