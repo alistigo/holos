@@ -145,7 +145,12 @@ that happens to pick it.
 The Gherkin suites (`@alistigo/list-features`,
 `@alistigo/artifact-ai-draw-comments-features`) run against `vite preview` through
 `@alistigo/artifact-features-runner-playwright`, whose `PlaygroundPage` owns every playground
-selector. A few pieces of this app's chrome are therefore load-bearing for tests:
+selector. Each suite gets **its own preview server on its own port**, started by
+`scripts/run-e2e-suite.sh` — 4173 for the list suite, 4174 for draw-comments — because CI runs them
+concurrently and they used to share the default port. A new suite takes the next free number; the
+script's header holds the table and the reasoning.
+
+A few pieces of this app's chrome are load-bearing for tests:
 
 - the **`Artifact` combobox** — how a scenario selects its artifact, and how `doctor` decides the
   host really is the playground;

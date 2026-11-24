@@ -39,8 +39,10 @@ srcdoc is byte-identical to the pre-refactor output (S-1) and that the segments 
 
 ## 2. The end-to-end regression guard (FR-019)
 
-Run the existing suites **unchanged**. Each `test:e2e` target starts `vite preview` itself, so
-the playground must be built first; there is no second terminal to manage.
+Run the existing suites **unchanged**. Each `test:e2e` target starts its own `vite preview`
+through `scripts/run-e2e-suite.sh` on its own port (4173 list, 4174 draw-comments), so the
+playground must be built first and there is no second terminal to manage. Running both at once is
+supported and is what CI does.
 
 ```sh
 # Record the baseline BEFORE touching the playground, on a clean checkout
