@@ -1,3 +1,19 @@
+## 0.2.3 (2026-11-24)
+
+### 🩹 Fixes
+
+- **e2e:** give each Gherkin suite its own preview server and port ([3444fa0](https://github.com/alistigo/holos/commit/3444fa0))
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-ai-draw-comments-features to 0.2.3
+- Updated artifact-features-runner-playwright to 0.3.1
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.2.2 (2026-11-18)
 
 ### 🚀 Features

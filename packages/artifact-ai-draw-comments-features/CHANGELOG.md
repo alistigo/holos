@@ -1,3 +1,9 @@
+## 0.2.3 (2026-11-24)
+
+### 🧱 Updated Dependencies
+
+- Updated artifact-features-runner-playwright to 0.3.1
+
 ## 0.2.2 (2026-11-18)
 
 ### 🚀 Features

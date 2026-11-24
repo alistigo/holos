@@ -1,3 +1,18 @@
+## 0.10.2 (2026-11-24)
+
+### 🩹 Fixes
+
+- **e2e:** give each Gherkin suite its own preview server and port ([3444fa0](https://github.com/alistigo/holos/commit/3444fa0))
+
+### 🧱 Updated Dependencies
+
+- Updated list-features to 0.5.12
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.10.1 (2026-11-18)
 
 ### 🧱 Updated Dependencies

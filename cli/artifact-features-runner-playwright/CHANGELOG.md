@@ -1,3 +1,14 @@
+## 0.3.1 (2026-11-24)
+
+### 🚀 Features
+
+- **alistigo-artifact-playground:** persist the form, read the address, split the source tabs ([8f5e588](https://github.com/alistigo/holos/commit/8f5e588))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Mikael Labrut @MLKiiwy
+
 ## 0.3.0 (2026-11-18)
 
 ### 🚀 Features
