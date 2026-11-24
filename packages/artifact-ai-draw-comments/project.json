@@ -95,7 +95,7 @@
         }
       ],
       "options": {
-        "command": "bash -c '(cd ../../apps/alistigo-artifact-playground && pnpm exec vite preview) & SPID=$!; count=0; until curl -sf http://localhost:4173 >/dev/null 2>&1 || [ $count -ge 30 ]; do sleep 1; count=$((count+1)); done; bun ../../cli/artifact-features-runner-playwright/dist/cli.js --target=@alistigo/artifact-ai-draw-comments-features --artifact=@alistigo/artifact-ai-draw-comments --host=http://localhost:4173; STATUS=$?; kill $SPID 2>/dev/null; exit $STATUS'",
+        "command": "bash ../../scripts/run-e2e-suite.sh 4174 --target=@alistigo/artifact-ai-draw-comments-features --artifact=@alistigo/artifact-ai-draw-comments",
         "cwd": "{projectRoot}"
       }
     },
